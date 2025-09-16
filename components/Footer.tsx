@@ -10,7 +10,6 @@ export default function Footer() {
     { Icon: SiLinkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/nedfstudios" },
     { Icon: SiPinterest, label: "Pinterest", href: "https://www.pinterest.com/nedfstudios" },
     { Icon: SiBehance, label: "Behance", href: "https://www.behance.net/ndfjkindia" },
-    { Icon: SiX, label: "X", href: "https://twitter.com/ndfjkindia" },
   ];
 
   return (
@@ -30,7 +29,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 px-6">
         {/* Logo */}
         <div className="flex flex-col justify-center md:justify-start items-center md:items-start pt-10 md:pt-20">
-          <h2 className="text-[32px] text-[#333333]/80 font-medium md:ml-32">NDFE</h2>
+          <h2 className="text-[32px] text-[#333333]/80 font-medium md:ml-32">NEDF</h2>
           <p className="text-[16px] text-[#001F4B]/60 mt-2 md:ml-28">Less, but Better.</p>
         </div>
 

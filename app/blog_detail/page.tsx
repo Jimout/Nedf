@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Menu } from "lucide-react";
 
 const toc = [
   { id: "intro", label: "Introduction" },
@@ -17,6 +18,8 @@ const toc = [
 
 export default function BlogDetailPage() {
   const [activeId, setActiveId] = useState("intro");
+  const [showMobileTOC, setShowMobileTOC] = useState(false);
+  const [tocExpanded, setTocExpanded] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +35,12 @@ export default function BlogDetailPage() {
         }
       });
       setActiveId(current);
+
+      const article = document.querySelector("article");
+      if (article) {
+        const top = article.getBoundingClientRect().top;
+        setShowMobileTOC(top < 0);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -39,136 +48,185 @@ export default function BlogDetailPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br ">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <main
-        className="flex-1 flex flex-col lg:flex-row gap-10"
-        style={{ marginLeft: 122, marginRight: 122 }}
+      <div
+        className="flex-1 px-10 md:px-[122px]"
+        style={{
+          background: "white",
+          maskImage:
+            "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "intersect",
+        }}
       >
-        {/* Table of Content */}
-        <aside className="lg:w-1/4 w-full h-fit lg:sticky lg:top-0 self-start">
-          <div className="bg-[#001F4B]/5 rounded">
-            {/* TOC Header */}
-            <div className="bg-[#001F4B] text-white text-center py-3 font-medium rounded-t">
-              Table Of Content
+        <main className="flex-1 flex flex-col lg:flex-row gap-10 relative">
+          {/* Desktop TOC */}
+          <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
+            {/* Changed top-0 to top-20 for padding from top */}
+            <div className="bg-[#001F4B]/5 rounded">
+              <div className="bg-[#001F4B] text-white text-center py-3 font-medium rounded-t">
+                Table Of Content
+              </div>
+              <ul className="divide-y divide-[#001F4B33]">
+                {toc.map((item) => {
+                  const isActive = activeId === item.id;
+                  return (
+                    <li
+                      key={item.id}
+                      className={`p-3 text-sm cursor-pointer transition-all duration-300 ease-in-out ${
+                        isActive
+                          ? "bg-[#001F4B]/15 border-l-[3px] border-[#001F4B] font-medium"
+                          : "hover:bg-[#001F4B]/10"
+                      }`}
+                    >
+                      <a
+                        href={`#${item.id}`}
+                        className="block text-[#001F4B]"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          document
+                            .getElementById(item.id)
+                            ?.scrollIntoView({ behavior: "smooth" });
+                          setActiveId(item.id);
+                        }}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </aside>
+
+          {/* Blog Content */}
+          <article className="flex-1 relative">
+            {/* Mobile TOC Icon */}
+            {showMobileTOC && (
+              <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
+                <button
+                  className="bg-[#001F4B] text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+                  onClick={() => setTocExpanded(!tocExpanded)}
+                >
+                  <Menu size={24} />
+                </button>
+
+                <div
+                  className={`mt-2 bg-white border rounded shadow-lg w-56 max-h-[70vh] flex flex-col transform origin-top transition-all duration-300 ease-in-out overflow-hidden ${
+                    tocExpanded ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
+                  }`}
+                >
+                  <div className="bg-[#001F4B] text-white text-center py-3 font-medium rounded-t">
+                    Table Of Content
+                  </div>
+                  <ul className="overflow-y-auto flex-1 divide-y divide-[#001F4B33]">
+                    {toc.map((item) => {
+                      const isActive = activeId === item.id;
+                      return (
+                        <li
+                          key={item.id}
+                          className={`p-3 text-sm cursor-pointer transition-all duration-300 ease-in-out ${
+                            isActive
+                              ? "bg-[#001F4B]/15 border-l-[3px] border-[#001F4B] font-medium"
+                              : "hover:bg-[#001F4B]/10"
+                          }`}
+                        >
+                          <a
+                            href={`#${item.id}`}
+                            className="block text-[#001F4B]"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document
+                                .getElementById(item.id)
+                                ?.scrollIntoView({ behavior: "smooth" });
+                              setActiveId(item.id);
+                            }}
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
+              <Image
+                src="/room1.jpg"
+                alt="From Concept To Concrete"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
 
-            {/* TOC Items */}
-            <ul className="divide-y divide-[#001F4B33]">
-              {toc.map((item) => {
-                const isActive = activeId === item.id;
-                return (
-                  <li
-                    key={item.id}
-                    className={`p-3 text-sm cursor-pointer transition-all duration-300 ease-in-out ${
-                      isActive
-                        ? "bg-[#001F4B]/15 border-l-[3px] border-[#001F4B] font-medium"
-                        : "hover:bg-[#001F4B]/10"
-                    }`}
-                  >
-                    <a
-                      href={`#${item.id}`}
-                      className="block text-[#001F4B]"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        document
-                          .getElementById(item.id)
-                          ?.scrollIntoView({ behavior: "smooth" });
-                        setActiveId(item.id);
-                      }}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </aside>
-
-        {/* Blog Content */}
-        <article className="flex-1">
-          <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
-            <Image
-              src="/room1.jpg"
-              alt="From Concept To Concrete"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-
-          <h1
-  className="mb-6"
-  style={{
-    fontFamily: "Montserrat",
-    fontWeight: 500,          // Medium font weight
-    color: "#001F4B",          // Navy blue
-    fontSize: "36px",          // 40px size
-  }}
->
-  From Concept To Concrete
-</h1>
-
-          <div className="flex gap-2 mb-8">
-            <span
-              className="px-3 py-1 text-sm border border-gray-400 rounded-full font-normal text-[#333333]"
-              style={{ fontFamily: "Montserrat" }}
+            <h1
+              className="mb-6"
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 500,
+                color: "#001F4B",
+                fontSize: "36px",
+              }}
             >
-              Case File
-            </span>
-            <span
-              className="px-3 py-1 text-sm border border-gray-400 rounded-full font-normal text-[#333333]"
-              style={{ fontFamily: "Montserrat" }}
-            >
-              Architecture
-            </span>
-          </div>
+              From Concept To Concrete
+            </h1>
 
-          {/* Sections */}
-          {toc.map((item) => (
-            <section
-              key={item.id}
-              id={item.id}
-              className="scroll-mt-24 mb-10"
-            >
-              <h2
-                className="text-2xl font-medium mb-4 text-[#333333]"
+            <div className="flex gap-2 mb-8">
+              <span
+                className="px-3 py-1 text-sm border border-gray-400 rounded-full font-normal text-[#333333]"
                 style={{ fontFamily: "Montserrat" }}
               >
-                {item.label}
-              </h2>
-
-              {/* Main paragraph */}
-              <p
-                className="text-[#333333] text-sm mb-4 leading-7 text-justify"
-                style={{ fontFamily: "Montserrat", fontWeight: "400" }}
+                Case File
+              </span>
+              <span
+                className="px-3 py-1 text-sm border border-gray-400 rounded-full font-normal text-[#333333]"
+                style={{ fontFamily: "Montserrat" }}
               >
-                {getSectionContent(item.id)}
-              </p>
+                Architecture
+              </span>
+            </div>
 
-              {/* Extra paragraphs for scroll */}
-              {Array.from({ length: 4 }).map((_, idx) => (
+            {toc.map((item) => (
+              <section key={item.id} id={item.id} className="scroll-mt-24 mb-10">
+                <h2
+                  className="text-2xl font-medium mb-4 text-[#333333]"
+                  style={{ fontFamily: "Montserrat" }}
+                >
+                  {item.label}
+                </h2>
                 <p
-                  key={idx}
                   className="text-[#333333] text-sm mb-4 leading-7 text-justify"
                   style={{ fontFamily: "Montserrat", fontWeight: "400" }}
                 >
                   {getSectionContent(item.id)}
                 </p>
-              ))}
-            </section>
-          ))}
-        </article>
-      </main>
+                {Array.from({ length: 4 }).map((_, idx) => (
+                  <p
+                    key={idx}
+                    className="text-[#333333] text-sm mb-4 leading-7 text-justify"
+                    style={{ fontFamily: "Montserrat", fontWeight: "400" }}
+                  >
+                    {getSectionContent(item.id)}
+                  </p>
+                ))}
+              </section>
+            ))}
+          </article>
+        </main>
+      </div>
 
       <Footer />
     </div>
   );
 }
 
-// Realistic blog content
 function getSectionContent(id: string) {
   switch (id) {
     case "intro":

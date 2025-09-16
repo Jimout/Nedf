@@ -99,7 +99,7 @@ export default function StudioNotes() {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 md:px-6 py-12 relative">
+    <section className="max-w-7xl mx-auto px-4 md:px-6 py-6 relative">
       <h2 className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-8">
         STUDIO NOTES
       </h2>

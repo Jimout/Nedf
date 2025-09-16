@@ -111,17 +111,22 @@ export function ClientReflections() {
               const zIndex = isActive ? 20 : 10;
 
               return (
-                <div
+                <motion.div
                   key={client.name + index}
-                  className={`absolute flex flex-col items-center transition-all duration-700 ${
-                    isActive ? "scale-125 opacity-100" : "scale-90 opacity-60"
-                  }`}
+                  className="absolute flex flex-col items-center"
                   style={{
-                    left: `${pos.x}px`,
-                    top: `${pos.y}px`,
-                    transform: "translate(-50%, -50%)",
+                    left: pos.x - avatarSize / 2,
+                    top: pos.y - avatarSize / 2,
                     zIndex,
                   }}
+                  initial={{ scale: isActive ? 1.1 : 0.9, opacity: isActive ? 1 : 0.6 }}
+                  animate={{
+                    scale: isActive ? 1.25 : 0.9,
+                    opacity: isActive ? 1 : 0.6,
+                    left: pos.x - avatarSize / 2,
+                    top: pos.y - avatarSize / 2,
+                  }}
+                  transition={{ duration: 1.2, ease: "easeInOut" }}
                 >
                   <Image
                     src={client.image}
@@ -133,24 +138,28 @@ export function ClientReflections() {
                   <p className="mt-2 text-sm font-medium text-center text-[#333333]">
                     {client.name}
                   </p>
-                  <span className="text-xs text-gray-500 text-center">
-                    {client.role}
-                  </span>
+                  <span className="text-xs text-gray-500 text-center">{client.role}</span>
 
                   {isActive && (
-                    <div className="absolute left-full top-1/2 transform -translate-y-3/4 ml-24 w-[575px]">
-                      <p className="text-lg font-medium text-[#333333]/80 leading-relaxed pl-8 pr-8 relative">
+                    <motion.div
+                      className="absolute left-full top-1/2 transform -translate-y-1/2 ml-20 w-[400px]"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1.2, ease: "easeInOut" }}
+                    >
+                      <p className="text-sm font-medium text-[#333333]/80 leading-relaxed pl-6 pr-6 relative">
                         <span className="absolute -left-4 -top-6 text-6xl font-serif text-gray-300">
-                          "
+                          ❝
                         </span>
                         {activeClient.testimonial}
                         <span className="absolute -right-4 -bottom-6 text-6xl font-serif text-gray-300">
-                          "
+                          ❞
                         </span>
                       </p>
-                    </div>
+                    </motion.div>
                   )}
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -166,7 +175,7 @@ export function ClientReflections() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
               className="flex flex-col items-center"
             >
               <Image
@@ -180,8 +189,8 @@ export function ClientReflections() {
                 {clients[step].name}
               </h3>
               <p className="text-sm text-gray-500">{clients[step].role}</p>
-              <p className="mt-4 text-base text-[#333333]/80 italic leading-relaxed text-center">
-                “{clients[step].testimonial}”
+              <p className="mt-4 text-sm text-[#333333]/80 italic leading-relaxed text-center">
+                ❝{clients[step].testimonial}❞
               </p>
             </motion.div>
           </AnimatePresence>
