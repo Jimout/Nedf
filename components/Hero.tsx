@@ -56,7 +56,7 @@ export default function HeroWithStats() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative flex items-center justify-start font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] -mt-4">
+      <section className="relative flex items-center justify-start font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] -mt-4 max-sm:-mt-20">
         <div className="flex items-center max-sm:items-start gap-2 max-sm:gap-2">
           {/* Rotated NEDF */}
           <div className="select-none text-[#001F4B] tracking-wider text-[80px] rotate-[-90deg] max-sm:text-[48px] font-extralight 2xl:font-light 2xl:text-[100px] -ml-2">
