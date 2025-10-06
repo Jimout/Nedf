@@ -20,7 +20,6 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleToggle = () => {
-    console.log("[v0] Hamburger clicked, current state:", isOpen)
     setIsOpen((prev) => !prev)
   }
 
@@ -49,8 +48,8 @@ export function Navbar() {
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
           </Link>
 
-          {/* Desktop nav - centered navigation links */}
-          <div className="hidden md:flex items-center justify-center space-x-24 text-sm font-medium flex-1 ml-10 2xl:ml-15">
+          {/* Desktop nav with gap from logo */}
+          <div className="hidden md:flex items-center justify-center flex-1 ml-32 2xl:ml-38 space-x-20 2xl:space-x-24">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -58,7 +57,7 @@ export function Navbar() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "transition duration-300 ease-in-out pb-1 whitespace-nowrap",
+                    "transition duration-300 ease-in-out pb-1 whitespace-nowrap text-sm 2xl:text-base",
                     isActive
                       ? "text-[#001F4B] underline underline-offset-4 decoration-[#001F4B]"
                       : "text-[#333333] hover:text-[#003366] hover:scale-105",
@@ -70,20 +69,23 @@ export function Navbar() {
             })}
           </div>
 
+          {/* CTA Button */}
           <Link
             href={ctaItem.href}
-            className="hidden md:flex items-center px-6 py-2 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm whitespace-nowrap"
+            className="hidden md:flex items-center px-6 py-2 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
           >
             {ctaItem.name}
           </Link>
 
+          {/* Mobile hamburger menu (right corner) */}
           <button
             onClick={handleToggle}
-            className="md:hidden ml-4 relative w-12 h-12 flex items-center justify-center focus:outline-none touch-manipulation bg-transparent border-0 cursor-pointer z-40 active:bg-gray-100 rounded-md"
+            className="md:hidden ml-auto relative w-12 h-12 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-40 active:bg-gray-100 rounded-md"
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             type="button"
           >
+            {/* Hamburger */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -98,6 +100,7 @@ export function Navbar() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
 
+            {/* Close */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

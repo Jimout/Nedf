@@ -55,33 +55,43 @@ export default function HeroWithStats() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative flex items-center justify-center font-montserrat overflow-hidden px-4 sm:px-6 lg:px-12 2xl:px-20 max-w-7xl mx-auto min-h-[65vh] -mt-4 max-sm:-mt-16">
-        <div className="flex items-center max-sm:items-start">
+      <section className="relative flex items-center justify-center font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-16 max-w-7xl mx-auto min-h-[65vh] -mt-4 max-sm:-mt-16">
+        <div className="flex items-center max-sm:items-start gap-2 max-sm:gap-2">
           {/* Rotated NEDF */}
-          <div className="select-none text-[#001F4B] font-extralight tracking-wider text-[80px] rotate-[-90deg] mr-[-10px] max-sm:text-[48px] max-sm:mr-[-4px]">
+          <div className="select-none text-[#001F4B] tracking-wider text-[80px] rotate-[-90deg] max-sm:text-[48px] -ml-10 font-extralight 2xl:font-normal 2xl:text-[100px]">
             NEDF
           </div>
 
           {/* Text Block */}
           <div className="flex flex-col justify-center max-sm:-mt-4">
-            <div className="flex items-center max-sm:flex-col max-sm:items-start" style={{ height: `${lineHeight}px` }}>
-              <span className="text-[58px] font-thin text-[#333333]/80 tracking-wide mr-3 max-sm:text-[24px] max-sm:mb-[-6px] max-sm:ml-[36px]">
+            <div
+              className="flex items-center max-sm:flex-col max-sm:items-start"
+              style={{ height: `${lineHeight}px` }}
+            >
+              <span className="text-[58px] font-thin text-[#333333]/80 tracking-wide mr-3 max-sm:text-[24px] max-sm:mb-[-6px] max-sm:ml-[36px] 2xl:text-[70px] 2xl:font-medium">
                 We Are
               </span>
 
-              <div className="overflow-hidden relative" style={{ height: `${lineHeight}px`, maxHeight: `${lineHeight}px` }}>
+              <div
+                className="overflow-hidden relative"
+                style={{
+                  height: `${lineHeight}px`,
+                  maxHeight: `${lineHeight}px`,
+                }}
+              >
                 <div
                   ref={containerRef}
                   className="will-change-transform"
                   style={{
                     transform: `translateY(-${index * lineHeight}px)`,
-                    transition: 'transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                    transition:
+                      'transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
                   }}
                 >
                   {extendedWords.map((word, i) => (
                     <span
                       key={i}
-                      className="block font-medium text-[#001F4B] text-[85px] leading-none whitespace-nowrap max-sm:text-[40px]"
+                      className="block font-medium text-[#001F4B] text-[85px] leading-none whitespace-nowrap max-sm:text-[40px] 2xl:text-[110px]"
                       style={{
                         height: `${lineHeight}px`,
                         lineHeight: `${lineHeight}px`,
