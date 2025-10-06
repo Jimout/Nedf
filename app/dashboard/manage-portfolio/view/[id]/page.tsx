@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
+import ConfirmationModal from "@/components/Confirmation-modal"
 
 import { useState, useRef } from "react"
-import { ArrowLeft, Edit3, Upload, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -63,6 +63,40 @@ const initialProjectData: ProjectData = {
   ],
 }
 
+const ArrowLeftIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+)
+
+const EditIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+    />
+  </svg>
+)
+
+const UploadIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+    />
+  </svg>
+)
+
+const PlusIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+  </svg>
+)
+
 export default function ProjectDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
@@ -71,6 +105,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   const [colorPickerIndex, setColorPickerIndex] = useState<number | null>(null)
   const [colorPickerPosition, setColorPickerPosition] = useState<{ top: number; left: number } | null>(null)
   const [originalColor, setOriginalColor] = useState<string>("")
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const beforeImageRef = useRef<HTMLInputElement>(null)
   const afterImageRef = useRef<HTMLInputElement>(null)
@@ -90,6 +125,19 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   const handleCancel = () => {
     setEditData({ ...projectData })
     setIsEditing(false)
+  }
+
+  const handleDelete = () => {
+    setShowConfirmationModal(true)
+  }
+
+  const confirmDelete = () => {
+    // Logic to delete the project
+    router.back()
+  }
+
+  const cancelDelete = () => {
+    setShowConfirmationModal(false)
   }
 
   const updateEditData = (field: keyof ProjectData, value: any) => {
@@ -235,19 +283,21 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             onClick={() => router.back()}
             className="text-gray-600 hover:text-gray-800 transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
+            <ArrowLeftIcon />
+            <span className="ml-2">Back</span>
           </Button>
 
           <div className="flex gap-3">
             {!isEditing ? (
-              <Button
-                onClick={handleEdit}
-                className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200 hover:shadow-xl"
-              >
-                <Edit3 className="w-4 h-4 mr-2" />
-                Edit
-              </Button>
+              <>
+                <Button
+                  onClick={handleEdit}
+                  className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200 hover:shadow-xl"
+                >
+                  <EditIcon />
+                  <span className="ml-2">Edit</span>
+                </Button>
+              </>
             ) : (
               <>
                 <Button
@@ -299,7 +349,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 { label: "LOCATION", field: "location" as keyof ProjectData },
                 { label: "AREA", field: "area" as keyof ProjectData },
                 { label: "TECHNOLOGY", field: "technology" as keyof ProjectData },
-                { label: "ROLE", field: "role" as keyof ProjectData }, // Changed from PRICE to ROLE
+                { label: "ROLE", field: "role" as keyof ProjectData },
                 { label: "STATUS", field: "status" as keyof ProjectData },
               ].map(({ label, field }) => (
                 <div key={field}>
@@ -341,8 +391,8 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                   className="absolute top-4 right-4 z-10 bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200"
                   size="sm"
                 >
-                  <Upload className="w-4 h-4 mr-1" />
-                  Upload
+                  <UploadIcon />
+                  <span className="ml-1">Upload</span>
                 </Button>
               </>
             )}
@@ -372,8 +422,8 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                   className="absolute top-4 right-4 z-10 bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200"
                   size="sm"
                 >
-                  <Upload className="w-4 h-4 mr-1" />
-                  Upload
+                  <UploadIcon />
+                  <span className="ml-1">Upload</span>
                 </Button>
               </>
             )}
@@ -457,8 +507,8 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                   size="sm"
                   className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
                 >
-                  <Plus className="w-4 h-4 mr-1" />
-                  Add Feature
+                  <PlusIcon />
+                  <span className="ml-1">Add Feature</span>
                 </Button>
               </li>
             )}
@@ -501,8 +551,8 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                   size="sm"
                   className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
                 >
-                  <Plus className="w-4 h-4 mr-1" />
-                  Add Material
+                  <PlusIcon />
+                  <span className="ml-1">Add Material</span>
                 </Button>
               </li>
             )}
@@ -547,7 +597,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                   size="sm"
                   className="h-16 w-16 rounded-xl bg-transparent border-2 border-dashed border-gray-300 hover:border-[#001F4B] hover:bg-[#001F4B]/5 transition-all duration-200"
                 >
-                  <Plus className="w-6 h-6 text-gray-400" />
+                  <PlusIcon />
                 </Button>
               </div>
             )}
@@ -590,8 +640,8 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 onClick={addGalleryImage}
                 className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Gallery Image
+                <PlusIcon />
+                <span className="ml-1">Add Gallery Image</span>
               </Button>
             </div>
           ) : (
@@ -635,6 +685,17 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             </div>
           </div>
         </div>
+      )}
+
+      {showConfirmationModal && (
+        <ConfirmationModal
+          isOpen={showConfirmationModal}
+          onClose={() => setShowConfirmationModal(false)}
+          onConfirm={confirmDelete}
+          title="Delete Project"
+          message="Are you sure you want to delete this project? This action cannot be undone."
+          type="delete"
+        />
       )}
     </div>
   )

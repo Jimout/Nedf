@@ -1,8 +1,10 @@
 "use client"
 
+import type React from "react"
+
 import Image from "next/image"
-import { useEffect, useState } from "react"
-import { Navbar } from "@/components/Navbar"
+import { useEffect, useState, useRef } from "react"
+import Link from "next/link"
 import Footer from "@/components/Footer"
 import { Menu } from "lucide-react"
 import RelatedBlogs from "@/components/Related-blogs"
@@ -34,7 +36,7 @@ const currentBlogTags = ["Case File", "Architecture"]
 const allPosts = [
   {
     id: 0,
-    image: "/room1.jpg",
+    image: "/modern-home-interior.jpg",
     categories: ["Case File", "Architecture"],
     title: "From Concept To Concrete",
     description:
@@ -42,7 +44,7 @@ const allPosts = [
   },
   {
     id: 1,
-    image: "/interior2.jpg",
+    image: "/clay-interior-design.jpg",
     categories: ["Materials", "Design Thinking", "Interior Design"],
     title: "Why Clay Still Wins",
     description:
@@ -50,7 +52,7 @@ const allPosts = [
   },
   {
     id: 2,
-    image: "/visual1.jpg",
+    image: "/studio-workspace.png",
     categories: ["Studio Life", "Behind The Scenes"],
     title: "Studio Mornings: What Fuels Our Process",
     description:
@@ -58,7 +60,7 @@ const allPosts = [
   },
   {
     id: 3,
-    image: "/interior1.jpg",
+    image: "/minimalist-interior.png",
     categories: ["Design", "Architecture"],
     title: "The Power Of Simplicity",
     description:
@@ -66,7 +68,7 @@ const allPosts = [
   },
   {
     id: 4,
-    image: "/room3.jpg",
+    image: "/ai-architecture.png",
     categories: ["Tech", "AI", "Architecture"],
     title: "Using AI in Architecture",
     description:
@@ -74,7 +76,7 @@ const allPosts = [
   },
   {
     id: 5,
-    image: "/room1.jpg",
+    image: "/sustainable-building.jpg",
     categories: ["Case File", "Sustainability"],
     title: "Green Building Practices",
     description:
@@ -86,9 +88,12 @@ export default function BlogDetailPage() {
   const [activeId, setActiveId] = useState("intro")
   const [showMobileTOC, setShowMobileTOC] = useState(false)
   const [tocExpanded, setTocExpanded] = useState(false)
+  const isClickScrolling = useRef(false)
 
   useEffect(() => {
     const handleScroll = () => {
+      if (isClickScrolling.current) return
+
       const offset = 150
       let current = toc[0].id
       toc.forEach((item) => {
@@ -113,6 +118,30 @@ export default function BlogDetailPage() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const handleTocClick = (e: React.MouseEvent<HTMLAnchorElement>, itemId: string) => {
+    e.preventDefault()
+
+    setActiveId(itemId)
+
+    isClickScrolling.current = true
+
+    const element = document.getElementById(itemId)
+    if (element) {
+      const offset = 100
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - offset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      })
+    }
+
+    setTimeout(() => {
+      isClickScrolling.current = false
+    }, 1000)
+  }
+
   const relatedPosts = allPosts
     .filter((post) => {
       if (post.id === 0) return false
@@ -122,10 +151,19 @@ export default function BlogDetailPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <div className="px-10 md:px-[122px] pt-8">
+        <Link href="/blog">
+          <button
+            className="flex items-center text-[#001f4b] hover:text-black mb-6 transition-colors"
+            aria-label="Back to Blog"
+          >
+            <span className="text-4xl">←</span>
+          </button>
+        </Link>
+      </div>
 
       <div
-        className="flex-1 px-10 md:px-[122px]"
+        className="flex-1 px-10 md:px-[122px] py-8"
         style={{
           background: "white",
           maskImage:
@@ -137,99 +175,115 @@ export default function BlogDetailPage() {
         }}
       >
         <main className="flex-1 flex flex-col lg:flex-row gap-10 relative">
-          {/* Desktop TOC */}
           <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
-            <div className="bg-[#001F4B]/5 rounded">
-              <div className="bg-[#001F4B] text-white text-center py-3 font-medium rounded-t">Table Of Content</div>
-              <ul className="divide-y divide-[#001F4B33]">
-                {toc.map((item) => {
-                  const isActive = activeId === item.id
-                  const paddingLeft = item.level === 1 ? "12px" : item.level === 2 ? "24px" : "36px"
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="border-b border-gray-200 px-6 py-5 bg-gray-50">
+                <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Table of Contents</h2>
+              </div>
+              <nav className="p-3">
+                <ul className="space-y-1">
+                  {toc.map((item) => {
+                    const isActive = activeId === item.id
+                    const paddingLeft = item.level === 1 ? "12px" : item.level === 2 ? "28px" : "44px"
 
-                  return (
-                    <li
-                      key={item.id}
-                      className={`py-3 text-sm cursor-pointer transition-all duration-300 ease-in-out ${
-                        isActive
-                          ? "bg-[#001F4B]/15 border-l-[3px] border-[#001F4B] font-medium"
-                          : "hover:bg-[#001F4B]/10"
-                      }`}
-                      style={{ paddingLeft }}
-                    >
-                      <a
-                        href={`#${item.id}`}
-                        className="block text-[#001F4B]"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })
-                          setActiveId(item.id)
-                        }}
-                      >
-                        <span className="font-semibold mr-2">{item.number}</span>
-                        {item.label}
-                      </a>
-                    </li>
-                  )
-                })}
-              </ul>
+                    return (
+                      <li key={item.id}>
+                        <a
+                          href={`#${item.id}`}
+                          className={`flex items-start gap-3 py-2 px-3 rounded-md text-sm transition-all duration-300 ease-in-out group ${
+                            isActive ? "bg-[#001F4B] text-white" : "text-gray-700 hover:bg-gray-50 hover:text-[#001F4B]"
+                          }`}
+                          style={{ paddingLeft }}
+                          onClick={(e) => handleTocClick(e, item.id)}
+                        >
+                          <span
+                            className={`text-xs font-medium mt-0.5 min-w-[32px] transition-colors duration-300 ${
+                              isActive ? "text-white/80" : "text-gray-400 group-hover:text-[#001F4B]"
+                            }`}
+                          >
+                            {item.number}
+                          </span>
+                          <span className={`flex-1 leading-relaxed ${isActive ? "font-medium" : "font-normal"}`}>
+                            {item.label}
+                          </span>
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </nav>
             </div>
           </aside>
 
           {/* Blog Content */}
           <article className="flex-1 relative">
-            {/* Mobile TOC Icon */}
             {showMobileTOC && (
               <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
                 <button
-                  className="bg-[#001F4B] text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+                  className="bg-[#001F4B] text-white p-3 rounded-lg shadow-lg w-12 h-12 flex items-center justify-center hover:bg-[#003875] transition-colors duration-200"
                   onClick={() => setTocExpanded(!tocExpanded)}
+                  aria-label="Toggle table of contents"
                 >
-                  <Menu size={24} />
+                  <Menu size={20} />
                 </button>
 
                 <div
-                  className={`mt-2 bg-white border rounded shadow-lg w-56 max-h-[70vh] flex flex-col transform origin-top transition-all duration-300 ease-in-out overflow-hidden ${
+                  className={`mt-3 bg-white border border-gray-200 rounded-lg shadow-xl w-72 max-h-[70vh] flex flex-col transform origin-top transition-all duration-200 ease-out overflow-hidden ${
                     tocExpanded ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
                   }`}
                 >
-                  <div className="bg-[#001F4B] text-white text-center py-3 font-medium rounded-t">Table Of Content</div>
-                  <ul className="overflow-y-auto flex-1 divide-y divide-[#001F4B33]">
-                    {toc.map((item) => {
-                      const isActive = activeId === item.id
-                      const paddingLeft = item.level === 1 ? "12px" : item.level === 2 ? "24px" : "36px"
+                  <div className="border-b border-gray-200 px-6 py-5 bg-gray-50">
+                    <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Table of Contents</h2>
+                  </div>
+                  <nav className="overflow-y-auto flex-1 p-3">
+                    <ul className="space-y-1">
+                      {toc.map((item) => {
+                        const isActive = activeId === item.id
+                        const paddingLeft = item.level === 1 ? "12px" : item.level === 2 ? "28px" : "44px"
 
-                      return (
-                        <li
-                          key={item.id}
-                          className={`py-3 text-sm cursor-pointer transition-all duration-300 ease-in-out ${
-                            isActive
-                              ? "bg-[#001F4B]/15 border-l-[3px] border-[#001F4B] font-medium"
-                              : "hover:bg-[#001F4B]/10"
-                          }`}
-                          style={{ paddingLeft }}
-                        >
-                          <a
-                            href={`#${item.id}`}
-                            className="block text-[#001F4B]"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })
-                              setActiveId(item.id)
-                            }}
-                          >
-                            <span className="font-semibold mr-2">{item.number}</span>
-                            {item.label}
-                          </a>
-                        </li>
-                      )
-                    })}
-                  </ul>
+                        return (
+                          <li key={item.id}>
+                            <a
+                              href={`#${item.id}`}
+                              className={`flex items-start gap-3 py-2 px-3 rounded-md text-sm transition-all duration-300 ease-in-out ${
+                                isActive
+                                  ? "bg-[#001F4B] text-white"
+                                  : "text-gray-700 hover:bg-gray-50 hover:text-[#001F4B]"
+                              }`}
+                              style={{ paddingLeft }}
+                              onClick={(e) => {
+                                handleTocClick(e, item.id)
+                                setTocExpanded(false)
+                              }}
+                            >
+                              <span
+                                className={`text-xs font-medium mt-0.5 min-w-[32px] transition-colors duration-300 ${
+                                  isActive ? "text-white/80" : "text-gray-400"
+                                }`}
+                              >
+                                {item.number}
+                              </span>
+                              <span className={`flex-1 leading-relaxed ${isActive ? "font-medium" : "font-normal"}`}>
+                                {item.label}
+                              </span>
+                            </a>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </nav>
                 </div>
               </div>
             )}
 
             <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
-              <Image src="/room1.jpg" alt="From Concept To Concrete" fill className="object-cover" priority />
+              <Image
+                src="/modern-architecture-concept.jpg"
+                alt="From Concept To Concrete"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
 
             <h1
@@ -294,8 +348,10 @@ export default function BlogDetailPage() {
             className="px-10 md:px-[122px] py-4"
             style={{
               background: "white",
-              maskImage: "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
             }}
           >
             <hr

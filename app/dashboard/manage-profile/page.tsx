@@ -4,7 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Edit2 } from "lucide-react"
+import { Edit2, Eye, EyeOff } from "lucide-react"
 
 interface Contact {
   phone: string
@@ -27,18 +27,24 @@ interface ProfileData {
   socialMedia: SocialMedia
 }
 
-interface ManageProfilePageProps {
-  onBack: () => void
+interface AdminCredentials {
+  username: string
+  password: string
 }
 
-export default function ManageProfilePage({ onBack }: ManageProfilePageProps) {
+export default function ManageProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
+  const [isEditingCredentials, setIsEditingCredentials] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
   const originalAbout =
     "NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural design, interior spaces, and high-end visualizations. We blend design with technology to create thoughtful, innovative, and visually compelling environments. From concept to execution, our work reflects a commitment to clarity, craft, and bold creative expression......."
 
   const [profileData, setProfileData] = useState<ProfileData>({
     companyName: "NEDF",
-    companyLogo: "/nedf-logo.png",
+    companyLogo: "/logo.jpg",
     about: originalAbout,
     contacts: [{ phone: "+1 (555) 123-4567" }, { phone: "+1 (555) 987-6543" }],
     email: "contact@nedf.studio",
@@ -49,6 +55,18 @@ export default function ManageProfilePage({ onBack }: ManageProfilePageProps) {
       tiktok: "@nedf.studio",
       pinterest: "nedf",
     },
+  })
+
+  const [adminCredentials, setAdminCredentials] = useState<AdminCredentials>(() => {
+    const stored = localStorage.getItem("adminCredentials")
+    return stored ? JSON.parse(stored) : { username: "admin", password: "password123" }
+  })
+
+  const [credentialEdit, setCredentialEdit] = useState({
+    currentPassword: "",
+    newUsername: "",
+    newPassword: "",
+    confirmPassword: "",
   })
 
   const [editData, setEditData] = useState<ProfileData>(profileData)
@@ -66,6 +84,53 @@ export default function ManageProfilePage({ onBack }: ManageProfilePageProps) {
   const handleCancel = () => {
     setEditData({ ...profileData })
     setIsEditing(false)
+  }
+
+  const handleEditCredentials = () => {
+    setCredentialEdit({
+      currentPassword: "",
+      newUsername: adminCredentials.username,
+      newPassword: "",
+      confirmPassword: "",
+    })
+    setIsEditingCredentials(true)
+  }
+
+  const handleSaveCredentials = () => {
+    if (credentialEdit.currentPassword !== adminCredentials.password) {
+      alert("Current password is incorrect")
+      return
+    }
+
+    if (credentialEdit.newPassword !== credentialEdit.confirmPassword) {
+      alert("New passwords do not match")
+      return
+    }
+
+    if (credentialEdit.newPassword.length < 6) {
+      alert("Password must be at least 6 characters long")
+      return
+    }
+
+    const newCredentials = {
+      username: credentialEdit.newUsername,
+      password: credentialEdit.newPassword,
+    }
+
+    setAdminCredentials(newCredentials)
+    localStorage.setItem("adminCredentials", JSON.stringify(newCredentials))
+    setIsEditingCredentials(false)
+    alert("Credentials updated successfully!")
+  }
+
+  const handleCancelCredentials = () => {
+    setIsEditingCredentials(false)
+    setCredentialEdit({
+      currentPassword: "",
+      newUsername: "",
+      newPassword: "",
+      confirmPassword: "",
+    })
   }
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,7 +233,7 @@ export default function ManageProfilePage({ onBack }: ManageProfilePageProps) {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          
+          <h1 className="text-3xl font-bold text-gray-900">Manage Profile</h1>
 
           <div className="flex gap-3">
             {isEditing ? (
@@ -197,162 +262,286 @@ export default function ManageProfilePage({ onBack }: ManageProfilePageProps) {
           </div>
         </div>
 
-        <Card className="shadow-lg">
-          <CardContent className="p-8">
-            <div className="space-y-8">
-              {/* Logo and Company Name - Non-editable */}
-              <div className="flex items-center gap-6">
-                <div className="w-24 h-24  flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <img
-                    src={currentData.companyLogo || "/placeholder.svg"}
-                    alt="Company Logo"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </div>
-                
-              </div>
-
-              {/* About Section */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">About</h3>
-                  {isEditing && (
-                    <span className={`text-sm ${isAboutValidLength ? "text-green-600" : "text-red-500"}`}>
-                      {aboutCharCount}/{originalCharCount} characters
-                    </span>
-                  )}
-                </div>
-                {isEditing ? (
-                  <div>
-                    <textarea
-                      value={currentData.about}
-                      onChange={(e) => setEditData((prev) => ({ ...prev, about: e.target.value }))}
-                      rows={4}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none resize-none ${
-                        isAboutValidLength ? "border-gray-300" : "border-red-300"
-                      }`}
-                      placeholder="Tell us about your company..."
-                    />
-                    {!isAboutValidLength && (
-                      <p className="text-red-500 text-sm mt-1">
-                        Text must be exactly {originalCharCount} characters long
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <p className="text-gray-700 leading-relaxed">{currentData.about}</p>
-                )}
-              </div>
-
-              {/* Contact Section */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">Contact</h3>
-                  {isEditing && currentData.contacts.length < 2 && (
+        <div className="space-y-6">
+          <Card className="shadow-lg">
+            <CardContent className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-semibold text-gray-900">Admin Credentials</h2>
+                {isEditingCredentials ? (
+                  <div className="flex gap-3">
                     <Button
                       variant="outline"
-                      size="sm"
-                      onClick={addContact}
+                      onClick={handleCancelCredentials}
                       className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-transparent"
                     >
-                      Add Contact
+                      Cancel
                     </Button>
-                  )}
-                </div>
-                <div className="space-y-3">
-                  {currentData.contacts.map((contact, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      {isEditing ? (
-                        <>
-                          <input
-                            type="tel"
-                            value={contact.phone}
-                            onChange={(e) => updateContact(index, e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none"
-                            placeholder="Phone number"
-                          />
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeContact(index)}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                          >
-                            X
-                          </Button>
-                        </>
-                      ) : (
-                        contact.phone && <p className="text-gray-700">{contact.phone}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Email */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Email</h3>
-                {isEditing ? (
-                  <input
-                    type="email"
-                    value={currentData.email}
-                    onChange={(e) => setEditData((prev) => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none"
-                    placeholder="Enter email address"
-                  />
+                    <Button onClick={handleSaveCredentials} className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white">
+                      Save Credentials
+                    </Button>
+                  </div>
                 ) : (
-                  <p className="text-gray-700">{currentData.email}</p>
+                  <Button onClick={handleEditCredentials} className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white">
+                    <Edit2 className="w-4 h-4 mr-2" />
+                    Change Credentials
+                  </Button>
                 )}
               </div>
 
-              {/* Social Media */}
-              <div className="mt-12">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">Social Media</h3>
-                <div className="flex flex-col items-start gap-4 max-w-md">
-                  {Object.entries(currentData.socialMedia).map(([platform, handle]) => (
-                    <div key={platform} className="flex items-center gap-4 w-full">
-                      {isEditing ? (
-                        <>
-                          <div className="flex items-center gap-2 text-[#001F4B] min-w-[100px]">
-                            {getSocialIcon(platform)}
-                            <span className="text-sm font-medium capitalize">{platform}</span>
-                          </div>
-                          <div className="flex-1 flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={handle}
-                              onChange={(e) => updateSocialMedia(platform as keyof SocialMedia, e.target.value)}
-                              className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none"
-                              placeholder={`@handle`}
-                            />
-                            {handle && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => removeSocialMedia(platform as keyof SocialMedia)}
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50 px-2"
-                              >
-                                X
-                              </Button>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        handle && (
-                          <div className="flex items-center gap-4 w-full">
-                            <div className="text-[#001F4B] p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                              {getSocialIcon(platform)}
-                            </div>
-                            <span className="text-sm text-gray-600">{handle}</span>
-                          </div>
-                        )
+              {isEditingCredentials ? (
+                <div className="space-y-4 max-w-md">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Current Password *</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={credentialEdit.currentPassword}
+                        onChange={(e) => setCredentialEdit((prev) => ({ ...prev, currentPassword: e.target.value }))}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none pr-12"
+                        placeholder="Enter current password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      >
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">New Username *</label>
+                    <input
+                      type="text"
+                      value={credentialEdit.newUsername}
+                      onChange={(e) => setCredentialEdit((prev) => ({ ...prev, newUsername: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none"
+                      placeholder="Enter new username"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">New Password *</label>
+                    <div className="relative">
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        value={credentialEdit.newPassword}
+                        onChange={(e) => setCredentialEdit((prev) => ({ ...prev, newPassword: e.target.value }))}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none pr-12"
+                        placeholder="Enter new password (min 6 characters)"
+                        required
+                        minLength={6}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      >
+                        {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password *</label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={credentialEdit.confirmPassword}
+                        onChange={(e) => setCredentialEdit((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none pr-12"
+                        placeholder="Confirm new password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4 max-w-md">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <p className="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">{adminCredentials.username}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <p className="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">••••••••</p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Company Profile Section */}
+          <Card className="shadow-lg">
+            <CardContent className="p-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Company Profile</h2>
+              <div className="space-y-8">
+                {/* Logo and Company Name - Non-editable */}
+                <div className="flex items-center gap-6">
+                  <div className="w-24 h-24  flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <img
+                      src={currentData.companyLogo || "/placeholder.svg"}
+                      alt="Company Logo"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900">{currentData.companyName}</h3>
+                  </div>
+                </div>
+
+                {/* About Section */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">About</h3>
+                    {isEditing && (
+                      <span className={`text-sm ${isAboutValidLength ? "text-green-600" : "text-red-500"}`}>
+                        {aboutCharCount}/{originalCharCount} characters
+                      </span>
+                    )}
+                  </div>
+                  {isEditing ? (
+                    <div>
+                      <textarea
+                        value={currentData.about}
+                        onChange={(e) => setEditData((prev) => ({ ...prev, about: e.target.value }))}
+                        rows={4}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none resize-none ${
+                          isAboutValidLength ? "border-gray-300" : "border-red-300"
+                        }`}
+                        placeholder="Tell us about your company..."
+                      />
+                      {!isAboutValidLength && (
+                        <p className="text-red-500 text-sm mt-1">
+                          Text must be exactly {originalCharCount} characters long
+                        </p>
                       )}
                     </div>
-                  ))}
+                  ) : (
+                    <p className="text-gray-700 leading-relaxed">{currentData.about}</p>
+                  )}
+                </div>
+
+                {/* Contact Section */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">Contact</h3>
+                    {isEditing && currentData.contacts.length < 2 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={addContact}
+                        className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-transparent"
+                      >
+                        Add Contact
+                      </Button>
+                    )}
+                  </div>
+                  <div className="space-y-3">
+                    {currentData.contacts.map((contact, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        {isEditing ? (
+                          <>
+                            <input
+                              type="tel"
+                              value={contact.phone}
+                              onChange={(e) => updateContact(index, e.target.value)}
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none"
+                              placeholder="Phone number"
+                            />
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeContact(index)}
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                            >
+                              X
+                            </Button>
+                          </>
+                        ) : (
+                          contact.phone && <p className="text-gray-700">{contact.phone}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Email</h3>
+                  {isEditing ? (
+                    <input
+                      type="email"
+                      value={currentData.email}
+                      onChange={(e) => setEditData((prev) => ({ ...prev, email: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none"
+                      placeholder="Enter email address"
+                    />
+                  ) : (
+                    <p className="text-gray-700">{currentData.email}</p>
+                  )}
+                </div>
+
+                {/* Social Media */}
+                <div className="mt-12">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-6">Social Media</h3>
+                  <div className="flex flex-col items-start gap-4 max-w-md">
+                    {Object.entries(currentData.socialMedia).map(([platform, handle]) => (
+                      <div key={platform} className="flex items-center gap-4 w-full">
+                        {isEditing ? (
+                          <>
+                            <div className="flex items-center gap-2 text-[#001F4B] min-w-[100px]">
+                              {getSocialIcon(platform)}
+                              <span className="text-sm font-medium capitalize">{platform}</span>
+                            </div>
+                            <div className="flex-1 flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={handle}
+                                onChange={(e) => updateSocialMedia(platform as keyof SocialMedia, e.target.value)}
+                                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001F4B] focus:border-[#001F4B] outline-none"
+                                placeholder={`@handle`}
+                              />
+                              {handle && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeSocialMedia(platform as keyof SocialMedia)}
+                                  className="text-red-500 hover:text-red-700 hover:bg-red-50 px-2"
+                                >
+                                  X
+                                </Button>
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          handle && (
+                            <div className="flex items-center gap-4 w-full">
+                              <div className="text-[#001F4B] p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                {getSocialIcon(platform)}
+                              </div>
+                              <span className="text-sm text-gray-600">{handle}</span>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

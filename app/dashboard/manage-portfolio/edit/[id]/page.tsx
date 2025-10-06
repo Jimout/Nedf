@@ -1,14 +1,13 @@
 "use client"
 
 import type React from "react"
-
-import { useState, useRef } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
 
 const ArrowLeftIcon = () => (
@@ -47,7 +46,8 @@ interface CustomField {
   value: string | string[]
 }
 
-interface ProjectData {
+interface Project {
+  id: number
   name: string
   year: string
   client: string
@@ -67,132 +67,41 @@ interface ProjectData {
   customFields: CustomField[]
 }
 
-export default function AddProjectPage() {
+export default function EditProjectPage({ params }: { params: { id: string } }) {
   const router = useRouter()
-  const colorPickerRef = useRef<HTMLInputElement>(null)
-  const [activeColorIndex, setActiveColorIndex] = useState<number | null>(null)
-  const [colorPickerPosition, setColorPickerPosition] = useState({ x: 0, y: 0 })
-  const [yearError, setYearError] = useState("")
-  const [validationError, setValidationError] = useState("")
+  const [project, setProject] = useState<Project | null>(null)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [validationError, setValidationError] = useState("")
+  const [yearError, setYearError] = useState("")
 
-  const [projectData, setProjectData] = useState<ProjectData>({
-    name: "",
-    year: "",
-    client: "",
-    location: "",
-    area: "",
-    topology: "",
-    role: "",
-    status: "In Progress",
-    beforeImage: "",
-    afterImage: "",
-    inspiration: "",
-    description: "",
-    features: [""],
-    materials: [""],
-    colorPalette: ["#ffffff"],
-    galleryImages: [],
-    customFields: [],
-  })
-
-  const handleInputChange = (field: keyof ProjectData, value: string) => {
-    setProjectData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const handleYearChange = (value: string) => {
-    if (value && !/^\d*$/.test(value)) {
-      setYearError("Must enter numbers only")
-      setTimeout(() => setYearError(""), 3000)
-    } else {
-      setYearError("")
-    }
-
-    const numericValue = value.replace(/[^0-9]/g, "")
-    setProjectData((prev) => ({ ...prev, year: numericValue }))
-  }
-
-  const handleArrayChange = (field: "features" | "materials" | "galleryImages", index: number, value: string) => {
-    setProjectData((prev) => ({
-      ...prev,
-      [field]: prev[field].map((item, i) => (i === index ? value : item)),
-    }))
-  }
-
-  const addArrayItem = (field: "features" | "materials" | "galleryImages") => {
-    setProjectData((prev) => ({
-      ...prev,
-      [field]: [...prev[field], ""],
-    }))
-  }
-
-  const removeArrayItem = (field: "features" | "materials" | "galleryImages", index: number) => {
-    setProjectData((prev) => ({
-      ...prev,
-      [field]: prev[field].filter((_, i) => i !== index),
-    }))
-  }
-
-  const handleColorChange = (index: number, value: string) => {
-    setProjectData((prev) => ({
-      ...prev,
-      colorPalette: prev.colorPalette.map((color, i) => (i === index ? value : color)),
-    }))
-  }
-
-  const addColor = () => {
-    setProjectData((prev) => ({
-      ...prev,
-      colorPalette: [...prev.colorPalette, "#ffffff"],
-    }))
-  }
-
-  const removeColor = (index: number) => {
-    if (projectData.colorPalette.length > 1) {
-      setProjectData((prev) => ({
-        ...prev,
-        colorPalette: prev.colorPalette.filter((_, i) => i !== index),
-      }))
-    }
-  }
-
-  const handleImageUpload = (field: "beforeImage" | "afterImage" | "galleryImages", index?: number) => {
-    const input = document.createElement("input")
-    input.type = "file"
-    input.accept = "image/*"
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (file) {
-        const url = URL.createObjectURL(file)
-        if (field === "galleryImages" && typeof index === "number") {
-          handleArrayChange("galleryImages", index, url)
-        } else if (field !== "galleryImages") {
-          handleInputChange(field, url)
-        }
+  useEffect(() => {
+    const savedProjects = localStorage.getItem("portfolioProjects")
+    if (savedProjects) {
+      const projects = JSON.parse(savedProjects)
+      const foundProject = projects.find((p: Project) => p.id === Number.parseInt(params.id))
+      if (foundProject) {
+        setProject({
+          ...foundProject,
+          customFields: foundProject.customFields || [],
+          features: foundProject.features || [""],
+          materials: foundProject.materials || [""],
+          colorPalette: foundProject.colorPalette || ["#ffffff"],
+          galleryImages: foundProject.galleryImages || [],
+          location: foundProject.location || "",
+          area: foundProject.area || "",
+          topology: foundProject.topology || "",
+          role: foundProject.role || "",
+          inspiration: foundProject.inspiration || "",
+        })
+      } else {
+        router.push("/dashboard/manage-portfolio")
       }
     }
-    input.click()
-  }
+  }, [params.id, router])
 
-  const handleGalleryUpload = () => {
-    const input = document.createElement("input")
-    input.type = "file"
-    input.accept = "image/*"
-    input.multiple = true
-    input.onchange = (e) => {
-      const files = Array.from((e.target as HTMLInputElement).files || [])
-      files.forEach((file) => {
-        const url = URL.createObjectURL(file)
-        setProjectData((prev) => ({
-          ...prev,
-          galleryImages: [...prev.galleryImages, url],
-        }))
-      })
-    }
-    input.click()
-  }
+  const handleSave = () => {
+    if (!project) return
 
-  const handleUpload = () => {
     if (!isFormValid()) {
       setValidationError(
         "Please fill the required fields: Name, Year, Client, Before Image, After Image, and Description",
@@ -204,106 +113,91 @@ export default function AddProjectPage() {
     setShowConfirmModal(true)
   }
 
-  const handleConfirmedUpload = () => {
-    const existingProjects = JSON.parse(localStorage.getItem("portfolioProjects") || "[]")
+  const handleConfirmedSave = () => {
+    if (!project) return
 
-    const newProject = {
-      ...projectData,
-      id: Date.now(),
+    const savedProjects = localStorage.getItem("portfolioProjects")
+    if (savedProjects) {
+      const projects = JSON.parse(savedProjects)
+      const updatedProjects = projects.map((p: Project) => (p.id === project.id ? project : p))
+      localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
     }
 
-    const updatedProjects = [...existingProjects, newProject]
-
-    localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
-
-    console.log("Project uploaded successfully:", newProject)
     setShowConfirmModal(false)
-    router.push(`/dashboard/manage-portfolio/view/${newProject.id}`)
+    router.push(`/dashboard/manage-portfolio/view/${project.id}`)
   }
 
-  const handleCancel = () => {
-    router.back()
-  }
+  const handleYearChange = (value: string) => {
+    if (!project) return
 
-  const handleBackClick = () => {
-    router.back()
-  }
-
-  const addCustomField = (type: "text" | "list") => {
-    const newField: CustomField = {
-      id: Date.now().toString(),
-      type,
-      label: `Custom ${type === "text" ? "Field" : "List"} ${projectData.customFields.length + 1}`,
-      value: type === "text" ? "" : [""],
+    if (value && !/^\d*$/.test(value)) {
+      setYearError("Must enter numbers only")
+      setTimeout(() => setYearError(""), 3000)
+    } else {
+      setYearError("")
     }
-    setProjectData((prev) => ({
-      ...prev,
-      customFields: [...prev.customFields, newField],
-    }))
+
+    const numericValue = value.replace(/[^0-9]/g, "")
+    setProject({ ...project, year: numericValue })
   }
 
-  const updateCustomField = (id: string, updates: Partial<CustomField>) => {
-    setProjectData((prev) => ({
-      ...prev,
-      customFields: prev.customFields.map((field) => (field.id === id ? { ...field, ...updates } : field)),
-    }))
+  const handleArrayChange = (field: "features" | "materials" | "galleryImages", index: number, value: string) => {
+    if (!project) return
+    setProject({
+      ...project,
+      [field]: project[field].map((item, i) => (i === index ? value : item)),
+    })
   }
 
-  const removeCustomField = (id: string) => {
-    setProjectData((prev) => ({
-      ...prev,
-      customFields: prev.customFields.filter((field) => field.id !== id),
-    }))
+  const addArrayItem = (field: "features" | "materials" | "galleryImages") => {
+    if (!project) return
+    setProject({
+      ...project,
+      [field]: [...project[field], ""],
+    })
   }
 
-  const addCustomListItem = (fieldId: string) => {
-    setProjectData((prev) => ({
-      ...prev,
-      customFields: prev.customFields.map((field) =>
-        field.id === fieldId && field.type === "list" ? { ...field, value: [...(field.value as string[]), ""] } : field,
-      ),
-    }))
+  const removeArrayItem = (field: "features" | "materials" | "galleryImages", index: number) => {
+    if (!project) return
+    setProject({
+      ...project,
+      [field]: project[field].filter((_, i) => i !== index),
+    })
   }
 
-  const updateCustomListItem = (fieldId: string, index: number, value: string) => {
-    setProjectData((prev) => ({
-      ...prev,
-      customFields: prev.customFields.map((field) =>
-        field.id === fieldId && field.type === "list"
-          ? {
-              ...field,
-              value: (field.value as string[]).map((item, i) => (i === index ? value : item)),
-            }
-          : field,
-      ),
-    }))
+  const handleColorChange = (index: number, value: string) => {
+    if (!project) return
+    setProject({
+      ...project,
+      colorPalette: project.colorPalette.map((color, i) => (i === index ? value : color)),
+    })
   }
 
-  const removeCustomListItem = (fieldId: string, index: number) => {
-    setProjectData((prev) => ({
-      ...prev,
-      customFields: prev.customFields.map((field) =>
-        field.id === fieldId && field.type === "list"
-          ? {
-              ...field,
-              value: (field.value as string[]).filter((_, i) => i !== index),
-            }
-          : field,
-      ),
-    }))
+  const addColor = () => {
+    if (!project) return
+    setProject({
+      ...project,
+      colorPalette: [...project.colorPalette, "#ffffff"],
+    })
+  }
+
+  const removeColor = (index: number) => {
+    if (!project) return
+    if (project.colorPalette.length > 1) {
+      setProject({
+        ...project,
+        colorPalette: project.colorPalette.filter((_, i) => i !== index),
+      })
+    }
   }
 
   const handleColorClick = (index: number, event: React.MouseEvent) => {
+    if (!project) return
     const rect = (event.target as HTMLElement).getBoundingClientRect()
-    setColorPickerPosition({
-      x: rect.left,
-      y: rect.bottom + 5,
-    })
-    setActiveColorIndex(index)
 
     const input = document.createElement("input")
     input.type = "color"
-    input.value = projectData.colorPalette[index]
+    input.value = project.colorPalette[index]
     input.style.position = "absolute"
     input.style.left = `${rect.left}px`
     input.style.top = `${rect.bottom + 5}px`
@@ -313,12 +207,10 @@ export default function AddProjectPage() {
     input.onchange = (e) => {
       handleColorChange(index, (e.target as HTMLInputElement).value)
       document.body.removeChild(input)
-      setActiveColorIndex(null)
     }
 
     input.onblur = () => {
       document.body.removeChild(input)
-      setActiveColorIndex(null)
     }
 
     document.body.appendChild(input)
@@ -326,25 +218,141 @@ export default function AddProjectPage() {
     input.click()
   }
 
+  const handleImageUpload = (field: "beforeImage" | "afterImage" | "galleryImages", index?: number) => {
+    if (!project) return
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept = "image/*"
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (file) {
+        const url = URL.createObjectURL(file)
+        if (field === "galleryImages" && typeof index === "number") {
+          handleArrayChange("galleryImages", index, url)
+        } else if (field !== "galleryImages") {
+          setProject({ ...project, [field]: url })
+        }
+      }
+    }
+    input.click()
+  }
+
+  const handleGalleryUpload = () => {
+    if (!project) return
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept = "image/*"
+    input.multiple = true
+    input.onchange = (e) => {
+      const files = Array.from((e.target as HTMLInputElement).files || [])
+      files.forEach((file) => {
+        const url = URL.createObjectURL(file)
+        setProject((prev) => {
+          if (!prev) return prev
+          return {
+            ...prev,
+            galleryImages: [...prev.galleryImages, url],
+          }
+        })
+      })
+    }
+    input.click()
+  }
+
+  const addCustomField = (type: "text" | "list") => {
+    if (!project) return
+    const newField: CustomField = {
+      id: Date.now().toString(),
+      type,
+      label: `Custom ${type === "text" ? "Field" : "List"} ${project.customFields.length + 1}`,
+      value: type === "text" ? "" : [""],
+    }
+    setProject({
+      ...project,
+      customFields: [...project.customFields, newField],
+    })
+  }
+
+  const updateCustomField = (id: string, updates: Partial<CustomField>) => {
+    if (!project) return
+    setProject({
+      ...project,
+      customFields: project.customFields.map((field) => (field.id === id ? { ...field, ...updates } : field)),
+    })
+  }
+
+  const removeCustomField = (id: string) => {
+    if (!project) return
+    setProject({
+      ...project,
+      customFields: project.customFields.filter((field) => field.id !== id),
+    })
+  }
+
+  const addCustomListItem = (fieldId: string) => {
+    if (!project) return
+    setProject({
+      ...project,
+      customFields: project.customFields.map((field) =>
+        field.id === fieldId && field.type === "list" ? { ...field, value: [...(field.value as string[]), ""] } : field,
+      ),
+    })
+  }
+
+  const updateCustomListItem = (fieldId: string, index: number, value: string) => {
+    if (!project) return
+    setProject({
+      ...project,
+      customFields: project.customFields.map((field) =>
+        field.id === fieldId && field.type === "list"
+          ? {
+              ...field,
+              value: (field.value as string[]).map((item, i) => (i === index ? value : item)),
+            }
+          : field,
+      ),
+    })
+  }
+
+  const removeCustomListItem = (fieldId: string, index: number) => {
+    if (!project) return
+    setProject({
+      ...project,
+      customFields: project.customFields.map((field) =>
+        field.id === fieldId && field.type === "list"
+          ? {
+              ...field,
+              value: (field.value as string[]).filter((_, i) => i !== index),
+            }
+          : field,
+      ),
+    })
+  }
+
   const isFormValid = () => {
     return (
-      projectData.name.trim() !== "" &&
-      projectData.year.trim() !== "" &&
-      projectData.client.trim() !== "" &&
-      projectData.beforeImage !== "" &&
-      projectData.afterImage !== "" &&
-      projectData.description.trim() !== ""
+      project &&
+      project.name.trim() !== "" &&
+      project.year.trim() !== "" &&
+      project.client.trim() !== "" &&
+      project.beforeImage !== "" &&
+      project.afterImage !== "" &&
+      project.description.trim() !== ""
     )
+  }
+
+  if (!project) {
+    return <div>Loading...</div>
   }
 
   return (
     <div className="min-h-screen bg-gray-50 font-['Montserrat']">
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="ghost" size="sm" className="p-2" onClick={handleBackClick}>
+          <Button variant="ghost" size="sm" className="p-2" onClick={() => router.back()}>
             <ArrowLeftIcon />
           </Button>
-          <h1 className="text-3xl font-bold text-[#001F4B] uppercase tracking-wide">Add New Project</h1>
+          <h1 className="text-3xl font-bold text-[#001F4B] uppercase tracking-wide">Edit Project</h1>
         </div>
 
         {validationError && (
@@ -364,8 +372,8 @@ export default function AddProjectPage() {
                   Project Name <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  value={projectData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  value={project.name}
+                  onChange={(e) => setProject({ ...project, name: e.target.value })}
                   placeholder="Enter project name"
                   required
                 />
@@ -375,7 +383,7 @@ export default function AddProjectPage() {
                   Year <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  value={projectData.year}
+                  value={project.year}
                   onChange={(e) => handleYearChange(e.target.value)}
                   placeholder="Enter year"
                   required
@@ -387,8 +395,8 @@ export default function AddProjectPage() {
                   Client <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  value={projectData.client}
-                  onChange={(e) => handleInputChange("client", e.target.value)}
+                  value={project.client}
+                  onChange={(e) => setProject({ ...project, client: e.target.value })}
                   placeholder="Client name"
                   required
                 />
@@ -396,38 +404,38 @@ export default function AddProjectPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
                 <Input
-                  value={projectData.location}
-                  onChange={(e) => handleInputChange("location", e.target.value)}
+                  value={project.location}
+                  onChange={(e) => setProject({ ...project, location: e.target.value })}
                   placeholder="Project location"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Area</label>
                 <Input
-                  value={projectData.area}
-                  onChange={(e) => handleInputChange("area", e.target.value)}
+                  value={project.area}
+                  onChange={(e) => setProject({ ...project, area: e.target.value })}
                   placeholder="Area size"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Topology</label>
                 <Input
-                  value={projectData.topology}
-                  onChange={(e) => handleInputChange("topology", e.target.value)}
+                  value={project.topology}
+                  onChange={(e) => setProject({ ...project, topology: e.target.value })}
                   placeholder="Topology used"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                 <Input
-                  value={projectData.role}
-                  onChange={(e) => handleInputChange("role", e.target.value)}
+                  value={project.role}
+                  onChange={(e) => setProject({ ...project, role: e.target.value })}
                   placeholder="Your role in project"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <Select value={projectData.status} onValueChange={(value) => handleInputChange("status", value)}>
+                <Select value={project.status} onValueChange={(value) => setProject({ ...project, status: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -455,10 +463,10 @@ export default function AddProjectPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Before Image</label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  {projectData.beforeImage ? (
+                  {project.beforeImage ? (
                     <div className="relative">
                       <img
-                        src={projectData.beforeImage || "/placeholder.svg"}
+                        src={project.beforeImage || "/placeholder.svg"}
                         alt="Before"
                         className="w-full h-48 object-cover rounded"
                       />
@@ -486,10 +494,10 @@ export default function AddProjectPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">After Image</label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  {projectData.afterImage ? (
+                  {project.afterImage ? (
                     <div className="relative">
                       <img
-                        src={projectData.afterImage || "/placeholder.svg"}
+                        src={project.afterImage || "/placeholder.svg"}
                         alt="After"
                         className="w-full h-48 object-cover rounded"
                       />
@@ -526,8 +534,8 @@ export default function AddProjectPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Inspiration</label>
               <Textarea
-                value={projectData.inspiration}
-                onChange={(e) => handleInputChange("inspiration", e.target.value)}
+                value={project.inspiration}
+                onChange={(e) => setProject({ ...project, inspiration: e.target.value })}
                 placeholder="Describe the inspiration for this project"
                 rows={3}
               />
@@ -537,8 +545,8 @@ export default function AddProjectPage() {
                 Description <span className="text-red-500">*</span>
               </label>
               <Textarea
-                value={projectData.description}
-                onChange={(e) => handleInputChange("description", e.target.value)}
+                value={project.description}
+                onChange={(e) => setProject({ ...project, description: e.target.value })}
                 placeholder="Detailed project description"
                 rows={4}
                 required
@@ -553,14 +561,14 @@ export default function AddProjectPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {projectData.features.map((feature, index) => (
+              {project.features.map((feature, index) => (
                 <div key={index} className="flex gap-2">
                   <Input
                     value={feature}
                     onChange={(e) => handleArrayChange("features", index, e.target.value)}
                     placeholder="Enter feature"
                   />
-                  {projectData.features.length > 1 && (
+                  {project.features.length > 1 && (
                     <Button variant="outline" size="sm" onClick={() => removeArrayItem("features", index)}>
                       <XIcon />
                     </Button>
@@ -570,34 +578,6 @@ export default function AddProjectPage() {
               <Button variant="outline" onClick={() => addArrayItem("features")} className="w-full">
                 <PlusIcon />
                 <span className="ml-2">Add Feature</span>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-[#001F4B]">Materials</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {projectData.materials.map((material, index) => (
-                <div key={index} className="flex gap-2">
-                  <Input
-                    value={material}
-                    onChange={(e) => handleArrayChange("materials", index, e.target.value)}
-                    placeholder="Enter material"
-                  />
-                  {projectData.materials.length > 1 && (
-                    <Button variant="outline" size="sm" onClick={() => removeArrayItem("materials", index)}>
-                      <XIcon />
-                    </Button>
-                  )}
-                </div>
-              ))}
-              <Button variant="outline" onClick={() => addArrayItem("materials")} className="w-full">
-                <PlusIcon />
-                <span className="ml-2">Add Material</span>
               </Button>
             </div>
           </CardContent>
@@ -629,49 +609,13 @@ export default function AddProjectPage() {
           </CardContent>
         </Card>
 
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-[#001F4B]">Color Palette</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4 mb-4">
-              {projectData.colorPalette.map((color, index) => (
-                <div key={index} className="relative">
-                  <div
-                    className="w-16 h-16 rounded-lg border-2 border-gray-300 cursor-pointer shadow-sm hover:shadow-md transition-shadow"
-                    style={{ backgroundColor: color }}
-                    onClick={(e) => handleColorClick(index, e)}
-                  />
-                  {projectData.colorPalette.length > 1 && (
-                    <button
-                      onClick={() => removeColor(index)}
-                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors"
-                    >
-                      X
-                    </button>
-                  )}
-                  <div className="text-xs text-gray-600 mt-1 text-center font-mono">{color}</div>
-                </div>
-              ))}
-            </div>
-            <Button
-              variant="outline"
-              onClick={addColor}
-              className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-transparent"
-            >
-              <PlusIcon />
-              <span className="ml-2">Add Color</span>
-            </Button>
-          </CardContent>
-        </Card>
-
-        {projectData.customFields.length > 0 && (
+        {project.customFields.length > 0 && (
           <Card className="mb-8">
             <CardHeader>
               <CardTitle className="text-[#001F4B]">Custom Fields</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              {projectData.customFields.map((field) => (
+              {project.customFields.map((field) => (
                 <div key={field.id} className="border rounded-lg p-4 bg-gray-50">
                   <div className="flex items-center gap-2 mb-3">
                     <Input
@@ -727,12 +671,76 @@ export default function AddProjectPage() {
 
         <Card className="mb-8">
           <CardHeader>
+            <CardTitle className="text-[#001F4B]">Materials</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {project.materials.map((material, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={material}
+                    onChange={(e) => handleArrayChange("materials", index, e.target.value)}
+                    placeholder="Enter material"
+                  />
+                  {project.materials.length > 1 && (
+                    <Button variant="outline" size="sm" onClick={() => removeArrayItem("materials", index)}>
+                      <XIcon />
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button variant="outline" onClick={() => addArrayItem("materials")} className="w-full">
+                <PlusIcon />
+                <span className="ml-2">Add Material</span>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-[#001F4B]">Color Palette</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-4 mb-4">
+              {project.colorPalette.map((color, index) => (
+                <div key={index} className="relative">
+                  <div
+                    className="w-16 h-16 rounded-lg border-2 border-gray-300 cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+                    style={{ backgroundColor: color }}
+                    onClick={(e) => handleColorClick(index, e)}
+                  />
+                  {project.colorPalette.length > 1 && (
+                    <button
+                      onClick={() => removeColor(index)}
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors"
+                    >
+                      X
+                    </button>
+                  )}
+                  <div className="text-xs text-gray-600 mt-1 text-center font-mono">{color}</div>
+                </div>
+              ))}
+            </div>
+            <Button
+              variant="outline"
+              onClick={addColor}
+              className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-transparent"
+            >
+              <PlusIcon />
+              <span className="ml-2">Add Color</span>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-8">
+          <CardHeader>
             <CardTitle className="text-[#001F4B]">Gallery</CardTitle>
           </CardHeader>
           <CardContent>
-            {projectData.galleryImages.length > 0 && (
+            {project.galleryImages.length > 0 && (
               <div className="flex flex-wrap gap-3 mb-4">
-                {projectData.galleryImages.map((image, index) => (
+                {project.galleryImages.map((image, index) => (
                   <div key={index} className="relative">
                     <img
                       src={image || "/placeholder.svg"}
@@ -764,28 +772,28 @@ export default function AddProjectPage() {
           <Button
             variant="outline"
             className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-transparent"
-            onClick={handleCancel}
+            onClick={() => router.back()}
           >
             Cancel
           </Button>
           <Button
-            onClick={handleUpload}
+            onClick={handleSave}
             className={`${isFormValid() ? "bg-[#001F4B] hover:bg-[#001F4B]/90" : "bg-gray-400 cursor-not-allowed"}`}
             disabled={!isFormValid()}
           >
-            Upload Project
+            Save Changes
           </Button>
         </div>
-      </div>
 
-      <ConfirmationModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onConfirm={handleConfirmedUpload}
-        title="Confirm Upload"
-        message="Are you sure you want to upload this project?"
-        type="upload"
-      />
+        <ConfirmationModal
+          isOpen={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={handleConfirmedSave}
+          title="Save Changes"
+          message="Are you sure you want to save these changes?"
+          type="update"
+        />
+      </div>
     </div>
   )
 }

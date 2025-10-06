@@ -42,7 +42,7 @@ export function Navbar() {
           WebkitMaskComposite: "intersect",
         }}
       >
-        <div className="flex items-center justify-between max-w-[1280px] mx-auto py-1 px-3 md:px-[122px] relative z-20">
+        <div className="flex items-center justify-between max-w-[1280px] mx-auto py-1 px-3 md:px-[122px] 2xl:px-32 relative z-20">
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
@@ -107,6 +107,7 @@ export function Navbar() {
         </div>
       </nav>
 
+      {/* Mobile Menu */}
       <div
         className={cn(
           "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-2 overflow-hidden transition-all duration-300 ease-in-out z-50 shadow-lg",

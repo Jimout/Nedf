@@ -11,6 +11,7 @@ export default function HeroWithStats() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lineHeight, setLineHeight] = useState(96); // default
 
+  // Update line height dynamically based on first span
   useEffect(() => {
     function updateLineHeight() {
       if (containerRef.current) {
@@ -27,6 +28,7 @@ export default function HeroWithStats() {
     return () => window.removeEventListener('resize', updateLineHeight);
   }, []);
 
+  // Rotate words every 2.6s
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => prev + 1);
@@ -34,6 +36,7 @@ export default function HeroWithStats() {
     return () => clearInterval(interval);
   }, []);
 
+  // Reset animation when reaching the last word
   useEffect(() => {
     if (index === words.length) {
       const timeout = setTimeout(() => {
@@ -41,7 +44,7 @@ export default function HeroWithStats() {
           containerRef.current.style.transition = 'none';
           setIndex(0);
           containerRef.current.style.transform = `translateY(0px)`;
-          containerRef.current.offsetHeight;
+          containerRef.current.offsetHeight; // force reflow
           containerRef.current.style.transition =
             'transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)';
         }
@@ -63,6 +66,9 @@ export default function HeroWithStats() {
           font-montserrat
           overflow-hidden
           px-4
+          2xl:px-20      /* Add bigger padding only on ultra-wide screens */
+          max-w-[1600px] /* Limit the max width so content doesn't stretch too much */
+          mx-auto        /* Center content horizontally */
           -mt-4
           max-sm:-mt-16
         "

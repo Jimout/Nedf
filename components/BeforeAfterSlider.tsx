@@ -53,8 +53,8 @@ export default function BeforeAfterSlider({
   )
 
   // Determine label visibility
-  const showBefore = sliderPosition < 80
-  const showAfter = sliderPosition > 20
+  const showAfter = sliderPosition < 80
+  const showBefore = sliderPosition > 20
 
   return (
     <div

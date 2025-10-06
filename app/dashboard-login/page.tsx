@@ -14,7 +14,7 @@ export default function DashboardLogin() {
 
   useEffect(() => {
     if (localStorage.getItem("dashboardAuth")) {
-      router.push("/dashboard/overview");
+      router.push("/dashboard");
     }
   }, [router]);
 
@@ -24,7 +24,7 @@ export default function DashboardLogin() {
 
     if (username === DEFAULT_USER && password === savedPass) {
       localStorage.setItem("dashboardAuth", "true");
-      router.push("/dashboard/overview");
+      router.push("/dashboard");
     } else {
       setError("Invalid username or password");
     }

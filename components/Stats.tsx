@@ -73,7 +73,7 @@ export default function Stats() {
     <section ref={ref} className="w-full py-4 max-sm:-mt-12">
       <div
         className="
-          max-w-6xl mx-auto px-4
+          max-w-6xl mx-auto px-4 2xl:px-32
           grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4
           gap-y-10 gap-x-6 text-center
         "

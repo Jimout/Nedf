@@ -16,47 +16,64 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
   const totalSlides = images.length - 1 // sliding window of 2
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1 > totalSlides ? 0 : prev + 1))
+    setCurrentSlide((prev) => Math.min(prev + 1, totalSlides))
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 < 0 ? totalSlides : prev - 1))
+    setCurrentSlide((prev) => Math.max(prev - 1, 0))
   }
+
+  const isAtStart = currentSlide === 0
+  const isAtEnd = currentSlide === totalSlides
 
   return (
     <div className="relative w-full overflow-hidden">
       {/* Left Arrow */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition-all"
+        disabled={isAtStart}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80"
       >
         <ChevronLeft className="w-6 h-6 text-[#001F4B]" />
       </button>
 
-      {/* Images Container */}
-      <div className="flex transition-transform duration-700 ease-in-out">
+      <div
+        className="flex transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+      >
         {images.map((img, idx) => {
-          let width = "0%" // default hidden
-          if (idx === currentSlide)
-            width = "75%" // first image in pair
-          else if (idx === currentSlide + 1) width = "25%" // second image in pair
+          const isMainImage = idx === currentSlide
+          const isSecondaryImage = idx === currentSlide + 1
 
           return (
             <div
               key={idx}
-              className="flex-shrink-0"
-              style={{ width, marginRight: `${gap}px`, transition: "width 0.7s" }}
+              className="flex-shrink-0 flex"
+              style={{
+                width: "100%",
+                gap: `${gap}px`,
+              }}
             >
-              {(idx === currentSlide || idx === currentSlide + 1) && (
+              <div className="flex-shrink-0" style={{ width: "75%" }}>
                 <Image
                   src={img || "/placeholder.svg"}
                   alt={alts[idx]}
                   width={700}
                   height={400}
-                  className={`w-full h-[400px] object-cover transition-opacity duration-300 ${
-                    idx === currentSlide + 1 ? "opacity-30" : ""
-                  }`}
+                  className="w-full h-[400px] object-cover"
                 />
+              </div>
+
+              {idx < images.length - 1 && (
+                <div className="flex-shrink-0" style={{ width: "25%" }}>
+                  <Image
+                    src={images[idx + 1] || "/placeholder.svg"}
+                    alt={alts[idx + 1]}
+                    width={300}
+                    height={400}
+                    className="w-full h-[400px] object-cover opacity-30"
+                  />
+                </div>
               )}
             </div>
           )
@@ -66,14 +83,14 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
       {/* Right Arrow */}
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition-all"
+        disabled={isAtEnd}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80"
       >
         <ChevronRight className="w-6 h-6 text-[#001F4B]" />
       </button>
 
-      {/* Dots */}
       <div className="flex justify-center mt-4 space-x-2">
-        {Array.from({ length: totalSlides }).map((_, idx) => (
+        {Array.from({ length: totalSlides + 1 }).map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentSlide(idx)}

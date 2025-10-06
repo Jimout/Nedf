@@ -1,89 +1,115 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Image from "next/image";
-import { Navbar } from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Pagination from "@/components/Pagination";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { Navbar } from "@/components/Navbar"
+import Footer from "@/components/Footer"
+import Pagination from "@/components/Pagination"
+import { motion, AnimatePresence } from "framer-motion"
 
 const posts = [
   {
-    image: "/room1.jpg",
+    id: 1,
+    image: "/modern-architecture-concept.jpg",
     categories: ["Case File", "Architecture"],
     title: "From Concept To Concrete",
     description:
-      "We Take You Through The Design Journey Of A Modern Home We Recently Completed In Addis Ababa From Rough Initial Sketches To Polished Renders To ....",
+      "We Take You Through The Design Journey Of A Modern Home We Recently Completed In Addis Ababa From Rough Initial Sketches To Polished Renders To Final Construction. This comprehensive case study explores every detail of our creative process and the challenges we overcame.",
   },
   {
-    image: "/interior2.jpg",
+    id: 2,
+    image: "/clay-materials-interior-design.jpg",
     categories: ["Materials", "Design Thinking", "Interior Design"],
     title: "Why Clay Still Wins",
-    description: "Clay Isn’t Just A Material It’s A Philosophy. In This Note, We Reflect On Why ....",
+    description:
+      "Clay Isn't Just A Material It's A Philosophy. In This Note, We Reflect On Why Traditional Materials Continue To Outperform Modern Alternatives In Both Sustainability And Aesthetic Appeal.",
   },
   {
-    image: "/visual1.jpg",
+    id: 3,
+    image: "/creative-studio-workspace.png",
     categories: ["Studio Life", "Behind The Scenes"],
     title: "Studio Mornings: What Fuels Our Process",
-    description: "Every Monday At NEDF Starts With Music, Coffee, And Creative Chaos. We Give You A Glimpse ....",
+    description:
+      "Every Monday At NEDF Starts With Music, Coffee, And Creative Chaos. We Give You A Glimpse Into Our Daily Rituals And The Small Moments That Spark Big Ideas.",
   },
   {
-    image: "/interior1.jpg",
+    id: 4,
+    image: "/minimalist-interior.png",
     categories: ["Design"],
     title: "The Power Of Simplicity",
-    description: "Design Isn’t Always About More. Sometimes It’s About Less Done Right....",
+    description:
+      "Design Isn't Always About More. Sometimes It's About Less Done Right. We explore the principles of minimalist design and how restraint can create more impactful spaces.",
   },
   {
-    image: "/room3.jpg",
+    id: 5,
+    image: "/ai-architecture-technology.jpg",
     categories: ["Tech", "AI"],
     title: "Using AI in Architecture",
-    description: "How Artificial Intelligence is shaping how we plan, visualize, and build in the 21st century....",
+    description:
+      "How Artificial Intelligence is shaping how we plan, visualize, and build in the 21st century. From generative design to predictive modeling, we examine the tools that are revolutionizing our industry.",
   },
   {
-    image: "/room2.jpg",
+    id: 6,
+    image: "/modern-minimalist-room.png",
     categories: ["Interior", "Design"],
     title: "Modern Minimalism",
-    description: "Minimalist spaces are more than aesthetics; they are philosophy....",
+    description:
+      "Minimalist spaces are more than aesthetics; they are philosophy. We explore how to create spaces that breathe and inspire through thoughtful reduction and careful curation.",
   },
   {
-    image: "/visual2.jpg",
+    id: 7,
+    image: "/creative-workflow-visualization.jpg",
     categories: ["Studio Life", "Workflow"],
     title: "Workflow Optimization",
-    description: "Tips on how to streamline your creative process....",
+    description:
+      "Tips on how to streamline your creative process and maintain productivity while preserving the spark of innovation.",
   },
   {
-    image: "/interior3.jpg",
+    id: 8,
+    image: "/sustainable-interior-materials.jpg",
     categories: ["Design", "Materials"],
     title: "Material Innovation",
-    description: "Exploring new materials for sustainable interiors....",
+    description: "Exploring new materials for sustainable interiors that don't compromise on beauty or functionality.",
   },
-];
+]
+
+const calculateTextLines = (title: string, categories: string[]) => {
+  let lines = 3
+  if (title.length > 40) lines -= 1
+  if (title.length > 60) lines -= 1
+  if (categories.length > 2) lines -= 1
+  if (categories.length > 3) lines -= 1
+  return Math.max(1, lines)
+}
 
 export default function BlogPage() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("")
+  const [page, setPage] = useState(1)
+  const router = useRouter()
 
-  const postsPerPage = 6;
+  const postsPerPage = 6
 
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(search.toLowerCase()) ||
-      post.description.toLowerCase().includes(search.toLowerCase())
-  );
+      post.description.toLowerCase().includes(search.toLowerCase()) ||
+      post.categories.some((cat) => cat.toLowerCase().includes(search.toLowerCase())),
+  )
 
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-  const paginatedPosts = filteredPosts.slice(
-    (page - 1) * postsPerPage,
-    page * postsPerPage
-  );
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage)
+  const paginatedPosts = filteredPosts.slice((page - 1) * postsPerPage, page * postsPerPage)
+
+  const handleReadMore = (id: number) => {
+    router.push(`/blog/${id}`)
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* Entire page container with fade and 122px padding */}
       <div
-        className="px-[122px]"
+        className="px-10 md:px-[122px]"
         style={{
           background: "white",
           maskImage:
@@ -94,34 +120,31 @@ export default function BlogPage() {
           WebkitMaskComposite: "intersect",
         }}
       >
-        {/* Intro + Search */}
+        {/* HEADER */}
         <section className="max-w-full mx-auto pt-6 pb-6 text-center">
-          <h1 className="text-2xl md:text-3xl font-medium text-[#001F4B] mb-2">
-            Our Blog: Stories & Insights
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-medium text-[#001F4B] mb-2">Our Blog: Stories & Insights</h1>
           <p className="text-gray-600 mb-4">
             Discover design thinking, project stories, and ideas shaping architecture & interior design.
           </p>
 
+          {/* SEARCH BAR */}
           <div className="flex justify-center">
             <input
               type="text"
               placeholder="Search articles..."
               value={search}
               onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
+                setSearch(e.target.value)
+                setPage(1)
               }}
               className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#001F4B]"
             />
-            <button className="px-4 py-2 bg-[#001F4B] text-white rounded-r-md">
-              Search
-            </button>
+            <button className="px-4 py-2 bg-[#001F4B] text-white rounded-r-md">Search</button>
           </div>
         </section>
 
-        {/* Blog Grid */}
-        <section className="max-w-full mx-auto">
+        {/* BLOG CARDS */}
+        <section className="max-w-full mx-auto pb-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={page}
@@ -131,82 +154,88 @@ export default function BlogPage() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.3 }}
             >
-              {paginatedPosts.map(({ image, categories, title, description }, i) => (
-                <article
-                  key={i}
-                  className="bg-white shadow-sm flex flex-col border border-[rgba(0,31,75,0.1)]"
-                  style={{ height: "420px" }}
-                >
-                  <div className="relative h-[180px] w-full">
-                    <Image
-                      src={image}
-                      alt={title}
-                      fill
-                      className="object-cover"
-                      sizes="400px"
-                    />
-                  </div>
+              {paginatedPosts.map(({ id, image, categories, title, description }) => {
+                const textLines = calculateTextLines(title, categories)
 
-                  <div className="p-4 flex flex-col flex-1">
-                    <div className="mb-2 flex flex-wrap gap-2">
-                      {categories.map((cat, idx) => (
-                        <span
-                          key={idx}
-                          className="text-[11px] font-medium"
-                          style={{
-                            fontFamily: "Montserrat, sans-serif",
-                            color: "#001F4B",
-                            border: "1px solid rgba(0,31,75,0.1)",
-                            padding: "4px 10px",
-                            borderRadius: "999px",
-                          }}
-                        >
-                          {cat}
-                        </span>
-                      ))}
+                return (
+                  <article
+                    key={id}
+                    className="bg-white shadow-sm flex flex-col border border-[rgba(0,31,75,0.1)]"
+                    style={{ height: "420px" }}
+                  >
+                    <div className="relative h-[180px] w-full">
+                      <Image
+                        src={image || "/placeholder.svg"}
+                        alt={title}
+                        fill
+                        className="object-cover"
+                        sizes="400px"
+                      />
                     </div>
 
-                    <h2 className="text-[18px] text-[#333333] mb-1">{title}</h2>
+                    <div className="p-4 flex flex-col flex-1">
+                      <div className="mb-2 flex flex-wrap gap-2">
+                        {categories.map((cat, idx) => (
+                          <span
+                            key={idx}
+                            className="text-[11px] font-medium"
+                            style={{
+                              fontFamily: "Montserrat, sans-serif",
+                              color: "#001F4B",
+                              border: "1px solid rgba(0,31,75,0.1)",
+                              padding: "4px 10px",
+                              borderRadius: "999px",
+                            }}
+                          >
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
 
-                    <p
-                      className="text-[#333333]/60 text-[12px] leading-snug mb-3"
-                      style={{
-                        display: "-webkit-box",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {description}
-                    </p>
+                      <h2 className="text-[18px] text-[#333333] mb-1">{title}</h2>
 
-                    <div className="mt-auto flex justify-end">
-                      <button
-                        className="text-white text-xs px-3 py-[8px] transition"
+                      <p
+                        className="text-[#333333]/60 text-[12px] leading-snug mb-3"
                         style={{
-                          backgroundColor: "#001F4B",
-                          border: "1px solid rgba(0,31,75,0.1)",
-                          borderRadius: "0px",
+                          display: "-webkit-box",
+                          WebkitLineClamp: textLines,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                         }}
                       >
-                        Read More
-                      </button>
+                        {description}
+                      </p>
+
+                      <div className="mt-auto flex justify-end">
+                        <button
+                          onClick={() => handleReadMore(id)}
+                          className="text-white text-xs px-3 py-[8px] transition hover:bg-[#001F4B]/90"
+                          style={{
+                            backgroundColor: "#001F4B",
+                            border: "1px solid rgba(0,31,75,0.1)",
+                            borderRadius: "0px",
+                          }}
+                        >
+                          Read More
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                )
+              })}
             </motion.div>
           </AnimatePresence>
 
-          {/* Pagination aligned to last card */}
-          <div className="mt-6 flex justify-end">
-            <Pagination page={page} setPage={setPage} total={totalPages} />
-          </div>
+          {totalPages > 1 && (
+            <div className="mt-6 flex justify-end">
+              <Pagination page={page} setPage={setPage} total={totalPages} />
+            </div>
+          )}
         </section>
       </div>
 
       <Footer />
     </div>
-  );
+  )
 }
