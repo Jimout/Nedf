@@ -7,38 +7,50 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
-  { name: "need", href: "/" },
+  { name: "Home", href: "/" },
   { name: "Portfolio", href: "/portfolio", scrollOnLanding: false },
   { name: "Team", href: "/TheCrew", scrollOnLanding: true },
   { name: "Blog", href: "/blog", scrollOnLanding: false },
-  { name: "Contact Us", href: "/footer", scrollOnLanding: true },
 ]
+
+const ctaItem = { name: "Contact Us", href: "/footer", scrollOnLanding: true }
 
 export function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleToggle = () => setIsOpen((prev) => !prev)
+  const handleToggle = () => {
+    console.log("[v0] Hamburger clicked, current state:", isOpen)
+    setIsOpen((prev) => !prev)
+  }
 
   return (
     <div className="w-full relative">
       <nav
         className="w-full relative bg-white overflow-visible"
         style={{
-          maskImage: `linear-gradient(to right, white 0%, white 15%, white 85%, white 100%), linear-gradient(to top, transparent 0%, white 50%, white 100%), linear-gradient(to bottom, transparent 0%, white 50%, white 100%)`,
+          maskImage: `
+            linear-gradient(to right, white 0%, white 15%, white 85%, white 100%),
+            linear-gradient(to top, transparent 0%, white 50%, white 100%),
+            linear-gradient(to bottom, transparent 0%, white 50%, white 100%)
+          `,
           maskComposite: "intersect",
-          WebkitMaskImage: `linear-gradient(to right, white 0%, white 15%, white 85%, white 100%), linear-gradient(to top, transparent 0%, white 50%, white 100%), linear-gradient(to bottom, transparent 0%, white 50%, white 100%)`,
+          WebkitMaskImage: `
+            linear-gradient(to right, white 0%, white 15%, white 85%, white 100%),
+            linear-gradient(to top, transparent 0%, white 50%, white 100%),
+            linear-gradient(to bottom, transparent 0%, white 50%, white 100%)
+          `,
           WebkitMaskComposite: "intersect",
         }}
       >
-        <div className="flex items-center w-full max-w-[90%] mx-auto px-4 md:px-12 2xl:px-32 py-2 relative z-20">
+        <div className="flex items-center w-full max-w-[95%] mx-auto px-4 md:px-12 2xl:px-32 py-2 relative z-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center flex-shrink-0">
+          <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex ml-[220px] 2xl:ml-[280px] space-x-20 2xl:space-x-30 text-sm font-medium">
+          {/* Desktop nav - centered navigation links */}
+          <div className="hidden md:flex items-center justify-center space-x-24 text-sm font-medium flex-1 ml-10 2xl:ml-15">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -58,15 +70,20 @@ export function Navbar() {
             })}
           </div>
 
-          {/* Mobile menu button */}
+          <Link
+            href={ctaItem.href}
+            className="hidden md:flex items-center px-6 py-2 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm whitespace-nowrap"
+          >
+            {ctaItem.name}
+          </Link>
+
           <button
             onClick={handleToggle}
-            className="md:hidden ml-auto w-12 h-12 flex items-center justify-center focus:outline-none rounded-md z-40 active:bg-gray-100"
+            className="md:hidden ml-4 relative w-12 h-12 flex items-center justify-center focus:outline-none touch-manipulation bg-transparent border-0 cursor-pointer z-40 active:bg-gray-100 rounded-md"
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             type="button"
           >
-            {/* Hamburger */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -81,7 +98,6 @@ export function Navbar() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
 
-            {/* Close */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -113,7 +129,7 @@ export function Navbar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "block transition duration-300 ease-in-out pb-1 text-sm text-[#333333] text-center",
+                "block transition duration-300 ease-in-out pb-1 text-sm text-[#333333] text-center touch-manipulation",
                 isActive ? "underline underline-offset-4 decoration-[#001F4B]" : "hover:text-[#003366] hover:scale-105",
               )}
               onClick={() => setIsOpen(false)}
@@ -122,6 +138,13 @@ export function Navbar() {
             </Link>
           )
         })}
+        <Link
+          href={ctaItem.href}
+          className="block px-6 py-2 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm text-center touch-manipulation"
+          onClick={() => setIsOpen(false)}
+        >
+          {ctaItem.name}
+        </Link>
       </div>
     </div>
   )
