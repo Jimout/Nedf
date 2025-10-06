@@ -38,7 +38,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex ml-[220px] 2xl:ml-[240px] space-x-20 2xl:space-x-30 text-sm font-medium">
+          <div className="hidden md:flex ml-[220px] 2xl:ml-[280px] space-x-20 2xl:space-x-30 text-sm font-medium">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
