@@ -25,29 +25,20 @@ export function Navbar() {
       <nav
         className="w-full relative bg-white overflow-visible"
         style={{
-          maskImage: `
-            linear-gradient(to right, white 0%, white 15%, white 85%, white 100%),
-            linear-gradient(to top, transparent 0%, white 50%, white 100%),
-            linear-gradient(to bottom, transparent 0%, white 50%, white 100%)
-          `,
+          maskImage: `linear-gradient(to right, white 0%, white 15%, white 85%, white 100%), linear-gradient(to top, transparent 0%, white 50%, white 100%), linear-gradient(to bottom, transparent 0%, white 50%, white 100%)`,
           maskComposite: "intersect",
-          WebkitMaskImage: `
-            linear-gradient(to right, white 0%, white 15%, white 85%, white 100%),
-            linear-gradient(to top, transparent 0%, white 50%, white 100%),
-            linear-gradient(to bottom, transparent 0%, white 50%, white 100%)
-          `,
+          WebkitMaskImage: `linear-gradient(to right, white 0%, white 15%, white 85%, white 100%), linear-gradient(to top, transparent 0%, white 50%, white 100%), linear-gradient(to bottom, transparent 0%, white 50%, white 100%)`,
           WebkitMaskComposite: "intersect",
         }}
       >
         <div className="flex items-center w-full max-w-[90%] mx-auto px-4 md:px-12 2xl:px-32 py-2 relative z-20">
-
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex ml-[60px] 2xl:ml-[80px] space-x-20 text-sm font-medium">
+          <div className="hidden md:flex ml-[220px] 2xl:ml-[240px] space-x-20 2xl:space-x-30 text-sm font-medium">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -58,7 +49,7 @@ export function Navbar() {
                     "transition duration-300 ease-in-out pb-1 whitespace-nowrap",
                     isActive
                       ? "text-[#001F4B] underline underline-offset-4 decoration-[#001F4B]"
-                      : "text-[#333333] hover:text-[#003366] hover:scale-105"
+                      : "text-[#333333] hover:text-[#003366] hover:scale-105",
                   )}
                 >
                   {item.name}
@@ -84,7 +75,7 @@ export function Navbar() {
               strokeWidth={2}
               className={cn(
                 "w-6 h-6 transition-all duration-200 ease-in-out",
-                isOpen ? "opacity-0 rotate-90" : "opacity-100 rotate-0"
+                isOpen ? "opacity-0 rotate-90" : "opacity-100 rotate-0",
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -99,7 +90,7 @@ export function Navbar() {
               strokeWidth={2}
               className={cn(
                 "absolute w-6 h-6 transition-all duration-200 ease-in-out",
-                isOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"
+                isOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90",
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -112,7 +103,7 @@ export function Navbar() {
       <div
         className={cn(
           "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-2 overflow-hidden transition-all duration-300 ease-in-out z-50 shadow-lg",
-          isOpen ? "max-h-64 opacity-100 py-3" : "max-h-0 opacity-0 py-0"
+          isOpen ? "max-h-64 opacity-100 py-3" : "max-h-0 opacity-0 py-0",
         )}
       >
         {navItems.map((item) => {
@@ -123,7 +114,7 @@ export function Navbar() {
               href={item.href}
               className={cn(
                 "block transition duration-300 ease-in-out pb-1 text-sm text-[#333333] text-center",
-                isActive ? "underline underline-offset-4 decoration-[#001F4B]" : "hover:text-[#003366] hover:scale-105"
+                isActive ? "underline underline-offset-4 decoration-[#001F4B]" : "hover:text-[#003366] hover:scale-105",
               )}
               onClick={() => setIsOpen(false)}
             >
