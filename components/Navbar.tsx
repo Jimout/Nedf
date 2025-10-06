@@ -7,7 +7,7 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
-  { name: "Hme", href: "/" },
+  { name: "Home", href: "/" },
   { name: "Portfolio", href: "/portfolio", scrollOnLanding: false },
   { name: "Team", href: "/TheCrew", scrollOnLanding: true },
   { name: "Blog", href: "/blog", scrollOnLanding: false },
