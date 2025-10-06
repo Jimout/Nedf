@@ -25,14 +25,10 @@ export default function Stats() {
       { threshold: 0.3 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    if (ref.current) observer.observe(ref.current);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+      if (ref.current) observer.unobserve(ref.current);
     };
   }, [hasAnimated]);
 
@@ -40,30 +36,15 @@ export default function Stats() {
     const duration = 2000;
     const startTimestamp = performance.now();
 
-    const targetValues = stats.map((stat) => {
-      const numericPart = parseInt(stat.value.replace(/[^\d]/g, ""));
-      return isNaN(numericPart) ? 0 : numericPart;
-    });
-
-    const suffixes = stats.map((stat) => {
-      if (stat.value.includes("%")) return "%";
-      if (stat.value.includes("+")) return "+";
-      return "";
-    });
+    const targetValues = stats.map((stat) => parseInt(stat.value.replace(/[^\d]/g, "")) || 0);
+    const suffixes = stats.map((stat) => (stat.value.includes("%") ? "%" : stat.value.includes("+") ? "+" : ""));
 
     const step = (timestamp: number) => {
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-
-      const updatedValues = targetValues.map((target, index) => {
-        const current = Math.floor(progress * target);
-        return `${current}${suffixes[index]}`;
-      });
-
+      const updatedValues = targetValues.map((target, index) => `${Math.floor(progress * target)}${suffixes[index]}`);
       setAnimatedValues(updatedValues);
 
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      }
+      if (progress < 1) requestAnimationFrame(step);
     };
 
     requestAnimationFrame(step);
@@ -73,16 +54,13 @@ export default function Stats() {
     <section ref={ref} className="w-full py-4 max-sm:-mt-12">
       <div
         className="
-          max-w-6xl mx-auto px-4 2xl:px-32
+          w-full px-4 2xl:px-32
           grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4
           gap-y-10 gap-x-6 text-center
         "
       >
         {stats.map((stat, index) => (
-          <div
-            key={index}
-            className="max-sm:bg-white max-sm:p-4 max-sm:rounded-md max-sm:shadow-md"
-          >
+          <div key={index} className="max-sm:bg-white max-sm:p-4 max-sm:rounded-md max-sm:shadow-md">
             <div className="text-2xl max-sm:text-lg font-bold text-[#001F4B]/70 font-mono">
               {animatedValues[index]}
             </div>

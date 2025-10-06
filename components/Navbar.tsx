@@ -7,10 +7,10 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
-  { name: "Home", href: "/" },
+  { name: "Hme", href: "/" },
   { name: "Portfolio", href: "/portfolio", scrollOnLanding: false },
   { name: "Team", href: "/TheCrew", scrollOnLanding: true },
-  { name: "Blog", href:"/blog", scrollOnLanding: false },
+  { name: "Blog", href: "/blog", scrollOnLanding: false },
   { name: "Contact Us", href: "/footer", scrollOnLanding: true },
 ]
 
@@ -19,7 +19,6 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleToggle = () => {
-    console.log("[v0] Hamburger clicked, current state:", isOpen)
     setIsOpen((prev) => !prev)
   }
 
@@ -42,8 +41,7 @@ export function Navbar() {
           WebkitMaskComposite: "intersect",
         }}
       >
-        <div className="flex items-center justify-between max-w-[1280px] mx-auto py-1 px-3 md:px-[122px] 2xl:px-32 relative z-20">
-          {/* Logo */}
+        <div className="flex items-center justify-between max-w-[1280px] mx-auto py-0.5 px-3 md:px-[122px] 2xl:px-32 relative z-20">
           <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
           </Link>

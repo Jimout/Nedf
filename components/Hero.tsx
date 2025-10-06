@@ -17,8 +17,7 @@ export default function HeroWithStats() {
       if (containerRef.current) {
         const firstSpan = containerRef.current.querySelector('span');
         if (firstSpan) {
-          const height = firstSpan.clientHeight;
-          setLineHeight(height);
+          setLineHeight(firstSpan.clientHeight);
         }
       }
     }
@@ -56,95 +55,33 @@ export default function HeroWithStats() {
   return (
     <>
       {/* Hero Section */}
-      <section
-        className="
-          relative
-          min-h-[65vh]
-          flex
-          items-center
-          justify-center
-          font-montserrat
-          overflow-hidden
-          px-4
-          2xl:px-20      /* Add bigger padding only on ultra-wide screens */
-          max-w-[1600px] /* Limit the max width so content doesn't stretch too much */
-          mx-auto        /* Center content horizontally */
-          -mt-4
-          max-sm:-mt-16
-        "
-      >
+      <section className="relative flex items-center justify-center font-montserrat overflow-hidden px-4 sm:px-6 lg:px-12 2xl:px-20 max-w-7xl mx-auto min-h-[65vh] -mt-4 max-sm:-mt-16">
         <div className="flex items-center max-sm:items-start">
           {/* Rotated NEDF */}
-          <div
-            className="
-              select-none
-              text-[#001F4B]
-              font-extralight
-              tracking-wider
-              text-[80px]
-              rotate-[-90deg]
-              mr-[-10px]
-              max-sm:text-[48px]
-              max-sm:mr-[-4px]
-            "
-          >
+          <div className="select-none text-[#001F4B] font-extralight tracking-wider text-[80px] rotate-[-90deg] mr-[-10px] max-sm:text-[48px] max-sm:mr-[-4px]">
             NEDF
           </div>
 
           {/* Text Block */}
           <div className="flex flex-col justify-center max-sm:-mt-4">
-            <div
-              className="
-                flex
-                items-center
-                max-sm:flex-col
-                max-sm:items-start
-              "
-              style={{ height: `${lineHeight}px` }}
-            >
-              <span
-                className="
-                  text-[58px]
-                  font-thin
-                  text-[#333333]/80
-                  tracking-wide
-                  mr-3
-                  max-sm:text-[24px]
-                  max-sm:mb-[-6px]
-                  max-sm:ml-[36px]
-                "
-              >
+            <div className="flex items-center max-sm:flex-col max-sm:items-start" style={{ height: `${lineHeight}px` }}>
+              <span className="text-[58px] font-thin text-[#333333]/80 tracking-wide mr-3 max-sm:text-[24px] max-sm:mb-[-6px] max-sm:ml-[36px]">
                 We Are
               </span>
 
-              <div
-                className="overflow-hidden relative"
-                style={{
-                  height: `${lineHeight}px`,
-                  maxHeight: `${lineHeight}px`,
-                }}
-              >
+              <div className="overflow-hidden relative" style={{ height: `${lineHeight}px`, maxHeight: `${lineHeight}px` }}>
                 <div
                   ref={containerRef}
                   className="will-change-transform"
                   style={{
                     transform: `translateY(-${index * lineHeight}px)`,
-                    transition:
-                      'transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                    transition: 'transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
                   }}
                 >
                   {extendedWords.map((word, i) => (
                     <span
                       key={i}
-                      className="
-                        block
-                        font-medium
-                        text-[#001F4B]
-                        text-[85px]
-                        leading-none
-                        whitespace-nowrap
-                        max-sm:text-[40px]
-                      "
+                      className="block font-medium text-[#001F4B] text-[85px] leading-none whitespace-nowrap max-sm:text-[40px]"
                       style={{
                         height: `${lineHeight}px`,
                         lineHeight: `${lineHeight}px`,
