@@ -7,7 +7,7 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
-  { name: "hoo", href: "/" },
+  { name: "Home", href: "/" },
   { name: "Portfolio", href: "/portfolio", scrollOnLanding: false },
   { name: "Team", href: "/TheCrew", scrollOnLanding: true },
   { name: "Blog", href: "/blog", scrollOnLanding: false },
@@ -47,7 +47,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex ml-60 space-x-20 text-sm font-medium">
+          <div className="hidden md:flex ml-[60px] 2xl:ml-[80px] space-x-20 text-sm font-medium">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
