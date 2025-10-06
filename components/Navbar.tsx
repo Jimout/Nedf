@@ -18,9 +18,7 @@ export function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleToggle = () => {
-    setIsOpen((prev) => !prev)
-  }
+  const handleToggle = () => setIsOpen((prev) => !prev)
 
   return (
     <div className="w-full relative">
@@ -41,14 +39,15 @@ export function Navbar() {
           WebkitMaskComposite: "intersect",
         }}
       >
-        <div className="flex items-center justify-between w-full max-w-[90%] mx-auto px-4 md:px-12 2xl:px-32 relative z-20">
+        <div className="flex items-center w-full max-w-[90%] mx-auto px-4 md:px-12 2xl:px-32 py-2 relative z-20">
 
-          <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
+          {/* Logo */}
+          <Link href="/" className="flex items-center flex-shrink-0">
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex ml-8 space-x-[80px] text-sm font-medium max-w-[700px] flex-grow">
+          <div className="hidden md:flex ml-60 space-x-20 text-sm font-medium">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -59,7 +58,7 @@ export function Navbar() {
                     "transition duration-300 ease-in-out pb-1 whitespace-nowrap",
                     isActive
                       ? "text-[#001F4B] underline underline-offset-4 decoration-[#001F4B]"
-                      : "text-[#333333] hover:text-[#003366] hover:scale-105",
+                      : "text-[#333333] hover:text-[#003366] hover:scale-105"
                   )}
                 >
                   {item.name}
@@ -68,13 +67,15 @@ export function Navbar() {
             })}
           </div>
 
+          {/* Mobile menu button */}
           <button
             onClick={handleToggle}
-            className="md:hidden ml-4 relative w-12 h-12 flex items-center justify-center focus:outline-none touch-manipulation bg-transparent border-0 cursor-pointer z-40 active:bg-gray-100 rounded-md"
+            className="md:hidden ml-auto w-12 h-12 flex items-center justify-center focus:outline-none rounded-md z-40 active:bg-gray-100"
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             type="button"
           >
+            {/* Hamburger */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -83,12 +84,13 @@ export function Navbar() {
               strokeWidth={2}
               className={cn(
                 "w-6 h-6 transition-all duration-200 ease-in-out",
-                isOpen ? "opacity-0 rotate-90" : "opacity-100 rotate-0",
+                isOpen ? "opacity-0 rotate-90" : "opacity-100 rotate-0"
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
 
+            {/* Close */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -97,7 +99,7 @@ export function Navbar() {
               strokeWidth={2}
               className={cn(
                 "absolute w-6 h-6 transition-all duration-200 ease-in-out",
-                isOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90",
+                isOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -110,7 +112,7 @@ export function Navbar() {
       <div
         className={cn(
           "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-2 overflow-hidden transition-all duration-300 ease-in-out z-50 shadow-lg",
-          isOpen ? "max-h-64 opacity-100 py-3" : "max-h-0 opacity-0 py-0",
+          isOpen ? "max-h-64 opacity-100 py-3" : "max-h-0 opacity-0 py-0"
         )}
       >
         {navItems.map((item) => {
@@ -120,8 +122,8 @@ export function Navbar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "block transition duration-300 ease-in-out pb-1 text-sm text-[#333333] text-center touch-manipulation",
-                isActive ? "underline underline-offset-4 decoration-[#001F4B]" : "hover:text-[#003366] hover:scale-105",
+                "block transition duration-300 ease-in-out pb-1 text-sm text-[#333333] text-center",
+                isActive ? "underline underline-offset-4 decoration-[#001F4B]" : "hover:text-[#003366] hover:scale-105"
               )}
               onClick={() => setIsOpen(false)}
             >
