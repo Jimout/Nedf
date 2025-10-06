@@ -36,12 +36,17 @@ export default function PortfolioPage() {
   const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
   const [windowWidth, setWindowWidth] = useState<number>(0)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     setWindowWidth(window.innerWidth)
     const handleResize = () => setWindowWidth(window.innerWidth)
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    setIsLoaded(true)
   }, [])
 
   const filteredProjects = projects.filter((p) => {
@@ -75,7 +80,7 @@ export default function PortfolioPage() {
           }}
         >
           {/* Search */}
-          <div className="relative mb-6 sm:mb-8">
+          <div className="relative mb-6 sm:mb-8" id="search">
             <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-[#001F4B] opacity-40 w-4 h-4 sm:w-5 sm:h-5" />
             <input
               type="text"
@@ -96,8 +101,10 @@ export default function PortfolioPage() {
                   setActiveTag(tag)
                   setPage(1)
                 }}
-                className={`pb-1 text-xs sm:text-sm font-medium whitespace-nowrap transition-all ${
-                  activeTag === tag ? "text-[#001F4B] border-b-2 border-[#001F4B]" : "text-gray-500"
+                className={`pb-1 text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                  activeTag === tag
+                    ? "text-[#001F4B] border-b-2 border-[#001F4B]"
+                    : "text-gray-500 hover:text-[#001F4B]/60"
                 }`}
               >
                 {tag}
@@ -110,16 +117,16 @@ export default function PortfolioPage() {
             <motion.div
               key={page + activeTag + search}
               className="grid grid-cols-2 md:grid-cols-4 gap-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
               {paginatedProjects.map((project, index) => (
                 <Link
                   key={`${project.id}-${index}`}
                   href={`/portfolio/${project.id}`}
-                  className="relative group cursor-pointer overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 ease-out transform hover:-translate-y-1 sm:hover:-translate-y-2 will-change-transform active:scale-95 sm:active:scale-98"
+                  className="relative group cursor-pointer overflow-hidden shadow-md hover:shadow-2xl transition-all duration-700 ease-out transform hover:-translate-y-2 will-change-transform active:scale-98"
                   style={{ height: `${imageHeight}px` }}
                 >
                   <Image
@@ -133,7 +140,6 @@ export default function PortfolioPage() {
                     priority={index < 6}
                   />
 
-                  {/* Overlay only on desktop */}
                   {windowWidth >= 768 && (
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
                   )}

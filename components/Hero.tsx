@@ -1,74 +1,72 @@
-'use client';
+"use client"
 
-import React, { useEffect, useRef, useState } from 'react';
-import Stats from './Stats';
+import { useEffect, useRef, useState } from "react"
+import Stats from "./Stats"
 
-const words = ['Designers', 'Creators', 'Resolvers'];
+const words = ["Designers", "Creators", "Resolvers"]
 
 export default function HeroWithStats() {
-  const extendedWords = [...words, words[0]];
-  const [index, setIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [lineHeight, setLineHeight] = useState(96); // default
+  const extendedWords = [...words, words[0]]
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  // Update line height dynamically based on first span
+  // Dynamically set lineHeight based on screen size
+  const getLineHeight = () => {
+    if (typeof window !== "undefined" && window.innerWidth >= 1536) {
+      return 180 // 2xl screen
+    }
+    return 96 // standard screens
+  }
+
+  const [lineHeight, setLineHeight] = useState(getLineHeight)
+  const [index, setIndex] = useState(0)
+
+  // Update lineHeight on resize
   useEffect(() => {
     function updateLineHeight() {
-      if (containerRef.current) {
-        const firstSpan = containerRef.current.querySelector('span');
-        if (firstSpan) {
-          setLineHeight(firstSpan.clientHeight);
-        }
-      }
+      setLineHeight(getLineHeight())
     }
 
-    updateLineHeight();
-    window.addEventListener('resize', updateLineHeight);
-    return () => window.removeEventListener('resize', updateLineHeight);
-  }, []);
+    updateLineHeight()
+    window.addEventListener("resize", updateLineHeight)
+    return () => window.removeEventListener("resize", updateLineHeight)
+  }, [])
 
   // Rotate words every 2.6s
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => prev + 1);
-    }, 2600);
-    return () => clearInterval(interval);
-  }, []);
+    const interval = setInterval(() => setIndex((prev) => prev + 1), 2600)
+    return () => clearInterval(interval)
+  }, [])
 
   // Reset animation when reaching the last word
   useEffect(() => {
     if (index === words.length) {
       const timeout = setTimeout(() => {
         if (containerRef.current) {
-          containerRef.current.style.transition = 'none';
-          setIndex(0);
-          containerRef.current.style.transform = `translateY(0px)`;
-          containerRef.current.offsetHeight; // force reflow
-          containerRef.current.style.transition =
-            'transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+          containerRef.current.style.transition = "none"
+          setIndex(0)
+          containerRef.current.style.transform = `translateY(0px)`
+          containerRef.current.offsetHeight // force reflow
+          containerRef.current.style.transition = "transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)"
         }
-      }, 700);
-      return () => clearTimeout(timeout);
+      }, 700)
+      return () => clearTimeout(timeout)
     }
-  }, [index]);
+  }, [index])
 
   return (
     <>
       {/* Hero Section */}
-      <section className="relative flex items-center justify-center font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-16 max-w-7xl mx-auto min-h-[65vh] -mt-4 max-sm:-mt-16">
+      <section className="relative flex items-center justify-start font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] -mt-4">
         <div className="flex items-center max-sm:items-start gap-2 max-sm:gap-2">
           {/* Rotated NEDF */}
-          <div className="select-none text-[#001F4B] tracking-wider text-[80px] rotate-[-90deg] max-sm:text-[48px] -ml-10 font-extralight 2xl:font-normal 2xl:text-[100px]">
+          <div className="select-none text-[#001F4B] tracking-wider text-[80px] rotate-[-90deg] max-sm:text-[48px] font-extralight 2xl:font-light 2xl:text-[100px] -ml-2">
             NEDF
           </div>
 
           {/* Text Block */}
-          <div className="flex flex-col justify-center max-sm:-mt-4">
-            <div
-              className="flex items-center max-sm:flex-col max-sm:items-start"
-              style={{ height: `${lineHeight}px` }}
-            >
-              <span className="text-[58px] font-thin text-[#333333]/80 tracking-wide mr-3 max-sm:text-[24px] max-sm:mb-[-6px] max-sm:ml-[36px] 2xl:text-[70px] 2xl:font-medium">
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center max-sm:flex-col max-sm:items-start" style={{ height: `${lineHeight}px` }}>
+              <span className="text-[58px] font-thin text-[#333333]/80 tracking-wide mr-2 max-sm:text-[24px] max-sm:mb-[-6px] max-sm:ml-[36px] 2xl:text-[70px] 2xl:font-normal">
                 We Are
               </span>
 
@@ -84,8 +82,7 @@ export default function HeroWithStats() {
                   className="will-change-transform"
                   style={{
                     transform: `translateY(-${index * lineHeight}px)`,
-                    transition:
-                      'transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                    transition: "transform 700ms cubic-bezier(0.68, -0.55, 0.265, 1.55)",
                   }}
                 >
                   {extendedWords.map((word, i) => (
@@ -110,5 +107,5 @@ export default function HeroWithStats() {
       {/* Stats Section */}
       <Stats />
     </>
-  );
+  )
 }

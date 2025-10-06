@@ -54,11 +54,11 @@ function ProjectDetailContent() {
     <PageTransition>
       <div className="relative min-h-screen overflow-hidden">
         <div
-          className="relative mx-auto"
+          className="relative mx-auto w-full"
           style={{
-            maxWidth: "1200px",
+            maxWidth: "1400px",
             backgroundColor: "white",
-            padding: "40px 122px",
+            padding: "40px clamp(20px, 8vw, 122px)",
             maskImage: `
             linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%),
             linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)
