@@ -41,7 +41,8 @@ export function Navbar() {
           WebkitMaskComposite: "intersect",
         }}
       >
-        <div className="flex items-center justify-between max-w-7xl mx-auto py-0.5 px-3 md:px-[122px] 2xl:px-32 relative z-20">
+        <div className="flex items-center justify-between w-full max-w-[90%] mx-auto px-4 md:px-12 2xl:px-32 relative z-20">
+
           <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
           </Link>
