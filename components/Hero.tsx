@@ -11,8 +11,12 @@ export default function HeroWithStats() {
 
   // Dynamically set lineHeight based on screen size
   const getLineHeight = () => {
-    if (typeof window !== "undefined" && window.innerWidth >= 1536) {
-      return 180 // 2xl screen
+    if (typeof window !== "undefined") {
+      if (window.innerWidth >= 1536) {
+        return 180 // 2xl screen
+      } else if (window.innerWidth < 640) {
+        return 64 // mobile line height (increased for visibility)
+      }
     }
     return 96 // standard screens
   }
@@ -70,7 +74,7 @@ export default function HeroWithStats() {
               className="flex items-center max-sm:flex-col max-sm:items-start"
               style={{ height: `${lineHeight}px` }}
             >
-              <span className="text-[58px] font-thin text-[#333333]/80 tracking-wide mr-2 max-sm:text-[24px] max-sm:mb-[-4px] max-sm:ml-[24px] 2xl:text-[70px] 2xl:font-normal">
+              <span className="text-[58px] font-thin text-[#333333]/80 tracking-wide mr-2 max-sm:text-[26px] max-sm:mb-[-4px] max-sm:ml-[24px] 2xl:text-[70px] 2xl:font-normal">
                 We Are
               </span>
 
@@ -93,7 +97,7 @@ export default function HeroWithStats() {
                   {extendedWords.map((word, i) => (
                     <span
                       key={i}
-                      className="block font-medium text-[#001F4B] text-[85px] leading-none whitespace-nowrap max-sm:text-[40px] 2xl:text-[110px]"
+                      className="block font-medium text-[#001F4B] text-[85px] leading-none whitespace-nowrap max-sm:text-[44px] 2xl:text-[110px]"
                       style={{
                         height: `${lineHeight}px`,
                         lineHeight: `${lineHeight}px`,

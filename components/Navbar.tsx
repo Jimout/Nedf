@@ -42,14 +42,15 @@ export function Navbar() {
           WebkitMaskComposite: "intersect",
         }}
       >
-        <div className="flex items-center w-full max-w-[95%] mx-auto px-4 md:px-12 2xl:px-32 py-2 relative z-20">
+        {/* Reduced height navbar */}
+        <div className="flex items-center w-full max-w-[95%] mx-auto px-4 md:px-12 2xl:px-32 py-1.5 relative z-20">
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
-            <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={100} height={40} priority />
+            <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={95} height={35} priority />
           </Link>
 
-          {/* Desktop nav with gap from logo */}
-          <div className="hidden md:flex items-center justify-center flex-1 ml-32 2xl:ml-38 space-x-20 2xl:space-x-24">
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center justify-center flex-1 ml-28 2xl:ml-36 space-x-16 2xl:space-x-20">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -72,15 +73,18 @@ export function Navbar() {
           {/* CTA Button */}
           <Link
             href={ctaItem.href}
-            className="hidden md:flex items-center px-6 py-2 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
+            className="hidden md:flex items-center px-5 py-1.5 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
           >
             {ctaItem.name}
           </Link>
 
-          {/* Mobile hamburger menu (right corner) */}
+          {/* Mobile hamburger */}
           <button
             onClick={handleToggle}
-            className="md:hidden ml-auto relative w-12 h-12 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-40 active:bg-gray-100 rounded-md"
+            className={cn(
+              "md:hidden ml-auto relative w-11 h-11 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-40 rounded-md transition-all duration-200 active:bg-gray-100",
+              "touch-manipulation select-none", // smoother mobile touch behavior
+            )}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             type="button"
@@ -118,7 +122,7 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <div
         className={cn(
           "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-2 overflow-hidden transition-all duration-300 ease-in-out z-50 shadow-lg",
