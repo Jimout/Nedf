@@ -48,18 +48,11 @@ const posts = [
 ]
 
 const calculateTextLines = (title: string, categories: string[]) => {
-  // Base lines: 3 (default)
   let lines = 3
-
-  // Reduce lines based on title length
   if (title.length > 40) lines -= 1
   if (title.length > 60) lines -= 1
-
-  // Reduce lines based on number of tags
   if (categories.length > 2) lines -= 1
   if (categories.length > 3) lines -= 1
-
-  // Ensure minimum 1 line
   return Math.max(1, lines)
 }
 
@@ -93,31 +86,30 @@ const ArrowRight = () => (
 
 export default function StudioNotes() {
   const [index, setIndex] = useState(0)
-  const [itemsPerSlide, setItemsPerSlide] = useState(3)
+  const [itemsPerSlide, setItemsPerSlide] = useState(4)
+  const [cardWidth, setCardWidth] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-
-  useEffect(() => {
-    const updateTextLength = () => {
-      if (!containerRef.current) return
-
-      const containerWidth = containerRef.current.offsetWidth
-      // Adjust max length based on container width
-      const newMaxLength = containerWidth < 250 ? 80 : containerWidth < 280 ? 100 : 120
-      // setMaxTextLength(newMaxLength)
-    }
-
-    updateTextLength()
-    window.addEventListener("resize", updateTextLength)
-    return () => window.removeEventListener("resize", updateTextLength)
-  }, [])
+  const gap = 32
 
   useEffect(() => {
     const handleResize = () => {
-      const isMobileView = window.innerWidth < 768
-      setItemsPerSlide(isMobileView ? 1 : 3)
-      setIsMobile(isMobileView)
+      const containerWidth = containerRef.current?.offsetWidth || window.innerWidth
+
+      if (window.innerWidth < 768) {
+        setItemsPerSlide(1)
+        setCardWidth(containerWidth)
+        setIsMobile(true)
+      } else if (window.innerWidth < 1024) {
+        setItemsPerSlide(2)
+        setCardWidth((containerWidth - gap) / 2)
+        setIsMobile(false)
+      } else {
+        setItemsPerSlide(4)
+        setCardWidth((containerWidth - gap * 3) / 4) // 4 cards
+        setIsMobile(false)
+      }
     }
 
     handleResize()
@@ -125,113 +117,85 @@ export default function StudioNotes() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  const cardWidth = 280
-  const gap = 32
   const totalSlides = Math.ceil(posts.length / itemsPerSlide)
   const isFirst = index === 0
   const isLast = index === totalSlides - 1
-  const totalCardWidth = cardWidth + gap
-  const translateX = -index * totalCardWidth * itemsPerSlide
 
-  const nextSlide = () => {
-    if (!isLast) setIndex((prev) => prev + 1)
-  }
+  const translateX = -index * (cardWidth + gap)
 
-  const prevSlide = () => {
-    if (!isFirst) setIndex((prev) => prev - 1)
-  }
-
-  const handleReadMore = (postId: number) => {
-    router.push(`/blog-detail?id=${postId}`)
-  }
+  const nextSlide = () => !isLast && setIndex((prev) => prev + 1)
+  const prevSlide = () => !isFirst && setIndex((prev) => prev - 1)
+  const handleReadMore = (postId: number) => router.push(`/blog-detail?id=${postId}`)
 
   return (
-    <section className="max-w-7xl mx-auto px-4 md:px-6 pt-20 relative" ref={containerRef}>
+    <section
+      className="w-full max-w-[1500px] mx-auto px-4 md:px-6 pt-20 relative" // wider max-width
+      ref={containerRef}
+    >
       <h2 className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-8">
         STUDIO NOTES
       </h2>
 
       <div className="flex flex-col items-center">
-        {/* Slider area */}
         <div className="relative flex items-center justify-center w-full">
-          {/* Arrows on Desktop */}
-          {!isMobile && (
-            <>
-              <div
-                onClick={prevSlide}
-                aria-label="Previous"
-                className={`absolute left-[-60px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
-                  isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
-                }`}
-              >
-                <ArrowLeft />
-              </div>
-
-              <div
-                onClick={nextSlide}
-                aria-label="Next"
-                className={`absolute right-[-60px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
-                  isLast ? "opacity-30 pointer-events-none" : "opacity-100"
-                }`}
-              >
-                <ArrowRight />
-              </div>
-            </>
-          )}
+          {/* Arrows */}
+          <div
+            onClick={prevSlide}
+            aria-label="Previous"
+            className={`absolute left-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+              isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
+            }`}
+          >
+            <ArrowLeft />
+          </div>
+          <div
+            onClick={nextSlide}
+            aria-label="Next"
+            className={`absolute right-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+              isLast ? "opacity-30 pointer-events-none" : "opacity-100"
+            }`}
+          >
+            <ArrowRight />
+          </div>
 
           {/* Slider container */}
-          <div
-            className="overflow-hidden"
-            style={{
-              width: `${cardWidth * itemsPerSlide + gap * (itemsPerSlide - 1)}px`,
-              maxWidth: "100%",
-            }}
-          >
+          <div className="overflow-hidden w-full">
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(${translateX}px)`, gap: `${gap}px` }}
+              style={{
+                transform: `translateX(${translateX}px)`,
+                gap: `${gap}px`,
+              }}
             >
               {posts.map(({ id, image, categories, title, description }, i) => {
                 const textLines = calculateTextLines(title, categories)
-
                 return (
                   <article
                     key={i}
-                    className="bg-white shadow-sm flex flex-col overflow-hidden"
+                    className="group bg-white shadow-sm flex flex-col overflow-hidden transition-shadow hover:shadow-lg flex-shrink-0"
                     style={{
                       width: `${cardWidth}px`,
                       height: "400px",
                       border: "1px solid rgba(0, 31, 75, 0.1)",
                       borderRadius: "0",
-                      flexShrink: 0,
                     }}
                   >
-                    <div className="relative" style={{ height: "170px", width: "100%" }}>
+                    <div className="relative w-full h-[170px]">
                       <Image
                         src={image || "/placeholder.svg"}
                         alt={title}
                         fill
-                        className="object-cover"
-                        sizes="320px"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes={isMobile ? "260px" : `${cardWidth}px`}
                       />
                     </div>
 
-                    <div className="relative p-4 flex flex-col" style={{ height: "230px" }}>
+                    <div className="relative p-4 flex flex-col h-[230px]">
                       <div className="flex flex-wrap gap-2 mb-2" style={{ minHeight: "24px" }}>
                         {categories.map((cat, idx) => (
                           <span
                             key={idx}
-                            className="text-[11px] font-medium"
-                            style={{
-                              fontFamily: "Montserrat, sans-serif",
-                              color: "#001F4B",
-                              border: "1px solid rgba(0,31,75,0.1)",
-                              padding: "2px 8px",
-                              borderRadius: "999px",
-                              height: "20px",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
+                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground rounded-full"
                           >
                             {cat}
                           </span>
@@ -276,26 +240,6 @@ export default function StudioNotes() {
             </div>
           </div>
         </div>
-
-        {/* Arrows on Mobile */}
-        {isMobile && (
-          <div className="mt-6 flex gap-4">
-            <button
-              onClick={prevSlide}
-              aria-label="Previous"
-              className={`${isFirst ? "opacity-30 pointer-events-none" : "opacity-100"}`}
-            >
-              <ArrowLeft />
-            </button>
-            <button
-              onClick={nextSlide}
-              aria-label="Next"
-              className={`${isLast ? "opacity-30 pointer-events-none" : "opacity-100"}`}
-            >
-              <ArrowRight />
-            </button>
-          </div>
-        )}
       </div>
     </section>
   )

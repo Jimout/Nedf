@@ -15,10 +15,10 @@ export default function HeroWithStats() {
       if (window.innerWidth >= 1536) {
         return 180 // 2xl screen
       } else if (window.innerWidth < 640) {
-        return 64 // mobile line height (increased for visibility)
+        return 100 // mobile line height (increased for visibility)
       }
     }
-    return 96 // standard screens
+    return 98 // standard screens
   }
 
   const [lineHeight, setLineHeight] = useState(getLineHeight)

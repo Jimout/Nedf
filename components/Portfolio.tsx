@@ -90,7 +90,8 @@ export default function Hero() {
         )}
       </AnimatePresence>
 
-      <section className="pt-20 font-montserrat relative overflow-hidden bg-gradient-to-b from-gray-50/30">
+      {/* Full-width Section */}
+      <section className="pt-20 font-montserrat relative overflow-hidden bg-gradient-to-b from-gray-50/30 w-full">
         <div
           className={`flex justify-center items-center gap-14 text-[12px] text-gray-500 mb-12 flex-wrap md:flex-nowrap transition-all duration-1000 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
@@ -119,9 +120,11 @@ export default function Hero() {
           </span>
         </div>
 
-        <div className="relative w-full px-4 2xl:px-32 max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16">
-            <div className="hidden md:flex justify-center items-start gap-14 w-full">
+        {/* Full-width container with minimal padding */}
+        <div className="relative w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 w-full">
+            <div className="hidden md:flex justify-center items-start gap-14 w-full max-w-[1800px] mx-auto">
+              {/* Left column */}
               <div className="flex flex-col w-[22%] lg:w-[20%] xl:w-[18%] items-start">
                 <div
                   className={`relative w-full h-[320px] overflow-hidden shadow-lg transition-all duration-[900ms] ${
@@ -170,6 +173,7 @@ export default function Hero() {
                 </div>
               </div>
 
+              {/* Middle Image */}
               <div
                 className={`relative w-[35%] lg:w-[38%] xl:w-[36%] h-[380px] overflow-hidden shadow-2xl transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
@@ -189,11 +193,10 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
               </div>
 
+              {/* Right column */}
               <div
                 className={`relative w-[33%] lg:w-[26%] xl:w-[24%] h-[400px] mt-8 overflow-hidden shadow-lg transition-all duration-[900ms] ${
-                  transitioning
-                    ? "transform translate-x-[120%] opacity-0 scale-95"
-                    : "transform translate-x-0 opacity-100 scale-100"
+                  transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{
                   transitionDelay: transitioning ? "0ms" : "500ms",
@@ -210,12 +213,11 @@ export default function Hero() {
               </div>
             </div>
 
+            {/* Mobile */}
             <div className="md:hidden w-full flex flex-col items-center">
               <div
                 className={`relative w-11/12 h-72 sm:h-96 overflow-hidden shadow-xl transition-all duration-[900ms] ${
-                  transitioning
-                    ? "transform translate-y-[100%] opacity-0 scale-98"
-                    : "transform translate-y-0 opacity-100 scale-100"
+                  transitioning ? "transform translate-y-[100%] opacity-0 scale-98" : "transform translate-y-0 opacity-100 scale-100"
                 }`}
                 style={{
                   transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -262,6 +264,7 @@ export default function Hero() {
           </div>
         </div>
 
+        {/* Pagination Dots */}
         <div className="flex justify-center mt-12 gap-3">
           {slides.map((_, index) => (
             <div

@@ -17,30 +17,30 @@ const clients: Client[] = [
     role: "CEO at NEDFB",
     image: "/test2.png",
     testimonial:
-      "Working with NEDF was the best part of our renovation. They listened to what we wanted and delivered more than we imagined.",
+      "Working with NEDF was the best part of our renovation. They listened to what we wanted and delivered more than we imagined. Their attention to detail transformed our space beautifully.",
   },
   {
     name: "Mac Jessile",
     role: "CEO at MERFB",
     image: "/tes4.png",
-    testimonial: "They exceeded our expectations and made the process seamless.",
+    testimonial:
+      "They exceeded our expectations and made the process seamless from start to finish. The team's expertise and dedication to quality were evident throughout. We couldn't be happier with the results.",
   },
   {
     name: "Samrawit M",
     role: "Homeowner",
     image: "/test3.png",
-    testimonial: "From design to execution, everything was flawless and thoughtful.",
+    testimonial:
+      "From design to execution, everything was flawless and thoughtful. The team demonstrated incredible skill while maintaining clear communication. They brought our vision to life beautifully.",
   },
 ]
 
 export function ClientReflections() {
   const [step, setStep] = useState(0)
-
-  const svgWidth = 700
-  const svgHeight = 600
-  const centerX = 84
-  const centerY = svgHeight / 2
-  const radius = 180
+  const [svgWidth, setSvgWidth] = useState(700)
+  const [svgHeight, setSvgHeight] = useState(600)
+  const [radius, setRadius] = useState(180)
+  const [centerX, setCenterX] = useState(350)
 
   const startAngle = (3 * Math.PI) / 2
   const totalArc = Math.PI
@@ -48,14 +48,41 @@ export function ClientReflections() {
 
   const getPosition = (angle: number) => ({
     x: centerX + radius * Math.cos(angle),
-    y: centerY + radius * Math.sin(angle),
+    y: svgHeight / 2 + radius * Math.sin(angle),
   })
 
+  // Auto-slide
   useEffect(() => {
     const interval = setInterval(() => {
       setStep((prev) => (prev - 1 + clients.length) % clients.length)
     }, 4000)
     return () => clearInterval(interval)
+  }, [])
+
+  // Responsive scaling
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth
+      if (width < 768) {
+        setSvgWidth(700)
+        setSvgHeight(600)
+        setRadius(180)
+        setCenterX(350)
+      } else if (width < 1280) {
+        setSvgWidth(900)
+        setSvgHeight(700)
+        setRadius(220)
+        setCenterX(450)
+      } else {
+        setSvgWidth(1400)
+        setSvgHeight(800)
+        setRadius(300)
+        setCenterX(275) // adjusted centerX from 260 to 275
+      }
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
   }, [])
 
   const rotatedClients = clients.map((_, i) => {
@@ -73,7 +100,7 @@ export function ClientReflections() {
   return (
     <section className="relative pt-20">
       <motion.h2
-        className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-0 md:ml-8 ml-0"
+        className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-0"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -82,8 +109,8 @@ export function ClientReflections() {
       </motion.h2>
 
       {/* Desktop layout (arc) */}
-      <div className="hidden md:flex relative max-w-5xl mx-auto flex-col md:flex-row items-center px-4 gap-4">
-        <div className="relative w-full md:w-[55%] flex justify-start items-center">
+      <div className="hidden md:flex relative w-full flex-col md:flex-row items-center gap-4">
+        <div className="relative w-full flex justify-start items-center">
           <div
             style={{
               width: svgWidth,
@@ -118,7 +145,7 @@ export function ClientReflections() {
             {visibleClients.map((client, index) => {
               const pos = getPosition(client.angle)
               const isActive = index === 1
-              const avatarSize = isActive ? 100 : 70
+              const avatarSize = isActive ? 100 : 90
               const zIndex = isActive ? 20 : 10
 
               return (
@@ -176,7 +203,11 @@ export function ClientReflections() {
 
                   {isActive && (
                     <motion.div
-                      className="absolute left-full top-1/2 transform -translate-y-1/2 ml-16 w-[380px]"
+                      className="absolute left-full top-[22%] transform -translate-y-1/2"
+                      style={{
+                        marginLeft: svgWidth >= 1200 ? 140 : svgWidth >= 900 ? 60 : 20,
+                        width: svgWidth >= 1200 ? 650 : svgWidth >= 900 ? 440 : 360,
+                      }}
                       initial={{ opacity: 0, x: -30, scale: 0.9 }}
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: 30, scale: 0.9 }}
@@ -187,13 +218,17 @@ export function ClientReflections() {
                       }}
                     >
                       <motion.p
-                        className="text-sm font-medium text-[#333333]/80 leading-relaxed pl-6 pr-6 relative"
+                        className="text-sm xl:text-lg font-medium text-[#333333]/80 leading-loose xl:leading-loose pl-6 pr-6 relative min-h-[120px] xl:min-h-[140px]"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4, duration: 0.5 }}
                       >
                         <motion.span
-                          className="absolute -left-4 -top-6 text-6xl font-serif text-gray-300"
+                          className="absolute text-6xl xl:text-7xl font-serif text-gray-300"
+                          style={{
+                            left: svgWidth >= 1200 ? "-20px" : "-16px",
+                            top: svgWidth >= 1200 ? "-32px" : "-24px",
+                          }}
                           initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
                           animate={{ opacity: 1, scale: 1, rotate: 0 }}
                           transition={{ delay: 0.6, duration: 0.4 }}
@@ -202,7 +237,11 @@ export function ClientReflections() {
                         </motion.span>
                         {activeClient.testimonial}
                         <motion.span
-                          className="absolute -right-4 -bottom-6 text-6xl font-serif text-gray-300"
+                          className="absolute text-6xl xl:text-7xl font-serif text-gray-300"
+                          style={{
+                            right: svgWidth >= 1200 ? "-20px" : "-16px",
+                            bottom: svgWidth >= 1200 ? "-32px" : "-24px",
+                          }}
                           initial={{ opacity: 0, scale: 0.5, rotate: 10 }}
                           animate={{ opacity: 1, scale: 1, rotate: 0 }}
                           transition={{ delay: 0.8, duration: 0.4 }}
@@ -219,7 +258,7 @@ export function ClientReflections() {
         </div>
       </div>
 
-      {/* Mobile layout (card with avatar + testimonial fade) */}
+      {/* Mobile layout */}
       <motion.div
         className="block md:hidden px-6 mt-10"
         initial={{ opacity: 0, y: 30 }}
@@ -265,7 +304,7 @@ export function ClientReflections() {
                 {clients[step].role}
               </motion.p>
               <motion.p
-                className="mt-4 text-sm text-[#333333]/80 italic leading-relaxed text-center"
+                className="mt-4 text-sm xl:text-lg text-[#333333]/80 italic leading-relaxed text-center"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.4 }}
