@@ -13,27 +13,27 @@ const slides = [
     title1: "Architectural",
     title2: "Design",
     images: [
-      { src: "/Room1.jpg", alt: "Room1" },
-      { src: "/Room2.jpg", alt: "Room2" },
-      { src: "/Room3.jpg", alt: "Room3" },
+      { src: "/room1.jpg", alt: "Room1" },
+      { src: "/room2.jpg", alt: "Room2" },
+      { src: "/room3.jpg", alt: "Room3" },
     ],
   },
   {
     title1: "Interior",
     title2: "Design",
     images: [
-      { src: "/Interior1.jpg", alt: "Interior1" },
-      { src: "/Interior2.jpg", alt: "Interior2" },
-      { src: "/Interior3.jpg", alt: "Interior3" },
+      { src: "/interior1.jpg", alt: "Interior1" },
+      { src: "/interior2.jpg", alt: "Interior2" },
+      { src: "/interior3.jpg", alt: "Interior3" },
     ],
   },
   {
     title1: "Visualization",
     title2: "",
     images: [
-      { src: "/Visual1.jpg", alt: "Visual1" },
-      { src: "/Visual2.jpg", alt: "Visual2" },
-      { src: "/Visual3.jpg", alt: "Visual3" },
+      { src: "/visual1.jpg", alt: "Visual1" },
+      { src: "/visual2.jpg", alt: "Visual2" },
+      { src: "/visual3s.jpg", alt: "Visual3" },
     ],
   },
 ]

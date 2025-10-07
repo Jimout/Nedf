@@ -20,7 +20,7 @@ interface Post {
 const posts: Post[] = [
   {
     id: 1,
-    image: "/modern-architecture-concept.jpg",
+    image: "/room1.jpg",
     categories: ["Case File", "Architecture"],
     title: "From Concept To Concrete",
     description:
@@ -28,7 +28,7 @@ const posts: Post[] = [
   },
   {
     id: 2,
-    image: "/clay-materials-interior-design.jpg",
+    image: "/room2.jpg",
     categories: ["Materials", "Design Thinking", "Interior Design"],
     title: "Why Clay Still Wins",
     description:
@@ -36,7 +36,7 @@ const posts: Post[] = [
   },
   {
     id: 3,
-    image: "/creative-studio-workspace.png",
+    image: "/interior1.jpg",
     categories: ["Studio Life", "Behind The Scenes"],
     title: "Studio Mornings: What Fuels Our Process",
     description:
@@ -44,7 +44,7 @@ const posts: Post[] = [
   },
   {
     id: 4,
-    image: "/minimalist-interior.png",
+    image: "/interior2.jpg",
     categories: ["Design"],
     title: "The Power Of Simplicity",
     description:
@@ -52,7 +52,7 @@ const posts: Post[] = [
   },
   {
     id: 5,
-    image: "/ai-architecture-technology.jpg",
+    image: "/interior3.jpg",
     categories: ["Tech", "AI"],
     title: "Using AI in Architecture",
     description:
@@ -60,7 +60,7 @@ const posts: Post[] = [
   },
   {
     id: 6,
-    image: "/modern-minimalist-room.png",
+    image: "/visual1.jpg",
     categories: ["Interior", "Design"],
     title: "Modern Minimalism",
     description:
@@ -68,7 +68,7 @@ const posts: Post[] = [
   },
   {
     id: 7,
-    image: "/creative-workflow-visualization.jpg",
+    image: "/visual1.jpg",
     categories: ["Studio Life", "Workflow"],
     title: "Workflow Optimization",
     description:
@@ -76,7 +76,7 @@ const posts: Post[] = [
   },
   {
     id: 8,
-    image: "/sustainable-interior-materials.jpg",
+    image: "/visual3.jpg",
     categories: ["Design", "Materials"],
     title: "Material Innovation",
     description:

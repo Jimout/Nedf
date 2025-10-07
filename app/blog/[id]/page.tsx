@@ -36,7 +36,7 @@ const currentBlogTags = ["Case File", "Architecture"]
 const allPosts = [
   {
     id: 0,
-    image: "/modern-home-interior.jpg",
+    image: "/interior1.jpg",
     categories: ["Case File", "Architecture"],
     title: "From Concept To Concrete",
     description:
@@ -44,7 +44,7 @@ const allPosts = [
   },
   {
     id: 1,
-    image: "/clay-interior-design.jpg",
+    image: "/interior2.jpg",
     categories: ["Materials", "Design Thinking", "Interior Design"],
     title: "Why Clay Still Wins",
     description:
@@ -52,7 +52,7 @@ const allPosts = [
   },
   {
     id: 2,
-    image: "/studio-workspace.png",
+    image: "/interior3.jpg",
     categories: ["Studio Life", "Behind The Scenes"],
     title: "Studio Mornings: What Fuels Our Process",
     description:
@@ -60,7 +60,7 @@ const allPosts = [
   },
   {
     id: 3,
-    image: "/minimalist-interior.png",
+    image: "/room3.jpg",
     categories: ["Design", "Architecture"],
     title: "The Power Of Simplicity",
     description:
@@ -68,7 +68,7 @@ const allPosts = [
   },
   {
     id: 4,
-    image: "/ai-architecture.png",
+    image: "/room2.jpg",
     categories: ["Tech", "AI", "Architecture"],
     title: "Using AI in Architecture",
     description:
@@ -76,7 +76,7 @@ const allPosts = [
   },
   {
     id: 5,
-    image: "/sustainable-building.jpg",
+    image: "/visual2.jpg",
     categories: ["Case File", "Sustainability"],
     title: "Green Building Practices",
     description:
@@ -278,7 +278,7 @@ export default function BlogDetailPage() {
 
             <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
               <Image
-                src="/modern-architecture-concept.jpg"
+                src="/room1.jpg"
                 alt="From Concept To Concrete"
                 fill
                 className="object-cover"
