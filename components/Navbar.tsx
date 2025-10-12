@@ -88,7 +88,8 @@ export function Navbar() {
           {/* Desktop nav */}
           <div className="hidden md:flex items-center justify-center flex-1 ml-28 2xl:ml-36 space-x-16 2xl:space-x-20">
             {navItems.map((item) => {
-              const isActive = pathname === item.href || (item.scrollOnLanding && pathname === "/")
+              // Active state: exact match for pages, never active for hash/scroll sections
+              const isActive = pathname === item.href && !item.href.includes("#")
               return (
                 <Link
                   key={item.name}
@@ -180,7 +181,8 @@ export function Navbar() {
         }}
       >
         {navItems.map((item) => {
-          const isActive = pathname === item.href || (item.scrollOnLanding && pathname === "/")
+          // Active state: exact match for pages, never active for hash/scroll sections
+          const isActive = pathname === item.href && !item.href.includes("#")
           return (
             <Link
               key={item.name}
