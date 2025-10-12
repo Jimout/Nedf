@@ -29,22 +29,6 @@ const posts = [
     description:
       "Every Monday At NEDF Starts With Music, Coffee, And Creative Chaos. We Give You A Glimpse Into Our Daily Rituals And The Small Moments That Spark Big Ideas. From brainstorming sessions to collaborative sketching, see how we maintain our creative energy.",
   },
-  {
-    id: 3,
-    image: "/interior1.jpg",
-    categories: ["Design"],
-    title: "The Power Of Simplicity",
-    description:
-      "Design Isn't Always About More. Sometimes It's About Less Done Right. We explore the principles of minimalist design and how restraint can create more impactful spaces. Learn why simplicity requires the most sophisticated thinking.",
-  },
-  {
-    id: 4,
-    image: "/room3.jpg",
-    categories: ["Tech", "AI"],
-    title: "Using AI in Architecture",
-    description:
-      "How Artificial Intelligence is shaping how we plan, visualize, and build in the 21st century. From generative design to predictive modeling, we examine the tools that are revolutionizing our industry and changing the way we approach complex architectural challenges.",
-  },
 ]
 
 const calculateTextLines = (title: string, categories: string[]) => {
