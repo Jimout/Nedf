@@ -43,9 +43,8 @@ export function ClientReflections() {
   const [centerX, setCenterX] = useState(350)
   const [visiblePositions, setVisiblePositions] = useState(3) // Number of visible avatars
 
-  const startAngle = Math.PI // Start at left side (180 degrees)
-  const endAngle = 0 // End at right side (0 degrees)
-  const totalArc = Math.PI // Full semicircle
+  const startAngle = (3 * Math.PI) / 2
+  const totalArc = Math.PI
   const angleStep = totalArc / (visiblePositions - 1) // Dynamic based on visible positions
 
   const getPosition = (angle: number) => ({
@@ -65,40 +64,27 @@ export function ClientReflections() {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
-      const containerWidth = Math.min(width * 0.9, 1400) // Slightly bigger container
-      
       if (width < 768) {
         // Mobile
-        const scaledWidth = Math.min(700, containerWidth)
-        setSvgWidth(scaledWidth)
-        setSvgHeight(450)
-        setRadius(140)
-        setCenterX(scaledWidth / 2)
-        setVisiblePositions(3)
-      } else if (width < 1280) {
-        // Standard screens (md/lg) - 3 avatars, bigger arc
-        const scaledWidth = Math.min(750, containerWidth)
-        setSvgWidth(scaledWidth)
-        setSvgHeight(450)
-        setRadius(130)
-        setCenterX(scaledWidth / 2)
-        setVisiblePositions(3)
-      } else if (width < 1600) {
-        // Large screens - 3 avatars with bigger size
-        const scaledWidth = Math.min(850, containerWidth)
-        setSvgWidth(scaledWidth)
+        setSvgWidth(600)
         setSvgHeight(500)
         setRadius(150)
-        setCenterX(scaledWidth / 2)
+        setCenterX(300)
+        setVisiblePositions(3)
+      } else if (width < 1280) {
+        // Standard screens (md/lg) - 3 avatars, smaller arc to align with other sections
+        setSvgWidth(900)
+        setSvgHeight(550)
+        setRadius(200)
+        setCenterX(200)
         setVisiblePositions(3)
       } else {
-        // XL screens - 3 avatars for consistency
-        const scaledWidth = Math.min(1000, containerWidth)
-        setSvgWidth(scaledWidth)
-        setSvgHeight(600)
-        setRadius(180)
-        setCenterX(scaledWidth / 2)
-        setVisiblePositions(3)
+        // XL screens - 4 avatars for wider design
+        setSvgWidth(1400)
+        setSvgHeight(800)
+        setRadius(300)
+        setCenterX(275)
+        setVisiblePositions(4)
       }
     }
     handleResize()
@@ -110,29 +96,24 @@ export function ClientReflections() {
   // Dynamic number of avatars based on screen size (3 or 4)
   const allPositions = clients.map((client, clientIndex) => {
     // Calculate the continuous position along the arc
-    // This determines which slot (0, 1, 2) each client occupies as they rotate
-    const continuousPosition = (clientIndex - step) % clients.length
-    // Normalize to positive values
-    const normalizedContinuousPosition = continuousPosition < 0 
-      ? continuousPosition + clients.length 
-      : continuousPosition
+    const continuousPosition = (clientIndex + step) % clients.length
     
     // Only show clients in visible positions (3 for standard, 4 for XL)
-    const isVisible = normalizedContinuousPosition < visiblePositions
+    const isVisible = continuousPosition < visiblePositions
     
     // Calculate the exact angle on the arc for this position
     // The angle corresponds directly to a point on the arc line
     // Position spacing adjusts automatically based on visiblePositions
-    const angle = startAngle + (normalizedContinuousPosition * angleStep)
+    const angle = startAngle + (continuousPosition * angleStep)
     
     // Normalized position for smooth interpolation of size/opacity
     // 0 = at edges, 0.5 = at middle (for 3 avatars), 0.33/0.66 (for 4 avatars)
-    const normalizedPosition = normalizedContinuousPosition / (visiblePositions - 1)
+    const normalizedPosition = continuousPosition / (visiblePositions - 1)
     
     return {
       ...client,
       angle,
-      continuousPosition: normalizedContinuousPosition,
+      continuousPosition,
       normalizedPosition,
       clientIndex,
       isVisible,
@@ -153,7 +134,7 @@ export function ClientReflections() {
 
   return (
     <section className="relative pt-20 w-full flex justify-center">
-      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         <motion.h2
           className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-0"
           initial={{ opacity: 0, y: -20 }}
@@ -164,23 +145,21 @@ export function ClientReflections() {
         </motion.h2>
 
         {/* Desktop layout (arc) */}
-        <div className="hidden md:flex relative w-full flex-col items-center justify-center">
-          <div className="relative flex justify-start items-center w-full">
-            <div
-              style={{
-                width: svgWidth,
-                height: svgHeight,
-                position: "relative",
-                overflow: "visible",
-                maxWidth: '100%',
-              }}
-            >
+        <div className="hidden md:flex relative w-full flex-col md:flex-row items-center justify-center gap-4">
+        <div className="relative w-full flex justify-start items-center">
+          <div
+            style={{
+              width: svgWidth,
+              height: svgHeight,
+              position: "relative",
+              overflow: "visible",
+            }}
+          >
             <motion.svg
-              width="100%"
-              height="100%"
+              width={svgWidth}
+              height={svgHeight}
               className="absolute inset-0"
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              preserveAspectRatio="xMidYMid meet"
               fill="none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -206,7 +185,9 @@ export function ClientReflections() {
               {/* Background arc layer with glow */}
               <motion.path
                 d={`M ${getPosition(startAngle).x} ${getPosition(startAngle).y}
-                    A ${radius} ${radius} 0 0 1 ${getPosition(endAngle).x} ${getPosition(endAngle).y}`}
+                    A ${radius} ${radius} 0 0 1 ${getPosition(startAngle + totalArc).x} ${
+                      getPosition(startAngle + totalArc).y
+                    }`}
                 stroke="#e2e8f0"
                 strokeWidth="4"
                 strokeOpacity="0.6"
@@ -218,7 +199,9 @@ export function ClientReflections() {
               {/* Main orbital path - this is the exact path avatars follow */}
               <motion.path
                 d={`M ${getPosition(startAngle).x} ${getPosition(startAngle).y}
-                    A ${radius} ${radius} 0 0 1 ${getPosition(endAngle).x} ${getPosition(endAngle).y}`}
+                    A ${radius} ${radius} 0 0 1 ${getPosition(startAngle + totalArc).x} ${
+                      getPosition(startAngle + totalArc).y
+                    }`}
                 stroke="url(#arcGradient)"
                 strokeWidth="2.5"
                 filter="url(#glow)"
@@ -262,9 +245,9 @@ export function ClientReflections() {
                 const isActive = client.clientIndex === activeClient?.clientIndex
                 
                 // Smooth interpolation for size and opacity based on position
-                // Scale based on screen size: small screens < large screens < XL screens
-                const baseSize = svgWidth >= 1200 ? 75 : svgWidth >= 850 ? 48 : 45
-                const maxSize = svgWidth >= 1200 ? 100 : svgWidth >= 850 ? 68 : 65
+                // Scale down for standard screens
+                const baseSize = svgWidth >= 1200 ? 75 : 55
+                const maxSize = svgWidth >= 1200 ? 100 : 75
                 const avatarSize = baseSize + (proximityToMiddle * (maxSize - baseSize))
                 
                 const minOpacity = 0.55
@@ -322,7 +305,7 @@ export function ClientReflections() {
                   <motion.p
                     className="mt-2 font-medium text-center text-[#333333]"
                     style={{
-                      fontSize: svgWidth >= 1200 ? '14px' : svgWidth >= 850 ? '10px' : '9px',
+                      fontSize: svgWidth >= 1200 ? '14px' : '12px',
                     }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isActive ? 1 : 0.7 }}
@@ -333,7 +316,7 @@ export function ClientReflections() {
                   <motion.span
                     className="text-gray-500 text-center"
                     style={{
-                      fontSize: svgWidth >= 1200 ? '12px' : svgWidth >= 850 ? '8px' : '8px',
+                      fontSize: svgWidth >= 1200 ? '12px' : '10px',
                     }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isActive ? 1 : 0.6 }}
@@ -346,15 +329,13 @@ export function ClientReflections() {
             })}
             </AnimatePresence>
             
-            {/* Testimonial display area - positioned below the arc */}
+            {/* Testimonial display area - separate from avatars for better fade control */}
             <div 
-              className="absolute overflow-hidden"
+              className="absolute"
               style={{
-                left: '50%',
-                transform: 'translateX(-50%)',
-                top: svgHeight - 50,
-                width: Math.min(svgWidth * 0.8, 500),
-                textAlign: 'center',
+                left: svgWidth >= 1200 ? centerX + radius + 140 : centerX + radius + 60,
+                top: svgHeight / 2 - 60,
+                width: svgWidth >= 1200 ? 650 : 450,
               }}
             >
               <AnimatePresence mode="wait">
@@ -372,16 +353,16 @@ export function ClientReflections() {
                     <motion.p
                       className="text-xs md:text-sm xl:text-lg font-medium text-[#333333]/80 leading-relaxed md:leading-relaxed xl:leading-loose pl-4 pr-4 relative min-h-[100px] md:min-h-[100px] xl:min-h-[140px]"
                       style={{
-                        fontSize: svgWidth >= 1200 ? undefined : svgWidth >= 850 ? '12px' : '11px',
-                        lineHeight: svgWidth >= 1200 ? undefined : svgWidth >= 850 ? '1.45' : '1.4',
+                        fontSize: svgWidth >= 1200 ? undefined : '14px',
+                        lineHeight: svgWidth >= 1200 ? undefined : '1.6',
                       }}
                     >
                       <motion.span
                         className="absolute font-serif text-gray-300"
                         style={{
-                          fontSize: svgWidth >= 1200 ? '56px' : svgWidth >= 850 ? '28px' : '26px',
-                          left: svgWidth >= 1200 ? "-20px" : "-6px",
-                          top: svgWidth >= 1200 ? "-32px" : "-14px",
+                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
+                          left: svgWidth >= 1200 ? "-20px" : "-10px",
+                          top: svgWidth >= 1200 ? "-32px" : "-18px",
                         }}
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -393,9 +374,9 @@ export function ClientReflections() {
                       <motion.span
                         className="absolute font-serif text-gray-300"
                         style={{
-                          fontSize: svgWidth >= 1200 ? '56px' : svgWidth >= 850 ? '28px' : '26px',
-                          right: svgWidth >= 1200 ? "-20px" : "-6px",
-                          bottom: svgWidth >= 1200 ? "-32px" : "-14px",
+                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
+                          right: svgWidth >= 1200 ? "-20px" : "-10px",
+                          bottom: svgWidth >= 1200 ? "-32px" : "-18px",
                         }}
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
