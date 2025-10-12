@@ -101,13 +101,15 @@ export default function AddProjectPage() {
   }
 
   const handleYearChange = (value: string) => {
+    // Check if user is trying to enter non-numeric characters
     if (value && !/^\d*$/.test(value)) {
-      setYearError("Must enter numbers only")
-      setTimeout(() => setYearError(""), 3000)
+      setYearError("⚠️ Year field only accepts numbers (0-9)")
+      setTimeout(() => setYearError(""), 4000)
     } else {
       setYearError("")
     }
 
+    // Strip all non-numeric characters
     const numericValue = value.replace(/[^0-9]/g, "")
     setProjectData((prev) => ({ ...prev, year: numericValue }))
   }
@@ -195,9 +197,9 @@ export default function AddProjectPage() {
   const handleUpload = () => {
     if (!isFormValid()) {
       setValidationError(
-        "Please fill the required fields: Name, Year, Client, Before Image, After Image, and Description",
+        "Please fill all required fields: Name, Year, Client, Before Image, After Image, Description, Color Palette (at least 1), and Gallery (at least 2 photos)",
       )
-      setTimeout(() => setValidationError(""), 5000)
+      setTimeout(() => setValidationError(""), 6000)
       return
     }
 
@@ -333,18 +335,20 @@ export default function AddProjectPage() {
       projectData.client.trim() !== "" &&
       projectData.beforeImage !== "" &&
       projectData.afterImage !== "" &&
-      projectData.description.trim() !== ""
+      projectData.description.trim() !== "" &&
+      projectData.colorPalette.length > 0 &&
+      projectData.galleryImages.length >= 2 // At least 2 gallery photos
     )
   }
 
   return (
     <div className="min-h-screen bg-gray-50 font-['Montserrat']">
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="flex items-center gap-4 mb-8">
+      <div className="max-w-4xl mx-auto p-4 sm:p-6">
+        <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
           <Button variant="ghost" size="sm" className="p-2" onClick={handleBackClick}>
             <ArrowLeftIcon />
           </Button>
-          <h1 className="text-3xl font-bold text-[#001F4B] uppercase tracking-wide">Add New Project</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] uppercase tracking-wide">Add New Project</h1>
         </div>
 
         {validationError && (
@@ -375,12 +379,20 @@ export default function AddProjectPage() {
                   Year <span className="text-red-500">*</span>
                 </label>
                 <Input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={projectData.year}
                   onChange={(e) => handleYearChange(e.target.value)}
-                  placeholder="Enter year"
+                  placeholder="Enter year (numbers only)"
                   required
+                  className={yearError ? "border-red-500 focus:border-red-500" : ""}
                 />
-                {yearError && <p className="text-red-500 text-sm mt-1">{yearError}</p>}
+                {yearError && (
+                  <p className="text-red-600 text-sm mt-1 font-medium bg-red-50 p-2 rounded">
+                    {yearError}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -631,7 +643,9 @@ export default function AddProjectPage() {
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-[#001F4B]">Color Palette</CardTitle>
+            <CardTitle className="text-[#001F4B]">
+              Color Palette <span className="text-red-500">*</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-4 mb-4">
@@ -727,7 +741,10 @@ export default function AddProjectPage() {
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-[#001F4B]">Gallery</CardTitle>
+            <CardTitle className="text-[#001F4B]">
+              Gallery <span className="text-red-500">*</span>
+              <span className="text-sm font-normal text-gray-500 ml-2">(Minimum 2 photos required)</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {projectData.galleryImages.length > 0 && (
@@ -760,6 +777,25 @@ export default function AddProjectPage() {
           </CardContent>
         </Card>
 
+        {/* Validation Status */}
+        {!isFormValid() && (
+          <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-yellow-800 font-medium text-sm">
+              ⚠️ Please complete all required fields:
+            </p>
+            <ul className="mt-2 text-yellow-700 text-sm list-disc list-inside">
+              {!projectData.name.trim() && <li>Project Name</li>}
+              {!projectData.year.trim() && <li>Year</li>}
+              {!projectData.client.trim() && <li>Client</li>}
+              {!projectData.beforeImage && <li>Before Image</li>}
+              {!projectData.afterImage && <li>After Image</li>}
+              {!projectData.description.trim() && <li>Description</li>}
+              {projectData.colorPalette.length === 0 && <li>Color Palette (at least 1 color)</li>}
+              {projectData.galleryImages.length < 2 && <li>Gallery (at least 2 photos, currently {projectData.galleryImages.length})</li>}
+            </ul>
+          </div>
+        )}
+
         <div className="flex gap-4 justify-end">
           <Button
             variant="outline"
@@ -770,7 +806,7 @@ export default function AddProjectPage() {
           </Button>
           <Button
             onClick={handleUpload}
-            className={`${isFormValid() ? "bg-[#001F4B] hover:bg-[#001F4B]/90" : "bg-gray-400 cursor-not-allowed"}`}
+            className={`${isFormValid() ? "bg-[#001F4B] hover:bg-[#001F4B]/90" : "bg-gray-400 cursor-not-allowed hover:bg-gray-400"}`}
             disabled={!isFormValid()}
           >
             Upload Project

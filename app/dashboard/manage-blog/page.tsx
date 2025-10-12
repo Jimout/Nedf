@@ -139,9 +139,9 @@ export default function ManageBlogPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-[#001F4B] font-montserrat">Manage Blog</h1>
-        <Button onClick={handleAddBlog} className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white font-montserrat">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#001F4B] font-montserrat">Manage Blog</h1>
+        <Button onClick={handleAddBlog} className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white font-montserrat w-full sm:w-auto">
           <PlusIcon />
           <span className="ml-2">Add New Blog</span>
         </Button>
@@ -158,56 +158,70 @@ export default function ManageBlogPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border shadow-sm">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead className="font-montserrat font-semibold text-[#001F4B]">Title</TableHead>
-                <TableHead className="font-montserrat font-semibold text-[#001F4B]">Tags</TableHead>
-                <TableHead className="font-montserrat font-semibold text-[#001F4B]">Created Date</TableHead>
-                <TableHead className="font-montserrat font-semibold text-[#001F4B] text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentBlogs.map((blog) => (
-                <TableRow key={blog.id} className="hover:bg-gray-50">
-                  <TableCell className="font-medium font-montserrat text-[#001F4B]">{blog.title}</TableCell>
-                  <TableCell className="font-montserrat text-gray-700">
-                    <div className="flex flex-wrap gap-1">
-                      {blog.tags.slice(0, 2).map((tag, index) => (
-                        <span key={index} className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs">
-                          {tag}
-                        </span>
-                      ))}
-                      {blog.tags.length > 2 && <span className="text-gray-500 text-xs">+{blog.tags.length - 2}</span>}
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-montserrat text-gray-700">{blog.createdAt}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex gap-2 justify-end">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewBlog(blog.id)}
-                        className="font-montserrat"
-                      >
-                        <EyeIcon />
-                        <span className="ml-1">View</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDeleteBlog(blog.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 font-montserrat"
-                      >
-                        <TrashIcon />
-                      </Button>
-                    </div>
-                  </TableCell>
+        <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="font-montserrat font-semibold text-[#001F4B]">Title</TableHead>
+                  <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-[#001F4B]">Tags</TableHead>
+                  <TableHead className="hidden md:table-cell font-montserrat font-semibold text-[#001F4B]">Created Date</TableHead>
+                  <TableHead className="font-montserrat font-semibold text-[#001F4B] text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {currentBlogs.map((blog) => (
+                  <TableRow key={blog.id} className="hover:bg-gray-50">
+                    <TableCell className="font-medium font-montserrat text-[#001F4B]">
+                      <div>
+                        <div className="text-sm sm:text-base">{blog.title}</div>
+                        <div className="sm:hidden mt-1 flex flex-wrap gap-1">
+                          {blog.tags.slice(0, 2).map((tag, index) => (
+                            <span key={index} className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs">
+                              {tag}
+                            </span>
+                          ))}
+                          {blog.tags.length > 2 && <span className="text-gray-500 text-xs">+{blog.tags.length - 2}</span>}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell font-montserrat text-gray-700">
+                      <div className="flex flex-wrap gap-1">
+                        {blog.tags.slice(0, 2).map((tag, index) => (
+                          <span key={index} className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs">
+                            {tag}
+                          </span>
+                        ))}
+                        {blog.tags.length > 2 && <span className="text-gray-500 text-xs">+{blog.tags.length - 2}</span>}
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell font-montserrat text-gray-700 text-sm">{blog.createdAt}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex gap-1 sm:gap-2 justify-end">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewBlog(blog.id)}
+                          className="font-montserrat text-xs sm:text-sm"
+                        >
+                          <EyeIcon />
+                          <span className="ml-1 hidden sm:inline">View</span>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteBlog(blog.id)}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 font-montserrat"
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           {totalPages > 1 && (
             <div className="p-4 border-t">

@@ -21,6 +21,7 @@ import { DataProvider } from "@/lib/data-context"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -30,6 +31,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       router.push("/dashboard-login")
     }
   }, [router, pathname])
+
+  // Auto-collapse sidebar on smaller screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setSidebarCollapsed(true)
+      }
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   const menuItems = [
     { id: "overview", label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
@@ -48,13 +61,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <DataProvider>
       <div className="flex min-h-screen bg-gray-50">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-[#001F4B] text-white rounded-lg shadow-lg"
+          aria-label="Toggle menu"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {mobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
+        {/* Mobile Overlay */}
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+
         <aside
-          className={`fixed top-0 left-0 h-screen bg-[#001F4B] text-white z-40 shadow-2xl overflow-hidden ${
+          className={`fixed top-0 left-0 h-screen bg-[#001F4B] text-white z-40 shadow-2xl overflow-hidden transition-all duration-500 ${
             sidebarCollapsed ? "w-20" : "w-64"
+          } ${
+            mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
           style={{
-            transition: "width 500ms cubic-bezier(0.4, 0, 0.2, 1)",
-            willChange: "width",
+            transition: "width 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+            willChange: "width, transform",
           }}
         >
           <div className="flex flex-col h-full">
@@ -101,6 +139,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <div key={item.id} className={`relative flex ${sidebarCollapsed ? "justify-center" : "px-3"} my-1`}>
                     <Link
                       href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
                       className={`relative flex items-center justify-center group overflow-hidden ${
                         sidebarCollapsed ? "w-12 h-12 rounded-lg" : "w-full px-3 py-3.5 rounded-lg justify-start"
                       } ${
@@ -221,14 +260,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </aside>
 
         <main
-          className="flex-1 min-h-screen"
-          style={{
-            marginLeft: sidebarCollapsed ? "5rem" : "16rem",
-            transition: "margin-left 500ms cubic-bezier(0.4, 0, 0.2, 1)",
-            willChange: "margin-left",
-          }}
+          className={`flex-1 min-h-screen transition-all duration-500 ${
+            sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
+          }`}
         >
-          <div className="p-6 lg:p-8">{children}</div>
+          <div className="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-6">{children}</div>
         </main>
       </div>
     </DataProvider>

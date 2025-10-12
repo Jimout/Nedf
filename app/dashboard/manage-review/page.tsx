@@ -4,11 +4,12 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Eye, Trash2, Plus } from "lucide-react"
+import { Eye, Trash2, Plus, MessageSquare } from "lucide-react"
 import Link from "next/link"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import Pagination from "@/components/Pagination"
 import SearchBar from "@/components/Search-bar"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface Review {
   id: string
@@ -84,10 +85,10 @@ export default function ManageReviewsPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Manage Reviews</h1>
-        <Link href="/dashboard/manage-review/add">
-          <Button className="bg-[#001F4B] hover:bg-[#001F4B]/90">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Manage Reviews</h1>
+        <Link href="/dashboard/manage-review/add" className="w-full sm:w-auto">
+          <Button className="bg-[#001F4B] hover:bg-[#001F4B]/90 w-full sm:w-auto">
             <Plus className="w-4 h-4 mr-2" />
             Add Review
           </Button>
@@ -96,90 +97,103 @@ export default function ManageReviewsPage() {
 
       <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search reviews..." />
 
-      {/* Reviews List */}
-      <div className="space-y-4">
-        {filteredReviews.length > 0 ? (
-          currentReviews.map((review) => (
-            <Card key={review.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-4">
-                    {/* Profile Photo or Initials */}
-                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border border-gray-200">
-                      {review.profilePicture ? (
-                        <img
-                          src={review.profilePicture || "/placeholder.svg"}
-                          alt={review.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-[#001F4B] flex items-center justify-center text-white font-semibold">
-                          {review.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .toUpperCase()}
+      {/* Reviews Table */}
+      {filteredReviews.length === 0 ? (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <MessageSquare className="w-12 h-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {searchTerm ? "No reviews found" : "No reviews yet"}
+            </h3>
+            <p className="text-gray-500 text-center mb-4">
+              {searchTerm
+                ? "Try adjusting your search terms."
+                : "Get started by adding your first review."}
+            </p>
+            {!searchTerm && (
+              <Link href="/dashboard/manage-review/add">
+                <Button className="bg-[#001F4B] hover:bg-[#001F4B]/90">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Review
+                </Button>
+              </Link>
+            )}
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="font-semibold text-[#001F4B]">Name</TableHead>
+                    <TableHead className="hidden sm:table-cell font-semibold text-[#001F4B]">Position</TableHead>
+                    <TableHead className="hidden lg:table-cell font-semibold text-[#001F4B]">Testimonial</TableHead>
+                    <TableHead className="font-semibold text-[#001F4B] text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {currentReviews.map((review) => (
+                    <TableRow key={review.id} className="hover:bg-gray-50">
+                      <TableCell className="font-medium text-[#001F4B]">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-[#001F4B] flex items-center justify-center flex-shrink-0">
+                            {review.profilePicture ? (
+                              <img
+                                src={review.profilePicture || "/placeholder.svg"}
+                                alt={review.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <span className="text-white font-bold text-xs sm:text-sm">
+                                {review.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")
+                                  .toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          <div>
+                            <div className="text-sm sm:text-base">{review.name}</div>
+                            <div className="sm:hidden text-xs text-gray-500 mt-1">{review.position}</div>
+                          </div>
                         </div>
-                      )}
-                    </div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell text-gray-700 text-sm">{review.position}</TableCell>
+                      <TableCell className="hidden lg:table-cell text-gray-600 max-w-md">
+                        <p className="line-clamp-2 text-sm">{review.testimonial}</p>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex gap-1 sm:gap-2 justify-end">
+                          <Link href={`/dashboard/manage-review/view/${review.id}`}>
+                            <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                              <Eye className="w-4 h-4" />
+                              <span className="ml-1 hidden sm:inline">View</span>
+                            </Button>
+                          </Link>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeleteReview(review.id)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
 
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{review.name}</h3>
-                      <Badge className="mt-1 bg-[#001F4B]">{review.position}</Badge>
-                    </div>
-                  </div>
-
-                  <div className="flex space-x-2">
-                    <Link href={`/dashboard/manage-review/view/${review.id}`}>
-                      <Button variant="outline" size="sm">
-                        <Eye className="w-4 h-4 mr-2" />
-                        View
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteReview(review.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="mt-4 pl-16">
-                  <p className="text-gray-600 text-sm">{review.testimonial}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                {searchTerm ? "No reviews found" : "No reviews yet"}
-              </h2>
-              <p className="text-gray-600 mb-4">
-                {searchTerm ? "No reviews found matching your search." : "Get started by adding your first review."}
-              </p>
-              {!searchTerm && (
-                <Link href="/dashboard/manage-review/add">
-                  <Button className="bg-[#001F4B] hover:bg-[#001F4B]/90">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Review
-                  </Button>
-                </Link>
-              )}
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex justify-center">
-          <Pagination page={currentPage} setPage={setCurrentPage} total={totalPages} />
-        </div>
+          {totalPages > 1 && (
+            <Pagination page={currentPage} setPage={setCurrentPage} total={totalPages} />
+          )}
+        </>
       )}
 
       {/* Delete Confirmation Modal */}

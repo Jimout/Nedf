@@ -19,8 +19,14 @@ export function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleToggle = () => {
+  const handleToggle = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIsOpen((prev) => !prev)
+  }
+
+  const handleClose = () => {
+    setIsOpen(false)
   }
 
   return (
@@ -82,12 +88,13 @@ export function Navbar() {
           <button
             onClick={handleToggle}
             className={cn(
-              "md:hidden ml-auto relative w-11 h-11 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-40 rounded-md transition-all duration-200 active:bg-gray-100",
-              "touch-manipulation select-none", // smoother mobile touch behavior
+              "md:hidden ml-auto relative w-12 h-12 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-40 rounded-lg transition-all duration-150 active:bg-gray-200 active:scale-95",
+              "touch-manipulation select-none -webkit-tap-highlight-color-transparent", // smoother mobile touch behavior
             )}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             type="button"
+            style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
           >
             {/* Hamburger */}
             <svg
@@ -95,10 +102,10 @@ export function Navbar() {
               fill="none"
               viewBox="0 0 24 24"
               stroke="#001F4B"
-              strokeWidth={2}
+              strokeWidth={2.5}
               className={cn(
-                "w-6 h-6 transition-all duration-200 ease-in-out",
-                isOpen ? "opacity-0 rotate-90" : "opacity-100 rotate-0",
+                "w-6 h-6 transition-all duration-150 ease-out",
+                isOpen ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100",
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -110,10 +117,10 @@ export function Navbar() {
               fill="none"
               viewBox="0 0 24 24"
               stroke="#001F4B"
-              strokeWidth={2}
+              strokeWidth={2.5}
               className={cn(
-                "absolute w-6 h-6 transition-all duration-200 ease-in-out",
-                isOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90",
+                "absolute w-6 h-6 transition-all duration-150 ease-out",
+                isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-75",
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -125,9 +132,10 @@ export function Navbar() {
       {/* Mobile menu */}
       <div
         className={cn(
-          "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-2 overflow-hidden transition-all duration-300 ease-in-out z-50 shadow-lg",
-          isOpen ? "max-h-64 opacity-100 py-3" : "max-h-0 opacity-0 py-0",
+          "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-50 shadow-lg",
+          isOpen ? "max-h-80 opacity-100 py-4" : "max-h-0 opacity-0 py-0",
         )}
+        style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         {navItems.map((item) => {
           const isActive = pathname === item.href
@@ -136,10 +144,11 @@ export function Navbar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "block transition duration-300 ease-in-out pb-1 text-sm text-[#333333] text-center touch-manipulation",
-                isActive ? "underline underline-offset-4 decoration-[#001F4B]" : "hover:text-[#003366] hover:scale-105",
+                "block transition-all duration-150 ease-out text-base text-[#333333] text-center touch-manipulation select-none px-6 py-2 rounded-md active:bg-gray-100",
+                isActive ? "underline underline-offset-4 decoration-[#001F4B] font-medium" : "hover:text-[#003366] active:scale-95",
               )}
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               {item.name}
             </Link>
@@ -147,8 +156,9 @@ export function Navbar() {
         })}
         <Link
           href={ctaItem.href}
-          className="block px-6 py-2 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm text-center touch-manipulation"
-          onClick={() => setIsOpen(false)}
+          className="block px-8 py-3 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] active:bg-[#002850] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md"
+          onClick={handleClose}
+          style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           {ctaItem.name}
         </Link>

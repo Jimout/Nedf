@@ -13,18 +13,29 @@ import SplashScreen from "@/components/SplashScreen"
 
 export default function HomePage() {
   const [showContent, setShowContent] = useState(false)
+  const [showSplash, setShowSplash] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Check if splash screen has already been shown in this session
+    const hasSeenSplash = sessionStorage.getItem("hasSeenSplash")
+    
+    if (!hasSeenSplash) {
+      // First visit - show splash screen
+      setShowSplash(true)
+      const timer = setTimeout(() => {
+        setShowContent(true)
+        sessionStorage.setItem("hasSeenSplash", "true")
+      }, 2500)
+      return () => clearTimeout(timer)
+    } else {
+      // Returning to home - skip splash screen
       setShowContent(true)
-    }, 2500)
-
-    return () => clearTimeout(timer)
+    }
   }, [])
 
   return (
     <>
-      <SplashScreen />
+      {showSplash && <SplashScreen />}
       {showContent && (
         <motion.div
           initial={{ opacity: 0 }}

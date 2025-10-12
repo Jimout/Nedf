@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { SiInstagram, SiTiktok, SiLinkedin, SiPinterest, SiBehance, SiX } from "react-icons/si";
+import { SiInstagram, SiTiktok, SiLinkedin, SiPinterest, SiBehance } from "react-icons/si";
 
 export default function Footer() {
   const socialIcons = [
@@ -26,17 +26,17 @@ export default function Footer() {
       />
 
       {/* Main Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 px-6">
+      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-[100px] gap-10">
         {/* Logo */}
-        <div className="flex flex-col justify-center md:justify-start items-center md:items-start pt-10 md:pt-20">
-          <h2 className="text-[32px] text-[#333333]/80 font-medium md:ml-32">NEDF</h2>
-          <p className="text-[16px] text-[#001F4B]/60 mt-2 md:ml-28">Less, but Better.</p>
+        <div className="flex flex-col justify-center items-center md:items-start">
+          <h2 className="text-[32px] text-[#333333]/80 font-medium">NEDF</h2>
+          <p className="text-[16px] text-[#001F4B]/60 mt-2">Less, but Better.</p>
         </div>
 
         {/* About Us */}
-        <div className="flex flex-col justify-center items-center md:items-start md:px-0">
+        <div className="flex flex-col justify-center items-center md:items-start md:max-w-lg text-justify">
           <h3 className="text-[32px] text-[#001F4B] font-medium mb-2">About Us</h3>
-          <p className="text-sm font-medium text-[#333333]/80 leading-relaxed text-justify md:w-[114%] w-full">
+          <p className="text-sm font-medium text-[#333333]/80 leading-relaxed">
             NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural
             design, interior spaces, and high-end visualizations. We blend design with technology to
             create thoughtful, innovative, and visually compelling environments. From concept to
@@ -46,11 +46,15 @@ export default function Footer() {
         </div>
 
         {/* Contact Us */}
-        <div className="flex flex-col justify-center items-center md:items-start md:ml-40">
-          <h3 className="text-[32px] text-[#001F4B] font-medium mb-3">Contact Us</h3>
-          <p className="text-sm mb-4 text-center md:text-left">
-            <span className="font-medium text-[#001F4B]/60">Call</span>: +251945289012
-          </p>
+        <div className="flex flex-col justify-center items-center md:items-start">
+          <h3 className="text-[32px] text-[#001F4B] font-medium mt-1 mb-3">Contact Us</h3>
+        <div className="flex flex-col md:flex-row gap-2 text-sm mb-4 text-center md:text-left">
+    <span>
+      <span className="font-medium text-[#001F4B]/60">Call</span>: +251945289012
+    </span>
+    <span>/</span>
+    <span>+251900672518</span>
+  </div>
           <p className="text-sm mb-4 text-center md:text-left">
             <span className="font-medium text-[#001F4B]/60">Email</span>: Nedf123@gmail.com
           </p>
@@ -77,7 +81,7 @@ export default function Footer() {
       </div>
 
       {/* Navigation Links */}
-      <div className="max-w-7xl mx-auto mt-8 px-6">
+      <div className="max-w-7xl mx-auto mt-8 px-6 lg:px-[200px]">
         <div className="flex flex-wrap justify-center gap-6 md:gap-20 text-sm text-[#333333] mb-6">
           <Link
             href="/#hero"
@@ -113,7 +117,7 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom */}
-      <div className="bg-[#001F4B] text-white text-center text-sm py-3">&copy; 2025, NEDF</div>
+      <div className="bg-[#001F4B] text-white text-center text-sm py-3 px-6 lg:px-[200px]">&copy; 2025, NEDF</div>
     </footer>
   );
 }

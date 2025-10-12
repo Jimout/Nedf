@@ -6,7 +6,6 @@ import BeforeAfterSlider from "@/components/BeforeAfterSlider"
 import ImageSlider from "@/components/ImageSlider"
 import Footer from "@/components/Footer"
 import Link from "next/link"
-import { PageTransition } from "@/components/Page-transition"
 
 // Example project data
 const projects = [
@@ -51,124 +50,117 @@ function ProjectDetailContent() {
   }
 
   return (
-    <PageTransition>
-      <div className="relative min-h-screen overflow-hidden">
-        <div
-          className="relative mx-auto w-full"
-          style={{
-            maxWidth: "1400px",
-            backgroundColor: "white",
-            padding: "40px clamp(20px, 8vw, 122px)",
-            maskImage: `
-            linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%),
-            linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)
+    <div className="relative min-h-screen overflow-hidden">
+      <div
+        className="relative mx-auto w-full px-10 md:px-[122px] py-10"
+        style={{
+          backgroundColor: "white",
+          maskImage: `
+            linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%),
+            linear-gradient(to bottom, transparent 0%, white 5%, white 95%, transparent 100%)
           `,
-            WebkitMaskImage: `
-            linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%),
-            linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)
+          WebkitMaskImage: `
+            linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%),
+            linear-gradient(to bottom, transparent 0%, white 5%, white 95%, transparent 100%)
           `,
-            maskComposite: "intersect",
-            WebkitMaskComposite: "intersect",
-          }}
-        >
-          <main className="text-gray-800 relative font-montserrat">
-            {/* Back Button */}
-            <Link href="/portfolio">
-              <button
-                className="flex items-center text-[#001f4b] hover:text-black mb-6 transition-colors"
-                aria-label="Back to Portfolio"
-              >
-                <span className="text-4xl">←</span>
-              </button>
-            </Link>
+          maskComposite: "intersect",
+          WebkitMaskComposite: "intersect",
+        }}
+      >
+        <main className="text-gray-800 relative font-montserrat">
+          {/* Back Button */}
+          <Link href="/portfolio">
+            <button
+              className="flex items-center text-[#001f4b] hover:text-black mb-6 transition-colors"
+              aria-label="Back to Portfolio"
+            >
+              <span className="text-4xl">←</span>
+            </button>
+          </Link>
 
-            {/* Title */}
-            <h1 className="text-4xl font-normal tracking-wide text-[#001F4B] mb-2">{project.title}</h1>
-            <p className="text-[#001f4b]/70 mb-4">{project.year}</p>
-            <hr className="mb-12 border-b-1 border-[#001F4B]/20" />
+          {/* Title */}
+          <h1 className="text-4xl font-normal tracking-wide text-[#001F4B] mb-2">{project.title}</h1>
+          <p className="text-[#001f4b]/70 mb-4">{project.year}</p>
+          <hr className="mb-12 border-b-1 border-[#001F4B]/20" />
 
-            {/* Project Info */}
-            <div className="space-y-2 text-sm mb-8 leading-relaxed">
-              <p className="font-normal text-[#333333]">
-                CLIENT: <span className="font-normal text-[#333333]/60">{project.client}</span>
-              </p>
-              <p className="font-medium text-[#333333]">
-                LOCATION: <span className="font-normal text-[#333333]/60">{project.location}</span>
-              </p>
-              <p className="font-medium text-[#333333]">
-                AREA: <span className="font-normal text-[#333333]/60">{project.area}</span>
-              </p>
-              <p className="font-medium text-[#333333]">
-                TOPOLOGY: <span className="font-normal text-[#333333]/60">{project.topology}</span>
-              </p>
-              <p className="font-medium text-[#333333]">
-                ROLE: <span className="font-normal text-[#333333]/60">{project.role}</span>
-              </p>
-              <p className="font-medium text-[#333333]">
-                STATUS: <span className="font-normal text-[#333333]/60">{project.status}</span>
-              </p>
+          {/* Project Info */}
+          <div className="space-y-2 text-sm mb-8 leading-relaxed">
+            <p className="font-normal text-[#333333]">
+              CLIENT: <span className="font-normal text-[#333333]/60">{project.client}</span>
+            </p>
+            <p className="font-medium text-[#333333]">
+              LOCATION: <span className="font-normal text-[#333333]/60">{project.location}</span>
+            </p>
+            <p className="font-medium text-[#333333]">
+              AREA: <span className="font-normal text-[#333333]/60">{project.area}</span>
+            </p>
+            <p className="font-medium text-[#333333]">
+              TOPOLOGY: <span className="font-normal text-[#333333]/60">{project.topology}</span>
+            </p>
+            <p className="font-medium text-[#333333]">
+              ROLE: <span className="font-normal text-[#333333]/60">{project.role}</span>
+            </p>
+            <p className="font-medium text-[#333333]">
+              STATUS: <span className="font-normal text-[#333333]/60">{project.status}</span>
+            </p>
+          </div>
+
+          {/* Before/After Slider */}
+          <div className="mb-12 flex justify-center">
+            <BeforeAfterSlider
+              beforeImage={project.beforeAfterImages[0]}
+              afterImage={project.beforeAfterImages[1]}
+              beforeAlt="Project before renovation"
+              afterAlt="Project after renovation"
+            />
+          </div>
+
+          {/* Sections */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-medium text-[#333333] mb-6">INSPIRATION</h2>
+            <p className="text-[#333333] text-sm font-normal leading-loose">{project.inspiration}</p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-medium text-[#333333] mb-6">DESCRIPTION</h2>
+            <p className="text-[#333333] text-sm font-normal leading-loose">{project.description}</p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-medium text-[#333333] mb-6">FEATURES</h2>
+            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-loose space-y-1">
+              {project.features.map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-medium text-[#333333] mb-6">MATERIALS</h2>
+            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-loose space-y-1">
+              {project.materials.map((m, i) => (
+                <li key={i}>{m}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-medium text-[#333333] mb-6">COLOR PALETTE</h2>
+            <div className="flex gap-6 mb-8">
+              {project.colorPalette.map((hex, i) => (
+                <div key={i} className="text-center">
+                  <div className="w-16 h-16 border" style={{ backgroundColor: hex }} />
+                  <p className="text-sm mt-2 text-[#333333]">{hex}</p>
+                </div>
+              ))}
             </div>
 
-            {/* Before/After Slider */}
-            <div className="mb-12 flex justify-center">
-              <BeforeAfterSlider
-                beforeImage={project.beforeAfterImages[0]}
-                afterImage={project.beforeAfterImages[1]}
-                beforeAlt="Project before renovation"
-                afterAlt="Project after renovation"
-                width={956}
-                height={600}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Sections */}
-            <section className="mb-12">
-              <h2 className="text-2xl font-medium text-[#333333] mb-6">INSPIRATION</h2>
-              <p className="text-[#333333] text-sm font-normal leading-loose">{project.inspiration}</p>
-            </section>
-
-            <section className="mb-12">
-              <h2 className="text-2xl font-medium text-[#333333] mb-6">DESCRIPTION</h2>
-              <p className="text-[#333333] text-sm font-normal leading-loose">{project.description}</p>
-            </section>
-
-            <section className="mb-12">
-              <h2 className="text-2xl font-medium text-[#333333] mb-6">FEATURES</h2>
-              <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-loose space-y-1">
-                {project.features.map((f, i) => (
-                  <li key={i}>{f}</li>
-                ))}
-              </ul>
-            </section>
-
-            <section className="mb-12">
-              <h2 className="text-2xl font-medium text-[#333333] mb-6">MATERIALS</h2>
-              <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-loose space-y-1">
-                {project.materials.map((m, i) => (
-                  <li key={i}>{m}</li>
-                ))}
-              </ul>
-            </section>
-
-            <section className="mb-12">
-              <h2 className="text-2xl font-medium text-[#333333] mb-6">COLOR PALETTE</h2>
-              <div className="flex gap-6 mb-8">
-                {project.colorPalette.map((hex, i) => (
-                  <div key={i} className="text-center">
-                    <div className="w-16 h-16 border" style={{ backgroundColor: hex }} />
-                    <p className="text-sm mt-2 text-[#333333]">{hex}</p>
-                  </div>
-                ))}
-              </div>
-
-              <ImageSlider images={project.galleryImages} alts={project.galleryAlts} gap={10} />
-            </section>
-          </main>
-        </div>
-        <Footer />
+            <ImageSlider images={project.galleryImages} alts={project.galleryAlts} gap={10} />
+          </section>
+        </main>
       </div>
-    </PageTransition>
+      <Footer />
+    </div>
   )
 }
 

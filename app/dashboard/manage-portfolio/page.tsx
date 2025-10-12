@@ -37,6 +37,13 @@ const TrashIcon = () => (
   </svg>
 )
 
+interface CustomField {
+  id: string
+  type: "text" | "list"
+  label: string
+  value: string | string[]
+}
+
 interface Project {
   id: number
   name: string
@@ -55,6 +62,7 @@ interface Project {
   materials: string[]
   colorPalette: string[]
   galleryImages: string[]
+  customFields?: CustomField[]
 }
 
 export default function ManagePortfolioPage() {
@@ -187,9 +195,9 @@ export default function ManagePortfolioPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-[#001F4B] font-montserrat">Manage Portfolio</h1>
-        <Button onClick={handleAddProject} className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white font-montserrat">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#001F4B] font-montserrat">Manage Portfolio</h1>
+        <Button onClick={handleAddProject} className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white font-montserrat w-full sm:w-auto">
           <PlusIcon />
           <span className="ml-2">Add New Project</span>
         </Button>
@@ -206,51 +214,58 @@ export default function ManagePortfolioPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border shadow-sm">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead className="font-montserrat font-semibold text-[#001F4B]">Title</TableHead>
-                <TableHead className="font-montserrat font-semibold text-[#001F4B]">Client</TableHead>
-                <TableHead className="font-montserrat font-semibold text-[#001F4B]">Status</TableHead>
-                <TableHead className="font-montserrat font-semibold text-[#001F4B] text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentProjects.map((project) => (
-                <TableRow key={project.id} className="hover:bg-gray-50">
-                  <TableCell className="font-medium font-montserrat text-[#001F4B]">{project.name}</TableCell>
-                  <TableCell className="font-montserrat text-gray-700">{project.client}</TableCell>
-                  <TableCell>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
-                      {project.status}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex gap-2 justify-end">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewProject(project.id)}
-                        className="font-montserrat"
-                      >
-                        <EyeIcon />
-                        <span className="ml-1">View</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDeleteProject(project.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 font-montserrat"
-                      >
-                        <TrashIcon />
-                      </Button>
-                    </div>
-                  </TableCell>
+        <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="font-montserrat font-semibold text-[#001F4B]">Title</TableHead>
+                  <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-[#001F4B]">Client</TableHead>
+                  <TableHead className="hidden md:table-cell font-montserrat font-semibold text-[#001F4B]">Status</TableHead>
+                  <TableHead className="font-montserrat font-semibold text-[#001F4B] text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {currentProjects.map((project) => (
+                  <TableRow key={project.id} className="hover:bg-gray-50">
+                    <TableCell className="font-medium font-montserrat text-[#001F4B]">
+                      <div>
+                        <div className="text-sm sm:text-base">{project.name}</div>
+                        <div className="sm:hidden text-xs text-gray-500 mt-1">{project.client}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell font-montserrat text-gray-700">{project.client}</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
+                        {project.status}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex gap-1 sm:gap-2 justify-end">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewProject(project.id)}
+                          className="font-montserrat text-xs sm:text-sm"
+                        >
+                          <EyeIcon />
+                          <span className="ml-1 hidden sm:inline">View</span>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteProject(project.id)}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 font-montserrat"
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           {totalPages > 1 && (
             <div className="p-4 border-t">

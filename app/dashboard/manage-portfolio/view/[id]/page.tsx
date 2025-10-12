@@ -3,12 +3,19 @@
 import type React from "react"
 import ConfirmationModal from "@/components/Confirmation-modal"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+
+interface CustomField {
+  id: string
+  type: "text" | "list"
+  label: string
+  value: string | string[]
+}
 
 interface ProjectData {
   id: string
@@ -28,6 +35,7 @@ interface ProjectData {
   beforeImage: string
   afterImage: string
   galleryImages: string[]
+  customFields?: CustomField[]
 }
 
 const initialProjectData: ProjectData = {
@@ -106,6 +114,27 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   const [colorPickerPosition, setColorPickerPosition] = useState<{ top: number; left: number } | null>(null)
   const [originalColor, setOriginalColor] = useState<string>("")
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const [showSaveConfirmation, setShowSaveConfirmation] = useState(false)
+
+  // Load project data from localStorage
+  useEffect(() => {
+    const savedProjects = localStorage.getItem("portfolioProjects")
+    if (savedProjects) {
+      const projects = JSON.parse(savedProjects)
+      const foundProject = projects.find((p: any) => p.id === Number.parseInt(params.id))
+      if (foundProject) {
+        const projectWithDefaults = {
+          ...foundProject,
+          customFields: foundProject.customFields || [],
+          colorPalette: foundProject.colorPalette 
+            ? foundProject.colorPalette.map((c: any) => typeof c === 'string' ? { color: c } : c)
+            : [{ color: "#ffffff" }],
+        }
+        setProjectData(projectWithDefaults)
+        setEditData(projectWithDefaults)
+      }
+    }
+  }, [params.id])
 
   const beforeImageRef = useRef<HTMLInputElement>(null)
   const afterImageRef = useRef<HTMLInputElement>(null)
@@ -118,8 +147,40 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   }
 
   const handleSave = () => {
+    // Validate required fields
+    const isValid = 
+      editData.name?.trim() !== "" &&
+      editData.year?.trim() !== "" &&
+      editData.client?.trim() !== "" &&
+      editData.beforeImage !== "" &&
+      editData.afterImage !== "" &&
+      editData.description?.trim() !== "" &&
+      editData.colorPalette && editData.colorPalette.length > 0 &&
+      editData.galleryImages && editData.galleryImages.length >= 2
+
+    if (!isValid) {
+      alert("Please fill all required fields: Name, Year, Client, Before Image, After Image, Description, Color Palette (at least 1), and Gallery (at least 2 photos)")
+      return
+    }
+
+    // Show confirmation modal
+    setShowSaveConfirmation(true)
+  }
+
+  const handleConfirmSave = () => {
+    // Save to localStorage
+    const savedProjects = localStorage.getItem("portfolioProjects")
+    if (savedProjects) {
+      const projects = JSON.parse(savedProjects)
+      const updatedProjects = projects.map((p: any) => 
+        p.id === editData.id ? editData : p
+      )
+      localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
+    }
+
     setProjectData({ ...editData })
     setIsEditing(false)
+    setShowSaveConfirmation(false)
   }
 
   const handleCancel = () => {
@@ -262,8 +323,9 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
       event.stopPropagation()
       const rect = event.currentTarget.getBoundingClientRect()
 
-      const left = rect.right + 10 // 10px gap from the color
-      const top = rect.top
+      // Position picker directly below and centered on the clicked color
+      const left = rect.left + (rect.width / 2) - 50 // Center the picker (picker width ~100px)
+      const top = rect.bottom + 10 // 10px below the color
 
       setColorPickerPosition({ top, left })
       setOriginalColor(editData.colorPalette[index]?.color || "#000000")
@@ -271,10 +333,55 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     }
   }
 
+  // Custom field handlers
+  const updateCustomField = (id: string, updates: Partial<CustomField>) => {
+    setEditData((prev) => ({
+      ...prev,
+      customFields: prev.customFields?.map((field) => (field.id === id ? { ...field, ...updates } : field)),
+    }))
+  }
+
+  const updateCustomListItem = (fieldId: string, index: number, value: string) => {
+    setEditData((prev) => ({
+      ...prev,
+      customFields: prev.customFields?.map((field) =>
+        field.id === fieldId && field.type === "list"
+          ? {
+              ...field,
+              value: (field.value as string[]).map((item, i) => (i === index ? value : item)),
+            }
+          : field,
+      ),
+    }))
+  }
+
+  const addCustomListItem = (fieldId: string) => {
+    setEditData((prev) => ({
+      ...prev,
+      customFields: prev.customFields?.map((field) =>
+        field.id === fieldId && field.type === "list" ? { ...field, value: [...(field.value as string[]), ""] } : field,
+      ),
+    }))
+  }
+
+  const removeCustomListItem = (fieldId: string, index: number) => {
+    setEditData((prev) => ({
+      ...prev,
+      customFields: prev.customFields?.map((field) =>
+        field.id === fieldId && field.type === "list"
+          ? {
+              ...field,
+              value: (field.value as string[]).filter((_, i) => i !== index),
+            }
+          : field,
+      ),
+    }))
+  }
+
   const currentData = isEditing ? editData : projectData
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6" onClick={handleClickOutside}>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6" onClick={handleClickOutside}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -302,7 +409,28 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
               <>
                 <Button
                   onClick={handleSave}
-                  className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200 hover:shadow-xl"
+                  className={`${
+                    editData.name?.trim() && 
+                    editData.year?.trim() && 
+                    editData.client?.trim() && 
+                    editData.beforeImage && 
+                    editData.afterImage && 
+                    editData.description?.trim() && 
+                    editData.colorPalette?.length > 0 && 
+                    editData.galleryImages?.length >= 2
+                      ? "bg-[#001F4B] hover:bg-[#001F4B]/90" 
+                      : "bg-gray-400 cursor-not-allowed hover:bg-gray-400"
+                  } text-white shadow-lg transition-all duration-200 hover:shadow-xl`}
+                  disabled={
+                    !(editData.name?.trim() && 
+                    editData.year?.trim() && 
+                    editData.client?.trim() && 
+                    editData.beforeImage && 
+                    editData.afterImage && 
+                    editData.description?.trim() && 
+                    editData.colorPalette?.length > 0 && 
+                    editData.galleryImages?.length >= 2)
+                  }
                 >
                   Save
                 </Button>
@@ -345,34 +473,42 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-6">
               {[
-                { label: "CLIENT", field: "client" as keyof ProjectData },
-                { label: "LOCATION", field: "location" as keyof ProjectData },
-                { label: "AREA", field: "area" as keyof ProjectData },
-                { label: "TECHNOLOGY", field: "technology" as keyof ProjectData },
-                { label: "ROLE", field: "role" as keyof ProjectData },
-                { label: "STATUS", field: "status" as keyof ProjectData },
-              ].map(({ label, field }) => (
-                <div key={field}>
-                  <p className="text-sm text-gray-500 font-montserrat font-medium mb-1">{label}</p>
-                  {isEditing ? (
-                    <Input
-                      value={currentData[field] as string}
-                      onChange={(e) => updateEditData(field, e.target.value)}
-                      className="border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                    />
-                  ) : (
-                    <p className="font-medium text-gray-800 font-montserrat bg-gray-50 p-2 rounded-lg">
-                      {currentData[field] as string}
-                    </p>
-                  )}
-                </div>
-              ))}
+                { label: "CLIENT", field: "client" as keyof ProjectData, required: true },
+                { label: "LOCATION", field: "location" as keyof ProjectData, required: false },
+                { label: "AREA", field: "area" as keyof ProjectData, required: false },
+                { label: "TECHNOLOGY", field: "technology" as keyof ProjectData, required: false },
+                { label: "ROLE", field: "role" as keyof ProjectData, required: false },
+                { label: "STATUS", field: "status" as keyof ProjectData, required: false },
+              ].map(({ label, field, required }) => {
+                const fieldValue = currentData[field] as string
+                // Only show field if it has a value OR if we're editing OR if it's required
+                if (!isEditing && !required && (!fieldValue || fieldValue.trim() === "")) {
+                  return null
+                }
+                
+                return (
+                  <div key={field}>
+                    <p className="text-sm text-gray-500 font-montserrat font-medium mb-1">{label}</p>
+                    {isEditing ? (
+                      <Input
+                        value={fieldValue}
+                        onChange={(e) => updateEditData(field, e.target.value)}
+                        className="border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                      />
+                    ) : (
+                      <p className="font-medium text-gray-800 font-montserrat bg-gray-50 p-2 rounded-lg">
+                        {fieldValue}
+                      </p>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
 
         {/* Before/After Images */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
           <div className="relative group">
             <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm z-10 font-medium">
               Before
@@ -437,22 +573,24 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
 
-        {/* Inspiration Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">INSPIRATION</h2>
-          {isEditing ? (
-            <Textarea
-              value={currentData.inspiration}
-              onChange={(e) => updateEditData("inspiration", e.target.value)}
-              className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-              rows={2}
-            />
-          ) : (
-            <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
-              {currentData.inspiration}
-            </p>
-          )}
-        </div>
+        {/* Inspiration Section - only show if has content or editing */}
+        {(isEditing || (currentData.inspiration && currentData.inspiration.trim() !== "")) && (
+          <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">INSPIRATION</h2>
+            {isEditing ? (
+              <Textarea
+                value={currentData.inspiration}
+                onChange={(e) => updateEditData("inspiration", e.target.value)}
+                className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                rows={2}
+              />
+            ) : (
+              <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
+                {currentData.inspiration}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Description Section */}
         <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
@@ -471,95 +609,103 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           )}
         </div>
 
-        {/* Features Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">FEATURES</h2>
-          <ul className="space-y-3">
-            {currentData.features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
-                {isEditing ? (
-                  <div className="flex items-center gap-2 flex-1">
-                    <Input
-                      value={feature}
-                      onChange={(e) => updateArrayField("features", index, e.target.value)}
-                      className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                    />
-                    <Button
-                      onClick={() => removeArrayItem("features", index)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                    >
-                      X
-                    </Button>
-                  </div>
-                ) : (
-                  <span className="text-gray-600 font-montserrat">{feature}</span>
-                )}
-              </li>
-            ))}
-            {isEditing && (
-              <li>
-                <Button
-                  onClick={() => addArrayItem("features")}
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
-                >
-                  <PlusIcon />
-                  <span className="ml-1">Add Feature</span>
-                </Button>
-              </li>
-            )}
-          </ul>
-        </div>
+        {/* Features Section - only show if has features or editing */}
+        {(isEditing || (currentData.features && currentData.features.some(f => f && f.trim() !== ""))) && (
+          <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">FEATURES</h2>
+            <ul className="space-y-3">
+              {currentData.features.map((feature, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
+                  {isEditing ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <Input
+                        value={feature}
+                        onChange={(e) => updateArrayField("features", index, e.target.value)}
+                        className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                      />
+                      <Button
+                        onClick={() => removeArrayItem("features", index)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ) : (
+                    feature && feature.trim() && (
+                      <span className="text-gray-600 font-montserrat">{feature}</span>
+                    )
+                  )}
+                </li>
+              ))}
+              {isEditing && (
+                <li>
+                  <Button
+                    onClick={() => addArrayItem("features")}
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
+                  >
+                    <PlusIcon />
+                    <span className="ml-1">Add Feature</span>
+                  </Button>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
 
-        {/* Materials Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">MATERIALS</h2>
-          <ul className="space-y-3">
-            {currentData.materials.map((material, index) => (
-              <li key={index} className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
-                {isEditing ? (
-                  <div className="flex items-center gap-2 flex-1">
-                    <Input
-                      value={material}
-                      onChange={(e) => updateArrayField("materials", index, e.target.value)}
-                      className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                    />
-                    <Button
-                      onClick={() => removeArrayItem("materials", index)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                    >
-                      X
-                    </Button>
-                  </div>
-                ) : (
-                  <span className="text-gray-600 font-montserrat">{material}</span>
-                )}
-              </li>
-            ))}
-            {isEditing && (
-              <li>
-                <Button
-                  onClick={() => addArrayItem("materials")}
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
-                >
-                  <PlusIcon />
-                  <span className="ml-1">Add Material</span>
-                </Button>
-              </li>
-            )}
-          </ul>
-        </div>
+        {/* Materials Section - only show if has materials or editing */}
+        {(isEditing || (currentData.materials && currentData.materials.some(m => m && m.trim() !== ""))) && (
+          <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">MATERIALS</h2>
+            <ul className="space-y-3">
+              {currentData.materials.map((material, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
+                  {isEditing ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <Input
+                        value={material}
+                        onChange={(e) => updateArrayField("materials", index, e.target.value)}
+                        className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                      />
+                      <Button
+                        onClick={() => removeArrayItem("materials", index)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ) : (
+                    material && material.trim() && (
+                      <span className="text-gray-600 font-montserrat">{material}</span>
+                    )
+                  )}
+                </li>
+              ))}
+              {isEditing && (
+                <li>
+                  <Button
+                    onClick={() => addArrayItem("materials")}
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
+                  >
+                    <PlusIcon />
+                    <span className="ml-1">Add Material</span>
+                  </Button>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
 
-        {/* Color Palette Section */}
+        {/* Color Palette Section - required */}
         <div className="bg-white rounded-xl p-6 shadow-sm mb-8 relative">
           <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">COLOR PALETTE</h2>
           <div className="flex flex-wrap gap-4">
@@ -604,7 +750,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
 
-        {/* Gallery Section */}
+        {/* Gallery Section - required */}
         <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
           <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">GALLERY</h2>
           {isEditing ? (
@@ -660,27 +806,111 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             </div>
           )}
         </div>
+
+        {/* Custom Fields Section */}
+        {currentData.customFields && currentData.customFields.length > 0 && (
+          <div className="space-y-4 mb-8">
+            {currentData.customFields.map((field) => (
+              <div key={field.id} className="bg-white rounded-xl p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat uppercase">
+                  {isEditing ? (
+                    <Input
+                      value={field.label}
+                      onChange={(e) => updateCustomField(field.id, { label: e.target.value })}
+                      className="text-xl font-semibold border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                    />
+                  ) : (
+                    field.label
+                  )}
+                </h2>
+                
+                {field.type === "text" ? (
+                  isEditing ? (
+                    <Textarea
+                      value={field.value as string}
+                      onChange={(e) => updateCustomField(field.id, { value: e.target.value })}
+                      className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                      rows={3}
+                    />
+                  ) : (
+                    <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
+                      {field.value as string}
+                    </p>
+                  )
+                ) : (
+                  <ul className="space-y-3">
+                    {(field.value as string[]).map((item, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
+                        {isEditing ? (
+                          <div className="flex items-center gap-2 flex-1">
+                            <Input
+                              value={item}
+                              onChange={(e) => updateCustomListItem(field.id, index, e.target.value)}
+                              className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                            />
+                            {(field.value as string[]).length > 1 && (
+                              <Button
+                                onClick={() => removeCustomListItem(field.id, index)}
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                              >
+                                X
+                              </Button>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-gray-600 font-montserrat">{item}</span>
+                        )}
+                      </li>
+                    ))}
+                    {isEditing && (
+                      <li>
+                        <Button
+                          onClick={() => addCustomListItem(field.id)}
+                          variant="outline"
+                          size="sm"
+                          className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
+                        >
+                          <PlusIcon />
+                          <span className="ml-1">Add Item</span>
+                        </Button>
+                      </li>
+                    )}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {isEditing && colorPickerIndex !== null && colorPickerPosition && (
         <div
-          className="fixed z-[99999] bg-white p-3 rounded-lg shadow-xl border-2 border-gray-300"
+          className="fixed z-[99999] bg-white p-4 rounded-xl shadow-2xl border-2 border-[#001F4B]/20"
           style={{
             top: `${colorPickerPosition.top}px`,
             left: `${colorPickerPosition.left}px`,
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex flex-col items-center space-y-2">
+          {/* Arrow pointing up to the color */}
+          <div 
+            className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l-2 border-t-2 border-[#001F4B]/20 rotate-45"
+          />
+          
+          <div className="flex flex-col items-center space-y-3 relative">
+            <p className="text-xs font-medium text-gray-600 uppercase">Select Color</p>
             <input
               type="color"
               value={currentData.colorPalette[colorPickerIndex]?.color || "#000000"}
               onChange={(e) => {
                 updateColorPalette(colorPickerIndex, e.target.value)
               }}
-              className="w-16 h-16 rounded-md border border-gray-300 cursor-pointer"
+              className="w-20 h-20 rounded-lg border-2 border-gray-200 cursor-pointer hover:border-[#001F4B] transition-colors"
             />
-            <div className="text-xs text-gray-600 font-mono">
+            <div className="text-sm font-mono font-bold text-[#001F4B]">
               {currentData.colorPalette[colorPickerIndex]?.color.toUpperCase()}
             </div>
           </div>
@@ -695,6 +925,17 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           title="Delete Project"
           message="Are you sure you want to delete this project? This action cannot be undone."
           type="delete"
+        />
+      )}
+
+      {showSaveConfirmation && (
+        <ConfirmationModal
+          isOpen={showSaveConfirmation}
+          onClose={() => setShowSaveConfirmation(false)}
+          onConfirm={handleConfirmSave}
+          title="Save Changes"
+          message="Are you sure you want to save these changes?"
+          type="update"
         />
       )}
     </div>

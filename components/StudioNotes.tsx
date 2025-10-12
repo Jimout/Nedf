@@ -98,16 +98,24 @@ export default function StudioNotes() {
       const containerWidth = containerRef.current?.offsetWidth || window.innerWidth
 
       if (window.innerWidth < 768) {
+        // Mobile
         setItemsPerSlide(1)
         setCardWidth(containerWidth)
         setIsMobile(true)
       } else if (window.innerWidth < 1024) {
+        // Tablet
         setItemsPerSlide(2)
         setCardWidth((containerWidth - gap) / 2)
         setIsMobile(false)
+      } else if (window.innerWidth < 1280) {
+        // Standard screens (md/lg) - 3 cards
+        setItemsPerSlide(3)
+        setCardWidth((containerWidth - gap * 2) / 3)
+        setIsMobile(false)
       } else {
+        // Wider screens (xl) - 4 cards
         setItemsPerSlide(4)
-        setCardWidth((containerWidth - gap * 3) / 4) // 4 cards
+        setCardWidth((containerWidth - gap * 3) / 4)
         setIsMobile(false)
       }
     }

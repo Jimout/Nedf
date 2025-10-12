@@ -104,9 +104,9 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
 
     if (!isFormValid()) {
       setValidationError(
-        "Please fill the required fields: Name, Year, Client, Before Image, After Image, and Description",
+        "Please fill all required fields: Name, Year, Client, Before Image, After Image, Description, Color Palette (at least 1), and Gallery (at least 2 photos)",
       )
-      setTimeout(() => setValidationError(""), 5000)
+      setTimeout(() => setValidationError(""), 6000)
       return
     }
 
@@ -130,13 +130,15 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
   const handleYearChange = (value: string) => {
     if (!project) return
 
+    // Check if user is trying to enter non-numeric characters
     if (value && !/^\d*$/.test(value)) {
-      setYearError("Must enter numbers only")
-      setTimeout(() => setYearError(""), 3000)
+      setYearError("⚠️ Year field only accepts numbers (0-9)")
+      setTimeout(() => setYearError(""), 4000)
     } else {
       setYearError("")
     }
 
+    // Strip all non-numeric characters
     const numericValue = value.replace(/[^0-9]/g, "")
     setProject({ ...project, year: numericValue })
   }
@@ -337,7 +339,9 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
       project.client.trim() !== "" &&
       project.beforeImage !== "" &&
       project.afterImage !== "" &&
-      project.description.trim() !== ""
+      project.description.trim() !== "" &&
+      project.colorPalette.length > 0 &&
+      project.galleryImages.length >= 2 // At least 2 gallery photos
     )
   }
 
@@ -347,12 +351,28 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
 
   return (
     <div className="min-h-screen bg-gray-50 font-['Montserrat']">
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="flex items-center gap-4 mb-8">
+      <div className="max-w-4xl mx-auto p-4 sm:p-6">
+        <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
           <Button variant="ghost" size="sm" className="p-2" onClick={() => router.back()}>
             <ArrowLeftIcon />
           </Button>
-          <h1 className="text-3xl font-bold text-[#001F4B] uppercase tracking-wide">Edit Project</h1>
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] uppercase tracking-wide mb-4">Edit Project</h1>
+            {project.name && (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                <div>
+                  <label className="text-xs text-gray-500 font-medium uppercase">Project Name</label>
+                  <p className="text-base sm:text-lg text-gray-800 font-medium">{project.name}</p>
+                </div>
+                {project.year && (
+                  <div>
+                    <label className="text-xs text-gray-500 font-medium uppercase">Year</label>
+                    <p className="text-base sm:text-lg text-gray-800 font-medium">{project.year}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {validationError && (
@@ -360,6 +380,41 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
             <p className="text-red-600 font-medium">{validationError}</p>
           </div>
         )}
+
+        <Card className="mb-8 border-2 border-[#001F4B]/20 bg-gradient-to-r from-blue-50 to-white">
+          <CardHeader>
+            <CardTitle className="text-[#001F4B] flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Project Overview
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="font-semibold text-gray-700">Project Name:</span>
+                <span className="ml-2 text-gray-600">{project.name || "Not set"}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-gray-700">Year:</span>
+                <span className="ml-2 text-gray-600">{project.year || "Not set"}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-gray-700">Client:</span>
+                <span className="ml-2 text-gray-600">{project.client || "Not set"}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-gray-700">Status:</span>
+                <span className="ml-2 text-gray-600">{project.status || "Not set"}</span>
+              </div>
+              <div className="col-span-2">
+                <span className="font-semibold text-gray-700">Custom Fields:</span>
+                <span className="ml-2 text-gray-600">{project.customFields.length} field(s)</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <Card className="mb-8">
           <CardHeader>
@@ -383,12 +438,20 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
                   Year <span className="text-red-500">*</span>
                 </label>
                 <Input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={project.year}
                   onChange={(e) => handleYearChange(e.target.value)}
-                  placeholder="Enter year"
+                  placeholder="Enter year (numbers only)"
                   required
+                  className={yearError ? "border-red-500 focus:border-red-500" : ""}
                 />
-                {yearError && <p className="text-red-500 text-sm mt-1">{yearError}</p>}
+                {yearError && (
+                  <p className="text-red-600 text-sm mt-1 font-medium bg-red-50 p-2 rounded">
+                    {yearError}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -583,16 +646,24 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
           </CardContent>
         </Card>
 
-        <Card className="mb-8">
+        <Card className="mb-8 border-2 border-dashed border-gray-300 bg-gray-50">
           <CardHeader>
-            <CardTitle className="text-[#001F4B]">Add Custom Fields</CardTitle>
+            <CardTitle className="text-[#001F4B] flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Add Custom Fields
+            </CardTitle>
+            <p className="text-sm text-gray-600 mt-2">
+              Create dynamic fields to add any additional information to your project. Choose between text fields for paragraphs or list fields for bullet points.
+            </p>
           </CardHeader>
           <CardContent>
             <div className="flex gap-4">
               <Button
                 variant="outline"
                 onClick={() => addCustomField("text")}
-                className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-transparent"
+                className="flex-1 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-white shadow-sm"
               >
                 <PlusIcon />
                 <span className="ml-2">Add Text Field</span>
@@ -600,7 +671,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
               <Button
                 variant="outline"
                 onClick={() => addCustomField("list")}
-                className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-transparent"
+                className="flex-1 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white bg-white shadow-sm"
               >
                 <PlusIcon />
                 <span className="ml-2">Add List Field</span>
@@ -612,23 +683,38 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
         {project.customFields.length > 0 && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle className="text-[#001F4B]">Custom Fields</CardTitle>
+              <CardTitle className="text-[#001F4B] flex items-center gap-2">
+                Custom Fields
+                <span className="text-sm font-normal text-gray-500">({project.customFields.length})</span>
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              {project.customFields.map((field) => (
-                <div key={field.id} className="border rounded-lg p-4 bg-gray-50">
+              {project.customFields.map((field, fieldIndex) => (
+                <div key={field.id} className="border-2 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#001F4B] text-white">
+                      {field.type === "text" ? (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                        </svg>
+                      )}
+                      <span>{field.type === "text" ? "Text" : "List"}</span>
+                    </div>
                     <Input
                       value={field.label}
                       onChange={(e) => updateCustomField(field.id, { label: e.target.value })}
                       placeholder="Field label"
-                      className="font-medium"
+                      className="flex-1 font-medium border-gray-300"
                     />
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => removeCustomField(field.id)}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-300"
                     >
                       <XIcon />
                     </Button>
@@ -640,24 +726,36 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
                       onChange={(e) => updateCustomField(field.id, { value: e.target.value })}
                       placeholder="Enter text content"
                       rows={3}
+                      className="border-gray-300"
                     />
                   ) : (
                     <div className="space-y-2">
                       {(field.value as string[]).map((item, index) => (
-                        <div key={index} className="flex gap-2">
+                        <div key={index} className="flex gap-2 items-center">
+                          <span className="text-xs text-gray-500 font-mono w-6">{index + 1}.</span>
                           <Input
                             value={item}
                             onChange={(e) => updateCustomListItem(field.id, index, e.target.value)}
                             placeholder="Enter list item"
+                            className="flex-1 border-gray-300"
                           />
                           {(field.value as string[]).length > 1 && (
-                            <Button variant="outline" size="sm" onClick={() => removeCustomListItem(field.id, index)}>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => removeCustomListItem(field.id, index)}
+                              className="hover:bg-red-50 hover:border-red-300"
+                            >
                               <XIcon />
                             </Button>
                           )}
                         </div>
                       ))}
-                      <Button variant="outline" onClick={() => addCustomListItem(field.id)} className="w-full">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => addCustomListItem(field.id)} 
+                        className="w-full border-dashed border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
+                      >
                         <PlusIcon />
                         <span className="ml-2">Add Item</span>
                       </Button>
@@ -699,7 +797,9 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-[#001F4B]">Color Palette</CardTitle>
+            <CardTitle className="text-[#001F4B]">
+              Color Palette <span className="text-red-500">*</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-4 mb-4">
@@ -735,7 +835,10 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-[#001F4B]">Gallery</CardTitle>
+            <CardTitle className="text-[#001F4B]">
+              Gallery <span className="text-red-500">*</span>
+              <span className="text-sm font-normal text-gray-500 ml-2">(Minimum 2 photos required)</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {project.galleryImages.length > 0 && (
@@ -768,6 +871,25 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
           </CardContent>
         </Card>
 
+        {/* Validation Status */}
+        {!isFormValid() && (
+          <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-yellow-800 font-medium text-sm">
+              ⚠️ Please complete all required fields:
+            </p>
+            <ul className="mt-2 text-yellow-700 text-sm list-disc list-inside">
+              {!project.name.trim() && <li>Project Name</li>}
+              {!project.year.trim() && <li>Year</li>}
+              {!project.client.trim() && <li>Client</li>}
+              {!project.beforeImage && <li>Before Image</li>}
+              {!project.afterImage && <li>After Image</li>}
+              {!project.description.trim() && <li>Description</li>}
+              {project.colorPalette.length === 0 && <li>Color Palette (at least 1 color)</li>}
+              {project.galleryImages.length < 2 && <li>Gallery (at least 2 photos, currently {project.galleryImages.length})</li>}
+            </ul>
+          </div>
+        )}
+
         <div className="flex gap-4 justify-end">
           <Button
             variant="outline"
@@ -778,7 +900,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
           </Button>
           <Button
             onClick={handleSave}
-            className={`${isFormValid() ? "bg-[#001F4B] hover:bg-[#001F4B]/90" : "bg-gray-400 cursor-not-allowed"}`}
+            className={`${isFormValid() ? "bg-[#001F4B] hover:bg-[#001F4B]/90" : "bg-gray-400 cursor-not-allowed hover:bg-gray-400"}`}
             disabled={!isFormValid()}
           >
             Save Changes
