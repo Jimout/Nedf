@@ -154,46 +154,28 @@ export default function StudioNotes() {
       </h2>
 
       <div className="flex flex-col items-center">
-        {/* Navigation Controls - Only show on desktop */}
-        <div className="hidden md:flex items-center justify-center gap-4 mb-6">
+        <div className="relative flex items-center justify-center w-full">
+          {/* Left Arrow */}
           <div
             onClick={prevSlide}
             aria-label="Previous"
-            className={`cursor-pointer z-10 ${
+            className={`absolute left-0 md:left-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
               isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
           >
             <ArrowLeft />
           </div>
-          
-          {/* Pagination Dots */}
-          <div className="flex gap-2">
-            {Array.from({ length: totalSlides }).map((_, dotIndex) => (
-              <button
-                key={dotIndex}
-                onClick={() => setIndex(dotIndex)}
-                className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                  dotIndex === index
-                    ? "bg-[#001F4B] scale-125"
-                    : "bg-gray-300 hover:bg-gray-400"
-                }`}
-                aria-label={`Go to page ${dotIndex + 1}`}
-              />
-            ))}
-          </div>
-          
+
+          {/* Right Arrow */}
           <div
             onClick={nextSlide}
             aria-label="Next"
-            className={`cursor-pointer z-10 ${
+            className={`absolute right-0 md:right-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
               isLast ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
           >
             <ArrowRight />
           </div>
-        </div>
-
-        <div className="relative flex items-center justify-center w-full">
 
           {/* Slider container */}
           <div 
@@ -286,44 +268,6 @@ export default function StudioNotes() {
           </div>
         </div>
         
-        {/* Mobile Navigation Controls */}
-        <div className="flex md:hidden items-center justify-center gap-4 mt-6">
-          <div
-            onClick={prevSlide}
-            aria-label="Previous"
-            className={`cursor-pointer z-10 ${
-              isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
-            }`}
-          >
-            <ArrowLeft />
-          </div>
-          
-          {/* Pagination Dots */}
-          <div className="flex gap-2">
-            {Array.from({ length: totalSlides }).map((_, dotIndex) => (
-              <button
-                key={dotIndex}
-                onClick={() => setIndex(dotIndex)}
-                className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                  dotIndex === index
-                    ? "bg-[#001F4B] scale-125"
-                    : "bg-gray-300 hover:bg-gray-400"
-                }`}
-                aria-label={`Go to page ${dotIndex + 1}`}
-              />
-            ))}
-          </div>
-          
-          <div
-            onClick={nextSlide}
-            aria-label="Next"
-            className={`cursor-pointer z-10 ${
-              isLast ? "opacity-30 pointer-events-none" : "opacity-100"
-            }`}
-          >
-            <ArrowRight />
-          </div>
-        </div>
       </div>
     </section>
   )

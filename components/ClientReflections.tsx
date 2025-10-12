@@ -43,8 +43,9 @@ export function ClientReflections() {
   const [centerX, setCenterX] = useState(350)
   const [visiblePositions, setVisiblePositions] = useState(3) // Number of visible avatars
 
-  const startAngle = (3 * Math.PI) / 2
-  const totalArc = Math.PI
+  const startAngle = Math.PI // Start at left side (180 degrees)
+  const endAngle = 0 // End at right side (0 degrees)
+  const totalArc = Math.PI // Full semicircle
   const angleStep = totalArc / (visiblePositions - 1) // Dynamic based on visible positions
 
   const getPosition = (angle: number) => ({
@@ -64,40 +65,40 @@ export function ClientReflections() {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
-      const containerWidth = width * 0.9 // Account for padding
+      const containerWidth = Math.min(width * 0.9, 1400) // Slightly bigger container
       
       if (width < 768) {
         // Mobile
-        const scaledWidth = Math.min(600, containerWidth)
+        const scaledWidth = Math.min(700, containerWidth)
+        setSvgWidth(scaledWidth)
+        setSvgHeight(450)
+        setRadius(140)
+        setCenterX(scaledWidth / 2)
+        setVisiblePositions(3)
+      } else if (width < 1280) {
+        // Standard screens (md/lg) - 3 avatars, bigger arc
+        const scaledWidth = Math.min(750, containerWidth)
+        setSvgWidth(scaledWidth)
+        setSvgHeight(450)
+        setRadius(130)
+        setCenterX(scaledWidth / 2)
+        setVisiblePositions(3)
+      } else if (width < 1600) {
+        // Large screens - 3 avatars with bigger size
+        const scaledWidth = Math.min(850, containerWidth)
         setSvgWidth(scaledWidth)
         setSvgHeight(500)
         setRadius(150)
         setCenterX(scaledWidth / 2)
         setVisiblePositions(3)
-      } else if (width < 1280) {
-        // Standard screens (md/lg) - 3 avatars, smaller arc to align with other sections
-        const scaledWidth = Math.min(700, containerWidth)
-        setSvgWidth(scaledWidth)
-        setSvgHeight(450)
-        setRadius(140)
-        setCenterX(150)
-        setVisiblePositions(3)
-      } else if (width < 1600) {
-        // Large screens - 3 avatars with medium size
-        const scaledWidth = Math.min(900, containerWidth)
-        setSvgWidth(scaledWidth)
-        setSvgHeight(550)
-        setRadius(180)
-        setCenterX(200)
-        setVisiblePositions(3)
       } else {
-        // XL screens - 4 avatars for wider design
-        const scaledWidth = Math.min(1400, containerWidth)
+        // XL screens - 3 avatars for consistency
+        const scaledWidth = Math.min(1000, containerWidth)
         setSvgWidth(scaledWidth)
-        setSvgHeight(800)
-        setRadius(300)
-        setCenterX(275)
-        setVisiblePositions(4)
+        setSvgHeight(600)
+        setRadius(180)
+        setCenterX(scaledWidth / 2)
+        setVisiblePositions(3)
       }
     }
     handleResize()
@@ -151,8 +152,8 @@ export function ClientReflections() {
   ) || visibleClients[middlePosition] || visibleClients[0]
 
   return (
-    <section className="relative pt-20 w-full flex justify-center overflow-hidden">
-      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 overflow-hidden">
+    <section className="relative pt-20 w-full flex justify-center">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         <motion.h2
           className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-0"
           initial={{ opacity: 0, y: -20 }}
@@ -163,17 +164,17 @@ export function ClientReflections() {
         </motion.h2>
 
         {/* Desktop layout (arc) */}
-        <div className="hidden md:flex relative w-full flex-col md:flex-row items-center justify-center gap-4 overflow-hidden">
-        <div className="relative w-full flex justify-center items-center">
-          <div
-            style={{
-              width: svgWidth,
-              height: svgHeight,
-              position: "relative",
-              overflow: "visible",
-              maxWidth: '100%',
-            }}
-          >
+        <div className="hidden md:flex relative w-full flex-col items-center justify-center">
+          <div className="relative flex justify-start items-center w-full">
+            <div
+              style={{
+                width: svgWidth,
+                height: svgHeight,
+                position: "relative",
+                overflow: "visible",
+                maxWidth: '100%',
+              }}
+            >
             <motion.svg
               width="100%"
               height="100%"
@@ -205,9 +206,7 @@ export function ClientReflections() {
               {/* Background arc layer with glow */}
               <motion.path
                 d={`M ${getPosition(startAngle).x} ${getPosition(startAngle).y}
-                    A ${radius} ${radius} 0 0 1 ${getPosition(startAngle + totalArc).x} ${
-                      getPosition(startAngle + totalArc).y
-                    }`}
+                    A ${radius} ${radius} 0 0 1 ${getPosition(endAngle).x} ${getPosition(endAngle).y}`}
                 stroke="#e2e8f0"
                 strokeWidth="4"
                 strokeOpacity="0.6"
@@ -219,9 +218,7 @@ export function ClientReflections() {
               {/* Main orbital path - this is the exact path avatars follow */}
               <motion.path
                 d={`M ${getPosition(startAngle).x} ${getPosition(startAngle).y}
-                    A ${radius} ${radius} 0 0 1 ${getPosition(startAngle + totalArc).x} ${
-                      getPosition(startAngle + totalArc).y
-                    }`}
+                    A ${radius} ${radius} 0 0 1 ${getPosition(endAngle).x} ${getPosition(endAngle).y}`}
                 stroke="url(#arcGradient)"
                 strokeWidth="2.5"
                 filter="url(#glow)"
@@ -349,14 +346,15 @@ export function ClientReflections() {
             })}
             </AnimatePresence>
             
-            {/* Testimonial display area - separate from avatars for better fade control */}
+            {/* Testimonial display area - positioned below the arc */}
             <div 
               className="absolute overflow-hidden"
               style={{
-                left: svgWidth >= 1200 ? centerX + radius + 140 : svgWidth >= 850 ? centerX + radius + 45 : centerX + radius + 40,
-                top: svgHeight / 2 - 60,
-                width: svgWidth >= 1200 ? 650 : svgWidth >= 850 ? 380 : 350,
-                maxWidth: `calc(${svgWidth}px - ${svgWidth >= 1200 ? centerX + radius + 140 : svgWidth >= 850 ? centerX + radius + 45 : centerX + radius + 40}px - 20px)`,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                top: svgHeight - 50,
+                width: Math.min(svgWidth * 0.8, 500),
+                textAlign: 'center',
               }}
             >
               <AnimatePresence mode="wait">
