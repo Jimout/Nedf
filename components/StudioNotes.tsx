@@ -29,6 +29,30 @@ const posts = [
     description:
       "Every Monday At NEDF Starts With Music, Coffee, And Creative Chaos. We Give You A Glimpse Into Our Daily Rituals And The Small Moments That Spark Big Ideas. From brainstorming sessions to collaborative sketching, see how we maintain our creative energy.",
   },
+  {
+    id: 3,
+    image: "/interior1.jpg",
+    categories: ["Design"],
+    title: "The Power Of Simplicity",
+    description:
+      "Design Isn't Always About More. Sometimes It's About Less Done Right. We explore the principles of minimalist design and how restraint can create more impactful spaces. Learn why simplicity requires the most sophisticated thinking.",
+  },
+  {
+    id: 4,
+    image: "/room3.jpg",
+    categories: ["Tech", "AI"],
+    title: "Using AI in Architecture",
+    description:
+      "How Artificial Intelligence is shaping how we plan, visualize, and build in the 21st century. From generative design to predictive modeling, we examine the tools that are revolutionizing our industry and changing the way we approach complex architectural challenges.",
+  },
+  {
+    id: 5,
+    image: "/visual2.jpg",
+    categories: ["Process", "Design"],
+    title: "Designing for the Future",
+    description:
+      "We explore how forward-thinking design principles shape spaces that adapt to changing needs. From flexible layouts to sustainable materials, discover our approach to creating timeless architecture that stands the test of time.",
+  },
 ]
 
 const calculateTextLines = (title: string, categories: string[]) => {
@@ -82,20 +106,22 @@ export default function StudioNotes() {
       const containerWidth = containerRef.current?.offsetWidth || window.innerWidth
 
       if (window.innerWidth < 768) {
-        // Mobile - smaller cards like other sections (90% width with max 320px)
-        const mobileWidth = Math.min(containerWidth * 0.9, 320)
+        // Mobile - minimized card width (max 280px)
+        const mobileWidth = Math.min(containerWidth * 0.85, 280)
         setItemsPerSlide(1)
         setCardWidth(mobileWidth)
         setIsMobile(true)
       } else if (window.innerWidth < 1024) {
-        // Tablet
+        // Tablet - with max width constraint
+        const calculatedWidth = (containerWidth - gap) / 2
         setItemsPerSlide(2)
-        setCardWidth((containerWidth - gap) / 2)
+        setCardWidth(Math.min(calculatedWidth, 320))
         setIsMobile(false)
       } else {
-        // Desktop and wider screens - always 3 cards
+        // Desktop and wider screens - minimized with max width constraint
+        const calculatedWidth = (containerWidth - gap * 2) / 3
         setItemsPerSlide(3)
-        setCardWidth((containerWidth - gap * 2) / 3)
+        setCardWidth(Math.min(calculatedWidth, 340))
         setIsMobile(false)
       }
     }
