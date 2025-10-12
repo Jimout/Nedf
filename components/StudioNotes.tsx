@@ -111,17 +111,11 @@ export default function StudioNotes() {
         setItemsPerSlide(1)
         setCardWidth(mobileWidth)
         setIsMobile(true)
-      } else if (window.innerWidth < 1024) {
-        // Tablet - with max width constraint
-        const calculatedWidth = (containerWidth - gap) / 2
-        setItemsPerSlide(2)
-        setCardWidth(Math.min(calculatedWidth, 320))
-        setIsMobile(false)
       } else {
-        // Desktop and wider screens - minimized with max width constraint
+        // Desktop and wider screens - always show 3 cards
         const calculatedWidth = (containerWidth - gap * 2) / 3
         setItemsPerSlide(3)
-        setCardWidth(Math.min(calculatedWidth, 340))
+        setCardWidth(Math.min(calculatedWidth, 380))
         setIsMobile(false)
       }
       // Reset index when screen size changes to avoid out-of-bounds
@@ -160,26 +154,46 @@ export default function StudioNotes() {
       </h2>
 
       <div className="flex flex-col items-center">
-        <div className="relative flex items-center justify-center w-full">
-          {/* Arrows */}
+        {/* Navigation Controls - Only show on desktop */}
+        <div className="hidden md:flex items-center justify-center gap-4 mb-6">
           <div
             onClick={prevSlide}
             aria-label="Previous"
-            className={`absolute left-0 md:left-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+            className={`cursor-pointer z-10 ${
               isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
           >
             <ArrowLeft />
           </div>
+          
+          {/* Pagination Dots */}
+          <div className="flex gap-2">
+            {Array.from({ length: totalSlides }).map((_, dotIndex) => (
+              <button
+                key={dotIndex}
+                onClick={() => setIndex(dotIndex)}
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  dotIndex === index
+                    ? "bg-[#001F4B] scale-125"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to page ${dotIndex + 1}`}
+              />
+            ))}
+          </div>
+          
           <div
             onClick={nextSlide}
             aria-label="Next"
-            className={`absolute right-0 md:right-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+            className={`cursor-pointer z-10 ${
               isLast ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
           >
             <ArrowRight />
           </div>
+        </div>
+
+        <div className="relative flex items-center justify-center w-full">
 
           {/* Slider container */}
           <div 
@@ -269,6 +283,45 @@ export default function StudioNotes() {
                 )
               })}
             </div>
+          </div>
+        </div>
+        
+        {/* Mobile Navigation Controls */}
+        <div className="flex md:hidden items-center justify-center gap-4 mt-6">
+          <div
+            onClick={prevSlide}
+            aria-label="Previous"
+            className={`cursor-pointer z-10 ${
+              isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
+            }`}
+          >
+            <ArrowLeft />
+          </div>
+          
+          {/* Pagination Dots */}
+          <div className="flex gap-2">
+            {Array.from({ length: totalSlides }).map((_, dotIndex) => (
+              <button
+                key={dotIndex}
+                onClick={() => setIndex(dotIndex)}
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  dotIndex === index
+                    ? "bg-[#001F4B] scale-125"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to page ${dotIndex + 1}`}
+              />
+            ))}
+          </div>
+          
+          <div
+            onClick={nextSlide}
+            aria-label="Next"
+            className={`cursor-pointer z-10 ${
+              isLast ? "opacity-30 pointer-events-none" : "opacity-100"
+            }`}
+          >
+            <ArrowRight />
           </div>
         </div>
       </div>
