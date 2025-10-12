@@ -64,30 +64,36 @@ export function ClientReflections() {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
+      const containerWidth = width * 0.9 // Account for padding
+      
       if (width < 768) {
         // Mobile
-        setSvgWidth(600)
+        const scaledWidth = Math.min(600, containerWidth)
+        setSvgWidth(scaledWidth)
         setSvgHeight(500)
         setRadius(150)
-        setCenterX(300)
+        setCenterX(scaledWidth / 2)
         setVisiblePositions(3)
       } else if (width < 1280) {
         // Standard screens (md/lg) - 3 avatars, smaller arc to align with other sections
-        setSvgWidth(700)
+        const scaledWidth = Math.min(700, containerWidth)
+        setSvgWidth(scaledWidth)
         setSvgHeight(450)
         setRadius(140)
         setCenterX(150)
         setVisiblePositions(3)
       } else if (width < 1600) {
         // Large screens - 3 avatars with medium size
-        setSvgWidth(900)
+        const scaledWidth = Math.min(900, containerWidth)
+        setSvgWidth(scaledWidth)
         setSvgHeight(550)
         setRadius(180)
         setCenterX(200)
         setVisiblePositions(3)
       } else {
         // XL screens - 4 avatars for wider design
-        setSvgWidth(1400)
+        const scaledWidth = Math.min(1400, containerWidth)
+        setSvgWidth(scaledWidth)
         setSvgHeight(800)
         setRadius(300)
         setCenterX(275)
@@ -103,24 +109,29 @@ export function ClientReflections() {
   // Dynamic number of avatars based on screen size (3 or 4)
   const allPositions = clients.map((client, clientIndex) => {
     // Calculate the continuous position along the arc
-    const continuousPosition = (clientIndex + step) % clients.length
+    // This determines which slot (0, 1, 2) each client occupies as they rotate
+    const continuousPosition = (clientIndex - step) % clients.length
+    // Normalize to positive values
+    const normalizedContinuousPosition = continuousPosition < 0 
+      ? continuousPosition + clients.length 
+      : continuousPosition
     
     // Only show clients in visible positions (3 for standard, 4 for XL)
-    const isVisible = continuousPosition < visiblePositions
+    const isVisible = normalizedContinuousPosition < visiblePositions
     
     // Calculate the exact angle on the arc for this position
     // The angle corresponds directly to a point on the arc line
     // Position spacing adjusts automatically based on visiblePositions
-    const angle = startAngle + (continuousPosition * angleStep)
+    const angle = startAngle + (normalizedContinuousPosition * angleStep)
     
     // Normalized position for smooth interpolation of size/opacity
     // 0 = at edges, 0.5 = at middle (for 3 avatars), 0.33/0.66 (for 4 avatars)
-    const normalizedPosition = continuousPosition / (visiblePositions - 1)
+    const normalizedPosition = normalizedContinuousPosition / (visiblePositions - 1)
     
     return {
       ...client,
       angle,
-      continuousPosition,
+      continuousPosition: normalizedContinuousPosition,
       normalizedPosition,
       clientIndex,
       isVisible,
@@ -140,8 +151,8 @@ export function ClientReflections() {
   ) || visibleClients[middlePosition] || visibleClients[0]
 
   return (
-    <section className="relative pt-20 w-full flex justify-center">
-      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+    <section className="relative pt-20 w-full flex justify-center overflow-hidden">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 overflow-hidden">
         <motion.h2
           className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-0"
           initial={{ opacity: 0, y: -20 }}
@@ -152,21 +163,23 @@ export function ClientReflections() {
         </motion.h2>
 
         {/* Desktop layout (arc) */}
-        <div className="hidden md:flex relative w-full flex-col md:flex-row items-center justify-center gap-4">
-        <div className="relative w-full flex justify-start items-center">
+        <div className="hidden md:flex relative w-full flex-col md:flex-row items-center justify-center gap-4 overflow-hidden">
+        <div className="relative w-full flex justify-center items-center">
           <div
             style={{
               width: svgWidth,
               height: svgHeight,
               position: "relative",
               overflow: "visible",
+              maxWidth: '100%',
             }}
           >
             <motion.svg
-              width={svgWidth}
-              height={svgHeight}
+              width="100%"
+              height="100%"
               className="absolute inset-0"
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+              preserveAspectRatio="xMidYMid meet"
               fill="none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -338,11 +351,12 @@ export function ClientReflections() {
             
             {/* Testimonial display area - separate from avatars for better fade control */}
             <div 
-              className="absolute"
+              className="absolute overflow-hidden"
               style={{
                 left: svgWidth >= 1200 ? centerX + radius + 140 : svgWidth >= 850 ? centerX + radius + 45 : centerX + radius + 40,
                 top: svgHeight / 2 - 60,
                 width: svgWidth >= 1200 ? 650 : svgWidth >= 850 ? 380 : 350,
+                maxWidth: `calc(${svgWidth}px - ${svgWidth >= 1200 ? centerX + radius + 140 : svgWidth >= 850 ? centerX + radius + 45 : centerX + radius + 40}px - 20px)`,
               }}
             >
               <AnimatePresence mode="wait">
