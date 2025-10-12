@@ -124,6 +124,8 @@ export default function StudioNotes() {
         setCardWidth(Math.min(calculatedWidth, 340))
         setIsMobile(false)
       }
+      // Reset index when screen size changes to avoid out-of-bounds
+      setIndex(0)
     }
 
     handleResize()
@@ -135,7 +137,8 @@ export default function StudioNotes() {
   const isFirst = index === 0
   const isLast = index === totalSlides - 1
 
-  const translateX = -index * (cardWidth + gap)
+  // Calculate translation to move by full pages (itemsPerSlide cards at a time)
+  const translateX = -index * itemsPerSlide * (cardWidth + gap)
 
   const nextSlide = () => !isLast && setIndex((prev) => prev + 1)
   const prevSlide = () => !isFirst && setIndex((prev) => prev - 1)
@@ -179,7 +182,13 @@ export default function StudioNotes() {
           </div>
 
           {/* Slider container */}
-          <div className="overflow-hidden w-full flex justify-center">
+          <div 
+            className="overflow-hidden flex justify-center"
+            style={{
+              width: `${cardWidth * itemsPerSlide + gap * (itemsPerSlide - 1)}px`,
+              maxWidth: '100%',
+            }}
+          >
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
