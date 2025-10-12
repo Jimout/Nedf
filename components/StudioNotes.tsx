@@ -86,7 +86,7 @@ const ArrowRight = () => (
 
 export default function StudioNotes() {
   const [index, setIndex] = useState(0)
-  const [itemsPerSlide, setItemsPerSlide] = useState(4)
+  const [itemsPerSlide, setItemsPerSlide] = useState(3)
   const [cardWidth, setCardWidth] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -108,15 +108,10 @@ export default function StudioNotes() {
         setItemsPerSlide(2)
         setCardWidth((containerWidth - gap) / 2)
         setIsMobile(false)
-      } else if (window.innerWidth < 1280) {
-        // Standard screens (md/lg) - 3 cards
+      } else {
+        // Desktop and wider screens - always 3 cards
         setItemsPerSlide(3)
         setCardWidth((containerWidth - gap * 2) / 3)
-        setIsMobile(false)
-      } else {
-        // Wider screens (xl) - 4 cards
-        setItemsPerSlide(4)
-        setCardWidth((containerWidth - gap * 3) / 4)
         setIsMobile(false)
       }
     }
@@ -144,7 +139,7 @@ export default function StudioNotes() {
 
   return (
     <section
-      className="w-full max-w-[1500px] mx-auto px-4 md:px-6 pt-20 relative" // wider max-width
+      className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 pt-20 relative"
       ref={containerRef}
     >
       <h2 className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-8">
