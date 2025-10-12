@@ -73,10 +73,10 @@ export function ClientReflections() {
         setVisiblePositions(3)
       } else if (width < 1280) {
         // Standard screens (md/lg) - 3 avatars, smaller arc to align with other sections
-        setSvgWidth(900)
-        setSvgHeight(550)
-        setRadius(200)
-        setCenterX(200)
+        setSvgWidth(800)
+        setSvgHeight(500)
+        setRadius(160)
+        setCenterX(180)
         setVisiblePositions(3)
       } else {
         // XL screens - 4 avatars for wider design
@@ -134,7 +134,7 @@ export function ClientReflections() {
 
   return (
     <section className="relative pt-20 w-full flex justify-center">
-      <div className="w-full max-w-[1800px] mx-auto px-4 md:px-12 lg:px-20 xl:px-32">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         <motion.h2
           className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-0"
           initial={{ opacity: 0, y: -20 }}
@@ -246,8 +246,8 @@ export function ClientReflections() {
                 
                 // Smooth interpolation for size and opacity based on position
                 // Scale down for standard screens
-                const baseSize = svgWidth >= 1200 ? 75 : 55
-                const maxSize = svgWidth >= 1200 ? 100 : 75
+                const baseSize = svgWidth >= 1200 ? 75 : 50
+                const maxSize = svgWidth >= 1200 ? 100 : 70
                 const avatarSize = baseSize + (proximityToMiddle * (maxSize - baseSize))
                 
                 const minOpacity = 0.55
@@ -305,7 +305,7 @@ export function ClientReflections() {
                   <motion.p
                     className="mt-2 font-medium text-center text-[#333333]"
                     style={{
-                      fontSize: svgWidth >= 1200 ? '14px' : '12px',
+                      fontSize: svgWidth >= 1200 ? '14px' : '11px',
                     }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isActive ? 1 : 0.7 }}
@@ -316,7 +316,7 @@ export function ClientReflections() {
                   <motion.span
                     className="text-gray-500 text-center"
                     style={{
-                      fontSize: svgWidth >= 1200 ? '12px' : '10px',
+                      fontSize: svgWidth >= 1200 ? '12px' : '9px',
                     }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isActive ? 1 : 0.6 }}
@@ -333,9 +333,9 @@ export function ClientReflections() {
             <div 
               className="absolute"
               style={{
-                left: svgWidth >= 1200 ? centerX + radius + 140 : centerX + radius + 60,
+                left: svgWidth >= 1200 ? centerX + radius + 140 : centerX + radius + 50,
                 top: svgHeight / 2 - 60,
-                width: svgWidth >= 1200 ? 650 : 450,
+                width: svgWidth >= 1200 ? 650 : 400,
               }}
             >
               <AnimatePresence mode="wait">
@@ -353,16 +353,16 @@ export function ClientReflections() {
                     <motion.p
                       className="text-xs md:text-sm xl:text-lg font-medium text-[#333333]/80 leading-relaxed md:leading-relaxed xl:leading-loose pl-4 pr-4 relative min-h-[100px] md:min-h-[100px] xl:min-h-[140px]"
                       style={{
-                        fontSize: svgWidth >= 1200 ? undefined : '14px',
-                        lineHeight: svgWidth >= 1200 ? undefined : '1.6',
+                        fontSize: svgWidth >= 1200 ? undefined : '13px',
+                        lineHeight: svgWidth >= 1200 ? undefined : '1.5',
                       }}
                     >
                       <motion.span
                         className="absolute font-serif text-gray-300"
                         style={{
-                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
-                          left: svgWidth >= 1200 ? "-20px" : "-10px",
-                          top: svgWidth >= 1200 ? "-32px" : "-18px",
+                          fontSize: svgWidth >= 1200 ? '56px' : '32px',
+                          left: svgWidth >= 1200 ? "-20px" : "-8px",
+                          top: svgWidth >= 1200 ? "-32px" : "-16px",
                         }}
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -374,9 +374,9 @@ export function ClientReflections() {
                       <motion.span
                         className="absolute font-serif text-gray-300"
                         style={{
-                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
-                          right: svgWidth >= 1200 ? "-20px" : "-10px",
-                          bottom: svgWidth >= 1200 ? "-32px" : "-18px",
+                          fontSize: svgWidth >= 1200 ? '56px' : '32px',
+                          right: svgWidth >= 1200 ? "-20px" : "-8px",
+                          bottom: svgWidth >= 1200 ? "-32px" : "-16px",
                         }}
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
