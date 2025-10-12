@@ -16,13 +16,14 @@ export default function SplashScreen() {
   }, [])
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 1, ease: [0.43, 0.13, 0.23, 0.96] }}
+          style={{ pointerEvents: 'auto' }}
         >
           <motion.div
             initial={{ scale: 0.85, opacity: 0, y: 20 }}

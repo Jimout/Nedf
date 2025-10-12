@@ -98,9 +98,10 @@ export default function StudioNotes() {
       const containerWidth = containerRef.current?.offsetWidth || window.innerWidth
 
       if (window.innerWidth < 768) {
-        // Mobile
+        // Mobile - smaller cards like other sections (90% width with max 320px)
+        const mobileWidth = Math.min(containerWidth * 0.9, 320)
         setItemsPerSlide(1)
-        setCardWidth(containerWidth)
+        setCardWidth(mobileWidth)
         setIsMobile(true)
       } else if (window.innerWidth < 1024) {
         // Tablet
@@ -133,7 +134,13 @@ export default function StudioNotes() {
 
   const nextSlide = () => !isLast && setIndex((prev) => prev + 1)
   const prevSlide = () => !isFirst && setIndex((prev) => prev - 1)
-  const handleReadMore = (postId: number) => router.push(`/blog-detail?id=${postId}`)
+  
+  const handleReadMore = (postId: number) => {
+    // Map post IDs to blog pages
+    // First card (id: 0) goes to the existing blog-1 page
+    const blogSlug = postId === 0 ? "blog-1" : `blog-${postId + 1}`
+    router.push(`/blog/${blogSlug}`)
+  }
 
   return (
     <section
@@ -150,7 +157,7 @@ export default function StudioNotes() {
           <div
             onClick={prevSlide}
             aria-label="Previous"
-            className={`absolute left-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+            className={`absolute left-0 md:left-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
               isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
           >
@@ -159,7 +166,7 @@ export default function StudioNotes() {
           <div
             onClick={nextSlide}
             aria-label="Next"
-            className={`absolute right-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+            className={`absolute right-0 md:right-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
               isLast ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
           >
@@ -167,7 +174,7 @@ export default function StudioNotes() {
           </div>
 
           {/* Slider container */}
-          <div className="overflow-hidden w-full">
+          <div className="overflow-hidden w-full flex justify-center">
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
@@ -231,11 +238,13 @@ export default function StudioNotes() {
                       <div className="flex justify-end">
                         <button
                           onClick={() => handleReadMore(id)}
-                          className="text-white text-xs px-3 py-[8px] transition hover:opacity-90"
+                          className="text-white text-xs px-3 py-[8px] transition hover:opacity-90 active:opacity-80 touch-manipulation select-none"
                           style={{
                             backgroundColor: "#001F4B",
                             border: "1px solid rgba(0,31,75,0.1)",
                             borderRadius: "0px",
+                            WebkitTapHighlightColor: 'transparent',
+                            touchAction: 'manipulation',
                           }}
                         >
                           Read More

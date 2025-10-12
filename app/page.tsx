@@ -42,6 +42,7 @@ export default function HomePage() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="min-h-screen flex flex-col"
+          style={{ pointerEvents: 'auto' }}
         >
           <Navbar />
           <Hero />

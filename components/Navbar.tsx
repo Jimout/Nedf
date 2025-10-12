@@ -30,7 +30,7 @@ export function Navbar() {
   }
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative z-[100]" style={{ pointerEvents: 'auto', touchAction: 'manipulation' }}>
       <nav
         className="w-full relative bg-white overflow-visible"
         style={{
@@ -46,10 +46,11 @@ export function Navbar() {
             linear-gradient(to bottom, transparent 0%, white 50%, white 100%)
           `,
           WebkitMaskComposite: "intersect",
+          pointerEvents: 'auto',
         }}
       >
         {/* Reduced height navbar */}
-        <div className="flex items-center w-full max-w-[95%] mx-auto px-4 md:px-12 2xl:px-32 py-1.5 relative z-20">
+        <div className="flex items-center w-full max-w-[95%] mx-auto px-4 md:px-12 2xl:px-32 py-1.5 relative z-20" style={{ pointerEvents: 'auto' }}>
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
             <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={95} height={35} priority />
@@ -87,14 +88,21 @@ export function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={handleToggle}
+            onTouchEnd={handleToggle}
             className={cn(
-              "md:hidden ml-auto relative w-12 h-12 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-40 rounded-lg transition-all duration-150 active:bg-gray-200 active:scale-95",
-              "touch-manipulation select-none -webkit-tap-highlight-color-transparent", // smoother mobile touch behavior
+              "md:hidden ml-auto relative w-12 h-12 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-[110] rounded-lg transition-all duration-150 active:bg-gray-200 active:scale-95",
+              "touch-manipulation select-none",
             )}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             type="button"
-            style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
+            style={{ 
+              WebkitTapHighlightColor: 'transparent', 
+              touchAction: 'manipulation',
+              pointerEvents: 'auto',
+              userSelect: 'none',
+              WebkitUserSelect: 'none'
+            }}
           >
             {/* Hamburger */}
             <svg
@@ -104,7 +112,7 @@ export function Navbar() {
               stroke="#001F4B"
               strokeWidth={2.5}
               className={cn(
-                "w-6 h-6 transition-all duration-150 ease-out",
+                "w-6 h-6 transition-all duration-150 ease-out pointer-events-none",
                 isOpen ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100",
               )}
             >
@@ -119,7 +127,7 @@ export function Navbar() {
               stroke="#001F4B"
               strokeWidth={2.5}
               className={cn(
-                "absolute w-6 h-6 transition-all duration-150 ease-out",
+                "absolute w-6 h-6 transition-all duration-150 ease-out pointer-events-none",
                 isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-75",
               )}
             >
@@ -132,10 +140,13 @@ export function Navbar() {
       {/* Mobile menu */}
       <div
         className={cn(
-          "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-50 shadow-lg",
-          isOpen ? "max-h-80 opacity-100 py-4" : "max-h-0 opacity-0 py-0",
+          "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-[105] shadow-lg",
+          isOpen ? "max-h-80 opacity-100 py-4 pointer-events-auto" : "max-h-0 opacity-0 py-0 pointer-events-none",
         )}
-        style={{ WebkitTapHighlightColor: 'transparent' }}
+        style={{ 
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation'
+        }}
       >
         {navItems.map((item) => {
           const isActive = pathname === item.href
@@ -144,11 +155,17 @@ export function Navbar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "block transition-all duration-150 ease-out text-base text-[#333333] text-center touch-manipulation select-none px-6 py-2 rounded-md active:bg-gray-100",
+                "block transition-all duration-150 ease-out text-base text-[#333333] text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 min-h-[44px] flex items-center justify-center",
                 isActive ? "underline underline-offset-4 decoration-[#001F4B] font-medium" : "hover:text-[#003366] active:scale-95",
               )}
               onClick={handleClose}
-              style={{ WebkitTapHighlightColor: 'transparent' }}
+              onTouchEnd={handleClose}
+              style={{ 
+                WebkitTapHighlightColor: 'transparent',
+                pointerEvents: 'auto',
+                userSelect: 'none',
+                WebkitUserSelect: 'none'
+              }}
             >
               {item.name}
             </Link>
@@ -156,9 +173,15 @@ export function Navbar() {
         })}
         <Link
           href={ctaItem.href}
-          className="block px-8 py-3 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] active:bg-[#002850] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md"
+          className="block px-8 py-3 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] active:bg-[#002850] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center"
           onClick={handleClose}
-          style={{ WebkitTapHighlightColor: 'transparent' }}
+          onTouchEnd={handleClose}
+          style={{ 
+            WebkitTapHighlightColor: 'transparent',
+            pointerEvents: 'auto',
+            userSelect: 'none',
+            WebkitUserSelect: 'none'
+          }}
         >
           {ctaItem.name}
         </Link>
