@@ -66,17 +66,17 @@ export function ClientReflections() {
       const width = window.innerWidth
       if (width < 768) {
         // Mobile
-        setSvgWidth(700)
-        setSvgHeight(600)
-        setRadius(180)
-        setCenterX(350)
+        setSvgWidth(600)
+        setSvgHeight(500)
+        setRadius(150)
+        setCenterX(300)
         setVisiblePositions(3)
       } else if (width < 1280) {
-        // Standard screens (md/lg) - 3 avatars
-        setSvgWidth(700)
-        setSvgHeight(600)
-        setRadius(160)
-        setCenterX(350)
+        // Standard screens (md/lg) - 3 avatars, smaller arc to align with other sections
+        setSvgWidth(900)
+        setSvgHeight(550)
+        setRadius(200)
+        setCenterX(200)
         setVisiblePositions(3)
       } else {
         // XL screens - 4 avatars for wider design
@@ -246,8 +246,8 @@ export function ClientReflections() {
                 
                 // Smooth interpolation for size and opacity based on position
                 // Scale down for standard screens
-                const baseSize = svgWidth >= 1200 ? 75 : 65
-                const maxSize = svgWidth >= 1200 ? 100 : 85
+                const baseSize = svgWidth >= 1200 ? 75 : 55
+                const maxSize = svgWidth >= 1200 ? 100 : 75
                 const avatarSize = baseSize + (proximityToMiddle * (maxSize - baseSize))
                 
                 const minOpacity = 0.55
@@ -303,7 +303,10 @@ export function ClientReflections() {
                     />
                   </motion.div>
                   <motion.p
-                    className="mt-2 text-xs md:text-sm font-medium text-center text-[#333333]"
+                    className="mt-2 font-medium text-center text-[#333333]"
+                    style={{
+                      fontSize: svgWidth >= 1200 ? '14px' : '12px',
+                    }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isActive ? 1 : 0.7 }}
                     transition={{ duration: 0.3 }}
@@ -311,7 +314,10 @@ export function ClientReflections() {
                     {client.name}
                   </motion.p>
                   <motion.span
-                    className="text-[10px] md:text-xs text-gray-500 text-center"
+                    className="text-gray-500 text-center"
+                    style={{
+                      fontSize: svgWidth >= 1200 ? '12px' : '10px',
+                    }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isActive ? 1 : 0.6 }}
                     transition={{ duration: 0.3 }}
@@ -327,9 +333,9 @@ export function ClientReflections() {
             <div 
               className="absolute"
               style={{
-                left: svgWidth >= 1200 ? centerX + radius + 140 : centerX + radius + 40,
+                left: svgWidth >= 1200 ? centerX + radius + 140 : centerX + radius + 60,
                 top: svgHeight / 2 - 60,
-                width: svgWidth >= 1200 ? 650 : 400,
+                width: svgWidth >= 1200 ? 650 : 450,
               }}
             >
               <AnimatePresence mode="wait">
@@ -345,13 +351,18 @@ export function ClientReflections() {
                     }}
                   >
                     <motion.p
-                      className="text-xs md:text-sm xl:text-lg font-medium text-[#333333]/80 leading-relaxed md:leading-loose xl:leading-loose pl-4 md:pl-6 pr-4 md:pr-6 relative min-h-[100px] md:min-h-[120px] xl:min-h-[140px]"
+                      className="text-xs md:text-sm xl:text-lg font-medium text-[#333333]/80 leading-relaxed md:leading-relaxed xl:leading-loose pl-4 pr-4 relative min-h-[100px] md:min-h-[100px] xl:min-h-[140px]"
+                      style={{
+                        fontSize: svgWidth >= 1200 ? undefined : '14px',
+                        lineHeight: svgWidth >= 1200 ? undefined : '1.6',
+                      }}
                     >
                       <motion.span
-                        className="absolute text-4xl md:text-5xl xl:text-7xl font-serif text-gray-300"
+                        className="absolute font-serif text-gray-300"
                         style={{
-                          left: svgWidth >= 1200 ? "-20px" : "-12px",
-                          top: svgWidth >= 1200 ? "-32px" : "-20px",
+                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
+                          left: svgWidth >= 1200 ? "-20px" : "-10px",
+                          top: svgWidth >= 1200 ? "-32px" : "-18px",
                         }}
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -361,10 +372,11 @@ export function ClientReflections() {
                       </motion.span>
                       {activeClient.testimonial}
                       <motion.span
-                        className="absolute text-4xl md:text-5xl xl:text-7xl font-serif text-gray-300"
+                        className="absolute font-serif text-gray-300"
                         style={{
-                          right: svgWidth >= 1200 ? "-20px" : "-12px",
-                          bottom: svgWidth >= 1200 ? "-32px" : "-20px",
+                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
+                          right: svgWidth >= 1200 ? "-20px" : "-10px",
+                          bottom: svgWidth >= 1200 ? "-32px" : "-18px",
                         }}
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}

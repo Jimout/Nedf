@@ -87,7 +87,7 @@ export function TheCrew() {
   ];
 
   return (
-    <section className="pt-20 w-full flex justify-center">
+    <section id="TheCrew" className="pt-20 w-full flex justify-center scroll-mt-20">
       <div className="w-full max-w-[1800px] mx-auto px-4 md:px-12 lg:px-20 xl:px-32">
         <h2 className="text-center text-[30px] font-medium text-[#333333] font-montserrat mb-12">
           THE CREW

@@ -13,7 +13,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer id="footer" className="bg-white text-gray-800 relative pt-16 scroll-smooth">
+    <footer id="footer" className="bg-white text-gray-800 relative pt-16 scroll-smooth scroll-mt-20">
       {/* Divider Line */}
       <div
         className="mx-auto mb-8"

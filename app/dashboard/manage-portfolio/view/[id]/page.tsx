@@ -487,20 +487,20 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 }
                 
                 return (
-                  <div key={field}>
-                    <p className="text-sm text-gray-500 font-montserrat font-medium mb-1">{label}</p>
-                    {isEditing ? (
-                      <Input
+                <div key={field}>
+                  <p className="text-sm text-gray-500 font-montserrat font-medium mb-1">{label}</p>
+                  {isEditing ? (
+                    <Input
                         value={fieldValue}
-                        onChange={(e) => updateEditData(field, e.target.value)}
-                        className="border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                      />
-                    ) : (
-                      <p className="font-medium text-gray-800 font-montserrat bg-gray-50 p-2 rounded-lg">
+                      onChange={(e) => updateEditData(field, e.target.value)}
+                      className="border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                    />
+                  ) : (
+                    <p className="font-medium text-gray-800 font-montserrat bg-gray-50 p-2 rounded-lg">
                         {fieldValue}
-                      </p>
-                    )}
-                  </div>
+                    </p>
+                  )}
+                </div>
                 )
               })}
             </div>
@@ -575,21 +575,21 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 
         {/* Inspiration Section - only show if has content or editing */}
         {(isEditing || (currentData.inspiration && currentData.inspiration.trim() !== "")) && (
-          <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">INSPIRATION</h2>
-            {isEditing ? (
-              <Textarea
-                value={currentData.inspiration}
-                onChange={(e) => updateEditData("inspiration", e.target.value)}
-                className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                rows={2}
-              />
-            ) : (
-              <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
-                {currentData.inspiration}
-              </p>
-            )}
-          </div>
+        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">INSPIRATION</h2>
+          {isEditing ? (
+            <Textarea
+              value={currentData.inspiration}
+              onChange={(e) => updateEditData("inspiration", e.target.value)}
+              className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+              rows={2}
+            />
+          ) : (
+            <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
+              {currentData.inspiration}
+            </p>
+          )}
+        </div>
         )}
 
         {/* Description Section */}
@@ -611,98 +611,98 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 
         {/* Features Section - only show if has features or editing */}
         {(isEditing || (currentData.features && currentData.features.some(f => f && f.trim() !== ""))) && (
-          <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">FEATURES</h2>
-            <ul className="space-y-3">
-              {currentData.features.map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
-                  {isEditing ? (
-                    <div className="flex items-center gap-2 flex-1">
-                      <Input
-                        value={feature}
-                        onChange={(e) => updateArrayField("features", index, e.target.value)}
-                        className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                      />
-                      <Button
-                        onClick={() => removeArrayItem("features", index)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                      >
-                        X
-                      </Button>
-                    </div>
-                  ) : (
+        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">FEATURES</h2>
+          <ul className="space-y-3">
+            {currentData.features.map((feature, index) => (
+              <li key={index} className="flex items-center gap-3">
+                <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
+                {isEditing ? (
+                  <div className="flex items-center gap-2 flex-1">
+                    <Input
+                      value={feature}
+                      onChange={(e) => updateArrayField("features", index, e.target.value)}
+                      className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                    />
+                    <Button
+                      onClick={() => removeArrayItem("features", index)}
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      X
+                    </Button>
+                  </div>
+                ) : (
                     feature && feature.trim() && (
-                      <span className="text-gray-600 font-montserrat">{feature}</span>
+                  <span className="text-gray-600 font-montserrat">{feature}</span>
                     )
-                  )}
-                </li>
-              ))}
-              {isEditing && (
-                <li>
-                  <Button
-                    onClick={() => addArrayItem("features")}
-                    variant="outline"
-                    size="sm"
-                    className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
-                  >
-                    <PlusIcon />
-                    <span className="ml-1">Add Feature</span>
-                  </Button>
-                </li>
-              )}
-            </ul>
-          </div>
+                )}
+              </li>
+            ))}
+            {isEditing && (
+              <li>
+                <Button
+                  onClick={() => addArrayItem("features")}
+                  variant="outline"
+                  size="sm"
+                  className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
+                >
+                  <PlusIcon />
+                  <span className="ml-1">Add Feature</span>
+                </Button>
+              </li>
+            )}
+          </ul>
+        </div>
         )}
 
         {/* Materials Section - only show if has materials or editing */}
         {(isEditing || (currentData.materials && currentData.materials.some(m => m && m.trim() !== ""))) && (
-          <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">MATERIALS</h2>
-            <ul className="space-y-3">
-              {currentData.materials.map((material, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
-                  {isEditing ? (
-                    <div className="flex items-center gap-2 flex-1">
-                      <Input
-                        value={material}
-                        onChange={(e) => updateArrayField("materials", index, e.target.value)}
-                        className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                      />
-                      <Button
-                        onClick={() => removeArrayItem("materials", index)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                      >
-                        X
-                      </Button>
-                    </div>
-                  ) : (
+        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">MATERIALS</h2>
+          <ul className="space-y-3">
+            {currentData.materials.map((material, index) => (
+              <li key={index} className="flex items-center gap-3">
+                <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
+                {isEditing ? (
+                  <div className="flex items-center gap-2 flex-1">
+                    <Input
+                      value={material}
+                      onChange={(e) => updateArrayField("materials", index, e.target.value)}
+                      className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                    />
+                    <Button
+                      onClick={() => removeArrayItem("materials", index)}
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      X
+                    </Button>
+                  </div>
+                ) : (
                     material && material.trim() && (
-                      <span className="text-gray-600 font-montserrat">{material}</span>
+                  <span className="text-gray-600 font-montserrat">{material}</span>
                     )
-                  )}
-                </li>
-              ))}
-              {isEditing && (
-                <li>
-                  <Button
-                    onClick={() => addArrayItem("materials")}
-                    variant="outline"
-                    size="sm"
-                    className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
-                  >
-                    <PlusIcon />
-                    <span className="ml-1">Add Material</span>
-                  </Button>
-                </li>
-              )}
-            </ul>
-          </div>
+                )}
+              </li>
+            ))}
+            {isEditing && (
+              <li>
+                <Button
+                  onClick={() => addArrayItem("materials")}
+                  variant="outline"
+                  size="sm"
+                  className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
+                >
+                  <PlusIcon />
+                  <span className="ml-1">Add Material</span>
+                </Button>
+              </li>
+            )}
+          </ul>
+        </div>
         )}
 
         {/* Color Palette Section - required */}

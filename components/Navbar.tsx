@@ -2,21 +2,22 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Portfolio", href: "/portfolio", scrollOnLanding: false },
-  { name: "Team", href: "/TheCrew", scrollOnLanding: true },
+  { name: "Team", href: "/#TheCrew", scrollOnLanding: true, sectionId: "TheCrew" },
   { name: "Blog", href: "/blog", scrollOnLanding: false },
 ]
 
-const ctaItem = { name: "Contact Us", href: "/footer", scrollOnLanding: true }
+const ctaItem = { name: "Contact Us", href: "/#footer", scrollOnLanding: true, sectionId: "footer" }
 
 export function Navbar() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleToggle = (e: React.MouseEvent | React.TouchEvent) => {
@@ -27,6 +28,34 @@ export function Navbar() {
 
   const handleClose = () => {
     setIsOpen(false)
+  }
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: { href: string; scrollOnLanding?: boolean; sectionId?: string }) => {
+    if (item.scrollOnLanding && item.sectionId) {
+      e.preventDefault()
+      handleClose()
+      
+      const sectionId = item.sectionId // Capture for use in setTimeout
+      
+      if (pathname === "/") {
+        // Already on landing page, just scroll
+        const section = document.getElementById(sectionId)
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+      } else {
+        // Navigate to landing page first, then scroll
+        router.push("/")
+        setTimeout(() => {
+          const section = document.getElementById(sectionId)
+          if (section) {
+            section.scrollIntoView({ behavior: "smooth", block: "start" })
+          }
+        }, 100)
+      }
+    } else {
+      handleClose()
+    }
   }
 
   return (
@@ -59,11 +88,12 @@ export function Navbar() {
           {/* Desktop nav */}
           <div className="hidden md:flex items-center justify-center flex-1 ml-28 2xl:ml-36 space-x-16 2xl:space-x-20">
             {navItems.map((item) => {
-              const isActive = pathname === item.href
+              const isActive = pathname === item.href || (item.scrollOnLanding && pathname === "/")
               return (
                 <Link
                   key={item.name}
                   href={item.href}
+                  onClick={(e) => handleNavClick(e, item)}
                   className={cn(
                     "transition duration-300 ease-in-out pb-1 whitespace-nowrap text-sm 2xl:text-base",
                     isActive
@@ -80,6 +110,7 @@ export function Navbar() {
           {/* CTA Button */}
           <Link
             href={ctaItem.href}
+            onClick={(e) => handleNavClick(e, ctaItem)}
             className="hidden md:flex items-center px-5 py-1.5 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
           >
             {ctaItem.name}
@@ -149,17 +180,16 @@ export function Navbar() {
         }}
       >
         {navItems.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href || (item.scrollOnLanding && pathname === "/")
           return (
             <Link
               key={item.name}
               href={item.href}
+              onClick={(e) => handleNavClick(e, item)}
               className={cn(
                 "block transition-all duration-150 ease-out text-base text-[#333333] text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 min-h-[44px] flex items-center justify-center",
                 isActive ? "underline underline-offset-4 decoration-[#001F4B] font-medium" : "hover:text-[#003366] active:scale-95",
               )}
-              onClick={handleClose}
-              onTouchEnd={handleClose}
               style={{ 
                 WebkitTapHighlightColor: 'transparent',
                 pointerEvents: 'auto',
@@ -173,9 +203,8 @@ export function Navbar() {
         })}
         <Link
           href={ctaItem.href}
+          onClick={(e) => handleNavClick(e, ctaItem)}
           className="block px-8 py-3 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] active:bg-[#002850] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center"
-          onClick={handleClose}
-          onTouchEnd={handleClose}
           style={{ 
             WebkitTapHighlightColor: 'transparent',
             pointerEvents: 'auto',
