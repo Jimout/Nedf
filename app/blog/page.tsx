@@ -123,18 +123,13 @@ export default function BlogPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <div
-        className="px-10 md:px-[122px] bg-white"
-        style={{
-          WebkitMaskComposite: "intersect",
-        }}
-      >
+      <div className="px-10 md:px-[122px] bg-white dark:bg-[#111010]">
         {/* Header + Search */}
         <section className="max-w-full mx-auto pt-6 pb-6 text-center">
-          <h1 className="text-2xl md:text-3xl font-medium text-[#001F4B] mb-2">
+          <h1 className="text-2xl md:text-3xl font-medium text-[#001F4B] dark:text-white mb-2">
             Our Blog: Stories & Insights
           </h1>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             Discover design thinking, project stories, and ideas shaping
             architecture & interior design.
           </p>
@@ -148,9 +143,9 @@ export default function BlogPage() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#001F4B]"
+              className="w-full max-w-md px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24]"
             />
-            <button className="px-4 py-2 bg-[#001F4B] text-white rounded-r-md">
+            <button className="px-4 py-2 bg-[#001F4B] dark:bg-[#ec1e24] text-white">
               Search
             </button>
           </div>
@@ -173,61 +168,62 @@ export default function BlogPage() {
                 return (
                   <article
                     key={id}
-                    className="bg-white shadow-sm flex flex-col border border-[rgba(0,31,75,0.1)]"
-                    style={{ height: "420px" }}
+                    className="group bg-white shadow-sm flex flex-col overflow-hidden transition-shadow hover:shadow-lg"
+                    style={{
+                      height: "400px",
+                      border: "1px solid rgba(0, 31, 75, 0.1)",
+                      borderRadius: "0",
+                    }}
                   >
-                    <div className="relative h-[180px] w-full">
+                    <div className="relative w-full h-[170px]">
                       <Image
                         src={image || "/placeholder.svg"}
                         alt={title}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                         sizes="400px"
                       />
                     </div>
 
-                    <div className="p-4 flex flex-col flex-1">
-                      <div className="mb-2 flex flex-wrap gap-2">
+                    <div className="relative p-4 flex flex-col h-[230px]">
+                      <div className="flex flex-wrap gap-2 mb-2" style={{ minHeight: "24px" }}>
                         {categories.map((cat, idx) => (
                           <span
                             key={idx}
-                            className="text-[11px] font-medium"
-                            style={{
-                              fontFamily: "Montserrat, sans-serif",
-                              color: "#001F4B",
-                              border: "1px solid rgba(0,31,75,0.1)",
-                              padding: "4px 10px",
-                              borderRadius: "999px",
-                            }}
+                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground rounded-full"
                           >
                             {cat}
                           </span>
                         ))}
                       </div>
 
-                      <h2 className="text-[18px] text-[#333333] mb-1">{title}</h2>
+                      <h2 className="text-[18px] text-[#333333] font-regular leading-6 mb-2">{title}</h2>
 
-                      <p
-                        className="text-[#333333]/60 text-[12px] leading-snug mb-3"
-                        style={{
-                          display: "-webkit-box",
-                          WebkitLineClamp: textLines,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {description}
-                      </p>
+                      <div className="flex-1 mb-3">
+                        <p
+                          className="text-[#333333]/60 text-[12px] leading-[18px]"
+                          title={description}
+                          style={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: textLines,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {description}
+                        </p>
+                      </div>
 
-                      <div className="mt-auto flex justify-end">
+                      <div className="flex justify-end">
                         <button
                           onClick={() => handleReadMore(id)}
-                          className="text-white text-xs px-3 py-[8px] transition hover:bg-[#001F4B]/90"
+                          className="text-white text-xs px-3 py-[8px] transition hover:opacity-90 active:opacity-80 touch-manipulation select-none bg-[#001F4B] dark:bg-[#ec1e24]"
                           style={{
-                            backgroundColor: "#001F4B",
                             border: "1px solid rgba(0,31,75,0.1)",
                             borderRadius: "0px",
+                            WebkitTapHighlightColor: 'transparent',
+                            touchAction: 'manipulation',
                           }}
                         >
                           Read More

@@ -105,17 +105,29 @@ export default function StudioNotes() {
     const handleResize = () => {
       const containerWidth = containerRef.current?.offsetWidth || window.innerWidth
 
-      if (window.innerWidth < 768) {
-        // Mobile - minimized card width (max 280px)
-        const mobileWidth = Math.min(containerWidth * 0.85, 280)
+      if (window.innerWidth < 640) {
+        // Small screens - 1 full card
+        const smallWidth = Math.min(containerWidth * 0.85, 300)
         setItemsPerSlide(1)
-        setCardWidth(mobileWidth)
+        setCardWidth(smallWidth)
         setIsMobile(true)
-      } else {
-        // Desktop and wider screens - always show 3 cards
-        const calculatedWidth = (containerWidth - gap * 2) / 3
+      } else if (window.innerWidth < 1024) {
+        // Medium screens - 2 cards
+        const mediumWidth = (containerWidth - gap - 80) / 2 // Reserve space for arrows
+        setItemsPerSlide(2)
+        setCardWidth(Math.min(mediumWidth, 300))
+        setIsMobile(false)
+      } else if (window.innerWidth < 1536) {
+        // Standard screens - 3 full cards
+        const standardWidth = (containerWidth - gap * 2 - 80) / 3 // Reserve space for arrows
         setItemsPerSlide(3)
-        setCardWidth(Math.min(calculatedWidth, 380))
+        setCardWidth(Math.min(standardWidth, 300))
+        setIsMobile(false)
+      } else {
+        // Larger screens - 4 cards
+        const wideWidth = (containerWidth - gap * 3 - 80) / 4 // Reserve space for arrows
+        setItemsPerSlide(4)
+        setCardWidth(Math.min(wideWidth, 320))
         setIsMobile(false)
       }
       // Reset index when screen size changes to avoid out-of-bounds
@@ -159,9 +171,10 @@ export default function StudioNotes() {
           <div
             onClick={prevSlide}
             aria-label="Previous"
-            className={`absolute left-0 md:left-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+            className={`absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
               isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
+            style={{ transform: 'translateY(-50%) translateX(-20px)' }}
           >
             <ArrowLeft />
           </div>
@@ -170,9 +183,10 @@ export default function StudioNotes() {
           <div
             onClick={nextSlide}
             aria-label="Next"
-            className={`absolute right-0 md:right-[-40px] top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
+            className={`absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
               isLast ? "opacity-30 pointer-events-none" : "opacity-100"
             }`}
+            style={{ transform: 'translateY(-50%) translateX(20px)' }}
           >
             <ArrowRight />
           </div>

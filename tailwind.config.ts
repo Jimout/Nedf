@@ -54,6 +54,8 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
         nedfBlue: '#001F4B',
+        darkBg: '#111010',
+        darkAccent: '#ec1e24',
       },
       borderRadius: {
         lg: "var(--radius)",

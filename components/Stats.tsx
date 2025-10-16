@@ -60,11 +60,11 @@ export default function Stats() {
         "
       >
         {stats.map((stat, index) => (
-          <div key={index} className="max-sm:bg-white max-sm:p-4 max-sm:rounded-md max-sm:shadow-md">
-            <div className="text-2xl max-sm:text-lg font-bold text-[#001F4B]/70 font-mono">
+          <div key={index} className="max-sm:bg-white dark:max-sm:bg-[#111010] max-sm:p-4 max-sm:rounded-md max-sm:shadow-md">
+            <div className="text-2xl max-sm:text-lg font-bold text-[#001F4B]/70 dark:text-[#ec1e24]/70 font-mono">
               {animatedValues[index]}
             </div>
-            <div className="text-xs max-sm:text-[10px] text-[#333]/70 mt-1">{stat.label}</div>
+            <div className="text-xs max-sm:text-[10px] text-[#333]/70 dark:text-white/70 mt-1">{stat.label}</div>
           </div>
         ))}
       </div>

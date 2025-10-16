@@ -5,7 +5,9 @@ import { useParams } from "next/navigation"
 import BeforeAfterSlider from "@/components/BeforeAfterSlider"
 import ImageSlider from "@/components/ImageSlider"
 import Footer from "@/components/Footer"
+import PanoramaViewer from "@/components/PanoramaViewer"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
 // Example project data
 const projects = [
@@ -36,6 +38,11 @@ const projects = [
   // Add more projects as needed
 ]
 
+const fadeUpVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+}
+
 function ProjectDetailContent() {
   const params = useParams()
   const id = params?.id
@@ -50,18 +57,18 @@ function ProjectDetailContent() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden scroll-smooth">
       <div
         className="relative mx-auto w-full px-10 md:px-[122px] py-10"
         style={{
           backgroundColor: "white",
           maskImage: `
             linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%),
-            linear-gradient(to bottom, transparent 0%, white 5%, white 95%, transparent 100%)
+            linear-gradient(to top, transparent 0%, white 1%, white 99%, transparent 100%)
           `,
           WebkitMaskImage: `
             linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%),
-            linear-gradient(to bottom, transparent 0%, white 5%, white 95%, transparent 100%)
+            linear-gradient(to top, transparent 0%, white 1%, white 99%, transparent 100%)
           `,
           maskComposite: "intersect",
           WebkitMaskComposite: "intersect",
@@ -118,17 +125,206 @@ function ProjectDetailContent() {
           {/* Sections */}
           <section className="mb-12">
             <h2 className="text-2xl font-medium text-[#333333] mb-6">INSPIRATION</h2>
-            <p className="text-[#333333] text-sm font-normal leading-loose">{project.inspiration}</p>
+            <p className="text-[#333333] text-sm font-normal leading-7 text-justify">{project.inspiration}</p>
           </section>
 
           <section className="mb-12">
             <h2 className="text-2xl font-medium text-[#333333] mb-6">DESCRIPTION</h2>
-            <p className="text-[#333333] text-sm font-normal leading-loose">{project.description}</p>
+            <p className="text-[#333333] text-sm font-normal leading-7 text-justify">{project.description}</p>
           </section>
+
+          {/* Section 1: Image */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div className="w-full max-h-[500px] min-h-[400px] overflow-hidden flex items-center justify-center bg-gray-50">
+              <img src="/room3.jpg" alt="Project showcase 1" className="w-full h-full object-contain" />
+            </div>
+          </motion.section>
+
+          {/* Section 2: Description */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div>
+              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+                The architectural design seamlessly blends modern aesthetics with functional spaces, creating an
+                environment that promotes both productivity and comfort. Every detail has been carefully considered to
+                enhance the user experience, from the strategic placement of windows to maximize natural light, to the
+                selection of materials that provide both durability and visual appeal. The building's facade reflects a
+                contemporary approach while respecting the surrounding urban context, creating a harmonious relationship
+                between the structure and its environment. Interior spaces are designed with flexibility in mind,
+                allowing for various configurations that can adapt to changing needs over time.
+              </p>
+            </div>
+          </motion.section>
+
+          {/* Section 3: Another Image */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div className="w-full max-h-[500px] min-h-[400px] overflow-hidden flex items-center justify-center bg-gray-50">
+              <img src="/interior3.jpg" alt="Project showcase 2" className="w-full h-full object-contain" />
+            </div>
+          </motion.section>
+
+          {/* Section 4: Another Description */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div>
+              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+                Innovative spatial planning ensures optimal flow throughout the building, while sustainable materials
+                and energy-efficient systems demonstrate our commitment to environmental responsibility. The design
+                incorporates advanced building technologies that reduce energy consumption and minimize environmental
+                impact, including high-performance glazing systems, efficient HVAC solutions, and renewable energy
+                integration. Circulation paths are carefully planned to create intuitive navigation throughout the
+                space, while strategic zoning separates public and private areas to enhance functionality. The material
+                palette combines natural elements with contemporary finishes, creating a sophisticated aesthetic that
+                will remain timeless for years to come.
+              </p>
+            </div>
+          </motion.section>
+
+          {/* Section 5: Video (YouTube Embed) */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div>
+              <div className="w-full aspect-video overflow-hidden shadow-lg">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  title="Project video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Section 6: Third Description */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div>
+              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+                The integration of natural light throughout the space creates a warm and inviting atmosphere, while
+                carefully selected materials add texture and depth to the overall design aesthetic. Large windows and
+                strategically placed skylights ensure that daylight penetrates deep into the interior spaces, reducing
+                the need for artificial lighting and creating a connection with the outdoor environment. The interplay
+                of light and shadow throughout the day adds a dynamic quality to the spaces, highlighting architectural
+                features and creating visual interest. Material selections emphasize tactile qualities and natural
+                textures, from smooth polished surfaces to rough-hewn stone, creating a rich sensory experience that
+                engages occupants on multiple levels.
+              </p>
+            </div>
+          </motion.section>
+
+          {/* Section 7: GIF */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div className="w-full max-h-[500px] min-h-[400px] overflow-hidden flex items-center justify-center bg-gray-50">
+              <img
+                src="/Bermel_Animation_For-GIF.gif.mp4"
+                alt="Project animation"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </motion.section>
+
+          {/* Section 8: Another Description */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div>
+              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+                Advanced construction techniques and attention to detail ensure that every aspect of the building meets
+                the highest standards of quality and durability, creating a lasting legacy for generations to come. The
+                construction process employed cutting-edge methodologies and rigorous quality control measures at every
+                stage, from foundation to finishing touches. Skilled craftspeople worked alongside advanced technology
+                to achieve precision in execution, ensuring that the architect's vision was realized with exacting
+                accuracy. The building systems are designed for longevity and ease of maintenance, with careful
+                consideration given to future adaptability and potential expansion. This commitment to excellence in
+                construction ensures that the building will continue to serve its purpose effectively for decades to
+                come.
+              </p>
+            </div>
+          </motion.section>
+
+          {/* Section 9: Another Image */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <div className="w-full max-h-[500px] min-h-[400px] overflow-hidden flex items-center justify-center bg-gray-50">
+              <img src="/visual1.jpg" alt="Project showcase 3" className="w-full h-full object-contain" />
+            </div>
+          </motion.section>
+
+          {/* Section 10: 360° Experience Embed */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <h2 className="text-2xl font-medium text-[#333333] mb-6">360° VIRTUAL TOUR</h2>
+            <div className="w-full h-[600px]">
+              <PanoramaViewer
+                iframeUrl="https://nedf-studios.github.io/Lula_Beauty_Salon_360/"
+                title="360° Virtual Tour"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-2 text-center">
+              Drag with mouse or finger to explore in all directions • Scroll to zoom • Click fullscreen for immersive
+              view
+            </p>
+          </motion.section>
 
           <section className="mb-12">
             <h2 className="text-2xl font-medium text-[#333333] mb-6">FEATURES</h2>
-            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-loose space-y-1">
+            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-7 space-y-1">
               {project.features.map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
@@ -137,7 +333,7 @@ function ProjectDetailContent() {
 
           <section className="mb-12">
             <h2 className="text-2xl font-medium text-[#333333] mb-6">MATERIALS</h2>
-            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-loose space-y-1">
+            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-7 space-y-1">
               {project.materials.map((m, i) => (
                 <li key={i}>{m}</li>
               ))}
@@ -157,6 +353,28 @@ function ProjectDetailContent() {
 
             <ImageSlider images={project.galleryImages} alts={project.galleryAlts} gap={10} />
           </section>
+
+          {/* Section 11: Google Map Embed */}
+          <motion.section
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUpVariants}
+          >
+            <h2 className="text-2xl font-medium text-[#333333] mb-6">LOCATION</h2>
+            <div className="w-full h-[300px]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7577!3d9.0320!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sAddis%20Ababa!5e0!3m2!1sen!2set!4v1647000000000!5m2!1sen!2set"
+                title="Project Location"
+                className="w-full h-full border-0"
+                allowFullScreen
+                loading="eager"
+                referrerPolicy="no-referrer-when-downgrade"
+                style={{ pointerEvents: "auto" }}
+              />
+            </div>
+          </motion.section>
         </main>
       </div>
       <Footer />

@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -13,7 +14,7 @@ const navItems = [
   { name: "Blog", href: "/blog", scrollOnLanding: false },
 ]
 
-const ctaItem = { name: "Contact Us", href: "/#footer", scrollOnLanding: true, sectionId: "footer" }
+const contactItem = { name: "Contact", href: "/#footer", scrollOnLanding: true, sectionId: "footer" }
 
 export function Navbar() {
   const pathname = usePathname()
@@ -61,20 +62,8 @@ export function Navbar() {
   return (
     <div className="w-full relative z-[100]" style={{ pointerEvents: 'auto', touchAction: 'manipulation' }}>
       <nav
-        className="w-full relative bg-white overflow-visible"
+        className="w-full relative  overflow-visible"
         style={{
-          maskImage: `
-            linear-gradient(to right, white 0%, white 15%, white 85%, white 100%),
-            linear-gradient(to top, transparent 0%, white 50%, white 100%),
-            linear-gradient(to bottom, transparent 0%, white 50%, white 100%)
-          `,
-          maskComposite: "intersect",
-          WebkitMaskImage: `
-            linear-gradient(to right, white 0%, white 15%, white 85%, white 100%),
-            linear-gradient(to top, transparent 0%, white 50%, white 100%),
-            linear-gradient(to bottom, transparent 0%, white 50%, white 100%)
-          `,
-          WebkitMaskComposite: "intersect",
           pointerEvents: 'auto',
         }}
       >
@@ -82,7 +71,22 @@ export function Navbar() {
         <div className="flex items-center w-full max-w-[95%] mx-auto px-4 md:px-12 2xl:px-32 py-1.5 relative z-20" style={{ pointerEvents: 'auto' }}>
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
-            <Image src="/nedf-logo.png" alt="NEDF Studios Logo" width={95} height={35} priority />
+            <Image 
+              src="/NAVIGATION BAR LOGO OPTION 1.png" 
+              alt="NEDF Studios Logo" 
+              width={28} 
+              height={10} 
+              priority 
+              className="dark:hidden"
+            />
+            <Image 
+              src="/LOGO FOR THE WEBISTE-06.png" 
+              alt="NEDF Studios Logo Dark" 
+              width={28} 
+              height={10} 
+              priority 
+              className="hidden dark:block"
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -98,8 +102,8 @@ export function Navbar() {
                   className={cn(
                     "transition duration-300 ease-in-out pb-1 whitespace-nowrap text-sm 2xl:text-base",
                     isActive
-                      ? "text-[#001F4B] underline underline-offset-4 decoration-[#001F4B]"
-                      : "text-[#333333] hover:text-[#003366] hover:scale-105",
+                      ? "text-[#001F4B] dark:text-[#ec1e24] underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24]"
+                      : "text-[#333333] dark:text-white hover:text-[#003366] dark:hover:text-[#ec1e24] hover:scale-105",
                   )}
                 >
                   {item.name}
@@ -108,14 +112,17 @@ export function Navbar() {
             })}
           </div>
 
-          {/* CTA Button */}
-          <Link
-            href={ctaItem.href}
-            onClick={(e) => handleNavClick(e, ctaItem)}
-            className="hidden md:flex items-center px-5 py-1.5 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
-          >
-            {ctaItem.name}
-          </Link>
+          {/* Contact Button & Theme Toggle */}
+          <div className="hidden md:flex items-center gap-2">
+            <Link
+              href={contactItem.href}
+              onClick={(e) => handleNavClick(e, contactItem)}
+              className="flex items-center px-5 py-1.5 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24]/80 transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
+            >
+              {contactItem.name}
+            </Link>
+            <ThemeToggle />
+          </div>
 
           {/* Mobile hamburger */}
           <button
@@ -172,7 +179,7 @@ export function Navbar() {
       {/* Mobile menu */}
       <div
         className={cn(
-          "md:hidden bg-white absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-[105] shadow-lg",
+          "md:hidden bg-white dark:bg-[#111010] absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-[105] shadow-lg",
           isOpen ? "max-h-80 opacity-100 py-4 pointer-events-auto" : "max-h-0 opacity-0 py-0 pointer-events-none",
         )}
         style={{ 
@@ -189,8 +196,8 @@ export function Navbar() {
               href={item.href}
               onClick={(e) => handleNavClick(e, item)}
               className={cn(
-                "block transition-all duration-150 ease-out text-base text-[#333333] text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 min-h-[44px] flex items-center justify-center",
-                isActive ? "underline underline-offset-4 decoration-[#001F4B] font-medium" : "hover:text-[#003366] active:scale-95",
+                "block transition-all duration-150 ease-out text-base text-[#333333] dark:text-white text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 dark:active:bg-gray-800 min-h-[44px] flex items-center justify-center",
+                isActive ? "underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24] font-medium" : "hover:text-[#003366] dark:hover:text-[#ec1e24] active:scale-95",
               )}
               style={{ 
                 WebkitTapHighlightColor: 'transparent',
@@ -203,19 +210,24 @@ export function Navbar() {
             </Link>
           )
         })}
-        <Link
-          href={ctaItem.href}
-          onClick={(e) => handleNavClick(e, ctaItem)}
-          className="block px-8 py-3 bg-[#001F4B] text-white rounded-md hover:bg-[#003366] active:bg-[#002850] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center"
-          style={{ 
-            WebkitTapHighlightColor: 'transparent',
-            pointerEvents: 'auto',
-            userSelect: 'none',
-            WebkitUserSelect: 'none'
-          }}
-        >
-          {ctaItem.name}
-        </Link>
+        <div className="flex flex-col space-y-3 w-full px-6">
+          <Link
+            href={contactItem.href}
+            onClick={(e) => handleNavClick(e, contactItem)}
+            className="block px-8 py-3 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24]/80 active:bg-[#002850] dark:active:bg-[#ec1e24]/90 transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center"
+            style={{ 
+              WebkitTapHighlightColor: 'transparent',
+              pointerEvents: 'auto',
+              userSelect: 'none',
+              WebkitUserSelect: 'none'
+            }}
+          >
+            {contactItem.name}
+          </Link>
+          <div className="flex justify-center">
+            <ThemeToggle />
+          </div>
+        </div>
       </div>
     </div>
   )

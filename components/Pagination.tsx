@@ -19,7 +19,7 @@ export default function Pagination({ page, setPage, total }: PaginationProps) {
 
   return (
     <div className="flex justify-center sm:justify-end">
-      <div className="flex items-center border shadow-sm overflow-hidden rounded-lg">
+      <div className="flex items-center border shadow-sm overflow-hidden">
         {/* Previous Button */}
         <button
           onClick={handlePrev}

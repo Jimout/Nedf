@@ -91,28 +91,28 @@ export default function Hero() {
       </AnimatePresence>
 
       {/* Full-width Section */}
-      <section className="pt-20 font-montserrat relative overflow-hidden bg-gradient-to-b from-gray-50/30 w-full">
+      <section className="pt-20 font-montserrat relative overflow-hidden w-full">
         <div
           className={`flex justify-center items-center gap-14 text-[12px] text-gray-500 mb-12 flex-wrap md:flex-nowrap transition-all duration-1000 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
           <span
-            className={`tracking-widest transition-all duration-700 delay-100 ${
+            className={`tracking-widest transition-all duration-700 delay-100 dark:text-[#ec1e24] ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             }`}
           >
             2023
           </span>
           <h1
-            className={`text-[40px] font-light text-[#1a1a1a] font-montserrat whitespace-nowrap tracking-wider transition-all duration-700 delay-200 ${
+            className={`text-[40px] font-light text-[#1a1a1a] dark:text-white font-montserrat whitespace-nowrap tracking-wider transition-all duration-700 delay-200 ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
             PORTFOLIO
           </h1>
           <span
-            className={`tracking-widest transition-all duration-700 delay-300 ${
+            className={`tracking-widest transition-all duration-700 delay-300 dark:text-[#ec1e24] ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
             }`}
           >
@@ -127,7 +127,7 @@ export default function Hero() {
               {/* Left column */}
               <div className="flex flex-col w-[22%] lg:w-[20%] xl:w-[18%] items-start">
                 <div
-                  className={`relative w-full h-[320px] overflow-hidden shadow-lg transition-all duration-[900ms] ${
+                  className={`relative w-full h-[400px] overflow-hidden shadow-lg transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -143,7 +143,7 @@ export default function Hero() {
                     fill
                     className="object-cover transition-all duration-700 ease-out hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500" />
                 </div>
 
                 <div
@@ -155,16 +155,29 @@ export default function Hero() {
                     transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                   }}
                 >
-                  <h2 className="text-3xl md:text-4xl font-light text-[#1a1a1a] leading-[1.1] mb-4 tracking-tight">
-                    {slide.title1} <br />
-                    <span className="font-medium bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                      {slide.title2}
-                    </span>
+                  <h2 className="text-3xl md:text-4xl font-light text-[#1a1a1a] dark:text-white leading-[1.1] mb-4 tracking-tight">
+                    {slide.title1 === "Architectural" ? (
+                      <>
+                        Architectural{" "}
+                        <span className="font-medium bg-gradient-to-r from-gray-800 to-gray-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                          Design
+                        </span>
+                      </>
+                    ) : slide.title1 === "Interior" ? (
+                      <>
+                        Interior{" "}
+                        <span className="font-medium bg-gradient-to-r from-gray-800 to-gray-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                          Design
+                        </span>
+                      </>
+                    ) : (
+                      slide.title1
+                    )}
                   </h2>
                   <Button
                     variant="outline"
                     onClick={handleExploreClick}
-                    className="rounded-full px-6 py-2 text-sm transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-400 hover:bg-white group active:scale-100 active:translate-y-0"
+                    className="rounded-full px-6 py-2 text-sm transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0 dark:border-[#ec1e24] dark:text-[#ec1e24] dark:hover:bg-[#ec1e24] dark:hover:text-white"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                   >
@@ -175,7 +188,7 @@ export default function Hero() {
 
               {/* Middle Image */}
               <div
-                className={`relative w-[35%] lg:w-[38%] xl:w-[36%] h-[380px] overflow-hidden shadow-2xl transition-all duration-[1000ms] ${
+                className={`relative w-[35%] lg:w-[38%] xl:w-[36%] h-[400px] overflow-hidden shadow-2xl transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -190,12 +203,12 @@ export default function Hero() {
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
                 <div className="absolute inset-0 border border-white/20 pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 pointer-events-none" />
               </div>
 
               {/* Right column */}
               <div
-                className={`relative w-[33%] lg:w-[26%] xl:w-[24%] h-[400px] mt-8 overflow-hidden shadow-lg transition-all duration-[900ms] ${
+                className={`relative w-[33%] lg:w-[26%] xl:w-[24%] h-[400px] overflow-hidden shadow-lg transition-all duration-[900ms] ${
                   transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{
@@ -209,7 +222,7 @@ export default function Hero() {
                   fill
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500" />
               </div>
             </div>
 
@@ -232,7 +245,7 @@ export default function Hero() {
                 <div className="absolute inset-0 border border-white/20 pointer-events-none" />
               </div>
               <h2
-                className={`text-2xl font-light text-[#001F4B] leading-tight mt-6 whitespace-nowrap text-center transition-all duration-700 ${
+                className={`text-2xl font-light text-[#001F4B] dark:text-white leading-tight mt-6 whitespace-nowrap text-center transition-all duration-700 ${
                   transitioning ? "transform translate-y-6 opacity-0" : "transform translate-y-0 opacity-100"
                 }`}
                 style={{
@@ -240,15 +253,28 @@ export default function Hero() {
                   transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
               >
-                {slide.title1}{" "}
-                <span className="font-medium bg-gradient-to-r from-[#001F4B] to-blue-600 bg-clip-text text-transparent">
-                  {slide.title2}
-                </span>
+                {slide.title1 === "Architectural" ? (
+                  <>
+                    Architectural{" "}
+                    <span className="font-medium bg-gradient-to-r from-[#001F4B] to-blue-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                      Design
+                    </span>
+                  </>
+                ) : slide.title1 === "Interior" ? (
+                  <>
+                    Interior{" "}
+                    <span className="font-medium bg-gradient-to-r from-[#001F4B] to-blue-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                      Design
+                    </span>
+                  </>
+                ) : (
+                  slide.title1
+                )}
               </h2>
               <Button
                 variant="outline"
                 onClick={handleExploreClick}
-                className={`rounded-full px-6 py-2 text-sm mt-4 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 bg-[#001F4B]/90 text-white border-[#001F4B] hover:bg-[#001F4B] group active:scale-100 active:translate-y-0 ${
+                className={`rounded-full px-6 py-2 text-sm mt-4 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0 dark:border-[#ec1e24] dark:text-[#ec1e24] dark:hover:bg-[#ec1e24] dark:hover:text-white ${
                   transitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
                 }`}
                 style={{

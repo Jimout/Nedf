@@ -45,7 +45,12 @@ export function ClientReflections() {
 
   const startAngle = (3 * Math.PI) / 2
   const totalArc = Math.PI
-  const angleStep = totalArc / (visiblePositions - 1) // Dynamic based on visible positions
+  // Fixed positions: top, middle, bottom of arc
+  const fixedAngles = [
+    startAngle, // Top of arc
+    startAngle + totalArc / 2, // Middle of arc
+    startAngle + totalArc // Bottom of arc
+  ]
 
   const getPosition = (angle: number) => ({
     x: centerX + radius * Math.cos(angle),
@@ -60,7 +65,7 @@ export function ClientReflections() {
     return () => clearInterval(interval)
   }, [])
 
-  // Responsive scaling - aligned with TheCrew dimensions
+  // Responsive scaling - always 3 fixed positions (top, middle, bottom)
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
@@ -79,12 +84,12 @@ export function ClientReflections() {
         setCenterX(200)
         setVisiblePositions(3)
       } else {
-        // XL screens - 4 avatars for wider design
+        // XL screens - 3 avatars for consistent design
         setSvgWidth(1400)
         setSvgHeight(800)
         setRadius(300)
         setCenterX(275)
-        setVisiblePositions(4)
+        setVisiblePositions(3)
       }
     }
     handleResize()
@@ -92,23 +97,20 @@ export function ClientReflections() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Calculate positions for smooth arc rotation along the arc line
-  // Dynamic number of avatars based on screen size (3 or 4)
+  // Calculate positions for fixed arc positions (top, middle, bottom)
   const allPositions = clients.map((client, clientIndex) => {
     // Calculate the continuous position along the arc
     const continuousPosition = (clientIndex + step) % clients.length
     
-    // Only show clients in visible positions (3 for standard, 4 for XL)
-    const isVisible = continuousPosition < visiblePositions
+    // Only show clients in visible positions (always 3 for fixed positions)
+    const isVisible = continuousPosition < 3
     
-    // Calculate the exact angle on the arc for this position
-    // The angle corresponds directly to a point on the arc line
-    // Position spacing adjusts automatically based on visiblePositions
-    const angle = startAngle + (continuousPosition * angleStep)
+    // Use fixed angles for top, middle, bottom positions
+    const angle = fixedAngles[continuousPosition] || fixedAngles[0]
     
     // Normalized position for smooth interpolation of size/opacity
-    // 0 = at edges, 0.5 = at middle (for 3 avatars), 0.33/0.66 (for 4 avatars)
-    const normalizedPosition = continuousPosition / (visiblePositions - 1)
+    // 0 = top, 0.5 = middle, 1 = bottom
+    const normalizedPosition = continuousPosition / 2
     
     return {
       ...client,
@@ -123,14 +125,10 @@ export function ClientReflections() {
   // Filter to show only visible clients (on the visible arc)
   const visibleClients = allPositions.filter(client => client.isVisible)
 
-  // Find the active client (middle position of the visible avatars)
-  // For 3 avatars: position 1 (middle)
-  // For 4 avatars: position 1 or 2 (closer to middle)
-  const middlePosition = Math.floor((visiblePositions - 1) / 2)
+  // Find the active client (middle position - position 1)
   const activeClient = visibleClients.find(client => 
-    client.continuousPosition === middlePosition || 
-    client.continuousPosition === middlePosition + 1
-  ) || visibleClients[middlePosition] || visibleClients[0]
+    client.continuousPosition === 1
+  ) || visibleClients[1] || visibleClients[0]
 
   return (
     <section className="relative pt-20 w-full flex justify-center">
@@ -212,10 +210,9 @@ export function ClientReflections() {
               />
               
               {/* Position markers on the arc to show exact points */}
-              {Array.from({ length: visiblePositions }).map((_, position) => {
-                const markerAngle = startAngle + (position * angleStep)
+              {fixedAngles.map((markerAngle, position) => {
                 const markerPos = getPosition(markerAngle)
-                const isMiddle = position === middlePosition || position === middlePosition + 1
+                const isMiddle = position === 1 // Middle position
                 return (
                   <motion.circle
                     key={`marker-${position}`}
