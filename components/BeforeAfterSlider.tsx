@@ -153,7 +153,7 @@ export default function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden cursor-ew-resize select-none touch-none ${className}`}
+      className={`relative overflow-hidden cursor-ew-resize select-none touch-none bg-white dark:bg-[#15171a] ${className}`}
       style={{ width, height, touchAction: 'none', WebkitTouchCallout: 'none' }}
       onClick={handleContainerClick}
       onMouseMove={handleMouseMove}
@@ -271,14 +271,21 @@ export default function BeforeAfterSlider({
 
       {/* Slider Line */}
       <div
-        className="absolute top-0 bottom-0 w-[3px] bg-white shadow-lg z-10 pointer-events-none"
-        style={{ left: `${sliderPosition}%` }}
+        className="absolute top-0 bottom-0 w-[3px] bg-white dark:bg-[#15171a] shadow-lg z-10 pointer-events-none"
+        style={{ 
+          left: `${sliderPosition}%`,
+          transform: 'translateX(-50%)'
+        }}
       />
 
       {/* Slider Handle */}
       <div
-        className="absolute top-1/2 w-12 h-12 bg-white shadow-xl border-3 border-gray-300 rounded-full transform -translate-y-1/2 -translate-x-1/2 z-20 flex items-center justify-center cursor-grab active:cursor-grabbing active:scale-110 transition-all duration-200 touch-none"
-        style={{ left: `${sliderPosition}%`, touchAction: 'none' }}
+        className="absolute top-1/2 w-12 h-12 bg-white dark:bg-[#15171a] shadow-xl border-3 border-gray-300 dark:border-[#ec1e24] rounded-full z-20 flex items-center justify-center cursor-grab active:cursor-grabbing active:scale-110 transition-all duration-200 touch-none"
+        style={{ 
+          left: `${sliderPosition}%`,
+          transform: 'translate(-50%, -50%)',
+          touchAction: 'none'
+        }}
         onMouseDown={(e) => {
           e.stopPropagation()
           handleMouseDown()
@@ -289,19 +296,19 @@ export default function BeforeAfterSlider({
         }}
       >
         <div className="flex gap-1 pointer-events-none">
-          <div className="w-[2px] h-5 bg-gray-500 rounded-full" />
-          <div className="w-[2px] h-5 bg-gray-500 rounded-full" />
+          <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
+          <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
         </div>
       </div>
 
       {/* Labels */}
       {showBefore && (
-        <div className="absolute top-4 left-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
+        <div className="absolute top-4 left-4 bg-white dark:bg-[#15171a]/60 text-[#001F4B] dark:text-white/40 px-2 py-1 rounded text-sm font-medium">
           Before
         </div>
       )}
       {showAfter && (
-        <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
+        <div className="absolute top-4 right-4 bg-white dark:bg-[#15171a]/60 text-[#001F4B] dark:text-white/40 px-2 py-1 rounded text-sm font-medium">
           After
         </div>
       )}

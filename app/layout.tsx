@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
-import { BackgroundBoxes } from "@/components/background-boxes"
+import { DynamicBackground } from "@/components/dynamic-background"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -27,11 +27,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={montserrat.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="fixed inset-0 w-full h-full bg-white dark:bg-[#111010] overflow-hidden transition-colors duration-300">
-            <BackgroundBoxes />
+        <DynamicBackground />
+        <ThemeProvider 
+          attribute="class" 
+          defaultTheme="light" 
+          enableSystem={false}
+          disableTransitionOnChange={false}
+        >
+          <div className="bg-white dark:bg-[#15171a] transition-colors duration-300">
+            {children}
           </div>
-          <div className="relative z-10">{children}</div>
           <Toaster />
         </ThemeProvider>
         <Analytics />

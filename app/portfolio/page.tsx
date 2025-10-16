@@ -68,9 +68,8 @@ export default function PortfolioPage() {
         <Navbar />
 
         <div
-          className="px-3 sm:px-6 md:px-12 lg:px-20 xl:px-24 2xl:px-32 pt-6 pb-16"
+          className="px-3 sm:px-6 md:px-12 lg:px-20 xl:px-24 2xl:px-32 pt-6 pb-16 bg-white dark:bg-[#15171a]"
           style={{
-            background: "white",
             maskImage:
               "linear-gradient(to right, transparent 0%, white 8%, white 92%, transparent 100%), linear-gradient(to top, transparent 0%, white 8%, white 88%)",
             maskComposite: "intersect",
@@ -81,19 +80,19 @@ export default function PortfolioPage() {
         >
           {/* Search */}
           <div className="relative mb-6 sm:mb-8" id="search">
-            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-[#001F4B] opacity-40 w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-[#001F4B] dark:text-[#ec1e24] opacity-40 w-4 h-4 sm:w-5 sm:h-5" />
             <input
               type="text"
               placeholder="Search projects..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-2xl sm:rounded-3xl text-[#001F4B] placeholder-[#001F4B]/40 bg-[#001F4B]/[0.03] transition-all duration-300 ease-in-out
-              focus:bg-white focus:border focus:border-[#CBD5E1] focus:text-[#001F4B] focus:placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#001F4B]/10"
+              className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-2xl sm:rounded-3xl text-[#001F4B] dark:text-white/40 placeholder-[#001F4B]/40 dark:placeholder-white/40 bg-[#001F4B]/[0.03] dark:bg-white/5 transition-all duration-300 ease-in-out
+              focus:bg-white dark:focus:bg-white/10 focus:border focus:border-[#CBD5E1] dark:focus:border-[#ec1e24]/20 focus:text-[#001F4B] dark:focus:text-white/40 focus:placeholder-[#94A3B8] dark:focus:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#001F4B]/10 dark:focus:ring-[#ec1e24]/20"
             />
           </div>
 
           {/* Tags */}
-          <div className="flex gap-10 sm:gap-12 border-b border-gray-300 mb-8 overflow-x-auto no-scrollbar">
+          <div className="flex gap-10 sm:gap-12 border-b border-gray-300 dark:border-white/20 mb-8 overflow-x-auto no-scrollbar">
             {["All", "Architecture", "Interior", "Visualization"].map((tag) => (
               <button
                 key={tag}
@@ -103,8 +102,8 @@ export default function PortfolioPage() {
                 }}
                 className={`pb-1 text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                   activeTag === tag
-                    ? "text-[#001F4B] border-b-2 border-[#001F4B]"
-                    : "text-gray-500 hover:text-[#001F4B]/60"
+                    ? "text-[#001F4B] dark:text-[#ec1e24] border-b-2 border-[#001F4B] dark:border-[#ec1e24]"
+                    : "text-gray-500 dark:text-white/40 hover:text-[#001F4B]/60 dark:hover:text-[#ec1e24]/60"
                 }`}
               >
                 {tag}
@@ -126,7 +125,7 @@ export default function PortfolioPage() {
                 <Link
                   key={`${project.id}-${index}`}
                   href={`/portfolio/${project.id}`}
-                  className="relative group cursor-pointer overflow-hidden shadow-md hover:shadow-2xl transition-all duration-700 ease-out transform hover:-translate-y-2 will-change-transform active:scale-98"
+                  className="relative group cursor-pointer overflow-hidden transition-all duration-700 ease-out transform hover:-translate-y-2 will-change-transform active:scale-98"
                   style={{ height: `${imageHeight}px` }}
                 >
                   <Image
@@ -144,18 +143,18 @@ export default function PortfolioPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
                   )}
 
-                  <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 md:p-5 lg:p-6 text-white opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-3 sm:translate-y-4 group-hover:translate-y-0">
-                    <div className="backdrop-blur-sm bg-white/10 p-2.5 sm:p-3 md:p-4 border border-white/20">
+                  <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 md:p-5 lg:p-6 text-white dark:text-[#ec1e24] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-3 sm:translate-y-4 group-hover:translate-y-0">
+                    <div className="backdrop-blur-sm bg-white/10 dark:bg-[#ec1e24]/10 p-2.5 sm:p-3 md:p-4 border border-white/20 dark:border-[#ec1e24]/20">
                       <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold mb-1 sm:mb-2 text-balance leading-tight">
                         {project.title}
                       </h3>
-                      <span className="inline-block px-2 sm:px-3 py-0.5 sm:py-1 bg-white/20 rounded-full text-xs font-medium backdrop-blur-sm">
+                      <span className="inline-block px-2 sm:px-3 py-0.5 sm:py-1 bg-white/20 dark:bg-[#ec1e24]/20 rounded-full text-xs font-medium backdrop-blur-sm">
                         {project.category}
                       </span>
                     </div>
                   </div>
 
-                  <div className="absolute inset-0 border border-white/0 group-hover:border-white/20 transition-all duration-500 ease-out rounded-sm" />
+                  <div className="absolute inset-0 border border-white/0 group-hover:border-white/20 dark:group-hover:border-[#ec1e24]/20 transition-all duration-500 ease-out rounded-sm" />
                 </Link>
               ))}
             </motion.div>
@@ -167,7 +166,7 @@ export default function PortfolioPage() {
 
           {filteredProjects.length === 0 && (
             <div className="text-center py-12 sm:py-16">
-              <p className="text-gray-500 text-sm sm:text-base">No projects found matching your search.</p>
+              <p className="text-gray-500 dark:text-white/40 text-sm sm:text-base">No projects found matching your search.</p>
             </div>
           )}
         </div>

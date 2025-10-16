@@ -32,9 +32,9 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
       <button
         onClick={prevSlide}
         disabled={isAtStart}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-[#15171a]/80 hover:bg-white dark:hover:bg-[#15171a] rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80 dark:disabled:hover:bg-[#15171a]/80"
       >
-        <ChevronLeft className="w-6 h-6 text-[#001F4B]" />
+        <ChevronLeft className="w-6 h-6 text-[#001F4B] dark:text-[#ec1e24]" />
       </button>
 
       <div
@@ -84,9 +84,9 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
       <button
         onClick={nextSlide}
         disabled={isAtEnd}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-[#15171a]/80 hover:bg-white dark:hover:bg-[#15171a] rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80 dark:disabled:hover:bg-[#15171a]/80"
       >
-        <ChevronRight className="w-6 h-6 text-[#001F4B]" />
+        <ChevronRight className="w-6 h-6 text-[#001F4B] dark:text-[#ec1e24]" />
       </button>
 
       <div className="flex justify-center mt-4 space-x-2">
@@ -94,7 +94,7 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
           <button
             key={idx}
             onClick={() => setCurrentSlide(idx)}
-            className={`w-2 h-2 rounded-full transition-all ${idx === currentSlide ? "bg-[#001F4B]" : "bg-gray-300"}`}
+            className={`w-2 h-2 rounded-full transition-all ${idx === currentSlide ? "bg-[#001F4B] dark:bg-[#ec1e24]" : "bg-gray-300 dark:bg-gray-600"}`}
           />
         ))}
       </div>

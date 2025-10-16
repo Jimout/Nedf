@@ -98,21 +98,21 @@ export default function Hero() {
           }`}
         >
           <span
-            className={`tracking-widest transition-all duration-700 delay-100 dark:text-[#ec1e24] ${
+            className={`tracking-widest transition-all duration-700 delay-100 dark:text-[#ec1e24]/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             }`}
           >
             2023
           </span>
           <h1
-            className={`text-[40px] font-light text-[#1a1a1a] dark:text-white font-montserrat whitespace-nowrap tracking-wider transition-all duration-700 delay-200 ${
+            className={`text-[40px] font-light text-[#1a1a1a] dark:text-[#ec1e24] font-montserrat whitespace-nowrap tracking-wider transition-all duration-700 delay-200 ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
             PORTFOLIO
           </h1>
           <span
-            className={`tracking-widest transition-all duration-700 delay-300 dark:text-[#ec1e24] ${
+            className={`tracking-widest transition-all duration-700 delay-300 dark:text-[#ec1e24]/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
             }`}
           >
@@ -127,7 +127,7 @@ export default function Hero() {
               {/* Left column */}
               <div className="flex flex-col w-[22%] lg:w-[20%] xl:w-[18%] items-start">
                 <div
-                  className={`relative w-full h-[400px] overflow-hidden shadow-lg transition-all duration-[900ms] ${
+                  className={`relative w-full h-[400px] overflow-hidden shadow-2xl shadow-gray-400/20 dark:shadow-[#ec1e24]/30 transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -188,7 +188,7 @@ export default function Hero() {
 
               {/* Middle Image */}
               <div
-                className={`relative w-[35%] lg:w-[38%] xl:w-[36%] h-[400px] overflow-hidden shadow-2xl transition-all duration-[1000ms] ${
+                className={`relative w-[35%] lg:w-[38%] xl:w-[36%] h-[400px] overflow-hidden shadow-2xl shadow-gray-400/20 dark:shadow-[#ec1e24]/30 transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -208,7 +208,7 @@ export default function Hero() {
 
               {/* Right column */}
               <div
-                className={`relative w-[33%] lg:w-[26%] xl:w-[24%] h-[400px] overflow-hidden shadow-lg transition-all duration-[900ms] ${
+                className={`relative w-[33%] lg:w-[26%] xl:w-[24%] h-[400px] overflow-hidden shadow-2xl shadow-gray-400/20 dark:shadow-[#ec1e24]/30 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{
@@ -297,8 +297,8 @@ export default function Hero() {
               key={index}
               className={`transition-all duration-500 cursor-pointer hover:scale-125 ${
                 index === currentIndex
-                  ? "bg-gradient-to-r from-gray-400 to-gray-500 w-8 h-2 shadow-md"
-                  : "bg-gray-300 hover:bg-gray-400 w-2 h-2"
+                  ? "bg-gradient-to-r from-gray-400 to-gray-500 dark:from-[#ec1e24] dark:to-[#ec1e24]/80 w-8 h-2 shadow-md"
+                  : "bg-gray-300 hover:bg-gray-400 dark:bg-[#ec1e24]/30 dark:hover:bg-[#ec1e24]/50 w-2 h-2"
               }`}
               style={{
                 transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",

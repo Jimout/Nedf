@@ -42,11 +42,11 @@ body {
   }
 
   .dark {
-    --background: 0 0% 6.7%; /* #111010 */
+    --background: 220 8% 8%; /* #15171a */
     --foreground: 0 0% 98%;
-    --card: 0 0% 6.7%;
+    --card: 220 8% 8%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 6.7%;
+    --popover: 220 8% 8%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 84% 60%; /* #ec1e24 */
     --primary-foreground: 0 0% 98%;

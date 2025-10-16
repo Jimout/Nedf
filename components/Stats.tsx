@@ -51,7 +51,7 @@ export default function Stats() {
   };
 
   return (
-    <section ref={ref} className="w-full py-4 max-sm:-mt-12">
+    <section ref={ref} className="w-full py-4 max-sm:-mt-12 relative z-10">
       <div
         className="
           w-full px-4 2xl:px-32
@@ -60,11 +60,11 @@ export default function Stats() {
         "
       >
         {stats.map((stat, index) => (
-          <div key={index} className="max-sm:bg-white dark:max-sm:bg-[#111010] max-sm:p-4 max-sm:rounded-md max-sm:shadow-md">
+          <div key={index} className="max-sm:bg-white dark:max-sm:bg-[#15171a] max-sm:p-4 max-sm:rounded-md max-sm:shadow-md">
             <div className="text-2xl max-sm:text-lg font-bold text-[#001F4B]/70 dark:text-[#ec1e24]/70 font-mono">
               {animatedValues[index]}
             </div>
-            <div className="text-xs max-sm:text-[10px] text-[#333]/70 dark:text-white/70 mt-1">{stat.label}</div>
+            <div className="text-xs max-sm:text-[10px] text-[#333]/70 dark:text-white/60 mt-1">{stat.label}</div>
           </div>
         ))}
       </div>

@@ -134,7 +134,7 @@ export function ClientReflections() {
     <section className="relative pt-20 w-full flex justify-center">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         <motion.h2
-          className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-0"
+          className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-0"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -178,6 +178,12 @@ export function ClientReflections() {
                   <stop offset="50%" stopColor="#cbd5e1" />
                   <stop offset="100%" stopColor="#94a3b8" />
                 </linearGradient>
+                
+                <linearGradient id="arcGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#ec1e24" />
+                  <stop offset="50%" stopColor="#ec1e24" />
+                  <stop offset="100%" stopColor="#ec1e24" />
+                </linearGradient>
               </defs>
               
               {/* Background arc layer with glow */}
@@ -189,6 +195,7 @@ export function ClientReflections() {
                 stroke="#e2e8f0"
                 strokeWidth="4"
                 strokeOpacity="0.6"
+                className="dark:stroke-[#ec1e24]/20"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
@@ -204,6 +211,7 @@ export function ClientReflections() {
                 strokeWidth="2.5"
                 filter="url(#glow)"
                 strokeLinecap="round"
+                className="dark:stroke-[#ec1e24]/20"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
@@ -219,7 +227,7 @@ export function ClientReflections() {
                     cx={markerPos.x}
                     cy={markerPos.y}
                     r="4"
-                    fill={isMiddle ? "#001F4B" : "#94a3b8"}
+                    fill={isMiddle ? "#ec1e24" : "#ec1e24/40"}
                     opacity="0.4"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -300,7 +308,7 @@ export function ClientReflections() {
                     />
                   </motion.div>
                   <motion.p
-                    className="mt-2 font-medium text-center text-[#333333]"
+                    className="mt-2 font-medium text-center text-[#333333] dark:text-white/40"
                     style={{
                       fontSize: svgWidth >= 1200 ? '14px' : '12px',
                     }}
@@ -311,7 +319,7 @@ export function ClientReflections() {
                     {client.name}
                   </motion.p>
                   <motion.span
-                    className="text-gray-500 text-center"
+                    className="text-gray-500 dark:text-[#ec1e24]/40 text-center"
                     style={{
                       fontSize: svgWidth >= 1200 ? '12px' : '10px',
                     }}
@@ -348,14 +356,14 @@ export function ClientReflections() {
                     }}
                   >
                     <motion.p
-                      className="text-xs md:text-sm xl:text-lg font-medium text-[#333333]/80 leading-relaxed md:leading-relaxed xl:leading-loose pl-4 pr-4 relative min-h-[100px] md:min-h-[100px] xl:min-h-[140px]"
+                      className="text-xs md:text-sm xl:text-lg font-medium text-[#333333]/80 dark:text-white/40 leading-relaxed md:leading-relaxed xl:leading-loose pl-4 pr-4 relative min-h-[100px] md:min-h-[100px] xl:min-h-[140px]"
                       style={{
                         fontSize: svgWidth >= 1200 ? undefined : '14px',
                         lineHeight: svgWidth >= 1200 ? undefined : '1.6',
                       }}
                     >
                       <motion.span
-                        className="absolute font-serif text-gray-300"
+                        className="absolute font-serif text-gray-300 dark:text-[#ec1e24]/40"
                         style={{
                           fontSize: svgWidth >= 1200 ? '56px' : '36px',
                           left: svgWidth >= 1200 ? "-20px" : "-10px",
@@ -369,7 +377,7 @@ export function ClientReflections() {
                       </motion.span>
                       {activeClient.testimonial}
                       <motion.span
-                        className="absolute font-serif text-gray-300"
+                        className="absolute font-serif text-gray-300 dark:text-[#ec1e24]/40"
                         style={{
                           fontSize: svgWidth >= 1200 ? '56px' : '36px',
                           right: svgWidth >= 1200 ? "-20px" : "-10px",
@@ -397,7 +405,7 @@ export function ClientReflections() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
-        <div className="bg-white shadow-xl rounded-2xl p-6 text-center relative overflow-hidden">
+        <div className="bg-white dark:bg-[#15171a] shadow-xl rounded-2xl p-6 text-center relative overflow-hidden">
           <AnimatePresence mode="wait">
             {activeClient && (
               <motion.div
@@ -421,7 +429,7 @@ export function ClientReflections() {
                   />
                 </motion.div>
                 <motion.h3
-                  className="mt-4 text-lg font-semibold text-[#333333]"
+                  className="mt-4 text-lg font-semibold text-[#333333] dark:text-white/40"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -429,7 +437,7 @@ export function ClientReflections() {
                   {activeClient.name}
                 </motion.h3>
                 <motion.p
-                  className="text-sm text-gray-500"
+                  className="text-sm text-gray-500 dark:text-[#ec1e24]/40"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
@@ -437,7 +445,7 @@ export function ClientReflections() {
                   {activeClient.role}
                 </motion.p>
                 <motion.p
-                  className="mt-4 text-sm xl:text-lg text-[#333333]/80 italic leading-relaxed text-center"
+                  className="mt-4 text-sm xl:text-lg text-[#333333]/80 dark:text-white/40 italic leading-relaxed text-center"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.4 }}

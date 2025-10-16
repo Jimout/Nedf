@@ -51,7 +51,7 @@ function ProjectDetailContent() {
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500 text-lg">Project not found</p>
+        <p className="text-gray-500 dark:text-white/40 text-lg">Project not found</p>
       </div>
     )
   }
@@ -59,9 +59,8 @@ function ProjectDetailContent() {
   return (
     <div className="relative min-h-screen overflow-hidden scroll-smooth">
       <div
-        className="relative mx-auto w-full px-10 md:px-[122px] py-10"
+        className="relative mx-auto w-full px-10 md:px-[122px] py-10 bg-white dark:bg-[#15171a]"
         style={{
-          backgroundColor: "white",
           maskImage: `
             linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%),
             linear-gradient(to top, transparent 0%, white 1%, white 99%, transparent 100%)
@@ -74,11 +73,11 @@ function ProjectDetailContent() {
           WebkitMaskComposite: "intersect",
         }}
       >
-        <main className="text-gray-800 relative font-montserrat">
+        <main className="text-gray-800 dark:text-white relative font-montserrat">
           {/* Back Button */}
           <Link href="/portfolio">
             <button
-              className="flex items-center text-[#001f4b] hover:text-black mb-6 transition-colors"
+              className="flex items-center text-[#001f4b] dark:text-[#ec1e24] hover:text-black dark:hover:text-white mb-6 transition-colors"
               aria-label="Back to Portfolio"
             >
               <span className="text-4xl">←</span>
@@ -86,29 +85,29 @@ function ProjectDetailContent() {
           </Link>
 
           {/* Title */}
-          <h1 className="text-4xl font-normal tracking-wide text-[#001F4B] mb-2">{project.title}</h1>
-          <p className="text-[#001f4b]/70 mb-4">{project.year}</p>
-          <hr className="mb-12 border-b-1 border-[#001F4B]/20" />
+          <h1 className="text-4xl font-normal tracking-wide text-[#001F4B] dark:text-[#ec1e24] mb-2">{project.title}</h1>
+          <p className="text-[#001f4b]/70 dark:text-white/40 mb-4">{project.year}</p>
+          <hr className="mb-12 border-b-1 border-[#001F4B]/20 dark:border-white/20" />
 
           {/* Project Info */}
           <div className="space-y-2 text-sm mb-8 leading-relaxed">
-            <p className="font-normal text-[#333333]">
-              CLIENT: <span className="font-normal text-[#333333]/60">{project.client}</span>
+            <p className="font-normal text-[#333333] dark:text-[#ec1e24]">
+              CLIENT: <span className="font-normal text-[#333333]/60 dark:text-white/40">{project.client}</span>
             </p>
-            <p className="font-medium text-[#333333]">
-              LOCATION: <span className="font-normal text-[#333333]/60">{project.location}</span>
+            <p className="font-medium text-[#333333] dark:text-[#ec1e24]">
+              LOCATION: <span className="font-normal text-[#333333]/60 dark:text-white/40">{project.location}</span>
             </p>
-            <p className="font-medium text-[#333333]">
-              AREA: <span className="font-normal text-[#333333]/60">{project.area}</span>
+            <p className="font-medium text-[#333333] dark:text-[#ec1e24]">
+              AREA: <span className="font-normal text-[#333333]/60 dark:text-white/40">{project.area}</span>
             </p>
-            <p className="font-medium text-[#333333]">
-              TOPOLOGY: <span className="font-normal text-[#333333]/60">{project.topology}</span>
+            <p className="font-medium text-[#333333] dark:text-[#ec1e24]">
+              TOPOLOGY: <span className="font-normal text-[#333333]/60 dark:text-white/40">{project.topology}</span>
             </p>
-            <p className="font-medium text-[#333333]">
-              ROLE: <span className="font-normal text-[#333333]/60">{project.role}</span>
+            <p className="font-medium text-[#333333] dark:text-[#ec1e24]">
+              ROLE: <span className="font-normal text-[#333333]/60 dark:text-white/40">{project.role}</span>
             </p>
-            <p className="font-medium text-[#333333]">
-              STATUS: <span className="font-normal text-[#333333]/60">{project.status}</span>
+            <p className="font-medium text-[#333333] dark:text-[#ec1e24]">
+              STATUS: <span className="font-normal text-[#333333]/60 dark:text-white/40">{project.status}</span>
             </p>
           </div>
 
@@ -124,13 +123,13 @@ function ProjectDetailContent() {
 
           {/* Sections */}
           <section className="mb-12">
-            <h2 className="text-2xl font-medium text-[#333333] mb-6">INSPIRATION</h2>
-            <p className="text-[#333333] text-sm font-normal leading-7 text-justify">{project.inspiration}</p>
+            <h2 className="text-2xl font-medium text-[#333333] dark:text-[#ec1e24] mb-6">INSPIRATION</h2>
+            <p className="text-[#333333] dark:text-white/40 text-sm font-normal leading-7 text-justify">{project.inspiration}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-medium text-[#333333] mb-6">DESCRIPTION</h2>
-            <p className="text-[#333333] text-sm font-normal leading-7 text-justify">{project.description}</p>
+            <h2 className="text-2xl font-medium text-[#333333] dark:text-[#ec1e24] mb-6">DESCRIPTION</h2>
+            <p className="text-[#333333] dark:text-white/40 text-sm font-normal leading-7 text-justify">{project.description}</p>
           </section>
 
           {/* Section 1: Image */}
@@ -155,7 +154,7 @@ function ProjectDetailContent() {
             variants={fadeUpVariants}
           >
             <div>
-              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+              <p className="text-[#333333] dark:text-white/40 text-sm font-normal leading-7 text-justify">
                 The architectural design seamlessly blends modern aesthetics with functional spaces, creating an
                 environment that promotes both productivity and comfort. Every detail has been carefully considered to
                 enhance the user experience, from the strategic placement of windows to maximize natural light, to the
@@ -189,7 +188,7 @@ function ProjectDetailContent() {
             variants={fadeUpVariants}
           >
             <div>
-              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+              <p className="text-[#333333] dark:text-white/40 text-sm font-normal leading-7 text-justify">
                 Innovative spatial planning ensures optimal flow throughout the building, while sustainable materials
                 and energy-efficient systems demonstrate our commitment to environmental responsibility. The design
                 incorporates advanced building technologies that reduce energy consumption and minimize environmental
@@ -235,7 +234,7 @@ function ProjectDetailContent() {
             variants={fadeUpVariants}
           >
             <div>
-              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+              <p className="text-[#333333] dark:text-white/40 text-sm font-normal leading-7 text-justify">
                 The integration of natural light throughout the space creates a warm and inviting atmosphere, while
                 carefully selected materials add texture and depth to the overall design aesthetic. Large windows and
                 strategically placed skylights ensure that daylight penetrates deep into the interior spaces, reducing
@@ -274,7 +273,7 @@ function ProjectDetailContent() {
             variants={fadeUpVariants}
           >
             <div>
-              <p className="text-[#333333] text-sm font-normal leading-7 text-justify">
+              <p className="text-[#333333] dark:text-white/40 text-sm font-normal leading-7 text-justify">
                 Advanced construction techniques and attention to detail ensure that every aspect of the building meets
                 the highest standards of quality and durability, creating a lasting legacy for generations to come. The
                 construction process employed cutting-edge methodologies and rigorous quality control measures at every
@@ -309,22 +308,22 @@ function ProjectDetailContent() {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeUpVariants}
           >
-            <h2 className="text-2xl font-medium text-[#333333] mb-6">360° VIRTUAL TOUR</h2>
+            <h2 className="text-2xl font-medium text-[#333333] dark:text-[#ec1e24] mb-6">360° VIRTUAL TOUR</h2>
             <div className="w-full h-[600px]">
               <PanoramaViewer
                 iframeUrl="https://nedf-studios.github.io/Lula_Beauty_Salon_360/"
                 title="360° Virtual Tour"
               />
             </div>
-            <p className="text-xs text-gray-500 mt-2 text-center">
+            <p className="text-xs text-gray-500 dark:text-white/40 mt-2 text-center">
               Drag with mouse or finger to explore in all directions • Scroll to zoom • Click fullscreen for immersive
               view
             </p>
           </motion.section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-medium text-[#333333] mb-6">FEATURES</h2>
-            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-7 space-y-1">
+            <h2 className="text-2xl font-medium text-[#333333] dark:text-[#ec1e24] mb-6">FEATURES</h2>
+            <ul className="list-disc list-inside text-[#333333] dark:text-white/40 text-sm font-normal leading-7 space-y-1">
               {project.features.map((f, i) => (
                 <li key={i}>{f}</li>
               ))}
@@ -332,8 +331,8 @@ function ProjectDetailContent() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-medium text-[#333333] mb-6">MATERIALS</h2>
-            <ul className="list-disc list-inside text-[#333333] text-sm font-normal leading-7 space-y-1">
+            <h2 className="text-2xl font-medium text-[#333333] dark:text-[#ec1e24] mb-6">MATERIALS</h2>
+            <ul className="list-disc list-inside text-[#333333] dark:text-white/40 text-sm font-normal leading-7 space-y-1">
               {project.materials.map((m, i) => (
                 <li key={i}>{m}</li>
               ))}
@@ -341,12 +340,12 @@ function ProjectDetailContent() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-medium text-[#333333] mb-6">COLOR PALETTE</h2>
+            <h2 className="text-2xl font-medium text-[#333333] dark:text-[#ec1e24] mb-6">COLOR PALETTE</h2>
             <div className="flex gap-6 mb-8">
               {project.colorPalette.map((hex, i) => (
                 <div key={i} className="text-center">
                   <div className="w-16 h-16 border" style={{ backgroundColor: hex }} />
-                  <p className="text-sm mt-2 text-[#333333]">{hex}</p>
+                  <p className="text-sm mt-2 text-[#333333] dark:text-white/40">{hex}</p>
                 </div>
               ))}
             </div>
@@ -362,12 +361,12 @@ function ProjectDetailContent() {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeUpVariants}
           >
-            <h2 className="text-2xl font-medium text-[#333333] mb-6">LOCATION</h2>
-            <div className="w-full h-[300px]">
+            <h2 className="text-2xl font-medium text-[#333333] dark:text-[#ec1e24] mb-6">LOCATION</h2>
+            <div className="w-full h-[500px]">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7577!3d9.0320!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sAddis%20Ababa!5e0!3m2!1sen!2set!4v1647000000000!5m2!1sen!2set"
                 title="Project Location"
-                className="w-full h-full border-0"
+                className="w-full h-full border-0 dark:invert dark:brightness-90 dark:contrast-125 dark:sepia-[0.1] dark:hue-rotate-[320deg] dark:saturate-150"
                 allowFullScreen
                 loading="eager"
                 referrerPolicy="no-referrer-when-downgrade"

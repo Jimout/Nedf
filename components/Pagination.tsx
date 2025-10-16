@@ -24,14 +24,14 @@ export default function Pagination({ page, setPage, total }: PaginationProps) {
         <button
           onClick={handlePrev}
           disabled={page === 1}
-          className={`px-3 sm:px-4 py-2 bg-white text-black hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors`}
+          className={`px-3 sm:px-4 py-2 bg-white dark:bg-white/10 text-black dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors`}
           aria-label="Previous page"
         >
           <ArrowLeft size={18} className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         {/* Page Indicator */}
-        <span className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap">
+        <span className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-white/40 whitespace-nowrap">
           {page} of {total}
         </span>
 
@@ -39,7 +39,7 @@ export default function Pagination({ page, setPage, total }: PaginationProps) {
         <button
           onClick={handleNext}
           disabled={page === total}
-          className={`px-3 sm:px-4 py-2 bg-[#001F4B] text-white hover:bg-[#001F4B]/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors`}
+          className={`px-3 sm:px-4 py-2 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#001F4B]/80 dark:hover:bg-[#ec1e24]/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors`}
           aria-label="Next page"
         >
           <ArrowRight size={18} className="w-4 h-4 sm:w-5 sm:h-5" />

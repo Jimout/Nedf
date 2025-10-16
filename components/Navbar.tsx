@@ -103,7 +103,7 @@ export function Navbar() {
                     "transition duration-300 ease-in-out pb-1 whitespace-nowrap text-sm 2xl:text-base",
                     isActive
                       ? "text-[#001F4B] dark:text-[#ec1e24] underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24]"
-                      : "text-[#333333] dark:text-white hover:text-[#003366] dark:hover:text-[#ec1e24] hover:scale-105",
+                      : "text-[#333333] dark:text-white/60 hover:text-[#003366] dark:hover:text-[#ec1e24] hover:scale-105",
                   )}
                 >
                   {item.name}
@@ -179,7 +179,7 @@ export function Navbar() {
       {/* Mobile menu */}
       <div
         className={cn(
-          "md:hidden bg-white dark:bg-[#111010] absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-[105] shadow-lg",
+          "md:hidden bg-white dark:bg-[#15171a] absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-[105] shadow-lg",
           isOpen ? "max-h-80 opacity-100 py-4 pointer-events-auto" : "max-h-0 opacity-0 py-0 pointer-events-none",
         )}
         style={{ 
@@ -196,7 +196,7 @@ export function Navbar() {
               href={item.href}
               onClick={(e) => handleNavClick(e, item)}
               className={cn(
-                "block transition-all duration-150 ease-out text-base text-[#333333] dark:text-white text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 dark:active:bg-gray-800 min-h-[44px] flex items-center justify-center",
+                "block transition-all duration-150 ease-out text-base text-[#333333] dark:text-white/60 text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 dark:active:bg-gray-800 min-h-[44px] flex items-center justify-center",
                 isActive ? "underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24] font-medium" : "hover:text-[#003366] dark:hover:text-[#ec1e24] active:scale-95",
               )}
               style={{ 

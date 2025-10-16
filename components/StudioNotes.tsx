@@ -66,7 +66,7 @@ const calculateTextLines = (title: string, categories: string[]) => {
 
 const ArrowLeft = () => (
   <svg
-    className="w-[40px] h-[40px] text-[#001F4B] transition-transform duration-200 ease-in-out hover:scale-110"
+    className="w-[40px] h-[40px] text-[#001F4B] dark:text-[#ec1e24] transition-transform duration-200 ease-in-out hover:scale-110"
     fill="none"
     stroke="currentColor"
     strokeWidth="0.7"
@@ -80,7 +80,7 @@ const ArrowLeft = () => (
 
 const ArrowRight = () => (
   <svg
-    className="w-[40px] h-[40px] text-[#001F4B] transition-transform duration-200 ease-in-out hover:scale-110"
+    className="w-[40px] h-[40px] text-[#001F4B] dark:text-[#ec1e24] transition-transform duration-200 ease-in-out hover:scale-110"
     fill="none"
     stroke="currentColor"
     strokeWidth="0.7"
@@ -161,7 +161,7 @@ export default function StudioNotes() {
       className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 pt-20 relative"
       ref={containerRef}
     >
-      <h2 className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] font-montserrat mb-8">
+      <h2 className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-8">
         STUDIO NOTES
       </h2>
 
@@ -211,7 +211,7 @@ export default function StudioNotes() {
                 return (
                   <article
                     key={i}
-                    className="group bg-white shadow-sm flex flex-col overflow-hidden transition-shadow hover:shadow-lg flex-shrink-0"
+                    className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 flex-shrink-0"
                     style={{
                       width: `${cardWidth}px`,
                       height: "400px",
@@ -234,18 +234,18 @@ export default function StudioNotes() {
                         {categories.map((cat, idx) => (
                           <span
                             key={idx}
-                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground rounded-full"
+                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground dark:bg-[#ec1e24]/20 dark:text-[#ec1e24] rounded-full"
                           >
                             {cat}
                           </span>
                         ))}
                       </div>
 
-                      <h2 className="text-[18px] text-[#333333] font-regular leading-6 mb-2">{title}</h2>
+                      <h2 className="text-[18px] text-[#333333] dark:text-white font-regular leading-6 mb-2">{title}</h2>
 
                       <div className="flex-1 mb-3">
                         <p
-                          className="text-[#333333]/60 text-[12px] leading-[18px]"
+                          className="text-[#333333]/60 dark:text-white/60 text-[12px] leading-[18px]"
                           title={description}
                           style={{
                             display: "-webkit-box",
@@ -262,10 +262,10 @@ export default function StudioNotes() {
                       <div className="flex justify-end">
                         <button
                           onClick={() => handleReadMore(id)}
-                          className="text-white text-xs px-3 py-[8px] transition hover:opacity-90 active:opacity-80 touch-manipulation select-none"
+                          className="text-white text-xs px-3 py-[8px] transition hover:opacity-90 active:opacity-80 touch-manipulation select-none bg-[#ec1e24] border-[#ec1e24]/20"
                           style={{
-                            backgroundColor: "#001F4B",
-                            border: "1px solid rgba(0,31,75,0.1)",
+                            backgroundColor: "#ec1e24",
+                            border: "1px solid rgba(236,30,36,0.2)",
                             borderRadius: "0px",
                             WebkitTapHighlightColor: 'transparent',
                             touchAction: 'manipulation',
