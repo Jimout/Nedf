@@ -88,6 +88,12 @@ export default function PanoramaViewer({ imageUrl, iframeUrl, title = "360° Vir
 
 declare global {
   interface Window {
-    pannellum: any
+    pannellum: {
+      viewer: (container: string, config: Record<string, unknown>) => {
+        addEventListener: (event: string, callback: () => void) => void
+        removeEventListener: (event: string, callback: () => void) => void
+        destroy: () => void
+      }
+    }
   }
 }

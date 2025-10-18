@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 
 import { Navbar } from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Pagination from "@/components/Pagination";
+import { Button } from "@/components/ui/button";
 
 interface Post {
   id: number;
@@ -119,24 +119,30 @@ export default function BlogPage() {
     router.push(`/blog/${id}`);
   };
 
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* TEST HEADER - VERY VISIBLE */}
-      <div className="bg-yellow-400 text-black text-6xl font-bold text-center py-8">
-        TEST HEADER - CAN YOU SEE THIS?
-      </div>
 
-      <div className="px-10 md:px-[122px] bg-white dark:bg-[#15171a] min-h-screen">
+      <div 
+        className="px-4 md:px-12 2xl:px-32 bg-white dark:bg-[#15171a] min-h-screen"
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent 0%, white 8%, white 92%, transparent 100%), linear-gradient(to top, transparent 0%, white 8%, white 88%)",
+          maskComposite: "intersect",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, white 8%, white 92%, transparent 100%), linear-gradient(to top, transparent 0%, white 8%, white 88%)",
+          WebkitMaskComposite: "intersect",
+        }}
+      >
         {/* Header + Search */}
-        <section className="max-w-full mx-auto pt-12 pb-8 text-center bg-red-100 dark:bg-red-900/20">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#001F4B] dark:text-white mb-6">
+        <section className="max-w-full mx-auto pt-12 pb-8 text-center">
+          <h1 className="text-3xl md:text-4xl font-semibold text-[#001F4B] dark:text-white mb-6">
             Our Blog: Stories & Insights
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-            Discover design thinking, project stories, and ideas shaping
-            architecture & interior design.
+          <p className="text-lg text-gray-700 dark:text-gray-200 mb-8">
+            Discover design thinking, project stories, and ideas shaping architecture & interior design.
           </p>
 
           <div className="flex justify-center">
@@ -156,7 +162,7 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Blog Grid */}
+        {/* Blog Grid - 3 Rows */}
         <section className="max-w-full mx-auto pb-8">
           <AnimatePresence mode="wait">
             <motion.div
@@ -173,12 +179,7 @@ export default function BlogPage() {
                 return (
                   <article
                     key={id}
-                    className="group bg-white dark:bg-[#15171a] shadow-sm flex flex-col overflow-hidden transition-shadow hover:shadow-lg"
-                    style={{
-                      height: "400px",
-                      border: "1px solid rgba(0, 31, 75, 0.1)",
-                      borderRadius: "0",
-                    }}
+                    className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 h-[400px] border border-[rgba(0,31,75,0.1)] dark:border-transparent"
                   >
                     <div className="relative w-full h-[170px]">
                       <Image
@@ -188,6 +189,7 @@ export default function BlogPage() {
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                         sizes="400px"
                       />
+                      <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-all duration-300 group-hover:scale-105" />
                     </div>
 
                     <div className="relative p-4 flex flex-col h-[230px]">
@@ -195,7 +197,7 @@ export default function BlogPage() {
                         {categories.map((cat, idx) => (
                           <span
                             key={idx}
-                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground rounded-full"
+                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground/70 rounded-full"
                           >
                             {cat}
                           </span>
@@ -206,7 +208,7 @@ export default function BlogPage() {
 
                       <div className="flex-1 mb-3">
                         <p
-                          className="text-[#333333]/60 dark:text-white/40 text-[12px] leading-[18px]"
+                          className="text-[#333333]/60 dark:text-white/60 text-[12px] leading-[18px]"
                           title={description}
                           style={{
                             display: "-webkit-box",
@@ -221,18 +223,12 @@ export default function BlogPage() {
                       </div>
 
                       <div className="flex justify-end">
-                        <button
+                        <Button
                           onClick={() => handleReadMore(id)}
-                          className="text-white text-xs px-3 py-[8px] transition hover:opacity-90 active:opacity-80 touch-manipulation select-none bg-[#001F4B] dark:bg-[#ec1e24]"
-                          style={{
-                            border: "1px solid rgba(0,31,75,0.1)",
-                            borderRadius: "0px",
-                            WebkitTapHighlightColor: 'transparent',
-                            touchAction: 'manipulation',
-                          }}
+                          className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#003366] dark:hover:bg-[#ec1e24]/80 text-white text-xs px-3 py-2"
                         >
                           Read More
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </article>
@@ -249,8 +245,6 @@ export default function BlogPage() {
           )}
         </section>
       </div>
-
-      <Footer />
     </div>
   );
 }

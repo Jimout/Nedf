@@ -2,12 +2,12 @@
 
 import type React from "react"
 
-import Image from "next/image"
-import { useEffect, useState, useRef } from "react"
-import Link from "next/link"
-import Footer from "@/components/Footer"
-import { Menu } from "lucide-react"
 import RelatedBlogs from "@/components/Related-blogs"
+import { Navbar } from "@/components/Navbar"
+import { Menu } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
 interface TocItem {
   id: string
@@ -151,34 +151,14 @@ export default function BlogDetailPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-10 md:px-[122px] pt-8">
-        <Link href="/blog">
-          <button
-            className="flex items-center text-[#001f4b] hover:text-black mb-6 transition-colors"
-            aria-label="Back to Blog"
-          >
-            <span className="text-4xl">←</span>
-          </button>
-        </Link>
-      </div>
+      <Navbar />
 
-      <div
-        className="flex-1 px-10 md:px-[122px] py-8"
-        style={{
-          background: "white",
-          maskImage:
-            "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
-          maskComposite: "intersect",
-          WebkitMaskComposite: "intersect",
-        }}
-      >
-        <main className="flex-1 flex flex-col lg:flex-row gap-10 relative">
+      <div className="flex-1 py-8 bg-white dark:bg-[#15171a]">
+        <main className="flex-1 flex flex-col lg:flex-row gap-10 relative px-4 md:px-12 2xl:px-32">
           <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="border-b border-gray-200 px-6 py-5 bg-gray-50">
-                <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Table of Contents</h2>
+            <div className="bg-white dark:bg-[#15171a] rounded-lg border border-gray-200 dark:border-[#ec1e24]/20 overflow-hidden">
+              <div className="border-b border-gray-200 dark:border-[#ec1e24]/20 px-6 py-5 bg-gray-50 dark:bg-[#ec1e24]/10">
+                <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide">Table of Contents</h2>
               </div>
               <nav className="p-3">
                 <ul className="space-y-1">
@@ -191,14 +171,14 @@ export default function BlogDetailPage() {
                         <a
                           href={`#${item.id}`}
                           className={`flex items-start gap-3 py-2 px-3 rounded-md text-sm transition-all duration-300 ease-in-out group ${
-                            isActive ? "bg-[#001F4B] text-white" : "text-gray-700 hover:bg-gray-50 hover:text-[#001F4B]"
+                            isActive ? "bg-[#001F4B] dark:bg-[#ec1e24] text-white" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-[#001F4B] dark:hover:text-[#ec1e24]"
                           }`}
                           style={{ paddingLeft }}
                           onClick={(e) => handleTocClick(e, item.id)}
                         >
                           <span
                             className={`text-xs font-medium mt-0.5 min-w-[32px] transition-colors duration-300 ${
-                              isActive ? "text-white/80" : "text-gray-400 group-hover:text-[#001F4B]"
+                              isActive ? "text-white/80" : "text-gray-400 dark:text-gray-500 group-hover:text-[#001F4B] dark:group-hover:text-[#ec1e24]"
                             }`}
                           >
                             {item.number}
@@ -220,7 +200,7 @@ export default function BlogDetailPage() {
             {showMobileTOC && (
               <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
                 <button
-                  className="bg-[#001F4B] text-white p-3 rounded-lg shadow-lg w-12 h-12 flex items-center justify-center hover:bg-[#003875] transition-colors duration-200"
+                  className="bg-[#001F4B] dark:bg-[#ec1e24] text-white p-3 rounded-lg shadow-lg w-12 h-12 flex items-center justify-center hover:bg-[#003875] dark:hover:bg-red-700 transition-colors duration-200"
                   onClick={() => setTocExpanded(!tocExpanded)}
                   aria-label="Toggle table of contents"
                 >
@@ -228,12 +208,12 @@ export default function BlogDetailPage() {
                 </button>
 
                 <div
-                  className={`mt-3 bg-white border border-gray-200 rounded-lg shadow-xl w-72 max-h-[70vh] flex flex-col transform origin-top transition-all duration-200 ease-out overflow-hidden ${
+                  className={`mt-3 bg-white dark:bg-[#15171a] border border-gray-200 dark:border-[#ec1e24]/20 rounded-lg shadow-xl w-72 max-h-[70vh] flex flex-col transform origin-top transition-all duration-200 ease-out overflow-hidden ${
                     tocExpanded ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
                   }`}
                 >
-                  <div className="border-b border-gray-200 px-6 py-5 bg-gray-50">
-                    <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Table of Contents</h2>
+                  <div className="border-b border-gray-200 dark:border-[#ec1e24]/20 px-6 py-5 bg-gray-50 dark:bg-[#ec1e24]/10">
+                    <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide">Table of Contents</h2>
                   </div>
                   <nav className="overflow-y-auto flex-1 p-3">
                     <ul className="space-y-1">
@@ -247,8 +227,8 @@ export default function BlogDetailPage() {
                               href={`#${item.id}`}
                               className={`flex items-start gap-3 py-2 px-3 rounded-md text-sm transition-all duration-300 ease-in-out ${
                                 isActive
-                                  ? "bg-[#001F4B] text-white"
-                                  : "text-gray-700 hover:bg-gray-50 hover:text-[#001F4B]"
+                                  ? "bg-[#001F4B] dark:bg-[#ec1e24] text-white"
+                                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-[#001F4B] dark:hover:text-[#ec1e24]"
                               }`}
                               style={{ paddingLeft }}
                               onClick={(e) => {
@@ -258,7 +238,7 @@ export default function BlogDetailPage() {
                             >
                               <span
                                 className={`text-xs font-medium mt-0.5 min-w-[32px] transition-colors duration-300 ${
-                                  isActive ? "text-white/80" : "text-gray-400"
+                                  isActive ? "text-white/80" : "text-gray-400 dark:text-gray-500"
                                 }`}
                               >
                                 {item.number}
@@ -284,14 +264,14 @@ export default function BlogDetailPage() {
                 className="object-cover"
                 priority
               />
+              <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-opacity duration-300" />
             </div>
 
             <h1
-              className="mb-6"
+              className="mb-6 text-[#001F4B] dark:text-white"
               style={{
                 fontFamily: "Montserrat",
                 fontWeight: 500,
-                color: "#001F4B",
                 fontSize: "36px",
               }}
             >
@@ -302,7 +282,7 @@ export default function BlogDetailPage() {
               {currentBlogTags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="px-3 py-1 text-sm border border-gray-400 rounded-full font-normal text-[#333333]"
+                  className="px-3 py-1 text-sm border border-gray-400 dark:border-gray-600 rounded-full font-normal text-[#333333] dark:text-white/80"
                   style={{ fontFamily: "Montserrat" }}
                 >
                   {tag}
@@ -316,12 +296,12 @@ export default function BlogDetailPage() {
 
               return (
                 <section key={item.id} id={item.id} className={`scroll-mt-24 mb-6 ${marginTop}`}>
-                  <h2 className={`${headingSize} font-medium mb-4 text-[#333333]`} style={{ fontFamily: "Montserrat" }}>
+                  <h2 className={`${headingSize} font-medium mb-4 text-[#333333] dark:text-white`} style={{ fontFamily: "Montserrat" }}>
                     <span className="font-semibold mr-2">{item.number}</span>
                     {item.label}
                   </h2>
                   <p
-                    className="text-[#333333] text-sm mb-4 leading-7 text-justify"
+                    className="text-[#333333] dark:text-white/80 text-sm mb-4 leading-7 text-justify"
                     style={{ fontFamily: "Montserrat", fontWeight: "400" }}
                   >
                     {getSectionContent(item.id)}
@@ -329,7 +309,7 @@ export default function BlogDetailPage() {
                   {Array.from({ length: 2 }).map((_, idx) => (
                     <p
                       key={idx}
-                      className="text-[#333333] text-sm mb-4 leading-7 text-justify"
+                      className="text-[#333333] dark:text-white/80 text-sm mb-4 leading-7 text-justify"
                       style={{ fontFamily: "Montserrat", fontWeight: "400" }}
                     >
                       {getSectionContent(item.id)}
@@ -345,9 +325,8 @@ export default function BlogDetailPage() {
       {relatedPosts.length > 0 && (
         <>
           <div
-            className="px-10 md:px-[122px] py-4"
+            className="px-10 md:px-[122px] py-4 bg-white dark:bg-[#15171a]"
             style={{
-              background: "white",
               maskImage:
                 "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
               WebkitMaskImage:
@@ -355,16 +334,16 @@ export default function BlogDetailPage() {
             }}
           >
             <hr
+              className="border-[#001F4B] dark:border-[#ec1e24] opacity-30 dark:opacity-50"
               style={{
                 border: "none",
-                borderTop: "1px solid #001F4B",
-                opacity: 0.3,
+                borderTop: "1px solid",
               }}
             />
           </div>
 
           <section
-            className="bg-white py-6 px-10 md:px-[122px]"
+            className="bg-white dark:bg-[#15171a] py-6 px-4 md:px-12 2xl:px-32"
             style={{
               maskImage:
                 "linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%), linear-gradient(to top, transparent 0%, white 0%, white 100%)",
@@ -378,8 +357,6 @@ export default function BlogDetailPage() {
           </section>
         </>
       )}
-
-      <Footer />
     </div>
   )
 }

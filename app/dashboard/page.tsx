@@ -182,7 +182,7 @@ export default function DashboardOverview() {
           return (
             <Card
               key={index}
-              className={`group relative overflow-hidden border ${stat.borderColor} shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-1`}
+              className={`group relative overflow-hidden border ${stat.borderColor} shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-1 bg-white`}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} pointer-events-none`}></div>
 

@@ -36,12 +36,12 @@ function TeamMemberCard({ image, name, role, bio, socials }: TeamMemberProps) {
 
       <div className="flex-1 flex flex-col justify-between space-y-3 text-center md:text-left">
         <div className="mx-auto md:mx-0">
-          <h3 className="text-lg font-medium">{name}</h3>
-          <p className="text-xs text-[#333333]/40">{role}</p>
+          <h3 className="text-lg font-medium text-[#333333] dark:text-white">{name}</h3>
+          <p className="text-xs text-[#333333]/40 dark:text-white/60">{role}</p>
 
-          <div className="my-2 border-t border-gray-300 w-16 md:w-full mx-auto md:mx-0" />
+          <div className="my-2 border-t border-gray-300 dark:border-white/20 w-16 md:w-full mx-auto md:mx-0" />
 
-          <p className="text-sm text-[#333333]/80 leading-relaxed md:text-justify">
+          <p className="text-sm text-[#333333]/80 dark:text-white/70 leading-relaxed md:text-justify">
             {bio}
           </p>
         </div>
@@ -55,8 +55,8 @@ function TeamMemberCard({ image, name, role, bio, socials }: TeamMemberProps) {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full border border-[#001F4B] flex items-center justify-center 
-                             hover:bg-[#001F4B] hover:text-white transition-colors duration-300"
+                  className="w-8 h-8 rounded-full border border-[#001F4B] dark:border-[#ec1e24] flex items-center justify-center 
+                             hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white transition-colors duration-300 text-[#001F4B] dark:text-[#ec1e24]"
                 >
                   <Icon size={12} />
                 </a>
@@ -87,9 +87,9 @@ export function TheCrew() {
   ];
 
   return (
-    <section id="TheCrew" className="pt-20 w-full flex justify-center scroll-mt-20">
+    <section id="TheCrew" className="pt-20 pb-20 w-full flex justify-center scroll-mt-20 relative z-10">
       <div className="w-full max-w-[1800px] mx-auto px-4 md:px-12 lg:px-20 xl:px-32">
-        <h2 className="text-center text-[30px] font-medium text-[#333333] font-montserrat mb-12">
+        <h2 className="text-center text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-12">
           THE CREW
         </h2>
 

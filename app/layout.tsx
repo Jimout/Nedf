@@ -34,7 +34,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <div className="bg-white dark:bg-[#15171a] transition-colors duration-300">
+          <div className="bg-transparent relative z-10">
             {children}
           </div>
           <Toaster />

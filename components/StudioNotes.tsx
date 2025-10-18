@@ -1,8 +1,16 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Button } from "./ui/button"
 
 const posts = [
   {
@@ -19,7 +27,7 @@ const posts = [
     categories: ["Materials", "Design Thinking", "Interior Design"],
     title: "Why Clay Still Wins",
     description:
-      "Clay Isn't Just A Material It's A Philosophy. In This Note, We Reflect On Why Traditional Materials Continue To Outperform Modern Alternatives In Both Sustainability And Aesthetic Appeal. Discover the timeless beauty and practical benefits of working with clay.",
+      "Clay Isn&apos;t Just A Material It&apos;s A Philosophy. In This Note, We Reflect On Why Traditional Materials Continue To Outperform Modern Alternatives In Both Sustainability And Aesthetic Appeal. Discover the timeless beauty and practical benefits of working with clay.",
   },
   {
     id: 2,
@@ -35,7 +43,7 @@ const posts = [
     categories: ["Design"],
     title: "The Power Of Simplicity",
     description:
-      "Design Isn't Always About More. Sometimes It's About Less Done Right. We explore the principles of minimalist design and how restraint can create more impactful spaces. Learn why simplicity requires the most sophisticated thinking.",
+      "Design Isn&apos;t Always About More. Sometimes It&apos;s About Less Done Right. We explore the principles of minimalist design and how restraint can create more impactful spaces. Learn why simplicity requires the most sophisticated thinking.",
   },
   {
     id: 4,
@@ -55,99 +63,19 @@ const posts = [
   },
 ]
 
-const calculateTextLines = (title: string, categories: string[]) => {
-  let lines = 3
-  if (title.length > 40) lines -= 1
-  if (title.length > 60) lines -= 1
-  if (categories.length > 2) lines -= 1
-  if (categories.length > 3) lines -= 1
-  return Math.max(1, lines)
-}
-
-const ArrowLeft = () => (
-  <svg
-    className="w-[40px] h-[40px] text-[#001F4B] dark:text-[#ec1e24] transition-transform duration-200 ease-in-out hover:scale-110"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="0.7"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    viewBox="0 0 24 24"
-  >
-    <path d="M15 18l-6-6 6-6" />
-  </svg>
-)
-
-const ArrowRight = () => (
-  <svg
-    className="w-[40px] h-[40px] text-[#001F4B] dark:text-[#ec1e24] transition-transform duration-200 ease-in-out hover:scale-110"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="0.7"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    viewBox="0 0 24 24"
-  >
-    <path d="M9 18l6-6-6-6" />
-  </svg>
-)
-
 export default function StudioNotes() {
-  const [index, setIndex] = useState(0)
-  const [itemsPerSlide, setItemsPerSlide] = useState(3)
-  const [cardWidth, setCardWidth] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  const gap = 32
 
   useEffect(() => {
     const handleResize = () => {
-      const containerWidth = containerRef.current?.offsetWidth || window.innerWidth
-
-      if (window.innerWidth < 640) {
-        // Small screens - 1 full card
-        const smallWidth = Math.min(containerWidth * 0.85, 300)
-        setItemsPerSlide(1)
-        setCardWidth(smallWidth)
-        setIsMobile(true)
-      } else if (window.innerWidth < 1024) {
-        // Medium screens - 2 cards
-        const mediumWidth = (containerWidth - gap - 80) / 2 // Reserve space for arrows
-        setItemsPerSlide(2)
-        setCardWidth(Math.min(mediumWidth, 300))
-        setIsMobile(false)
-      } else if (window.innerWidth < 1536) {
-        // Standard screens - 3 full cards
-        const standardWidth = (containerWidth - gap * 2 - 80) / 3 // Reserve space for arrows
-        setItemsPerSlide(3)
-        setCardWidth(Math.min(standardWidth, 300))
-        setIsMobile(false)
-      } else {
-        // Larger screens - 4 cards
-        const wideWidth = (containerWidth - gap * 3 - 80) / 4 // Reserve space for arrows
-        setItemsPerSlide(4)
-        setCardWidth(Math.min(wideWidth, 320))
-        setIsMobile(false)
-      }
-      // Reset index when screen size changes to avoid out-of-bounds
-      setIndex(0)
+      setIsMobile(window.innerWidth < 640)
     }
 
     handleResize()
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
-
-  const totalSlides = Math.ceil(posts.length / itemsPerSlide)
-  const isFirst = index === 0
-  const isLast = index === totalSlides - 1
-
-  // Calculate translation to move by full pages (itemsPerSlide cards at a time)
-  const translateX = -index * itemsPerSlide * (cardWidth + gap)
-
-  const nextSlide = () => !isLast && setIndex((prev) => prev + 1)
-  const prevSlide = () => !isFirst && setIndex((prev) => prev - 1)
   
   const handleReadMore = (postId: number) => {
     // Map post IDs to blog pages
@@ -157,76 +85,31 @@ export default function StudioNotes() {
   }
 
   return (
-    <section
-      className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 pt-20 relative"
-      ref={containerRef}
-    >
-      <h2 className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-8">
-        STUDIO NOTES
-      </h2>
-
-      <div className="flex flex-col items-center">
-        <div className="relative flex items-center justify-center w-full">
-          {/* Left Arrow */}
-          <div
-            onClick={prevSlide}
-            aria-label="Previous"
-            className={`absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
-              isFirst ? "opacity-30 pointer-events-none" : "opacity-100"
-            }`}
-            style={{ transform: 'translateY(-50%) translateX(-20px)' }}
-          >
-            <ArrowLeft />
-          </div>
-
-          {/* Right Arrow */}
-          <div
-            onClick={nextSlide}
-            aria-label="Next"
-            className={`absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer z-10 ${
-              isLast ? "opacity-30 pointer-events-none" : "opacity-100"
-            }`}
-            style={{ transform: 'translateY(-50%) translateX(20px)' }}
-          >
-            <ArrowRight />
-          </div>
-
-          {/* Slider container */}
-          <div 
-            className="overflow-hidden flex justify-center"
-            style={{
-              width: `${cardWidth * itemsPerSlide + gap * (itemsPerSlide - 1)}px`,
-              maxWidth: '100%',
-            }}
-          >
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(${translateX}px)`,
-                gap: `${gap}px`,
-              }}
-            >
-              {posts.map(({ id, image, categories, title, description }, i) => {
-                const textLines = calculateTextLines(title, categories)
-                return (
-                  <article
-                    key={i}
-                    className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 flex-shrink-0"
-                    style={{
-                      width: `${cardWidth}px`,
-                      height: "400px",
-                      border: "1px solid rgba(0, 31, 75, 0.1)",
-                      borderRadius: "0",
-                    }}
-                  >
+    <section className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 pt-20">
+      <div className="flex justify-center">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: false,
+            dragFree: false,
+            containScroll: "trimSnaps",
+          }}
+          className="w-full max-w-7xl"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {posts.map(({ id, image, categories, title, description }, i) => {
+              return (
+                <CarouselItem key={i} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 ">
+                  <article className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 h-[400px] border border-[rgba(0,31,75,0.1)] dark:border-transparent">
                     <div className="relative w-full h-[170px]">
                       <Image
                         src={image || "/placeholder.svg"}
                         alt={title}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        sizes={isMobile ? "260px" : `${cardWidth}px`}
+                        sizes={isMobile ? "260px" : "300px"}
                       />
+                      <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-all duration-300 group-hover:scale-105" />
                     </div>
 
                     <div className="relative p-4 flex flex-col h-[230px]">
@@ -234,7 +117,7 @@ export default function StudioNotes() {
                         {categories.map((cat, idx) => (
                           <span
                             key={idx}
-                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground dark:bg-[#ec1e24]/20 dark:text-[#ec1e24] rounded-full"
+                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground/70 rounded-full"
                           >
                             {cat}
                           </span>
@@ -245,43 +128,28 @@ export default function StudioNotes() {
 
                       <div className="flex-1 mb-3">
                         <p
-                          className="text-[#333333]/60 dark:text-white/60 text-[12px] leading-[18px]"
-                          title={description}
-                          style={{
-                            display: "-webkit-box",
-                            WebkitLineClamp: textLines,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
+                          className="text-[#333333]/60 dark:text-white/60 text-[12px] line-clamp-3"
+                         
                         >
                           {description}
                         </p>
                       </div>
 
                       <div className="flex justify-end">
-                        <button
-                          onClick={() => handleReadMore(id)}
-                          className="text-white text-xs px-3 py-[8px] transition hover:opacity-90 active:opacity-80 touch-manipulation select-none bg-[#ec1e24] border-[#ec1e24]/20"
-                          style={{
-                            backgroundColor: "#ec1e24",
-                            border: "1px solid rgba(236,30,36,0.2)",
-                            borderRadius: "0px",
-                            WebkitTapHighlightColor: 'transparent',
-                            touchAction: 'manipulation',
-                          }}
-                        >
+                        <Button
+                          onClick={() => handleReadMore(id)}>
                           Read More
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </article>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-        
+                </CarouselItem>
+              )
+            })}
+          </CarouselContent>
+          <CarouselPrevious  />
+          <CarouselNext  />
+        </Carousel>
       </div>
     </section>
   )

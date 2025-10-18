@@ -1,11 +1,12 @@
 "use client"
 
+import React from "react"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
-import { cn } from "@/lib/utils"
-import { ThemeToggle } from "@/components/theme-toggle"
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -68,26 +69,27 @@ export function Navbar() {
         }}
       >
         {/* Reduced height navbar */}
-        <div className="flex items-center w-full max-w-[95%] mx-auto px-4 md:px-12 2xl:px-32 py-1.5 relative z-20" style={{ pointerEvents: 'auto' }}>
-          {/* Logo */}
-          <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
-            <Image 
-              src="/NAVIGATION BAR LOGO OPTION 1.png" 
-              alt="NEDF Studios Logo" 
-              width={28} 
-              height={10} 
-              priority 
-              className="dark:hidden"
-            />
-            <Image 
-              src="/LOGO FOR THE WEBISTE-06.png" 
-              alt="NEDF Studios Logo Dark" 
-              width={28} 
-              height={10} 
-              priority 
-              className="hidden dark:block"
-            />
-          </Link>
+        <div className="w-full py-1.5 relative z-20" style={{ pointerEvents: 'auto' }}>
+          <div className="flex items-center w-full px-4 md:px-12 2xl:px-32">
+            {/* Logo */}
+            <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
+              <Image 
+                src="/NAVIGATION BAR LOGO OPTION 1.png" 
+                alt="NEDF Studios Logo" 
+                width={28} 
+                height={10} 
+                priority 
+                className="dark:hidden"
+              />
+              <Image 
+                src="/LOGO FOR THE WEBISTE-06.png" 
+                alt="NEDF Studios Logo Dark" 
+                width={28} 
+                height={10} 
+                priority 
+                className="hidden dark:block"
+              />
+            </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center justify-center flex-1 ml-28 2xl:ml-36 space-x-16 2xl:space-x-20">
@@ -143,36 +145,37 @@ export function Navbar() {
               WebkitUserSelect: 'none'
             }}
           >
-            {/* Hamburger */}
+            {/* Hamburger Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="#001F4B"
+              stroke="currentColor"
               strokeWidth={2.5}
               className={cn(
-                "w-6 h-6 transition-all duration-150 ease-out pointer-events-none",
+                "w-6 h-6 transition-all duration-150 ease-out pointer-events-none text-[#001F4B] dark:text-[#ec1e24]",
                 isOpen ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100",
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
 
-            {/* Close */}
+            {/* Close Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="#001F4B"
+              stroke="currentColor"
               strokeWidth={2.5}
               className={cn(
-                "absolute w-6 h-6 transition-all duration-150 ease-out pointer-events-none",
+                "absolute w-6 h-6 transition-all duration-150 ease-out pointer-events-none text-[#001F4B] dark:text-[#ec1e24]",
                 isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-75",
               )}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+          </div>
         </div>
       </nav>
 
@@ -180,7 +183,7 @@ export function Navbar() {
       <div
         className={cn(
           "md:hidden bg-white dark:bg-[#15171a] absolute top-full left-0 w-full flex flex-col items-center space-y-3 overflow-hidden transition-all duration-200 ease-out z-[105] shadow-lg",
-          isOpen ? "max-h-80 opacity-100 py-4 pointer-events-auto" : "max-h-0 opacity-0 py-0 pointer-events-none",
+          isOpen ? "max-h-96 opacity-100 py-4 pointer-events-auto" : "max-h-0 opacity-0 py-0 pointer-events-none",
         )}
         style={{ 
           WebkitTapHighlightColor: 'transparent',
@@ -210,7 +213,7 @@ export function Navbar() {
             </Link>
           )
         })}
-        <div className="flex flex-col space-y-3 w-full px-6">
+        <div className="flex flex-col space-y-4 w-full px-6 pb-4">
           <Link
             href={contactItem.href}
             onClick={(e) => handleNavClick(e, contactItem)}
@@ -224,8 +227,10 @@ export function Navbar() {
           >
             {contactItem.name}
           </Link>
-          <div className="flex justify-center">
-            <ThemeToggle />
+          <div className="flex justify-center py-2">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-2">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </div>

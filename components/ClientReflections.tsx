@@ -36,60 +36,33 @@ const clients: Client[] = [
 ]
 
 export function ClientReflections() {
-  const [step, setStep] = useState(0)
-  const [svgWidth, setSvgWidth] = useState(700)
+  const [rotation, setRotation] = useState(0)
+  const [svgWidth, setSvgWidth] = useState(1000)
   const [svgHeight, setSvgHeight] = useState(600)
-  const [radius, setRadius] = useState(180)
-  const [centerX, setCenterX] = useState(350)
-  const [visiblePositions, setVisiblePositions] = useState(3) // Number of visible avatars
-
+  const [radius, setRadius] = useState(220)
+  const [centerX, setCenterX] = useState(300)
   const startAngle = (3 * Math.PI) / 2
   const totalArc = Math.PI
-  // Fixed positions: top, middle, bottom of arc
-  const fixedAngles = [
-    startAngle, // Top of arc
-    startAngle + totalArc / 2, // Middle of arc
-    startAngle + totalArc // Bottom of arc
-  ]
 
-  const getPosition = (angle: number) => ({
-    x: centerX + radius * Math.cos(angle),
-    y: svgHeight / 2 + radius * Math.sin(angle),
-  })
-
-  // Auto-rotate continuously - increment step to move avatars along the arc
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStep((prev) => prev + 1)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [])
-
-  // Responsive scaling - always 3 fixed positions (top, middle, bottom)
+  // Responsive sizing
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
       if (width < 768) {
-        // Mobile
         setSvgWidth(600)
         setSvgHeight(500)
-        setRadius(150)
-        setCenterX(300)
-        setVisiblePositions(3)
+        setRadius(160)
+        setCenterX(280)
       } else if (width < 1280) {
-        // Standard screens (md/lg) - 3 avatars, smaller arc to align with other sections
         setSvgWidth(900)
         setSvgHeight(550)
         setRadius(200)
-        setCenterX(200)
-        setVisiblePositions(3)
+        setCenterX(250)
       } else {
-        // XL screens - 3 avatars for consistent design
         setSvgWidth(1400)
         setSvgHeight(800)
         setRadius(300)
-        setCenterX(275)
-        setVisiblePositions(3)
+        setCenterX(300)
       }
     }
     handleResize()
@@ -97,44 +70,56 @@ export function ClientReflections() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Calculate positions for fixed arc positions (top, middle, bottom)
-  const allPositions = clients.map((client, clientIndex) => {
-    // Calculate the continuous position along the arc
-    const continuousPosition = (clientIndex + step) % clients.length
-    
-    // Only show clients in visible positions (always 3 for fixed positions)
-    const isVisible = continuousPosition < 3
-    
-    // Use fixed angles for top, middle, bottom positions
-    const angle = fixedAngles[continuousPosition] || fixedAngles[0]
-    
-    // Normalized position for smooth interpolation of size/opacity
-    // 0 = top, 0.5 = middle, 1 = bottom
-    const normalizedPosition = continuousPosition / 2
-    
+  // Continuous orbit animation
+  useEffect(() => {
+    let startTime: number | null = null
+    let animationFrame: number
+
+    const animate = (time: number) => {
+      if (startTime === null) startTime = time
+      const elapsed = time - startTime
+      const speed = 0.00025 // smaller = slower orbit
+      setRotation(elapsed * speed)
+      animationFrame = requestAnimationFrame(animate)
+    }
+
+    animationFrame = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(animationFrame)
+  }, [])
+
+  const getPosition = (angle: number) => ({
+    x: centerX + radius * Math.cos(angle),
+    y: svgHeight / 2 + radius * Math.sin(angle),
+  })
+
+  // Compute positions dynamically
+  const allClients = clients.map((client, i) => {
+    const progress = ((i / clients.length) + rotation) % 1
+    const angle = startAngle + progress * totalArc
+    const middleAngle = startAngle + totalArc / 2
+    const distanceFromMiddle = Math.abs(angle - middleAngle)
+    const normalized = 1 - distanceFromMiddle / (totalArc / 2)
+
     return {
       ...client,
       angle,
-      continuousPosition,
-      normalizedPosition,
-      clientIndex,
-      isVisible,
+      normalized,
     }
   })
 
-  // Filter to show only visible clients (on the visible arc)
-  const visibleClients = allPositions.filter(client => client.isVisible)
-
-  // Find the active client (middle position - position 1)
-  const activeClient = visibleClients.find(client => 
-    client.continuousPosition === 1
-  ) || visibleClients[1] || visibleClients[0]
+  // Determine active client (closest to center)
+  const middleAngle = startAngle + totalArc / 2
+  const activeClient = allClients.reduce((closest, client) => {
+    const diff = Math.abs(client.angle - middleAngle)
+    const closestDiff = Math.abs(closest.angle - middleAngle)
+    return diff < closestDiff ? client : closest
+  }, allClients[0])
 
   return (
-    <section className="relative pt-20 w-full flex justify-center">
+    <section className="relative pt-20 w-full flex justify-center overflow-hidden">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         <motion.h2
-          className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-0"
+          className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-12"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -142,321 +127,154 @@ export function ClientReflections() {
           CLIENT REFLECTIONS
         </motion.h2>
 
-        {/* Desktop layout (arc) */}
-        <div className="hidden md:flex relative w-full flex-col md:flex-row items-center justify-center gap-4">
-        <div className="relative w-full flex justify-start items-center">
+        {/* Desktop */}
+        <div className="hidden md:flex relative w-full items-center justify-center">
           <div
             style={{
               width: svgWidth,
               height: svgHeight,
               position: "relative",
-              overflow: "visible",
             }}
           >
-            <motion.svg
+            {/* Arc path */}
+            <svg
               width={svgWidth}
               height={svgHeight}
-              className="absolute inset-0"
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              fill="none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.3 }}
+              className="absolute inset-0"
             >
-              {/* Filters and gradients */}
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                  <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
-                </filter>
-                
-                <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#94a3b8" />
-                  <stop offset="50%" stopColor="#cbd5e1" />
-                  <stop offset="100%" stopColor="#94a3b8" />
-                </linearGradient>
-                
-                <linearGradient id="arcGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#ec1e24" />
-                  <stop offset="50%" stopColor="#ec1e24" />
-                  <stop offset="100%" stopColor="#ec1e24" />
-                </linearGradient>
-              </defs>
-              
-              {/* Background arc layer with glow */}
-              <motion.path
+              <path
                 d={`M ${getPosition(startAngle).x} ${getPosition(startAngle).y}
                     A ${radius} ${radius} 0 0 1 ${getPosition(startAngle + totalArc).x} ${
-                      getPosition(startAngle + totalArc).y
-                    }`}
+                  getPosition(startAngle + totalArc).y
+                }`}
                 stroke="#e2e8f0"
-                strokeWidth="4"
+                strokeWidth="3"
                 strokeOpacity="0.6"
-                className="dark:stroke-[#ec1e24]/20"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
+                fill="none"
               />
-              
-              {/* Main orbital path - this is the exact path avatars follow */}
-              <motion.path
-                d={`M ${getPosition(startAngle).x} ${getPosition(startAngle).y}
-                    A ${radius} ${radius} 0 0 1 ${getPosition(startAngle + totalArc).x} ${
-                      getPosition(startAngle + totalArc).y
-                    }`}
-                stroke="url(#arcGradient)"
-                strokeWidth="2.5"
-                filter="url(#glow)"
-                strokeLinecap="round"
-                className="dark:stroke-[#ec1e24]/20"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
-              />
-              
-              {/* Position markers on the arc to show exact points */}
-              {fixedAngles.map((markerAngle, position) => {
-                const markerPos = getPosition(markerAngle)
-                const isMiddle = position === 1 // Middle position
-                return (
-                  <motion.circle
-                    key={`marker-${position}`}
-                    cx={markerPos.x}
-                    cy={markerPos.y}
-                    r="4"
-                    fill={isMiddle ? "#ec1e24" : "#ec1e24/40"}
-                    opacity="0.4"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 1 + position * 0.1, duration: 0.3 }}
-                  />
-                )
-              })}
-            </motion.svg>
+            </svg>
 
-            <AnimatePresence>
-              {visibleClients.map((client) => {
-                const pos = getPosition(client.angle)
-                
-                // Calculate dynamic styling based on continuous position along arc
-                // normalizedPosition: 0 = top, 0.5 = middle, 1 = bottom
-                const distanceFromMiddle = Math.abs(client.normalizedPosition - 0.5) * 2 // 0 to 1
-                const proximityToMiddle = 1 - distanceFromMiddle // 1 = at middle, 0 = at edges
-                
-                // Check if this is the active client
-                const isActive = client.clientIndex === activeClient?.clientIndex
-                
-                // Smooth interpolation for size and opacity based on position
-                // Scale down for standard screens
-                const baseSize = svgWidth >= 1200 ? 75 : 55
-                const maxSize = svgWidth >= 1200 ? 100 : 75
-                const avatarSize = baseSize + (proximityToMiddle * (maxSize - baseSize))
-                
-                const minOpacity = 0.55
-                const maxOpacity = 1
-                const opacity = minOpacity + (proximityToMiddle * (maxOpacity - minOpacity))
-                
-                const minScale = 0.8
-                const maxScale = 1.2
-                const scale = minScale + (proximityToMiddle * (maxScale - minScale))
-                
-                const zIndex = Math.round(10 + (proximityToMiddle * 10))
+            {/* Avatars moving along the arc */}
+            {allClients.map((client, index) => {
+              const pos = getPosition(client.angle)
+              const size = 70 + client.normalized * 50
+              const opacity = 0.5 + client.normalized * 0.5
+              const scale = 0.8 + client.normalized * 0.4
+              const zIndex = Math.round(10 + client.normalized * 10)
 
-                return (
+              return (
+                <motion.div
+                  key={index}
+                  className="absolute flex flex-col items-center"
+                  style={{
+                    left: pos.x - size / 2,
+                    top: pos.y - size / 2,
+                    zIndex,
+                  }}
+                  animate={{
+                    left: pos.x - size / 2,
+                    top: pos.y - size / 2,
+                    scale,
+                    opacity,
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 80,
+                    damping: 20,
+                  }}
+                >
                   <motion.div
-                    key={`client-${client.clientIndex}`}
-                    className="absolute flex flex-col items-center"
-                    style={{
-                      zIndex,
-                    }}
-                    initial={{
-                      left: pos.x - avatarSize / 2,
-                      top: pos.y - avatarSize / 2,
-                      scale: 0.5,
-                      opacity: 0,
-                    }}
-                    animate={{
-                      left: pos.x - avatarSize / 2,
-                      top: pos.y - avatarSize / 2,
-                      scale: scale,
-                      opacity: opacity,
-                    }}
-                    exit={{
-                      scale: 0.5,
-                      opacity: 0,
-                      transition: { duration: 0.5, ease: "easeOut" }
-                    }}
-                    transition={{
-                      duration: 3.8,
-                      ease: "easeInOut",
-                    }}
-                  >
-                  <motion.div 
-                    whileHover={{ scale: 1.05 }} 
-                    transition={{ duration: 0.2 }}
-                    style={{ width: avatarSize, height: avatarSize }}
+                    whileHover={{ scale: 1.05 }}
+                    style={{ width: size, height: size }}
                   >
                     <Image
-                      src={client.image || "/placeholder.svg"}
+                      src={client.image}
                       alt={client.name}
                       width={100}
                       height={100}
                       className="rounded-full border-4 border-white shadow-lg object-cover w-full h-full"
                     />
                   </motion.div>
-                  <motion.p
-                    className="mt-2 font-medium text-center text-[#333333] dark:text-white/40"
-                    style={{
-                      fontSize: svgWidth >= 1200 ? '14px' : '12px',
-                    }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isActive ? 1 : 0.7 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {client.name}
-                  </motion.p>
-                  <motion.span
-                    className="text-gray-500 dark:text-[#ec1e24]/40 text-center"
-                    style={{
-                      fontSize: svgWidth >= 1200 ? '12px' : '10px',
-                    }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isActive ? 1 : 0.6 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {client.role}
-                  </motion.span>
                 </motion.div>
               )
             })}
-            </AnimatePresence>
-            
-            {/* Testimonial display area - separate from avatars for better fade control */}
-            <div 
-              className="absolute"
+
+            {/* Active testimonial area */}
+            <div
+              className="absolute text-left"
               style={{
                 left: svgWidth >= 1200 ? centerX + radius + 140 : centerX + radius + 60,
                 top: svgHeight / 2 - 60,
-                width: svgWidth >= 1200 ? 650 : 450,
+                width: svgWidth >= 1200 ? 600 : 400,
               }}
             >
               <AnimatePresence mode="wait">
-                {activeClient && (
-                  <motion.div
-                    key={`testimonial-display-${activeClient.clientIndex}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{
-                      duration: 0.5,
-                      ease: "easeInOut",
-                    }}
+                <motion.div
+                  key={activeClient.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <motion.p className="text-[#333333]/80 dark:text-white/40 text-base md:text-lg xl:text-xl font-medium leading-relaxed relative">
+                    <span className="absolute -left-4 -top-6 text-4xl text-gray-300 dark:text-[#ec1e24]/40">
+                      ❝
+                    </span>
+                    {activeClient.testimonial}
+                    <span className="absolute -right-4 -bottom-6 text-4xl text-gray-300 dark:text-[#ec1e24]/40">
+                      ❞
+                    </span>
+                  </motion.p>
+                  <motion.h3
+                    className="mt-6 text-lg font-semibold text-[#333333] dark:text-white/80"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
                   >
-                    <motion.p
-                      className="text-xs md:text-sm xl:text-lg font-medium text-[#333333]/80 dark:text-white/40 leading-relaxed md:leading-relaxed xl:leading-loose pl-4 pr-4 relative min-h-[100px] md:min-h-[100px] xl:min-h-[140px]"
-                      style={{
-                        fontSize: svgWidth >= 1200 ? undefined : '14px',
-                        lineHeight: svgWidth >= 1200 ? undefined : '1.6',
-                      }}
-                    >
-                      <motion.span
-                        className="absolute font-serif text-gray-300 dark:text-[#ec1e24]/40"
-                        style={{
-                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
-                          left: svgWidth >= 1200 ? "-20px" : "-10px",
-                          top: svgWidth >= 1200 ? "-32px" : "-18px",
-                        }}
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2, duration: 0.3 }}
-                      >
-                        ❝
-                      </motion.span>
-                      {activeClient.testimonial}
-                      <motion.span
-                        className="absolute font-serif text-gray-300 dark:text-[#ec1e24]/40"
-                        style={{
-                          fontSize: svgWidth >= 1200 ? '56px' : '36px',
-                          right: svgWidth >= 1200 ? "-20px" : "-10px",
-                          bottom: svgWidth >= 1200 ? "-32px" : "-18px",
-                        }}
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.3, duration: 0.3 }}
-                      >
-                        ❞
-                      </motion.span>
-                    </motion.p>
-                  </motion.div>
-                )}
+                    {activeClient.name}
+                  </motion.h3>
+                  <p className="text-sm text-gray-500 dark:text-[#ec1e24]/40">
+                    {activeClient.role}
+                  </p>
+                </motion.div>
               </AnimatePresence>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile layout */}
-      <motion.div
-        className="block md:hidden px-6 mt-10"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-      >
-        <div className="bg-white dark:bg-[#15171a] shadow-xl rounded-2xl p-6 text-center relative overflow-hidden">
-          <AnimatePresence mode="wait">
-            {activeClient && (
+        {/* Mobile */}
+        <div className="block md:hidden px-6 mt-10">
+          <div className="bg-white dark:bg-[#15171a] shadow-xl rounded-2xl p-6 text-center relative overflow-hidden">
+            <AnimatePresence mode="wait">
               <motion.div
-                key={`mobile-${activeClient.clientIndex}`}
+                key={activeClient.name}
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{
-                  duration: 0.6,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
+                transition={{ duration: 0.6 }}
                 className="flex flex-col items-center"
               >
-                <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.2, duration: 0.4 }}>
-                  <Image
-                    src={activeClient.image || "/placeholder.svg"}
-                    alt={activeClient.name}
-                    width={100}
-                    height={100}
-                    className="mx-auto rounded-full border-4 border-gray-200 shadow-lg object-cover"
-                  />
-                </motion.div>
-                <motion.h3
-                  className="mt-4 text-lg font-semibold text-[#333333] dark:text-white/40"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
+                <Image
+                  src={activeClient.image}
+                  alt={activeClient.name}
+                  width={100}
+                  height={100}
+                  className="mx-auto rounded-full border-4 border-gray-200 shadow-lg object-cover"
+                />
+                <h3 className="mt-4 text-lg font-semibold text-[#333333] dark:text-white/80">
                   {activeClient.name}
-                </motion.h3>
-                <motion.p
-                  className="text-sm text-gray-500 dark:text-[#ec1e24]/40"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-[#ec1e24]/40">
                   {activeClient.role}
-                </motion.p>
-                <motion.p
-                  className="mt-4 text-sm xl:text-lg text-[#333333]/80 dark:text-white/40 italic leading-relaxed text-center"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
-                >
+                </p>
+                <p className="mt-4 text-sm xl:text-lg text-[#333333]/80 dark:text-white/40 italic leading-relaxed text-center">
                   ❝{activeClient.testimonial}❞
-                </motion.p>
+                </p>
               </motion.div>
-            )}
-          </AnimatePresence>
+            </AnimatePresence>
+          </div>
         </div>
-      </motion.div>
       </div>
     </section>
   )

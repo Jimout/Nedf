@@ -1,15 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Navbar } from "@/components/Navbar"
-import Hero from "@/components/Hero"
-import Portfolio from "@/components/Portfolio"
-import StudioNotesPage from "@/components/StudioNotes"
 import { ClientReflections } from "@/components/ClientReflections"
-import { TheCrew } from "@/components/TheCrew"
-import Footer from "@/components/Footer"
+import Hero from "@/components/Hero"
+import { Navbar } from "@/components/Navbar"
+import Portfolio from "@/components/Portfolio"
 import SplashScreen from "@/components/SplashScreen"
+import StudioNotesPage from "@/components/StudioNotes"
+import { TheCrew } from "@/components/TheCrew"
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 export default function HomePage() {
   const [showContent, setShowContent] = useState(false)
@@ -41,16 +40,18 @@ export default function HomePage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="min-h-screen flex flex-col"
+          className="min-h-screen flex flex-col relative z-10"
           style={{ pointerEvents: 'auto' }}
         >
           <Navbar />
           <Hero />
           <Portfolio />
+          <p className="text-center text-[26px] md:text-[30px] font-medium mb-8">
+        STUDIO NOTES
+      </p>
           <StudioNotesPage />
           <ClientReflections />
           <TheCrew />
-          <Footer />
         </motion.div>
       )}
     </>

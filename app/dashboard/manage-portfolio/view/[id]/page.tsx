@@ -121,13 +121,13 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     const savedProjects = localStorage.getItem("portfolioProjects")
     if (savedProjects) {
       const projects = JSON.parse(savedProjects)
-      const foundProject = projects.find((p: any) => p.id === Number.parseInt(params.id))
+      const foundProject = projects.find((p: { id: number }) => p.id === Number.parseInt(params.id))
       if (foundProject) {
         const projectWithDefaults = {
           ...foundProject,
           customFields: foundProject.customFields || [],
           colorPalette: foundProject.colorPalette 
-            ? foundProject.colorPalette.map((c: any) => typeof c === 'string' ? { color: c } : c)
+            ? foundProject.colorPalette.map((c: string | { color: string }) => typeof c === 'string' ? { color: c } : c)
             : [{ color: "#ffffff" }],
         }
         setProjectData(projectWithDefaults)
@@ -172,7 +172,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     const savedProjects = localStorage.getItem("portfolioProjects")
     if (savedProjects) {
       const projects = JSON.parse(savedProjects)
-      const updatedProjects = projects.map((p: any) => 
+      const updatedProjects = projects.map((p: { id: number }) => 
         p.id === editData.id ? editData : p
       )
       localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
@@ -201,7 +201,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
     setShowConfirmationModal(false)
   }
 
-  const updateEditData = (field: keyof ProjectData, value: any) => {
+  const updateEditData = (field: keyof ProjectData, value: string | number | boolean | string[] | { color: string }[]) => {
     setEditData((prev) => ({ ...prev, [field]: value }))
   }
 

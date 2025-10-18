@@ -39,7 +39,7 @@ export const BackgroundBoxes = ({ className }: { className?: string }) => {
       )}
     >
       {rows.map((_, i) => (
-        <motion.div key={`row` + i} className="w-16 h-8 border-l border-slate-300/25 dark:border-white/5 relative transition-colors duration-300">
+        <motion.div key={`row` + i} className="w-16 h-8 border-l border-slate-300/25 dark:border-white/5 relative transition-colors duration-300 opacity-80 dark:opacity-90">
           {cols.map((_, j) => (
             <motion.div
               whileHover={{
@@ -51,7 +51,7 @@ export const BackgroundBoxes = ({ className }: { className?: string }) => {
                 transition: { duration: 2 },
               }}
               key={`col` + j}
-              className="w-16 h-8 border-r border-t border-slate-300/25 dark:border-white/5 relative cursor-pointer transition-colors duration-300"
+              className="w-16 h-8 border-r border-t border-slate-300/25 dark:border-white/5 relative cursor-pointer transition-colors duration-300 opacity-80 dark:opacity-90"
             >
             </motion.div>
           ))}

@@ -25,17 +25,17 @@ export default function Footer() {
       />
 
       {/* Main Grid */}
-      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-[100px] gap-10">
+      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-6 md:px-[100px] gap-10">
         {/* Logo */}
         <div className="flex flex-col justify-center items-center md:items-start">
-          <h2 className="text-[32px] text-[#333333]/80 dark:text-white/40 font-medium">NEDF</h2>
+          <h2 className="text-[32px] text-[#333333]/80 dark:text-white/70 font-medium">NEDF</h2>
           <p className="text-[16px] text-[#001F4B]/60 dark:text-[#ec1e24]/60 mt-2">Less, but Better.</p>
         </div>
 
         {/* About Us */}
-        <div className="flex flex-col justify-center items-center md:items-start md:max-w-lg text-justify">
+        <div className="flex flex-col justify-center items-center md:items-start md:max-w-lg text-center md:text-left w-full md:w-auto">
           <h3 className="text-[32px] text-[#001F4B] dark:text-[#ec1e24] font-medium mb-2">About Us</h3>
-          <p className="text-sm font-medium text-[#333333]/80 dark:text-white/40 leading-relaxed">
+          <p className="text-sm font-medium text-[#333333]/80 dark:text-white/70 leading-relaxed max-w-md md:max-w-none">
             NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural
             design, interior spaces, and high-end visualizations. We blend design with technology to
             create thoughtful, innovative, and visually compelling environments. From concept to
@@ -47,15 +47,15 @@ export default function Footer() {
         {/* Contact Us */}
         <div className="flex flex-col justify-center items-center md:items-start">
           <h3 className="text-[32px] text-[#001F4B] dark:text-[#ec1e24] font-medium mt-1 mb-3">Contact Us</h3>
-        <div className="flex flex-col md:flex-row gap-2 text-sm mb-4 text-center md:text-left text-[#333333] dark:text-white/40">
-    <span>
-      <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24]/60">Call</span>: +251945289012
-    </span>
-    <span>/</span>
-    <span>+251900672518</span>
-  </div>
-          <p className="text-sm mb-4 text-center md:text-left text-[#333333] dark:text-white/40">
-            <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24]/60">Email</span>: Nedf123@gmail.com
+          <div className="flex flex-row gap-2 text-sm mb-4 text-center md:text-left text-[#333333] dark:text-white/70">
+            <span>
+              <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24]">Call</span>: +251945289012
+            </span>
+            <span>/</span>
+            <span>+251900672518</span>
+          </div>
+          <p className="text-sm mb-4 text-center md:text-left text-[#333333] dark:text-white/70">
+            <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24]">Email</span>: Nedf123@gmail.com
           </p>
 
           {/* Social Icons */}
@@ -67,7 +67,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="w-8 h-8 rounded-full border border-[#001F4B] dark:border-[#ec1e24]/40 flex items-center justify-center text-[#001F4B] dark:text-[#ec1e24]/40
+                className="w-8 h-8 rounded-full border border-[#001F4B] dark:border-[#ec1e24] flex items-center justify-center text-[#001F4B] dark:text-[#ec1e24]
                            hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white transition-colors duration-300"
               >
                 <Icon size={12} />
@@ -81,7 +81,7 @@ export default function Footer() {
 
       {/* Navigation Links */}
       <div className="max-w-7xl mx-auto mt-8 px-6 lg:px-[200px]">
-        <div className="flex flex-wrap justify-center gap-6 md:gap-20 text-sm text-[#333333] dark:text-white/40 mb-6">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-20 text-sm text-[#333333] dark:text-white/70 mb-6">
           <Link
             href="/#hero"
             className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transform hover:scale-110 hover:-translate-y-1 transition duration-300"
@@ -116,7 +116,7 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom */}
-      <div className="bg-[#001F4B] dark:bg-[#ec1e24] text-white text-center text-sm py-3 px-6 lg:px-[200px]">&copy; 2025, NEDF</div>
+      <div className="bg-[#001F4B] dark:bg-[#15171a] text-white text-center text-sm py-3 px-6 lg:px-[200px] dark:px-0 dark:mx-auto dark:w-[90%] dark:shadow-[0_-4px_8px_rgba(236,30,36,0.3)]">&copy; 2025, NEDF</div>
     </footer>
   );
 }
