@@ -93,26 +93,26 @@ export default function Hero() {
       {/* Full-width Section */}
       <section className="pt-20 font-montserrat relative overflow-hidden w-full">
         <div
-          className={`flex justify-center items-center gap-14 text-[12px] text-gray-500 mb-12 flex-wrap md:flex-nowrap transition-all duration-1000 ease-out ${
+          className={`flex justify-center items-center gap-6 sm:gap-6 md:gap-14 text-[12px] text-gray-500 mb-12 flex-nowrap transition-all duration-1000 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
           <span
-            className={`tracking-widest transition-all duration-700 delay-100 dark:text-[#ec1e24]/60 ${
+            className={`text-[10px] sm:text-base tracking-widest transition-all duration-700 delay-100 dark:text-[#ec1e24]/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             }`}
           >
             2023
           </span>
           <h1
-            className={`text-[40px] font-light text-[#1a1a1a] dark:text-[#ec1e24] font-montserrat whitespace-nowrap tracking-wider transition-all duration-700 delay-200 ${
+            className={`text-[32px] sm:text-[32px] md:text-[40px] font-light text-[#1a1a1a] dark:text-[#ec1e24] font-montserrat whitespace-nowrap tracking-wider transition-all duration-700 delay-200 ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
             PORTFOLIO
           </h1>
           <span
-            className={`tracking-widest transition-all duration-700 delay-300 dark:text-[#ec1e24]/60 ${
+            className={`text-[10px] sm:text-base tracking-widest transition-all duration-700 delay-300 dark:text-[#ec1e24]/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
             }`}
           >
@@ -120,14 +120,14 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Full-width container with minimal padding */}
-        <div className="relative w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+        {/* Full-width container aligned with navbar */}
+        <div className="relative w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 w-full">
-            <div className="hidden md:flex justify-center items-start gap-14 w-full max-w-[1800px] mx-auto">
+            <div className="hidden md:flex justify-between items-start gap-14 w-full">
               {/* Left column */}
-              <div className="flex flex-col w-[22%] lg:w-[20%] xl:w-[18%] items-start">
+              <div className="flex flex-col w-[28%] lg:w-[26%] xl:w-[24%] items-start">
                 <div
-                  className={`relative w-full h-[400px] overflow-hidden shadow-2xl shadow-gray-400/20 dark:shadow-[#ec1e24]/30 transition-all duration-[900ms] ${
+                  className={`relative w-full h-[400px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -143,7 +143,7 @@ export default function Hero() {
                     fill
                     className="object-cover transition-all duration-700 ease-out hover:scale-105"
                   />
-                  <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
                 </div>
 
                 <div
@@ -159,14 +159,14 @@ export default function Hero() {
                     {slide.title1 === "Architectural" ? (
                       <>
                         Architectural{" "}
-                        <span className="font-medium bg-gradient-to-r from-gray-800 to-gray-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                        <span className="font-medium text-[#001F4B] dark:text-[#ec1e24]">
                           Design
                         </span>
                       </>
                     ) : slide.title1 === "Interior" ? (
                       <>
                         Interior{" "}
-                        <span className="font-medium bg-gradient-to-r from-gray-800 to-gray-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                        <span className="font-medium text-[#001F4B] dark:text-[#ec1e24]">
                           Design
                         </span>
                       </>
@@ -188,7 +188,7 @@ export default function Hero() {
 
               {/* Middle Image */}
               <div
-                className={`relative w-[35%] lg:w-[38%] xl:w-[36%] h-[400px] overflow-hidden shadow-2xl shadow-gray-400/20 dark:shadow-[#ec1e24]/30 transition-all duration-[1000ms] ${
+                className={`relative w-[40%] lg:w-[42%] xl:w-[40%] h-[400px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -202,13 +202,12 @@ export default function Hero() {
                   fill
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
-                <div className="absolute inset-0 border border-white/20 pointer-events-none" />
-                <div className="absolute inset-0 pointer-events-none" />
+                <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
               </div>
 
               {/* Right column */}
               <div
-                className={`relative w-[33%] lg:w-[26%] xl:w-[24%] h-[400px] overflow-hidden shadow-2xl shadow-gray-400/20 dark:shadow-[#ec1e24]/30 transition-all duration-[900ms] ${
+                className={`relative w-[28%] lg:w-[26%] xl:w-[24%] h-[400px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{
@@ -222,14 +221,14 @@ export default function Hero() {
                   fill
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
-                <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
               </div>
             </div>
 
             {/* Mobile */}
             <div className="md:hidden w-full flex flex-col items-center">
               <div
-                className={`relative w-11/12 h-72 sm:h-96 overflow-hidden shadow-xl transition-all duration-[900ms] ${
+                className={`relative w-11/12 h-72 sm:h-96 overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-y-[100%] opacity-0 scale-98" : "transform translate-y-0 opacity-100 scale-100"
                 }`}
                 style={{
@@ -242,7 +241,7 @@ export default function Hero() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 border border-white/20 pointer-events-none" />
+                <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
               </div>
               <h2
                 className={`text-2xl font-light text-[#001F4B] dark:text-white leading-tight mt-6 whitespace-nowrap text-center transition-all duration-700 ${
@@ -256,14 +255,14 @@ export default function Hero() {
                 {slide.title1 === "Architectural" ? (
                   <>
                     Architectural{" "}
-                    <span className="font-medium bg-gradient-to-r from-[#001F4B] to-blue-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                    <span className="font-medium text-[#001F4B] dark:text-[#ec1e24]">
                       Design
                     </span>
                   </>
                 ) : slide.title1 === "Interior" ? (
                   <>
                     Interior{" "}
-                    <span className="font-medium bg-gradient-to-r from-[#001F4B] to-blue-600 dark:from-[#ec1e24] dark:to-[#ec1e24] bg-clip-text text-transparent">
+                    <span className="font-medium text-[#001F4B] dark:text-[#ec1e24]">
                       Design
                     </span>
                   </>
@@ -291,7 +290,7 @@ export default function Hero() {
         </div>
 
         {/* Pagination Dots */}
-        <div className="flex justify-center mt-12 gap-3">
+        <div className="flex justify-center mt-6 gap-3">
           {slides.map((_, index) => (
             <div
               key={index}

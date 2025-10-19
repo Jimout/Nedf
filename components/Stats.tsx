@@ -54,13 +54,13 @@ export default function Stats() {
     <section ref={ref} className="w-full py-4 max-sm:-mt-12 relative z-10">
       <div
         className="
-          w-full px-4 2xl:px-32
-          grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4
-          gap-y-10 gap-x-6 text-center
+          w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16
+          grid grid-cols-2 sm:flex sm:flex-row sm:justify-between sm:items-center
+          gap-y-10 gap-x-6 sm:gap-y-0 sm:gap-x-0 text-center
         "
       >
         {stats.map((stat, index) => (
-          <div key={index} className="max-sm:bg-white dark:max-sm:bg-[#15171a] max-sm:p-4 max-sm:rounded-md max-sm:shadow-md">
+          <div key={index} className="max-sm:bg-white dark:max-sm:bg-[#15171a] dark:max-sm:border dark:max-sm:border-[#ec1e24]/20 max-sm:p-4 max-sm:rounded-md max-sm:shadow-md dark:max-sm:shadow-lg dark:max-sm:shadow-[#ec1e24]/10">
             <div className="text-2xl max-sm:text-lg font-bold text-[#001F4B]/70 dark:text-[#ec1e24]/70 font-mono">
               {animatedValues[index]}
             </div>

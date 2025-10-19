@@ -85,7 +85,7 @@ export default function StudioNotes() {
   }
 
   return (
-    <section className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 pt-20">
+    <section className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
       <div className="flex justify-center">
         <Carousel
           opts={{
@@ -94,12 +94,12 @@ export default function StudioNotes() {
             dragFree: false,
             containScroll: "trimSnaps",
           }}
-          className="w-full max-w-7xl"
+          className="w-full max-w-[calc(100%-180px)] mx-auto"
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {posts.map(({ id, image, categories, title, description }, i) => {
               return (
-                <CarouselItem key={i} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 ">
+                <CarouselItem key={i} className="pl-2 md:pl-4 basis-1/3">
                   <article className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 h-[400px] border border-[rgba(0,31,75,0.1)] dark:border-transparent">
                     <div className="relative w-full h-[170px]">
                       <Image
@@ -147,8 +147,8 @@ export default function StudioNotes() {
               )
             })}
           </CarouselContent>
-          <CarouselPrevious  />
-          <CarouselNext  />
+          <CarouselPrevious className="absolute -left-12 sm:-left-16 lg:-left-20 xl:-left-24 2xl:-left-28 top-1/2 -translate-y-1/2 z-10" />
+          <CarouselNext className="absolute -right-12 sm:-right-16 lg:-right-20 xl:-right-24 2xl:-right-28 top-1/2 -translate-y-1/2 z-10" />
         </Carousel>
       </div>
     </section>

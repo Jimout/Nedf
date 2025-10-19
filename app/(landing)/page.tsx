@@ -39,7 +39,7 @@ export default function HomePage() {
       <Navbar />
       <Hero />
       <Portfolio />
-      <p className="text-center text-[26px] md:text-[30px] font-medium mb-8">
+      <p className="text-center text-[32px] sm:text-[32px] md:text-[40px] font-light text-[#1a1a1a] dark:text-[#ec1e24] font-montserrat tracking-wider pt-20 mb-12">
         STUDIO NOTES
       </p>
       <StudioNotesPage />
