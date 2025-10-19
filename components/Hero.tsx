@@ -4,56 +4,64 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Stats from "./Stats"
 
-const words = ["Designers", "Creators", "Resolvers"]
+const words = ["Creators", "Designers", "Resolvers"]
 
 export default function HeroWithStats() {
-  const extendedWords = words
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Dynamically set lineHeight based on screen size to match logo
+  // 🧮 Dynamically calculate line height based on screen size
   const getLineHeight = () => {
     if (typeof window !== "undefined") {
-      if (window.innerWidth >= 1536) {
-        return 160 // 2xl screen - matches smaller dynamic words
-      } else if (window.innerWidth >= 1280) {
-        return 140 // xl screen - matches smaller dynamic words
-      } else if (window.innerWidth >= 1024) {
-        return 120 // lg screen - matches smaller dynamic words
-      } else if (window.innerWidth < 640) {
-        return 60 // mobile line height - matches smaller dynamic words
-      }
+      if (window.innerWidth >= 1536) return 160
+      if (window.innerWidth >= 1280) return 140
+      if (window.innerWidth >= 1024) return 120
+      if (window.innerWidth < 640) return 60
     }
-    return 80 // standard screens - matches smaller dynamic words
+    return 80
   }
 
   const [lineHeight, setLineHeight] = useState(getLineHeight)
   const [index, setIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(true)
 
-  // Update lineHeight on resize
+  // 👇 Duplicate the first word at the end to make the loop smooth
+  const extendedWords = [...words, words[0]]
+
+  // 📐 Update line height on window resize
   useEffect(() => {
-    function updateLineHeight() {
-      setLineHeight(getLineHeight())
-    }
-
+    const updateLineHeight = () => setLineHeight(getLineHeight())
     updateLineHeight()
     window.addEventListener("resize", updateLineHeight)
     return () => window.removeEventListener("resize", updateLineHeight)
   }, [])
 
-  // Rotate words every 1.8s for faster, smoother animation
+  // 🔁 Rotate words every 1.5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % words.length)
-    }, 1800)
+      setIndex((prev) => prev + 1)
+    }, 1500)
     return () => clearInterval(interval)
   }, [])
 
+  // 🪄 When we hit the fake last slide (duplicate), snap back to 0 without transition
+  useEffect(() => {
+    if (index === extendedWords.length - 1) {
+      const timeout = setTimeout(() => {
+        setIsTransitioning(false)
+        setIndex(0)
+      }, 400) // match transition duration
+      return () => clearTimeout(timeout)
+    } else {
+      setIsTransitioning(true)
+    }
+  }, [index, extendedWords.length])
+
   return (
     <>
-      {/* Hero Section */}
+      {/* 🧭 Hero Section */}
       <section className="relative flex items-center justify-start font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] mt-16 max-sm:mt-8 z-10">
         <div className="flex items-center max-sm:items-start gap-8 max-sm:gap-6">
-          {/* Rotated Logo */}
+          {/* 🪙 Logo */}
           <div className="select-none -ml-2 max-sm:-ml-1">
             <Image
               src="/HERO SECTION LOGO.png"
@@ -71,7 +79,7 @@ export default function HeroWithStats() {
             />
           </div>
 
-          {/* Text Block */}
+          {/* 📝 Text Block */}
           <div className="flex flex-col justify-center max-sm:mt-[-24px] max-sm:ml-[-6px]">
             <div
               className="flex items-center max-sm:flex-col max-sm:items-start"
@@ -90,11 +98,11 @@ export default function HeroWithStats() {
               >
                 <div
                   ref={containerRef}
-                  className="will-change-transform"
                   style={{
                     transform: `translateY(-${index * lineHeight}px)`,
-                    transition:
-                      "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+                    transition: isTransitioning
+                      ? "transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+                      : "none",
                   }}
                 >
                   {extendedWords.map((word, i) => (
@@ -104,6 +112,9 @@ export default function HeroWithStats() {
                       style={{
                         height: `${lineHeight}px`,
                         lineHeight: `${lineHeight}px`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
                       }}
                     >
                       {word}
@@ -116,10 +127,10 @@ export default function HeroWithStats() {
         </div>
       </section>
 
-      {/* Gap before Stats */}
+      {/* 🕳️ Gap before Stats */}
       <div className="h-16 max-sm:h-12"></div>
 
-      {/* Stats Section */}
+      {/* 📊 Stats Section */}
       <Stats />
     </>
   )

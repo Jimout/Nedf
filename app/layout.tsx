@@ -6,6 +6,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { DynamicBackground } from "@/components/dynamic-background"
+import SplashScreenWrapper from "@/components/SplashScreenWrapper"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={montserrat.className}>
+        <SplashScreenWrapper />
         <DynamicBackground />
         <ThemeProvider 
           attribute="class" 
