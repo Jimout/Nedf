@@ -91,6 +91,11 @@ export function Navbar() {
               />
             </Link>
 
+            {/* Theme toggle near logo */}
+            <div className="ml-3 flex items-center">
+              <ThemeToggle />
+            </div>
+
           {/* Desktop nav */}
           <div className="hidden md:flex items-center justify-center flex-1 ml-28 2xl:ml-36 space-x-16 2xl:space-x-20">
             {navItems.map((item) => {
@@ -114,7 +119,7 @@ export function Navbar() {
             })}
           </div>
 
-          {/* Contact Button & Theme Toggle */}
+          {/* Contact Button */}
           <div className="hidden md:flex items-center gap-2">
             <Link
               href={contactItem.href}
@@ -123,7 +128,6 @@ export function Navbar() {
             >
               {contactItem.name}
             </Link>
-            <ThemeToggle />
           </div>
 
           {/* Mobile hamburger */}

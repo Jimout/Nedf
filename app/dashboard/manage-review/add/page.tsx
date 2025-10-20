@@ -6,8 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
+
+const ArrowLeftIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+)
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useData } from "@/lib/data-context"
@@ -66,30 +71,28 @@ export default function AddReviewPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center gap-4">
-        <Link
-          href="/dashboard/manage-review"
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back</span>
-        </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Add Review</h1>
-      </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#15171a] font-['Montserrat']">
+      <div className="w-full p-4 sm:p-6">
+        <div className="w-full space-y-6">
+          <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+            <Button variant="ghost" size="sm" className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white" onClick={() => router.back()}>
+              <ArrowLeftIcon />
+            </Button>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Add Review</h1>
+          </div>
 
-      <Card>
+          <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
         <CardHeader>
-          <CardTitle>Review Information</CardTitle>
+          <CardTitle className="text-[#001F4B] dark:text-white font-medium">Review Information</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Profile Picture Upload */}
             <div className="flex flex-col items-center">
-              <Label>Profile Picture</Label>
+              <Label className="text-gray-700 dark:text-white/80">Profile Picture</Label>
               <label
                 htmlFor="profilePicture"
-                className="mt-2 w-32 h-32 flex items-center justify-center rounded-full border-2 border-dashed border-gray-400 cursor-pointer bg-gray-50 hover:bg-gray-100 overflow-hidden"
+                className="mt-2 w-32 h-32 flex items-center justify-center rounded-full border-2 border-dashed border-gray-400 dark:border-white/50 cursor-pointer bg-gray-50 dark:bg-[#1a1d23] hover:bg-gray-100 dark:hover:bg-[#1a1d23]/80 overflow-hidden"
               >
                 {formData.profilePicture ? (
                   <img
@@ -98,7 +101,7 @@ export default function AddReviewPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-gray-400 text-center">Click to upload</span>
+                  <span className="text-gray-400 dark:text-white/60 text-center">Click to upload</span>
                 )}
                 <input
                   id="profilePicture"
@@ -111,7 +114,7 @@ export default function AddReviewPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Name *</Label>
+              <Label htmlFor="name" className="text-gray-700 dark:text-white/80">Name <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
               <Input
                 id="name"
                 name="name"
@@ -123,7 +126,7 @@ export default function AddReviewPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="position">Job Position *</Label>
+              <Label htmlFor="position" className="text-gray-700 dark:text-white/80">Job Position <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
               <Input
                 id="position"
                 name="position"
@@ -135,7 +138,7 @@ export default function AddReviewPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="testimonial">Testimonial *</Label>
+              <Label htmlFor="testimonial" className="text-gray-700 dark:text-white/80">Testimonial <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
               <Textarea
                 id="testimonial"
                 name="testimonial"
@@ -148,7 +151,7 @@ export default function AddReviewPage() {
             </div>
 
             <div className="flex space-x-4">
-              <Button type="submit" className="bg-[#001F4B] hover:bg-[#001F4B]/90">
+              <Button type="submit" className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white">
                 Add Review
               </Button>
               <Link href="/dashboard/manage-review">
@@ -167,6 +170,8 @@ export default function AddReviewPage() {
         message={`Are you sure you want to add this review from ${formData.name}?`}
         type="add"
       />
+        </div>
+      </div>
     </div>
   )
 }

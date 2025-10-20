@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input"
 
 const SearchIcon = () => (
-  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <svg className="w-5 h-5 text-gray-400 dark:text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -30,7 +30,7 @@ export default function SearchBar({ value, onChange, placeholder = "Search..." }
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="pl-10 font-montserrat"
+        className="pl-10 font-montserrat border-gray-300 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-white"
       />
     </div>
   )

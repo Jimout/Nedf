@@ -143,7 +143,7 @@ export default function Hero() {
                     fill
                     className="object-cover transition-all duration-700 ease-out hover:scale-105"
                   />
-                  <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
+                  <div className="absolute inset-0 bg-[#15171a] opacity-50" />
                 </div>
 
                 <div
@@ -202,7 +202,7 @@ export default function Hero() {
                   fill
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
-                <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
+                <div className="absolute inset-0 bg-[#15171a] opacity-50" />
               </div>
 
               {/* Right column */}
@@ -221,7 +221,7 @@ export default function Hero() {
                   fill
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
-                <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
+                <div className="absolute inset-0 bg-[#15171a] opacity-50" />
               </div>
             </div>
 
@@ -241,7 +241,7 @@ export default function Hero() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 dark:bg-[#15171a] dark:opacity-30" />
+                <div className="absolute inset-0 bg-[#15171a] opacity-50" />
               </div>
               <h2
                 className={`text-2xl font-light text-[#001F4B] dark:text-white leading-tight mt-6 whitespace-nowrap text-center transition-all duration-700 ${

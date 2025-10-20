@@ -163,17 +163,17 @@ export default function ManagePortfolioPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Completed":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
       case "In Progress":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 dark:bg-red-100 text-blue-800 dark:text-red-800"
       case "On Hold":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
       case "Planning":
-        return "bg-purple-100 text-purple-800"
+        return "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300"
       case "UnderConstruction":
-        return "bg-orange-100 text-orange-800"
+        return "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white"
     }
   }
 
@@ -196,8 +196,8 @@ export default function ManagePortfolioPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#001F4B] font-montserrat">Manage Portfolio</h1>
-        <Button onClick={handleAddProject} className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white font-montserrat w-full sm:w-auto">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#001F4B] dark:text-red-500 font-montserrat">Manage Portfolio</h1>
+        <Button onClick={handleAddProject} className="bg-[#001F4B] dark:bg-red-500 hover:bg-[#001F4B]/90 dark:hover:bg-red-600 text-white font-montserrat w-full sm:w-auto">
           <PlusIcon />
           <span className="ml-2">Add New Project</span>
         </Button>
@@ -206,35 +206,35 @@ export default function ManagePortfolioPage() {
       <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search projects..." />
 
       {filteredProjects.length === 0 ? (
-        <div className="bg-white rounded-lg border p-8 text-center">
-          <p className="text-gray-500 font-montserrat">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700 p-8 text-center">
+          <p className="text-gray-500 dark:text-white font-montserrat">
             {searchTerm
               ? "No projects found matching your search."
               : "No projects found. Add your first project to get started!"}
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-[#1a1d23] rounded-lg border dark:border-gray-700 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
-                  <TableHead className="font-montserrat font-semibold text-[#001F4B]">Title</TableHead>
-                  <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-[#001F4B]">Client</TableHead>
-                  <TableHead className="hidden md:table-cell font-montserrat font-semibold text-[#001F4B]">Status</TableHead>
-                  <TableHead className="font-montserrat font-semibold text-[#001F4B] text-right">Actions</TableHead>
+                <TableRow className="bg-gray-50 dark:bg-white/15 border-b dark:border-white/20">
+                  <TableHead className="font-montserrat font-semibold text-[#001F4B] dark:text-red-500">Title</TableHead>
+                  <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-[#001F4B] dark:text-red-500">Client</TableHead>
+                  <TableHead className="hidden md:table-cell font-montserrat font-semibold text-[#001F4B] dark:text-red-500">Status</TableHead>
+                  <TableHead className="font-montserrat font-semibold text-[#001F4B] dark:text-red-500 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {currentProjects.map((project) => (
-                  <TableRow key={project.id} className="hover:bg-gray-50">
-                    <TableCell className="font-medium font-montserrat text-[#001F4B]">
+                  <TableRow key={project.id} className="hover:bg-gray-50 dark:hover:bg-white/5 border-b dark:border-white/10">
+                    <TableCell className="font-medium font-montserrat text-[#001F4B] dark:text-white">
                       <div>
                         <div className="text-sm sm:text-base">{project.name}</div>
-                        <div className="sm:hidden text-xs text-gray-500 mt-1">{project.client}</div>
+                        <div className="sm:hidden text-xs text-gray-500 dark:text-gray-300 mt-1">{project.client}</div>
                       </div>
                     </TableCell>
-                    <TableCell className="hidden sm:table-cell font-montserrat text-gray-700">{project.client}</TableCell>
+                    <TableCell className="hidden sm:table-cell font-montserrat text-gray-700 dark:text-white">{project.client}</TableCell>
                     <TableCell className="hidden md:table-cell">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
                         {project.status}
@@ -246,7 +246,7 @@ export default function ManagePortfolioPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewProject(project.id)}
-                          className="font-montserrat text-xs sm:text-sm"
+                          className="font-montserrat text-xs sm:text-sm border-[#001F4B] dark:border-white/50 text-[#001F4B] dark:text-white hover:bg-[#001F4B] dark:hover:bg-[#1a1d23] hover:text-white bg-transparent dark:bg-[#1a1d23]"
                         >
                           <EyeIcon />
                           <span className="ml-1 hidden sm:inline">View</span>
@@ -255,7 +255,7 @@ export default function ManagePortfolioPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteProject(project.id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 font-montserrat"
+                          className="text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-[#1a1d23] font-montserrat border-red-600 dark:border-red-500 bg-transparent dark:bg-[#1a1d23]"
                         >
                           <TrashIcon />
                         </Button>

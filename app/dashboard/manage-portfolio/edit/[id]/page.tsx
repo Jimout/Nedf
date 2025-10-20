@@ -353,7 +353,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
     <div className="min-h-screen bg-gray-50 font-['Montserrat']">
       <div className="max-w-4xl mx-auto p-4 sm:p-6">
         <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-          <Button variant="ghost" size="sm" className="p-2" onClick={() => router.back()}>
+          <Button variant="ghost" size="sm" className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white" onClick={() => router.back()}>
             <ArrowLeftIcon />
           </Button>
           <div className="flex-1">

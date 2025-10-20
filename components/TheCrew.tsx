@@ -26,13 +26,16 @@ function TeamMemberCard({ image, name, role, bio, socials }: TeamMemberProps) {
 
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start gap-6 w-full max-w-[500px]">
-      <Image
-        src={image}
-        alt={name}
-        width={160}
-        height={160}
-        className="rounded-full object-cover shadow-lg flex-shrink-0 mx-auto md:mx-0"
-      />
+      <div className="relative">
+        <Image
+          src={image}
+          alt={name}
+          width={160}
+          height={160}
+          className="rounded-full object-cover shadow-lg flex-shrink-0 mx-auto md:mx-0"
+        />
+        <div className="absolute inset-0 rounded-full bg-[#15171a] opacity-0 dark:opacity-50" />
+      </div>
 
       <div className="flex-1 flex flex-col justify-between space-y-3 text-center md:text-left">
         <div className="mx-auto md:mx-0">
@@ -56,7 +59,7 @@ function TeamMemberCard({ image, name, role, bio, socials }: TeamMemberProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full border border-[#001F4B] dark:border-[#ec1e24] flex items-center justify-center 
-                             hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white transition-colors duration-300 text-[#001F4B] dark:text-[#ec1e24]"
+                             hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white dark:hover:text-white transition-colors duration-300 text-[#001F4B] dark:text-[#ec1e24]"
                 >
                   <Icon size={12} />
                 </a>
@@ -88,7 +91,7 @@ export function TheCrew() {
 
   return (
     <section id="TheCrew" className="pt-20 pb-20 w-full flex justify-center scroll-mt-20 relative z-10">
-      <div className="w-full max-w-[1800px] mx-auto px-4 md:px-12 lg:px-20 xl:px-32">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <h2 className="text-center text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-12">
           THE CREW
         </h2>

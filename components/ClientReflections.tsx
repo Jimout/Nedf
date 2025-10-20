@@ -49,17 +49,17 @@ export function ClientReflections() {
     const handleResize = () => {
       const width = window.innerWidth
       if (width < 768) {
-        setSvgWidth(600)
+        setSvgWidth(width)
         setSvgHeight(500)
         setRadius(160)
-        setCenterX(280)
+        setCenterX(160)
       } else if (width < 1280) {
-        setSvgWidth(900)
+        setSvgWidth(width)
         setSvgHeight(550)
         setRadius(200)
-        setCenterX(250)
+        setCenterX(200)
       } else {
-        setSvgWidth(1400)
+        setSvgWidth(width)
         setSvgHeight(800)
         setRadius(300)
         setCenterX(300)
@@ -94,7 +94,7 @@ export function ClientReflections() {
 
   // Compute positions dynamically
   const allClients = clients.map((client, i) => {
-    const progress = ((i / clients.length) + rotation) % 1
+    const progress = ((i / clients.length) + (rotation % (2 * Math.PI)) / (2 * Math.PI)) % 1
     const angle = startAngle + progress * totalArc
     const middleAngle = startAngle + totalArc / 2
     const distanceFromMiddle = Math.abs(angle - middleAngle)
@@ -117,7 +117,7 @@ export function ClientReflections() {
 
   return (
     <section className="relative pt-20 w-full flex justify-center overflow-hidden">
-      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <motion.h2
           className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-12"
           initial={{ opacity: 0, y: -20 }}
@@ -128,7 +128,7 @@ export function ClientReflections() {
         </motion.h2>
 
         {/* Desktop */}
-        <div className="hidden md:flex relative w-full items-center justify-center">
+        <div className="hidden md:flex relative w-full items-center justify-start">
           <div
             style={{
               width: svgWidth,
@@ -179,9 +179,9 @@ export function ClientReflections() {
                     opacity,
                   }}
                   transition={{
-                    type: "spring",
-                    stiffness: 80,
-                    damping: 20,
+                    type: "tween",
+                    duration: 0.3,
+                    ease: "easeInOut",
                   }}
                 >
                   <motion.div
@@ -275,6 +275,7 @@ export function ClientReflections() {
             </AnimatePresence>
           </div>
         </div>
+
       </div>
     </section>
   )

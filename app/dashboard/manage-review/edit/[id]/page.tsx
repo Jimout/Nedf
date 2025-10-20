@@ -6,8 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+
+const ArrowLeftIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+)
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useData } from "@/lib/data-context";
@@ -91,60 +96,63 @@ export default function EditReviewPage() {
 
   if (!review) {
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard/manage-review" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back</span>
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Edit Review</h1>
+      <div className="min-h-screen bg-gray-50 dark:bg-[#15171a] font-['Montserrat']">
+        <div className="w-full p-4 sm:p-6">
+          <div className="w-full space-y-6">
+            <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+              <Button variant="ghost" size="sm" className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white" onClick={() => router.back()}>
+                <ArrowLeftIcon />
+              </Button>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Edit Review</h1>
+            </div>
+            <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
+              <CardContent className="py-12 text-center">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Review not found</h2>
+                <p className="text-gray-600 dark:text-white/80">The requested review could not be found.</p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-        <Card>
-          <CardContent className="py-12 text-center">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Review not found</h2>
-            <p className="text-gray-600">The requested review could not be found.</p>
-          </CardContent>
-        </Card>
       </div>
     );
   }
 
   return (
-    <>
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard/manage-review" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back</span>
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Edit Review</h1>
-        </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#15171a] font-['Montserrat']">
+      <div className="w-full p-4 sm:p-6">
+        <div className="w-full space-y-6">
+          <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+            <Button variant="ghost" size="sm" className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white" onClick={() => router.back()}>
+              <ArrowLeftIcon />
+            </Button>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Edit Review</h1>
+          </div>
 
-        <Card>
+          <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Review Information</CardTitle>
+            <CardTitle className="text-[#001F4B] dark:text-white font-medium">Review Information</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               
               {/* Profile Picture (Noticeable uploader) */}
               <div className="flex flex-col items-center space-y-2">
-                <Label>Profile Picture</Label>
+                <Label className="text-gray-700 dark:text-white/80">Profile Picture</Label>
                 <label className="cursor-pointer">
-                  <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center">
+                  <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-white/50 bg-gray-100 dark:bg-[#1a1d23] flex items-center justify-center">
                     {preview ? (
                       <img src={preview} alt="Profile Preview" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-gray-400 text-3xl">+</span>
+                      <span className="text-gray-400 dark:text-white/60 text-3xl">+</span>
                     )}
                   </div>
                   <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                 </label>
-                <p className="text-sm text-gray-500">Click above to change photo</p>
+                <p className="text-sm text-gray-500 dark:text-white/60">Click above to change photo</p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name" className="text-gray-700 dark:text-white/80">Name <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
                 <Input
                   id="name"
                   name="name"
@@ -156,7 +164,7 @@ export default function EditReviewPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="position">Job Position *</Label>
+                <Label htmlFor="position" className="text-gray-700 dark:text-white/80">Job Position <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
                 <Input
                   id="position"
                   name="position"
@@ -168,7 +176,7 @@ export default function EditReviewPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="testimonial">Testimonial *</Label>
+                <Label htmlFor="testimonial" className="text-gray-700 dark:text-white/80">Testimonial <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
                 <Textarea
                   id="testimonial"
                   name="testimonial"
@@ -181,7 +189,7 @@ export default function EditReviewPage() {
               </div>
 
               <div className="flex space-x-4">
-                <Button type="submit" className="bg-[#001F4B] hover:bg-[#001F4B]/90">
+                <Button type="submit" className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white">
                   Update Review
                 </Button>
                 <Link href={`/dashboard/manage-review/view/${reviewId}`}>
@@ -191,6 +199,7 @@ export default function EditReviewPage() {
             </form>
           </CardContent>
         </Card>
+        </div>
       </div>
 
       <ConfirmationModal
@@ -201,6 +210,6 @@ export default function EditReviewPage() {
         title="Update Review"
         message={`Are you sure you want to update this review by ${formData.name}?`}
       />
-    </>
+    </div>
   );
 }

@@ -1,191 +1,264 @@
 "use client"
 
 import type React from "react"
-import ConfirmationModal from "@/components/Confirmation-modal"
-
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useRouter } from "next/navigation"
+import { ArrowLeft, Upload as UploadIcon, Plus as PlusIcon } from "lucide-react"
 import Image from "next/image"
+import ConfirmationModal from "@/components/Confirmation-modal"
 
-interface CustomField {
+interface ContentSection {
   id: string
-  type: "text" | "list"
-  label: string
-  value: string | string[]
+  type: "description" | "photo" | "list" | "video" | "360tour"
+  title: string
+  content: string | string[] | File
 }
 
 interface ProjectData {
   id: string
-  name: string
-  year: string
+  title: string
   client: string
-  location: string
-  area: string
-  technology: string
-  role: string // Changed from price to role
-  status: string
-  inspiration: string
+  location?: string
+  area?: string
+  technology?: string
+  role?: string
+  status?: string
   description: string
-  features: string[]
-  materials: string[]
-  colorPalette: Array<{ color: string }> // Removed name field from color palette
-  beforeImage: string
-  afterImage: string
+  inspiration?: string
+  beforeImage?: string
+  afterImage?: string
   galleryImages: string[]
-  customFields?: CustomField[]
+  colorPalette: { color: string }[]
+  features?: string[]
+  materials?: string[]
+  contentSections?: ContentSection[]
+  customFields?: Array<{
+    id: string
+    label: string
+    type: "text" | "list"
+    value: string | string[]
+  }>
 }
 
-const initialProjectData: ProjectData = {
-  id: "1",
-  name: "HIDASSE TELECOM",
-  year: "2024",
-  client: "Snap Trading And Industry Plc",
-  location: "Gerji 04, Addis Ababa",
-  area: "300 m²",
-  technology: "HDTV/IPTV/LAN/Network/Lan Building",
-  role: "Design & Application", // Changed from price to role
-  status: "UnderConstruction",
-  inspiration: "Inspired By Natural Light, Open-Plan Living, And Seamless Indoor-Outdoor Integration",
-  description:
-    "This Interior Design Project Embraces Open-Plan Living And Seamless Integration With The Surrounding Environment. The Design Promotes Natural Light And Sustainable Materials, Creating A Home That Is Both Functional And Aesthetically Pleasing. The Space Is Carefully Incorporated To Blend Indoor And Outdoor Areas, Offering Dynamic Views And A Strong Connection To Nature.",
-  features: [
-    "Sustainable Building Materials",
-    "Open-Plan Layout With Panoramic Views",
-    "Terraces And Green Spaces Integrated",
-  ],
-  materials: ["Upholstery", "Marble", "Wood"],
-  colorPalette: [
-    { color: "#F5F5DC" }, // Simplified color palette structure
-    { color: "#D2B48C" },
-    { color: "#8B4513" },
-    { color: "#696969" },
-  ],
-  beforeImage: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-VIluGQdq2SLlRxuJ1nnfavKORBjGgl.png",
-  afterImage: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-lJz1lgELnEPHQQTT6KaIm9WsaPsfGL.png",
-  galleryImages: [
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-lJz1lgELnEPHQQTT6KaIm9WsaPsfGL.png",
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-VIluGQdq2SLlRxuJ1nnfavKORBjGgl.png",
-  ],
-}
-
-const ArrowLeftIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-  </svg>
-)
-
-const EditIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-    />
-  </svg>
-)
-
-const UploadIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-    />
-  </svg>
-)
-
-const PlusIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-  </svg>
-)
-
-export default function ProjectDetailPage({ params }: { params: { id: string } }) {
+export default function ViewProjectPage() {
+  const params = useParams()
   const router = useRouter()
+  const projectId = params.id as string
+
+  // State
+  const [currentData, setCurrentData] = useState<ProjectData | null>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [projectData, setProjectData] = useState<ProjectData>(initialProjectData)
-  const [editData, setEditData] = useState<ProjectData>(initialProjectData)
-  const [colorPickerIndex, setColorPickerIndex] = useState<number | null>(null)
-  const [colorPickerPosition, setColorPickerPosition] = useState<{ top: number; left: number } | null>(null)
-  const [originalColor, setOriginalColor] = useState<string>("")
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false)
+  const [colorPickerIndex, setColorPickerIndex] = useState<number | null>(null)
+  const [colorPickerPosition, setColorPickerPosition] = useState<{ top: number; left: number } | null>(null)
 
-  // Load project data from localStorage
-  useEffect(() => {
-    const savedProjects = localStorage.getItem("portfolioProjects")
-    if (savedProjects) {
-      const projects = JSON.parse(savedProjects)
-      const foundProject = projects.find((p: { id: number }) => p.id === Number.parseInt(params.id))
-      if (foundProject) {
-        const projectWithDefaults = {
-          ...foundProject,
-          customFields: foundProject.customFields || [],
-          colorPalette: foundProject.colorPalette 
-            ? foundProject.colorPalette.map((c: string | { color: string }) => typeof c === 'string' ? { color: c } : c)
-            : [{ color: "#ffffff" }],
-        }
-        setProjectData(projectWithDefaults)
-        setEditData(projectWithDefaults)
-      }
-    }
-  }, [params.id])
-
+  // Refs
   const beforeImageRef = useRef<HTMLInputElement>(null)
   const afterImageRef = useRef<HTMLInputElement>(null)
-  const galleryImageRefs = useRef<(HTMLInputElement | null)[]>([])
   const galleryAddRef = useRef<HTMLInputElement>(null)
 
-  const handleEdit = () => {
-    setEditData({ ...projectData })
-    setIsEditing(true)
-  }
+  // Load project data
+  useEffect(() => {
+    const loadProject = () => {
+      try {
+        // Try to load from localStorage first
+        const savedProjects = localStorage.getItem("portfolioProjects")
+        if (savedProjects) {
+          const projects = JSON.parse(savedProjects)
+          const project = projects.find((p: any) => String(p.id) === String(projectId))
+          if (project) {
+            setCurrentData(project)
+            return
+          }
+        }
 
-  const handleSave = () => {
-    // Validate required fields
-    const isValid = 
-      editData.name?.trim() !== "" &&
-      editData.year?.trim() !== "" &&
-      editData.client?.trim() !== "" &&
-      editData.beforeImage !== "" &&
-      editData.afterImage !== "" &&
-      editData.description?.trim() !== "" &&
-      editData.colorPalette && editData.colorPalette.length > 0 &&
-      editData.galleryImages && editData.galleryImages.length >= 2
-
-    if (!isValid) {
-      alert("Please fill all required fields: Name, Year, Client, Before Image, After Image, Description, Color Palette (at least 1), and Gallery (at least 2 photos)")
-      return
+        // Fallback to sample data if not found
+        const sampleProject: ProjectData = {
+          id: projectId,
+          title: "Sample Project",
+          client: "Sample Client",
+          location: "Sample Location",
+          description: "This is a sample project description.",
+          beforeImage: "/placeholder.svg",
+          afterImage: "/placeholder.svg",
+          galleryImages: ["/placeholder.svg"],
+          colorPalette: [{ color: "#000000" }],
+          features: ["Feature 1", "Feature 2"],
+          materials: ["Material 1", "Material 2"]
+        }
+        setCurrentData(sampleProject)
+      } catch (error) {
+        console.error("Error loading project:", error)
+      }
     }
 
-    // Show confirmation modal
+    loadProject()
+  }, [projectId])
+
+  // Update functions
+  const updateEditData = (field: keyof ProjectData, value: any) => {
+    setCurrentData(prev => prev ? { ...prev, [field]: value } : null)
+  }
+
+  const updateArrayField = (field: keyof ProjectData, index: number, value: string) => {
+    if (!currentData) return
+    const arrayField = currentData[field] as string[]
+    const updatedArray = [...arrayField]
+    updatedArray[index] = value
+    updateEditData(field, updatedArray)
+  }
+
+  const addArrayItem = (field: keyof ProjectData) => {
+    if (!currentData) return
+    const arrayField = currentData[field] as string[]
+    updateEditData(field, [...arrayField, ""])
+  }
+
+  const removeArrayItem = (field: keyof ProjectData, index: number) => {
+    if (!currentData) return
+    const arrayField = currentData[field] as string[]
+    const updatedArray = arrayField.filter((_, i) => i !== index)
+    updateEditData(field, updatedArray)
+  }
+
+  // Color palette functions
+  const addColor = () => {
+    if (!currentData) return
+    updateEditData("colorPalette", [...currentData.colorPalette, { color: "#000000" }])
+  }
+
+  const removeColor = (index: number) => {
+    if (!currentData || currentData.colorPalette.length <= 1) return
+    const updatedPalette = currentData.colorPalette.filter((_, i) => i !== index)
+    updateEditData("colorPalette", updatedPalette)
+  }
+
+  const updateColorPalette = (index: number, color: string) => {
+    if (!currentData) return
+    const updatedPalette = currentData.colorPalette.map((item, i) => 
+      i === index ? { ...item, color } : item
+    )
+    updateEditData("colorPalette", updatedPalette)
+  }
+
+  const handleColorClick = (index: number, event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    setColorPickerPosition({
+      top: rect.bottom + 10,
+      left: rect.left
+    })
+    setColorPickerIndex(index)
+  }
+
+  // Gallery functions
+  const addGalleryImage = () => {
+    galleryAddRef.current?.click()
+  }
+
+  const handleAddGalleryImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file && currentData) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const imageUrl = event.target?.result as string
+        updateEditData("galleryImages", [...currentData.galleryImages, imageUrl])
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeGalleryImage = (index: number) => {
+    if (!currentData || currentData.galleryImages.length <= 1) return
+    const updatedImages = currentData.galleryImages.filter((_, i) => i !== index)
+    updateEditData("galleryImages", updatedImages)
+  }
+
+  // File handling
+  const triggerFileInput = (type: "beforeImage" | "afterImage") => {
+    if (type === "beforeImage") {
+      beforeImageRef.current?.click()
+    } else {
+      afterImageRef.current?.click()
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "beforeImage" | "afterImage") => {
+    const file = e.target.files?.[0]
+    if (file && currentData) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const imageUrl = event.target?.result as string
+        updateEditData(type, imageUrl)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  // Custom field functions
+  const updateCustomField = (fieldId: string, updates: Partial<{ label: string; value: any }>) => {
+    if (!currentData) return
+    const updatedFields = currentData.customFields?.map(field => 
+      field.id === fieldId ? { ...field, ...updates } : field
+    ) || []
+    updateEditData("customFields", updatedFields)
+  }
+
+  const addCustomListItem = (fieldId: string) => {
+    if (!currentData) return
+    const field = currentData.customFields?.find(f => f.id === fieldId)
+    if (field && Array.isArray(field.value)) {
+      const updatedValue = [...field.value, ""]
+      updateCustomField(fieldId, { value: updatedValue })
+    }
+  }
+
+  const removeCustomListItem = (fieldId: string, index: number) => {
+    if (!currentData) return
+    const field = currentData.customFields?.find(f => f.id === fieldId)
+    if (field && Array.isArray(field.value)) {
+      const updatedValue = field.value.filter((_, i) => i !== index)
+      updateCustomField(fieldId, { value: updatedValue })
+    }
+  }
+
+  const updateCustomListItem = (fieldId: string, index: number, value: string) => {
+    if (!currentData) return
+    const field = currentData.customFields?.find(f => f.id === fieldId)
+    if (field && Array.isArray(field.value)) {
+      const updatedValue = [...field.value]
+      updatedValue[index] = value
+      updateCustomField(fieldId, { value: updatedValue })
+    }
+  }
+
+  // Save and delete functions
+  const handleSave = () => {
     setShowSaveConfirmation(true)
   }
 
   const handleConfirmSave = () => {
-    // Save to localStorage
-    const savedProjects = localStorage.getItem("portfolioProjects")
-    if (savedProjects) {
-      const projects = JSON.parse(savedProjects)
-      const updatedProjects = projects.map((p: { id: number }) => 
-        p.id === editData.id ? editData : p
-      )
-      localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
+    if (!currentData) return
+    
+    try {
+      const savedProjects = localStorage.getItem("portfolioProjects")
+      const projects = savedProjects ? JSON.parse(savedProjects) : []
+      const projectIndex = projects.findIndex((p: any) => String(p.id) === String(projectId))
+      
+      if (projectIndex !== -1) {
+        projects[projectIndex] = currentData
+        localStorage.setItem("portfolioProjects", JSON.stringify(projects))
+      }
+      
+      setShowSaveConfirmation(false)
+      setIsEditing(false)
+    } catch (error) {
+      console.error("Error saving project:", error)
     }
-
-    setProjectData({ ...editData })
-    setIsEditing(false)
-    setShowSaveConfirmation(false)
-  }
-
-  const handleCancel = () => {
-    setEditData({ ...projectData })
-    setIsEditing(false)
   }
 
   const handleDelete = () => {
@@ -193,283 +266,106 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
   }
 
   const confirmDelete = () => {
-    // Logic to delete the project
-    router.back()
-  }
-
-  const cancelDelete = () => {
-    setShowConfirmationModal(false)
-  }
-
-  const updateEditData = (field: keyof ProjectData, value: string | number | boolean | string[] | { color: string }[]) => {
-    setEditData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const updateArrayField = (field: "features" | "materials", index: number, value: string) => {
-    setEditData((prev) => ({
-      ...prev,
-      [field]: prev[field].map((item, i) => (i === index ? value : item)),
-    }))
-  }
-
-  const addArrayItem = (field: "features" | "materials") => {
-    setEditData((prev) => ({
-      ...prev,
-      [field]: [...prev[field], ""],
-    }))
-  }
-
-  const removeArrayItem = (field: "features" | "materials", index: number) => {
-    setEditData((prev) => ({
-      ...prev,
-      [field]: prev[field].filter((_, i) => i !== index),
-    }))
-  }
-
-  const updateColorPalette = (index: number, value: string) => {
-    setEditData((prev) => ({
-      ...prev,
-      colorPalette: prev.colorPalette.map((color, i) => (i === index ? { color: value } : color)),
-    }))
-  }
-
-  const addColor = () => {
-    setEditData((prev) => ({
-      ...prev,
-      colorPalette: [...prev.colorPalette, { color: "#000000" }],
-    }))
-  }
-
-  const removeColor = (index: number) => {
-    setEditData((prev) => ({
-      ...prev,
-      colorPalette: prev.colorPalette.filter((_, i) => i !== index),
-    }))
-  }
-
-  const addGalleryImage = () => {
-    galleryAddRef.current?.click()
-  }
-
-  const removeGalleryImage = (index: number) => {
-    setEditData((prev) => ({
-      ...prev,
-      galleryImages: prev.galleryImages.filter((_, i) => i !== index),
-    }))
-  }
-
-  const updateGalleryImage = (index: number, url: string) => {
-    setEditData((prev) => ({
-      ...prev,
-      galleryImages: prev.galleryImages.map((img, i) => (i === index ? url : img)),
-    }))
-  }
-
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    field: "beforeImage" | "afterImage" | "galleryImages",
-    index?: number,
-  ) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const result = e.target?.result as string
-        if (field === "galleryImages" && index !== undefined) {
-          updateGalleryImage(index, result)
-        } else {
-          updateEditData(field, result)
-        }
-      }
-      reader.readAsDataURL(file)
+    try {
+      const savedProjects = localStorage.getItem("portfolioProjects")
+      const projects = savedProjects ? JSON.parse(savedProjects) : []
+      const updatedProjects = projects.filter((p: any) => String(p.id) !== String(projectId))
+      localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
+      
+      setShowConfirmationModal(false)
+      router.push("/dashboard/manage-portfolio")
+    } catch (error) {
+      console.error("Error deleting project:", error)
     }
   }
 
-  const triggerFileInput = (field: "beforeImage" | "afterImage" | "galleryImages", index?: number) => {
-    if (field === "beforeImage" && beforeImageRef.current) {
-      beforeImageRef.current.click()
-    } else if (field === "afterImage" && afterImageRef.current) {
-      afterImageRef.current.click()
-    } else if (field === "galleryImages" && index !== undefined && galleryImageRefs.current[index]) {
-      galleryImageRefs.current[index]?.click()
-    }
+  if (!currentData) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-[#15171a] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Loading...</h2>
+          <p className="text-gray-600 dark:text-gray-300">Please wait while we load the project details.</p>
+        </div>
+      </div>
+    )
   }
-
-  const handleAddGalleryImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const result = e.target?.result as string
-        setEditData((prev) => ({
-          ...prev,
-          galleryImages: [...prev.galleryImages, result],
-        }))
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleClickOutside = (event: React.MouseEvent) => {
-    if (colorPickerIndex !== null) {
-      setColorPickerIndex(null)
-      setColorPickerPosition(null)
-      setOriginalColor("")
-    }
-  }
-
-  const handleColorClick = (index: number, event: React.MouseEvent<HTMLDivElement>) => {
-    if (isEditing) {
-      event.stopPropagation()
-      const rect = event.currentTarget.getBoundingClientRect()
-
-      // Position picker directly below and centered on the clicked color
-      const left = rect.left + (rect.width / 2) - 50 // Center the picker (picker width ~100px)
-      const top = rect.bottom + 10 // 10px below the color
-
-      setColorPickerPosition({ top, left })
-      setOriginalColor(editData.colorPalette[index]?.color || "#000000")
-      setColorPickerIndex(colorPickerIndex === index ? null : index)
-    }
-  }
-
-  // Custom field handlers
-  const updateCustomField = (id: string, updates: Partial<CustomField>) => {
-    setEditData((prev) => ({
-      ...prev,
-      customFields: prev.customFields?.map((field) => (field.id === id ? { ...field, ...updates } : field)),
-    }))
-  }
-
-  const updateCustomListItem = (fieldId: string, index: number, value: string) => {
-    setEditData((prev) => ({
-      ...prev,
-      customFields: prev.customFields?.map((field) =>
-        field.id === fieldId && field.type === "list"
-          ? {
-              ...field,
-              value: (field.value as string[]).map((item, i) => (i === index ? value : item)),
-            }
-          : field,
-      ),
-    }))
-  }
-
-  const addCustomListItem = (fieldId: string) => {
-    setEditData((prev) => ({
-      ...prev,
-      customFields: prev.customFields?.map((field) =>
-        field.id === fieldId && field.type === "list" ? { ...field, value: [...(field.value as string[]), ""] } : field,
-      ),
-    }))
-  }
-
-  const removeCustomListItem = (fieldId: string, index: number) => {
-    setEditData((prev) => ({
-      ...prev,
-      customFields: prev.customFields?.map((field) =>
-        field.id === fieldId && field.type === "list"
-          ? {
-              ...field,
-              value: (field.value as string[]).filter((_, i) => i !== index),
-            }
-          : field,
-      ),
-    }))
-  }
-
-  const currentData = isEditing ? editData : projectData
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6" onClick={handleClickOutside}>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+    <div className="min-h-screen bg-white dark:bg-[#15171a] w-full">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-4">
           <Button
             variant="ghost"
+            size="sm"
             onClick={() => router.back()}
-            className="text-gray-600 hover:text-gray-800 transition-colors"
+            className="flex items-center gap-2 p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white"
           >
-            <ArrowLeftIcon />
-            <span className="ml-2">Back</span>
+            <ArrowLeft className="w-4 h-4" />
+            Back
           </Button>
-
-          <div className="flex gap-3">
-            {!isEditing ? (
-              <>
-                <Button
-                  onClick={handleEdit}
-                  className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200 hover:shadow-xl"
-                >
-                  <EditIcon />
-                  <span className="ml-2">Edit</span>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  onClick={handleSave}
-                  className={`${
-                    editData.name?.trim() && 
-                    editData.year?.trim() && 
-                    editData.client?.trim() && 
-                    editData.beforeImage && 
-                    editData.afterImage && 
-                    editData.description?.trim() && 
-                    editData.colorPalette?.length > 0 && 
-                    editData.galleryImages?.length >= 2
-                      ? "bg-[#001F4B] hover:bg-[#001F4B]/90" 
-                      : "bg-gray-400 cursor-not-allowed hover:bg-gray-400"
-                  } text-white shadow-lg transition-all duration-200 hover:shadow-xl`}
-                  disabled={
-                    !(editData.name?.trim() && 
-                    editData.year?.trim() && 
-                    editData.client?.trim() && 
-                    editData.beforeImage && 
-                    editData.afterImage && 
-                    editData.description?.trim() && 
-                    editData.colorPalette?.length > 0 && 
-                    editData.galleryImages?.length >= 2)
-                  }
-                >
-                  Save
-                </Button>
-                <Button
-                  onClick={handleCancel}
-                  variant="outline"
-                  className="border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white transition-all duration-200 bg-transparent"
-                >
-                  Cancel
-                </Button>
-              </>
-            )}
-          </div>
+          <h1 className="text-3xl font-bold text-[#001F4B] dark:text-red-500 font-montserrat uppercase tracking-wide">
+            {isEditing ? "Edit Project" : "View Project"}
+          </h1>
         </div>
+        <div className="flex items-center gap-3">
+          {isEditing ? (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => setIsEditing(false)}
+                className="border-[#001F4B] dark:border-white/60 text-[#001F4B] dark:text-white hover:bg-[#001F4B] dark:hover:bg-red-500 hover:text-white dark:hover:text-white"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSave}
+                className="bg-[#001F4B] text-white hover:bg-[#001F4B]/90 dark:bg-red-500 dark:hover:bg-red-600"
+              >
+                Save Changes
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={handleDelete}
+                variant="outline"
+                className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => setIsEditing(true)}
+                className="bg-[#001F4B] text-white hover:bg-[#001F4B]/90 dark:bg-red-500 dark:hover:bg-red-600"
+              >
+                Edit
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
 
+      <div className="p-6 space-y-8">
         {/* Project Title */}
-        <div className="mb-8 bg-white rounded-xl p-6 shadow-sm">
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <h2 className="text-2xl font-bold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">PROJECT TITLE</h2>
           {isEditing ? (
             <Input
-              value={currentData.name}
-              onChange={(e) => updateEditData("name", e.target.value)}
-              className="text-3xl font-bold border-none p-0 h-auto text-[#001F4B] font-montserrat bg-transparent focus:ring-0"
+              value={currentData.title}
+              onChange={(e) => updateEditData("title", e.target.value)}
+              className="text-2xl font-bold border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
             />
           ) : (
-            <h1 className="text-3xl font-bold text-[#001F4B] font-montserrat">{currentData.name}</h1>
-          )}
-          {isEditing ? (
-            <Input
-              value={currentData.year}
-              onChange={(e) => updateEditData("year", e.target.value)}
-              className="text-gray-500 mt-2 w-20 border-gray-300 rounded-lg"
-            />
-          ) : (
-            <p className="text-gray-500 mt-2 font-medium">{currentData.year}</p>
+            <p className="text-2xl font-bold text-gray-800 dark:text-white font-montserrat">
+              {currentData.title}
+            </p>
           )}
         </div>
 
-        {/* Project Details */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+        {/* Project Information */}
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">PROJECT INFORMATION</h2>
+          
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-6">
               {[
@@ -481,26 +377,27 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 { label: "STATUS", field: "status" as keyof ProjectData, required: false },
               ].map(({ label, field, required }) => {
                 const fieldValue = currentData[field] as string
+                
                 // Only show field if it has a value OR if we're editing OR if it's required
                 if (!isEditing && !required && (!fieldValue || fieldValue.trim() === "")) {
                   return null
                 }
                 
                 return (
-                <div key={field}>
-                  <p className="text-sm text-gray-500 font-montserrat font-medium mb-1">{label}</p>
-                  {isEditing ? (
-                    <Input
-                        value={fieldValue}
-                      onChange={(e) => updateEditData(field, e.target.value)}
-                      className="border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                    />
-                  ) : (
-                    <p className="font-medium text-gray-800 font-montserrat bg-gray-50 p-2 rounded-lg">
-                        {fieldValue}
-                    </p>
-                  )}
-                </div>
+                  <div key={field}>
+                    <p className="text-sm text-gray-500 dark:text-gray-300 font-montserrat font-medium mb-1">{label}</p>
+                    {isEditing ? (
+                      <Input
+                        value={fieldValue || ""}
+                        onChange={(e) => updateEditData(field, e.target.value)}
+                        className="border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                      />
+                    ) : (
+                      <p className="font-medium text-gray-800 dark:text-white font-montserrat bg-gray-50 dark:bg-[#15171a] p-2 rounded-lg">
+                        {fieldValue || "Not specified"}
+                      </p>
+                    )}
+                  </div>
                 )
               })}
             </div>
@@ -508,7 +405,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         </div>
 
         {/* Before/After Images */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <div className="relative group">
             <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm z-10 font-medium">
               Before
@@ -524,7 +421,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 />
                 <Button
                   onClick={() => triggerFileInput("beforeImage")}
-                  className="absolute top-4 right-4 z-10 bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200"
+                  className="absolute top-4 right-4 z-10 bg-[#001F4B] hover:bg-[#001F4B]/90 dark:bg-red-500 dark:hover:bg-red-600 text-white shadow-lg transition-all duration-200"
                   size="sm"
                 >
                   <UploadIcon />
@@ -540,6 +437,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
               className="w-full h-64 object-cover rounded-xl shadow-lg transition-transform duration-200 group-hover:scale-[1.02]"
             />
           </div>
+
           <div className="relative group">
             <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm z-10 font-medium">
               After
@@ -555,7 +453,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 />
                 <Button
                   onClick={() => triggerFileInput("afterImage")}
-                  className="absolute top-4 right-4 z-10 bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200"
+                  className="absolute top-4 right-4 z-10 bg-[#001F4B] hover:bg-[#001F4B]/90 dark:bg-red-500 dark:hover:bg-red-600 text-white shadow-lg transition-all duration-200"
                   size="sm"
                 >
                   <UploadIcon />
@@ -575,35 +473,35 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 
         {/* Inspiration Section - only show if has content or editing */}
         {(isEditing || (currentData.inspiration && currentData.inspiration.trim() !== "")) && (
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">INSPIRATION</h2>
-          {isEditing ? (
-            <Textarea
-              value={currentData.inspiration}
-              onChange={(e) => updateEditData("inspiration", e.target.value)}
-              className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-              rows={2}
-            />
-          ) : (
-            <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
-              {currentData.inspiration}
-            </p>
-          )}
-        </div>
+          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">INSPIRATION</h2>
+            {isEditing ? (
+              <Textarea
+                value={currentData.inspiration || ""}
+                onChange={(e) => updateEditData("inspiration", e.target.value)}
+                className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                rows={2}
+              />
+            ) : (
+              <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
+                {currentData.inspiration}
+              </p>
+            )}
+          </div>
         )}
 
         {/* Description Section */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">DESCRIPTION</h2>
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">DESCRIPTION</h2>
           {isEditing ? (
             <Textarea
               value={currentData.description}
               onChange={(e) => updateEditData("description", e.target.value)}
-              className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+              className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
               rows={4}
             />
           ) : (
-            <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
+            <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
               {currentData.description}
             </p>
           )}
@@ -611,114 +509,114 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
 
         {/* Features Section - only show if has features or editing */}
         {(isEditing || (currentData.features && currentData.features.some(f => f && f.trim() !== ""))) && (
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">FEATURES</h2>
-          <ul className="space-y-3">
-            {currentData.features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
-                {isEditing ? (
-                  <div className="flex items-center gap-2 flex-1">
-                    <Input
-                      value={feature}
-                      onChange={(e) => updateArrayField("features", index, e.target.value)}
-                      className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                    />
-                    <Button
-                      onClick={() => removeArrayItem("features", index)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                    >
-                      X
-                    </Button>
-                  </div>
-                ) : (
+          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">FEATURES</h2>
+            <ul className="space-y-3">
+              {currentData.features?.map((feature, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-[#001F4B] dark:bg-red-500 rounded-full"></span>
+                  {isEditing ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <Input
+                        value={feature}
+                        onChange={(e) => updateArrayField("features", index, e.target.value)}
+                        className="flex-1 border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                      />
+                      <Button
+                        onClick={() => removeArrayItem("features", index)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ) : (
                     feature && feature.trim() && (
-                  <span className="text-gray-600 font-montserrat">{feature}</span>
+                      <span className="text-gray-600 dark:text-gray-300 font-montserrat">{feature}</span>
                     )
-                )}
-              </li>
-            ))}
-            {isEditing && (
-              <li>
-                <Button
-                  onClick={() => addArrayItem("features")}
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
-                >
-                  <PlusIcon />
-                  <span className="ml-1">Add Feature</span>
-                </Button>
-              </li>
-            )}
-          </ul>
-        </div>
+                  )}
+                </li>
+              )) || []}
+              {isEditing && (
+                <li>
+                  <Button
+                    onClick={() => addArrayItem("features")}
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 border-[#001F4B] dark:border-red-500 text-[#001F4B] dark:text-red-500 hover:bg-[#001F4B] dark:hover:bg-red-500 hover:text-white"
+                  >
+                    <PlusIcon />
+                    <span className="ml-1">Add Feature</span>
+                  </Button>
+                </li>
+              )}
+            </ul>
+          </div>
         )}
 
         {/* Materials Section - only show if has materials or editing */}
         {(isEditing || (currentData.materials && currentData.materials.some(m => m && m.trim() !== ""))) && (
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">MATERIALS</h2>
-          <ul className="space-y-3">
-            {currentData.materials.map((material, index) => (
-              <li key={index} className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
-                {isEditing ? (
-                  <div className="flex items-center gap-2 flex-1">
-                    <Input
-                      value={material}
-                      onChange={(e) => updateArrayField("materials", index, e.target.value)}
-                      className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
-                    />
-                    <Button
-                      onClick={() => removeArrayItem("materials", index)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                    >
-                      X
-                    </Button>
-                  </div>
-                ) : (
+          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">MATERIALS</h2>
+            <ul className="space-y-3">
+              {currentData.materials?.map((material, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-[#001F4B] dark:bg-red-500 rounded-full"></span>
+                  {isEditing ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <Input
+                        value={material}
+                        onChange={(e) => updateArrayField("materials", index, e.target.value)}
+                        className="flex-1 border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                      />
+                      <Button
+                        onClick={() => removeArrayItem("materials", index)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ) : (
                     material && material.trim() && (
-                  <span className="text-gray-600 font-montserrat">{material}</span>
+                      <span className="text-gray-600 dark:text-gray-300 font-montserrat">{material}</span>
                     )
-                )}
-              </li>
-            ))}
-            {isEditing && (
-              <li>
-                <Button
-                  onClick={() => addArrayItem("materials")}
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
-                >
-                  <PlusIcon />
-                  <span className="ml-1">Add Material</span>
-                </Button>
-              </li>
-            )}
-          </ul>
-        </div>
+                  )}
+                </li>
+              )) || []}
+              {isEditing && (
+                <li>
+                  <Button
+                    onClick={() => addArrayItem("materials")}
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 border-[#001F4B] dark:border-red-500 text-[#001F4B] dark:text-red-500 hover:bg-[#001F4B] dark:hover:bg-red-500 hover:text-white"
+                  >
+                    <PlusIcon />
+                    <span className="ml-1">Add Material</span>
+                  </Button>
+                </li>
+              )}
+            </ul>
+          </div>
         )}
 
-        {/* Color Palette Section - required */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8 relative">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">COLOR PALETTE</h2>
+        {/* Color Palette Section */}
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm relative">
+          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">COLOR PALETTE</h2>
           <div className="flex flex-wrap gap-4">
-            {currentData.colorPalette.map((color, index) => (
+            {currentData.colorPalette?.map((color, index) => (
               <div key={index} className="relative">
                 <div
-                  className="w-16 h-16 rounded-xl border-2 border-gray-200 cursor-pointer shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105 relative"
-                  style={{ backgroundColor: color.color }}
+                  className="w-16 h-16 rounded-xl border-2 border-gray-200 dark:border-white/60 cursor-pointer shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105 relative"
+                  style={{ backgroundColor: color.color || color }}
                   onClick={(e) => handleColorClick(index, e)}
                 />
                 {!isEditing && (
-                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 font-mono">
-                    {color.color.toUpperCase()}
+                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 dark:text-white font-mono">
+                    {(color.color || color).toUpperCase()}
                   </div>
                 )}
                 {isEditing && (
@@ -734,14 +632,14 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                   </Button>
                 )}
               </div>
-            ))}
+            )) || []}
             {isEditing && (
               <div className="flex items-center">
                 <Button
                   onClick={addColor}
                   variant="outline"
                   size="sm"
-                  className="h-16 w-16 rounded-xl bg-transparent border-2 border-dashed border-gray-300 hover:border-[#001F4B] hover:bg-[#001F4B]/5 transition-all duration-200"
+                  className="h-16 w-16 rounded-xl bg-transparent border-2 border-dashed border-gray-300 dark:border-white/60 hover:border-[#001F4B] dark:hover:border-red-500 hover:bg-[#001F4B]/5 dark:hover:bg-red-500/5 transition-all duration-200"
                 >
                   <PlusIcon />
                 </Button>
@@ -750,13 +648,13 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
 
-        {/* Gallery Section - required */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat">GALLERY</h2>
+        {/* Gallery Section */}
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">GALLERY</h2>
           {isEditing ? (
             <div className="space-y-4">
               <div className="flex flex-wrap gap-3">
-                {currentData.galleryImages.map((image, index) => (
+                {currentData.galleryImages?.map((image, index) => (
                   <div key={index} className="relative group">
                     <Image
                       src={image || "/placeholder.svg?height=120&width=120&query=gallery image"}
@@ -773,7 +671,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                       <span className="text-red-500 text-sm font-bold hover:text-red-700">X</span>
                     </Button>
                   </div>
-                ))}
+                )) || []}
               </div>
               <input
                 type="file"
@@ -784,7 +682,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
               />
               <Button
                 onClick={addGalleryImage}
-                className="bg-[#001F4B] hover:bg-[#001F4B]/90 text-white shadow-lg transition-all duration-200"
+                className="bg-[#001F4B] hover:bg-[#001F4B]/90 dark:bg-red-500 dark:hover:bg-red-600 text-white shadow-lg transition-all duration-200"
               >
                 <PlusIcon />
                 <span className="ml-1">Add Gallery Image</span>
@@ -792,7 +690,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             </div>
           ) : (
             <div className="flex flex-wrap gap-3">
-              {currentData.galleryImages.map((image, index) => (
+              {currentData.galleryImages?.map((image, index) => (
                 <div key={index} className="relative group">
                   <Image
                     src={image || "/placeholder.svg?height=120&width=120&query=gallery image"}
@@ -802,22 +700,93 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                     className="w-24 h-24 object-cover rounded-lg shadow-md transition-transform duration-200 group-hover:scale-105"
                   />
                 </div>
-              ))}
+              )) || []}
             </div>
           )}
         </div>
 
+        {/* Content Sections */}
+        {currentData.contentSections && currentData.contentSections.length > 0 && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-[#001F4B] dark:text-red-500 font-montserrat uppercase tracking-wide">CONTENT SECTIONS</h2>
+            {currentData.contentSections.map((section) => (
+              <div key={section.id} className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+                {section.title && (
+                  <h3 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">
+                    {section.title}
+                  </h3>
+                )}
+                
+                {section.type === "description" && (
+                  <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
+                    {section.content as string}
+                  </p>
+                )}
+
+                {section.type === "photo" && (
+                  <div className="relative">
+                    <Image
+                      src={typeof section.content === "string" ? section.content : URL.createObjectURL(section.content as File)}
+                      alt="Content photo"
+                      width={600}
+                      height={400}
+                      className="w-full h-64 object-cover rounded-lg shadow-md"
+                    />
+                  </div>
+                )}
+
+                {section.type === "video" && (
+                  <div className="relative">
+                    <video
+                      src={typeof section.content === "string" ? section.content : URL.createObjectURL(section.content as File)}
+                      controls
+                      className="w-full h-64 object-cover rounded-lg shadow-md"
+                    />
+                  </div>
+                )}
+
+                {section.type === "list" && (
+                  <ul className="space-y-3">
+                    {(section.content as string[]).map((item, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <span className="w-2 h-2 bg-[#001F4B] dark:bg-red-500 rounded-full"></span>
+                        <span className="text-gray-600 dark:text-gray-300 font-montserrat">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {section.type === "360tour" && (
+                  <div className="space-y-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-300 font-montserrat">
+                      360° Tour Link:
+                    </p>
+                    <a 
+                      href={section.content as string}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline break-all font-montserrat"
+                    >
+                      {section.content as string}
+                    </a>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Custom Fields Section */}
         {currentData.customFields && currentData.customFields.length > 0 && (
-          <div className="space-y-4 mb-8">
+          <div className="space-y-4">
             {currentData.customFields.map((field) => (
-              <div key={field.id} className="bg-white rounded-xl p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-4 text-[#001F4B] font-montserrat uppercase">
+              <div key={field.id} className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat uppercase">
                   {isEditing ? (
                     <Input
                       value={field.label}
                       onChange={(e) => updateCustomField(field.id, { label: e.target.value })}
-                      className="text-xl font-semibold border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                      className="text-xl font-semibold border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                     />
                   ) : (
                     field.label
@@ -829,11 +798,11 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                     <Textarea
                       value={field.value as string}
                       onChange={(e) => updateCustomField(field.id, { value: e.target.value })}
-                      className="w-full border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                      className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                       rows={3}
                     />
                   ) : (
-                    <p className="text-gray-600 font-montserrat leading-relaxed bg-gray-50 p-4 rounded-lg">
+                    <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
                       {field.value as string}
                     </p>
                   )
@@ -841,27 +810,27 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                   <ul className="space-y-3">
                     {(field.value as string[]).map((item, index) => (
                       <li key={index} className="flex items-center gap-3">
-                        <span className="w-2 h-2 bg-[#001F4B] rounded-full"></span>
+                        <span className="w-2 h-2 bg-[#001F4B] dark:bg-red-500 rounded-full"></span>
                         {isEditing ? (
                           <div className="flex items-center gap-2 flex-1">
                             <Input
                               value={item}
                               onChange={(e) => updateCustomListItem(field.id, index, e.target.value)}
-                              className="flex-1 border-gray-200 rounded-lg focus:border-[#001F4B] focus:ring-[#001F4B]"
+                              className="flex-1 border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                             />
                             {(field.value as string[]).length > 1 && (
                               <Button
                                 onClick={() => removeCustomListItem(field.id, index)}
                                 variant="ghost"
                                 size="sm"
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                               >
                                 X
                               </Button>
                             )}
                           </div>
                         ) : (
-                          <span className="text-gray-600 font-montserrat">{item}</span>
+                          <span className="text-gray-600 dark:text-gray-300 font-montserrat">{item}</span>
                         )}
                       </li>
                     ))}
@@ -871,7 +840,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                           onClick={() => addCustomListItem(field.id)}
                           variant="outline"
                           size="sm"
-                          className="mt-2 border-[#001F4B] text-[#001F4B] hover:bg-[#001F4B] hover:text-white"
+                          className="mt-2 border-[#001F4B] dark:border-red-500 text-[#001F4B] dark:text-red-500 hover:bg-[#001F4B] dark:hover:bg-red-500 hover:text-white"
                         >
                           <PlusIcon />
                           <span className="ml-1">Add Item</span>
@@ -886,9 +855,10 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         )}
       </div>
 
+      {/* Color Picker Modal */}
       {isEditing && colorPickerIndex !== null && colorPickerPosition && (
         <div
-          className="fixed z-[99999] bg-white p-4 rounded-xl shadow-2xl border-2 border-[#001F4B]/20"
+          className="fixed z-[99999] bg-white dark:bg-[#1a1d23] p-4 rounded-xl shadow-2xl border-2 border-[#001F4B]/20 dark:border-red-500/20"
           style={{
             top: `${colorPickerPosition.top}px`,
             left: `${colorPickerPosition.left}px`,
@@ -897,26 +867,27 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         >
           {/* Arrow pointing up to the color */}
           <div 
-            className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l-2 border-t-2 border-[#001F4B]/20 rotate-45"
+            className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white dark:bg-[#1a1d23] border-l-2 border-t-2 border-[#001F4B]/20 dark:border-red-500/20 rotate-45"
           />
           
           <div className="flex flex-col items-center space-y-3 relative">
-            <p className="text-xs font-medium text-gray-600 uppercase">Select Color</p>
+            <p className="text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Select Color</p>
             <input
               type="color"
               value={currentData.colorPalette[colorPickerIndex]?.color || "#000000"}
               onChange={(e) => {
                 updateColorPalette(colorPickerIndex, e.target.value)
               }}
-              className="w-20 h-20 rounded-lg border-2 border-gray-200 cursor-pointer hover:border-[#001F4B] transition-colors"
+              className="w-20 h-20 rounded-lg border-2 border-gray-200 dark:border-white/60 cursor-pointer hover:border-[#001F4B] dark:hover:border-red-500 transition-colors"
             />
-            <div className="text-sm font-mono font-bold text-[#001F4B]">
+            <div className="text-sm font-mono font-bold text-[#001F4B] dark:text-red-500">
               {currentData.colorPalette[colorPickerIndex]?.color.toUpperCase()}
             </div>
           </div>
         </div>
       )}
 
+      {/* Confirmation Modals */}
       {showConfirmationModal && (
         <ConfirmationModal
           isOpen={showConfirmationModal}
