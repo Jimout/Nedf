@@ -125,7 +125,7 @@ export default function DashboardOverview() {
       date: "2024-01-10",
       by: "Emily Davis",
       badge: "bg-[#001F4B]/10 text-[#001F4B] border-[#001F4B]/20 dark:bg-[#ec1e24]/10 dark:text-[#ec1e24] dark:border-[#ec1e24]/20",
-      link: "/dashboard/manage-testimonials",
+      link: "/dashboard/manage-review",
     },
     {
       type: "Portfolio",
@@ -221,19 +221,11 @@ export default function DashboardOverview() {
         <div className="lg:col-span-2">
           <Card className="border-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.3)] bg-white dark:bg-[#1a1d23] dark:border-gray-700">
             <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-2xl font-bold text-[#001F4B] dark:text-[#ec1e24]">Recent Activity</CardTitle>
-                  <CardDescription className="text-[#333333]/60 dark:text-white/60 mt-1.5">
-                    Latest updates across your portfolio
-                  </CardDescription>
-                </div>
-                <Link href="/dashboard/activity-log">
-                  <Button variant="ghost" size="sm" className="text-[#001F4B] dark:text-[#ec1e24] hover:bg-[#001F4B]/5 dark:hover:bg-[#ec1e24]/10">
-                    View All
-                    <ArrowUpRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
+              <div>
+                <CardTitle className="text-2xl font-bold text-[#001F4B] dark:text-[#ec1e24]">Recent Activity</CardTitle>
+                <CardDescription className="text-[#333333]/60 dark:text-white/60 mt-1.5">
+                  Latest 5 updates across your dashboard
+                </CardDescription>
               </div>
             </CardHeader>
             <CardContent className="px-0">

@@ -36,7 +36,7 @@ export default function ManageBlogPage() {
   const router = useRouter()
   const [blogs, setBlogs] = useState<Blog[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
+  const itemsPerPage = 8
   const [searchTerm, setSearchTerm] = useState("")
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; blogId: string | null }>({
     isOpen: false,

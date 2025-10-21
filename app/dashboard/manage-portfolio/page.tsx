@@ -69,7 +69,7 @@ export default function ManagePortfolioPage() {
   const router = useRouter()
   const [projects, setProjects] = useState<Project[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
+  const itemsPerPage = 8
   const [searchTerm, setSearchTerm] = useState("")
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; projectId: number | null }>({
     isOpen: false,
@@ -194,18 +194,20 @@ export default function ManagePortfolioPage() {
   }, [searchTerm])
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#001F4B] dark:text-red-500 font-montserrat">Manage Portfolio</h1>
-        <Button onClick={handleAddProject} className="bg-[#001F4B] dark:bg-red-500 hover:bg-[#001F4B]/90 dark:hover:bg-red-600 text-white font-montserrat w-full sm:w-auto">
-          <PlusIcon />
-          <span className="ml-2">Add New Project</span>
-        </Button>
-      </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#15171a] p-4 sm:p-6 font-['Montserrat']">
+      <div className="w-full">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#ec1e24]">Manage Portfolio</h1>
+          <Button onClick={handleAddProject} className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white w-full sm:w-auto">
+            <PlusIcon />
+            <span className="ml-2">Add New Project</span>
+          </Button>
+        </div>
 
       <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search projects..." />
 
-      {filteredProjects.length === 0 ? (
+      <div className="mt-6">
+        {filteredProjects.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700 p-8 text-center">
           <p className="text-gray-500 dark:text-white font-montserrat">
             {searchTerm
@@ -243,19 +245,18 @@ export default function ManagePortfolioPage() {
                     <TableCell className="text-right">
                       <div className="flex gap-1 sm:gap-2 justify-end">
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
                           onClick={() => handleViewProject(project.id)}
-                          className="font-montserrat text-xs sm:text-sm border-[#001F4B] dark:border-white/50 text-[#001F4B] dark:text-white hover:bg-[#001F4B] dark:hover:bg-[#1a1d23] hover:text-white bg-transparent dark:bg-[#1a1d23]"
+                          className="hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
                         >
                           <EyeIcon />
-                          <span className="ml-1 hidden sm:inline">View</span>
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteProject(project.id)}
-                          className="text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-[#1a1d23] font-montserrat border-red-600 dark:border-red-500 bg-transparent dark:bg-[#1a1d23]"
+                          className="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300"
                         >
                           <TrashIcon />
                         </Button>
@@ -273,7 +274,8 @@ export default function ManagePortfolioPage() {
             </div>
           )}
         </div>
-      )}
+        )}
+      </div>
 
       <ConfirmationModal
         isOpen={deleteModal.isOpen}
@@ -283,6 +285,7 @@ export default function ManagePortfolioPage() {
         message="Are you sure you want to delete this project? This action cannot be undone."
         type="delete"
       />
+      </div>
     </div>
   )
 }

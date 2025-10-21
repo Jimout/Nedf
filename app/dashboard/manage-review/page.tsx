@@ -22,7 +22,7 @@ interface Review {
 export default function ManageReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
+  const itemsPerPage = 8
   const [searchTerm, setSearchTerm] = useState("")
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null)

@@ -57,6 +57,8 @@ interface ProjectData {
   topology: string
   role: string
   status: string
+  category: string
+  customCategory: string
   beforeImage: string
   afterImage: string
   colorPalette: string[]
@@ -73,6 +75,7 @@ export default function AddProjectPage() {
   const [yearError, setYearError] = useState("")
   const [validationError, setValidationError] = useState("")
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
 
   const [projectData, setProjectData] = useState<ProjectData>({
     name: "",
@@ -82,10 +85,12 @@ export default function AddProjectPage() {
     area: "",
     topology: "",
     role: "",
-    status: "In Progress",
+    status: "",
+    category: "",
+    customCategory: "",
     beforeImage: "",
     afterImage: "",
-    colorPalette: ["#ffffff"],
+    colorPalette: [],
     galleryImages: [],
     contentSections: [],
     companyMap: "",
@@ -93,6 +98,21 @@ export default function AddProjectPage() {
 
   const handleInputChange = (field: keyof ProjectData, value: string) => {
     setProjectData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleCategoryChange = (value: string) => {
+    if (value === "Other") {
+      setShowCategoryModal(true)
+    } else {
+      setProjectData((prev) => ({ ...prev, category: value, customCategory: "" }))
+    }
+  }
+
+  const handleCustomCategorySubmit = () => {
+    if (projectData.customCategory.trim()) {
+      setProjectData((prev) => ({ ...prev, category: "Other" }))
+      setShowCategoryModal(false)
+    }
   }
 
   const handleYearChange = (value: string) => {
@@ -145,12 +165,10 @@ export default function AddProjectPage() {
   }
 
   const removeColor = (index: number) => {
-    if (projectData.colorPalette.length > 1) {
-      setProjectData((prev) => ({
-        ...prev,
-        colorPalette: prev.colorPalette.filter((_, i) => i !== index),
-      }))
-    }
+    setProjectData((prev) => ({
+      ...prev,
+      colorPalette: prev.colorPalette.filter((_, i) => i !== index),
+    }))
   }
 
   const handleImageUpload = (field: "beforeImage" | "afterImage" | "galleryImages", index?: number) => {
@@ -204,8 +222,19 @@ export default function AddProjectPage() {
   const handleConfirmedUpload = () => {
     const existingProjects = JSON.parse(localStorage.getItem("portfolioProjects") || "[]")
 
+    // Convert File objects to URLs before saving
+    const processedContentSections = projectData.contentSections.map(section => ({
+      ...section,
+      content: typeof section.content === "string" 
+        ? section.content 
+        : section.content instanceof File 
+          ? URL.createObjectURL(section.content)
+          : section.content
+    }))
+
     const newProject = {
       ...projectData,
+      contentSections: processedContentSections,
       id: Date.now(),
     }
 
@@ -348,13 +377,17 @@ export default function AddProjectPage() {
   }
 
   const isFormValid = () => {
+    const categoryValid = projectData.category.trim() !== "" && 
+      (projectData.category !== "Other" || projectData.customCategory.trim() !== "")
+    
     return (
       projectData.name.trim() !== "" &&
       projectData.year.trim() !== "" &&
       projectData.client.trim() !== "" &&
+      projectData.status.trim() !== "" &&
+      categoryValid &&
       projectData.beforeImage !== "" &&
       projectData.afterImage !== "" &&
-      projectData.colorPalette.length > 0 &&
       projectData.galleryImages.length >= 2 // At least 2 gallery photos
     )
   }
@@ -424,6 +457,29 @@ export default function AddProjectPage() {
                 />
               </div>
               <div>
+                <label className="block text-sm text-gray-700 dark:text-white/80 mb-2">
+                  Category <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span>
+                </label>
+                <Select value={projectData.category} onValueChange={handleCategoryChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select project category" className="opacity-50">
+                      {projectData.category === "Other" && projectData.customCategory 
+                        ? projectData.customCategory 
+                        : projectData.category}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Architectural Design">Architectural Design</SelectItem>
+                    <SelectItem value="Interior Design">Interior Design</SelectItem>
+                    <SelectItem value="Visualization">Visualization</SelectItem>
+                    <SelectItem value="Landscape">Landscape</SelectItem>
+                    <SelectItem value="Plan">Plan</SelectItem>
+                    <SelectItem value="Product">Product</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
                 <label className="block text-sm text-gray-700 dark:text-white/80 mb-2">Location</label>
                 <Input
                   value={projectData.location}
@@ -459,7 +515,7 @@ export default function AddProjectPage() {
                 <label className="block text-sm text-gray-700 dark:text-white/80 mb-2">Status</label>
                 <Select value={projectData.status} onValueChange={(value) => handleInputChange("status", value)}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Select project status" className="opacity-50" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="In Progress">In Progress</SelectItem>
@@ -593,7 +649,13 @@ export default function AddProjectPage() {
                       {section.content ? (
                         <div className="relative">
                           <img
-                            src={typeof section.content === "string" ? section.content : URL.createObjectURL(section.content as File)}
+                            src={
+                              typeof section.content === "string" 
+                                ? section.content 
+                                : section.content instanceof File 
+                                  ? URL.createObjectURL(section.content)
+                                  : "/placeholder.svg"
+                            }
                             alt="Content photo"
                             className="w-full h-48 object-cover rounded"
                           />
@@ -647,7 +709,13 @@ export default function AddProjectPage() {
                       {section.content ? (
                         <div className="relative">
                           <video
-                            src={typeof section.content === "string" ? section.content : URL.createObjectURL(section.content as File)}
+                            src={
+                              typeof section.content === "string" 
+                                ? section.content 
+                                : section.content instanceof File 
+                                  ? URL.createObjectURL(section.content)
+                                  : "/placeholder.svg"
+                            }
                             controls
                             className="w-full h-48 object-cover rounded"
                           />
@@ -683,7 +751,7 @@ export default function AddProjectPage() {
                         placeholder="Enter 360° tour embed URL or link"
                         className="w-full"
                       />
-                      <p className="text-sm text-gray-500">Enter the URL for your 360° tour (e.g., from Matterport, Roundme, etc.)</p>
+                      <p className="text-sm text-gray-500">Enter the embed URL for your 360° tour (e.g., from Matterport, Roundme, etc.). The tour will be interactive with mouse and touch controls.</p>
                     </div>
                   )}
 
@@ -761,7 +829,7 @@ export default function AddProjectPage() {
         <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
           <CardHeader>
             <CardTitle className="text-[#001F4B] dark:text-white font-medium">
-              Color Palette <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span>
+              Color Palette
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -773,7 +841,7 @@ export default function AddProjectPage() {
                     style={{ backgroundColor: color }}
                     onClick={(e) => handleColorClick(index, e)}
                   />
-                  {projectData.colorPalette.length > 1 && (
+                  {projectData.colorPalette.length > 0 && (
                     <button
                       onClick={() => removeColor(index)}
                       className="absolute -top-2 -right-2 w-6 h-6 bg-[#ec1e24]/100 dark:bg-[#ec1e24] text-white rounded-full text-xs hover:bg-[#ec1e24] dark:hover:bg-[#ec1e24] transition-colors"
@@ -847,15 +915,18 @@ export default function AddProjectPage() {
                 <Input
                   value={projectData.companyMap}
                   onChange={(e) => handleInputChange("companyMap", e.target.value)}
-                  placeholder="Enter map URL (e.g., Google Maps, Apple Maps, etc.)"
+                  placeholder="Enter Google Maps URL (embed URL or short URL like maps.app.goo.gl/...)"
                   className="w-full"
                 />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  ✅ Supports both embed URLs and short URLs (maps.app.goo.gl). Short URLs will be converted automatically.
+                </p>
               </div>
               {projectData.companyMap && (
                 <div className="mt-4">
                   <label className="block text-sm text-gray-700 mb-2">Map Preview</label>
                   <div className="border rounded-lg p-4 bg-gray-50">
-                    <p className="text-sm text-gray-600 mb-2">Map URL:</p>
+                    <p className="text-sm text-gray-600 mb-2">Map Preview (Google Maps with full interactivity):</p>
                     <a 
                       href={projectData.companyMap} 
                       target="_blank" 
@@ -881,9 +952,11 @@ export default function AddProjectPage() {
               {!projectData.name.trim() && <li>Project Name</li>}
               {!projectData.year.trim() && <li>Year</li>}
               {!projectData.client.trim() && <li>Client</li>}
+              {!projectData.status.trim() && <li>Status</li>}
+              {!projectData.category.trim() && <li>Category</li>}
+              {projectData.category === "Other" && !projectData.customCategory.trim() && <li>Custom Category</li>}
               {!projectData.beforeImage && <li>Before Image</li>}
               {!projectData.afterImage && <li>After Image</li>}
-              {projectData.colorPalette.length === 0 && <li>Color Palette (at least 1 color)</li>}
               {projectData.galleryImages.length < 2 && <li>Gallery (at least 2 photos, currently {projectData.galleryImages.length})</li>}
             </ul>
           </div>
@@ -915,6 +988,46 @@ export default function AddProjectPage() {
         message="Are you sure you want to upload this project?"
         type="upload"
       />
+
+      {/* Custom Category Modal */}
+      {showCategoryModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl border-2 border-[#001F4B]/20 dark:border-red-500/20">
+            <h3 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">
+              Custom Category
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-4 font-montserrat">
+              Please enter your custom project category:
+            </p>
+            <Input
+              value={projectData.customCategory}
+              onChange={(e) => handleInputChange("customCategory", e.target.value)}
+              placeholder="Enter your custom category"
+              className="mb-4"
+              autoFocus
+            />
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowCategoryModal(false)
+                  setProjectData((prev) => ({ ...prev, customCategory: "" }))
+                }}
+                className="border-[#001F4B] dark:border-white/60 text-[#001F4B] dark:text-white hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white dark:hover:text-white"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCustomCategorySubmit}
+                disabled={!projectData.customCategory.trim()}
+                className="bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 disabled:bg-gray-400 dark:disabled:bg-[#ec1e24]/30"
+              >
+                Confirm
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

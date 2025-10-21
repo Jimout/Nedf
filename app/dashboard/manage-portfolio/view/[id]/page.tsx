@@ -7,9 +7,16 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Upload as UploadIcon, Plus as PlusIcon } from "lucide-react"
+import { Upload as UploadIcon, Plus as PlusIcon } from "lucide-react"
 import Image from "next/image"
 import ConfirmationModal from "@/components/Confirmation-modal"
+import PanoramaViewer from "@/components/PanoramaViewer"
+
+const ArrowLeftIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+)
 
 interface ContentSection {
   id: string
@@ -20,22 +27,26 @@ interface ContentSection {
 
 interface ProjectData {
   id: string
-  title: string
+  name: string
+  year: string
   client: string
   location?: string
   area?: string
-  technology?: string
+  topology?: string
   role?: string
   status?: string
-  description: string
+  category?: string
+  customCategory?: string
+  description?: string
   inspiration?: string
   beforeImage?: string
   afterImage?: string
   galleryImages: string[]
-  colorPalette: { color: string }[]
+  colorPalette: string[]
   features?: string[]
   materials?: string[]
   contentSections?: ContentSection[]
+  companyMap?: string
   customFields?: Array<{
     id: string
     label: string
@@ -80,16 +91,25 @@ export default function ViewProjectPage() {
         // Fallback to sample data if not found
         const sampleProject: ProjectData = {
           id: projectId,
-          title: "Sample Project",
+          name: "Sample Project",
+          year: "2024",
           client: "Sample Client",
+          category: "Architectural Design",
           location: "Sample Location",
+          area: "1000 sq ft",
+          topology: "Modern",
+          role: "Lead Designer",
+          status: "Completed",
           description: "This is a sample project description.",
+          inspiration: "Modern minimalist design with clean lines",
           beforeImage: "/placeholder.svg",
           afterImage: "/placeholder.svg",
           galleryImages: ["/placeholder.svg"],
-          colorPalette: [{ color: "#000000" }],
+          colorPalette: ["#000000"],
           features: ["Feature 1", "Feature 2"],
-          materials: ["Material 1", "Material 2"]
+          materials: ["Material 1", "Material 2"],
+          contentSections: [],
+          companyMap: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7577!3d9.0320!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sAddis%20Ababa!5e0!3m2!1sen!2set!4v1647000000000!5m2!1sen!2set"
         }
         setCurrentData(sampleProject)
       } catch (error) {
@@ -129,7 +149,7 @@ export default function ViewProjectPage() {
   // Color palette functions
   const addColor = () => {
     if (!currentData) return
-    updateEditData("colorPalette", [...currentData.colorPalette, { color: "#000000" }])
+    updateEditData("colorPalette", [...currentData.colorPalette, "#000000"])
   }
 
   const removeColor = (index: number) => {
@@ -141,7 +161,7 @@ export default function ViewProjectPage() {
   const updateColorPalette = (index: number, color: string) => {
     if (!currentData) return
     const updatedPalette = currentData.colorPalette.map((item, i) => 
-      i === index ? { ...item, color } : item
+      i === index ? color : item
     )
     updateEditData("colorPalette", updatedPalette)
   }
@@ -299,10 +319,9 @@ export default function ViewProjectPage() {
             variant="ghost"
             size="sm"
             onClick={() => router.back()}
-            className="flex items-center gap-2 p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white"
+            className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back
+            <ArrowLeftIcon />
           </Button>
           <h1 className="text-3xl font-bold text-[#001F4B] dark:text-red-500 font-montserrat uppercase tracking-wide">
             {isEditing ? "Edit Project" : "View Project"}
@@ -346,22 +365,6 @@ export default function ViewProjectPage() {
       </div>
 
       <div className="p-6 space-y-8">
-        {/* Project Title */}
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-bold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">PROJECT TITLE</h2>
-          {isEditing ? (
-            <Input
-              value={currentData.title}
-              onChange={(e) => updateEditData("title", e.target.value)}
-              className="text-2xl font-bold border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
-            />
-          ) : (
-            <p className="text-2xl font-bold text-gray-800 dark:text-white font-montserrat">
-              {currentData.title}
-            </p>
-          )}
-        </div>
-
         {/* Project Information */}
         <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
           <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">PROJECT INFORMATION</h2>
@@ -369,7 +372,10 @@ export default function ViewProjectPage() {
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-6">
               {[
+                { label: "PROJECT NAME", field: "name" as keyof ProjectData, required: true },
+                { label: "YEAR", field: "year" as keyof ProjectData, required: true },
                 { label: "CLIENT", field: "client" as keyof ProjectData, required: true },
+                { label: "CATEGORY", field: "category" as keyof ProjectData, required: true },
                 { label: "LOCATION", field: "location" as keyof ProjectData, required: false },
                 { label: "AREA", field: "area" as keyof ProjectData, required: false },
                 { label: "TECHNOLOGY", field: "technology" as keyof ProjectData, required: false },
@@ -394,7 +400,9 @@ export default function ViewProjectPage() {
                       />
                     ) : (
                       <p className="font-medium text-gray-800 dark:text-white font-montserrat bg-gray-50 dark:bg-[#15171a] p-2 rounded-lg">
-                        {fieldValue || "Not specified"}
+                        {field === "category" && currentData?.category === "Other" && currentData?.customCategory 
+                          ? currentData.customCategory 
+                          : fieldValue || "Not specified"}
                       </p>
                     )}
                   </div>
@@ -471,6 +479,265 @@ export default function ViewProjectPage() {
           </div>
         </div>
 
+        {/* Content Sections - without title */}
+        {currentData.contentSections && currentData.contentSections.length > 0 && (
+          <div className="space-y-6">
+            {currentData.contentSections.map((section) => (
+              <div key={section.id} className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+                {section.title && (
+                  <h3 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">
+                    {section.title}
+                  </h3>
+                )}
+                
+                {section.type === "description" && (
+                  <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
+                    {section.content as string}
+                  </p>
+                )}
+
+                {section.type === "photo" && (
+                  <div className="relative">
+                    <Image
+                      src={
+                        typeof section.content === "string" 
+                          ? section.content 
+                          : section.content instanceof File 
+                            ? URL.createObjectURL(section.content)
+                            : "/placeholder.svg"
+                      }
+                      alt="Content photo"
+                      width={800}
+                      height={600}
+                      className="w-full h-auto max-h-[600px] object-contain rounded-lg shadow-md"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = "/placeholder.svg"
+                      }}
+                    />
+                  </div>
+                )}
+
+                {section.type === "video" && (
+                  <div className="relative">
+                    <video
+                      src={
+                        typeof section.content === "string" 
+                          ? section.content 
+                          : section.content instanceof File 
+                            ? URL.createObjectURL(section.content)
+                            : "/placeholder.svg"
+                      }
+                      controls
+                      preload="metadata"
+                      className="w-full h-auto max-h-[600px] object-contain rounded-lg shadow-md"
+                      onError={(e) => {
+                        const target = e.target as HTMLVideoElement
+                        target.style.display = "none"
+                        const fallback = document.createElement("div")
+                        fallback.className = "w-full h-96 bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md flex items-center justify-center"
+                        fallback.innerHTML = "<p class='text-gray-500 dark:text-gray-400'>Video not available</p>"
+                        target.parentNode?.insertBefore(fallback, target)
+                      }}
+                    />
+                  </div>
+                )}
+
+                {section.type === "list" && (
+                  <ul className="space-y-3">
+                    {(section.content as string[]).map((item, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <span className="w-2 h-2 bg-[#001F4B] dark:bg-red-500 rounded-full"></span>
+                        <span className="text-gray-600 dark:text-gray-300 font-montserrat">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {section.type === "360tour" && (
+                  <div className="space-y-4">
+                    {section.content ? (
+                      <div className="w-full h-[600px]">
+                        <PanoramaViewer iframeUrl={section.content as string} />
+                        <p className="text-sm text-gray-500 dark:text-gray-300 font-montserrat mt-2">
+                          Use mouse to drag and scroll to zoom. Touch controls supported on mobile.
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 dark:text-gray-400 font-montserrat">
+                        No 360° tour provided
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Color Palette Section */}
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm relative">
+          <div className="flex flex-wrap gap-4">
+            {currentData.colorPalette?.map((color, index) => (
+              <div key={index} className="relative">
+                <div
+                  className="w-16 h-16 rounded-xl border-2 border-gray-200 dark:border-white/60 cursor-pointer shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105 relative"
+                  style={{ backgroundColor: color }}
+                  onClick={(e) => handleColorClick(index, e)}
+                />
+                {!isEditing && (
+                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 dark:text-white font-mono">
+                    {color.toUpperCase()}
+                  </div>
+                )}
+                {isEditing && (
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      removeColor(index)
+                    }}
+                    className="absolute -top-2 -right-2 w-6 h-6 p-0 bg-transparent hover:bg-transparent border-none shadow-none"
+                    size="sm"
+                  >
+                    <span className="text-red-500 text-sm font-bold hover:text-red-700">X</span>
+                  </Button>
+                )}
+              </div>
+            ))}
+            {isEditing && (
+              <div className="flex items-center">
+                <Button
+                  onClick={addColor}
+                  className="h-16 w-16 rounded-xl bg-transparent border-2 border-dashed border-gray-300 dark:border-white/60 hover:border-[#001F4B] dark:hover:border-red-500 hover:bg-[#001F4B]/5 dark:hover:bg-red-500/5 transition-all duration-200"
+                >
+                  <PlusIcon />
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Gallery Section */}
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          {isEditing ? (
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-3">
+                {currentData.galleryImages.map((image, index) => (
+                  <div key={index} className="relative group">
+                    <Image
+                      src={image || "/placeholder.svg?height=120&width=120&query=gallery image"}
+                      alt={`Gallery image ${index + 1}`}
+                      width={120}
+                      height={120}
+                      className="w-24 h-24 object-cover rounded-lg shadow-md transition-transform duration-200 group-hover:scale-105"
+                    />
+                    <Button
+                      onClick={() => removeGalleryImage(index)}
+                      className="absolute -top-2 -right-2 w-6 h-6 p-0 bg-transparent hover:bg-transparent border-none shadow-none"
+                      size="sm"
+                    >
+                      <span className="text-red-500 text-sm font-bold hover:text-red-700">X</span>
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <input
+                type="file"
+                id="gallery-upload"
+                onChange={handleAddGalleryImage}
+                accept="image/*"
+                className="hidden"
+              />
+              <Button
+                onClick={addGalleryImage}
+                className="bg-[#001F4B] hover:bg-[#001F4B]/90 dark:bg-red-500 dark:hover:bg-red-600 text-white shadow-lg transition-all duration-200"
+              >
+                <PlusIcon />
+                <span className="ml-1">Add Gallery Image</span>
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-3">
+              {currentData.galleryImages.map((image, index) => (
+                <div key={index} className="relative group">
+                  <Image
+                    src={image || "/placeholder.svg?height=120&width=120&query=gallery image"}
+                    alt={`Gallery image ${index + 1}`}
+                    width={120}
+                    height={120}
+                    className="w-24 h-24 object-cover rounded-lg shadow-md transition-transform duration-200 group-hover:scale-105"
+                  />
+                </div>
+              )) || []}
+            </div>
+          )}
+        </div>
+
+        {/* Company Map - without title */}
+        {currentData.companyMap && (
+          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+            <div className="space-y-4">
+              {isEditing ? (
+                <div className="space-y-4">
+                  <Input
+                    value={currentData.companyMap}
+                    onChange={(e) => updateEditData("companyMap", e.target.value)}
+                    placeholder="Enter Google Maps embed URL"
+                    className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 font-montserrat">
+                    Enter the full Google Maps embed URL for interactive map display
+                  </p>
+                </div>
+              ) : (
+                <div className="w-full">
+                  {currentData.companyMap ? (
+                    <div className="w-full h-[500px]">
+                      <iframe
+                        src={currentData.companyMap}
+                        title="Project Location"
+                        className="w-full h-full border-0 rounded-lg shadow-md dark:invert dark:brightness-90 dark:contrast-125 dark:sepia-[0.1] dark:hue-rotate-[320deg] dark:saturate-150"
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        onLoad={() => console.log("Map loaded successfully")}
+                        onError={(e) => {
+                          console.log("Map failed to load:", e)
+                          const target = e.target as HTMLIFrameElement
+                          target.style.display = "none"
+                          const fallback = document.createElement("div")
+                          fallback.className = "w-full h-full bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md flex flex-col items-center justify-center p-4"
+                          fallback.innerHTML = `
+                            <p class="text-gray-500 dark:text-gray-400 text-center mb-4">
+                              Map could not be loaded. This might be a short URL that needs to be converted to an embed URL.
+                            </p>
+                            <a 
+                              href="${currentData.companyMap}"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline break-all text-sm"
+                            >
+                              Open in Google Maps: ${currentData.companyMap}
+                            </a>
+                          `
+                          target.parentNode?.insertBefore(fallback, target)
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-[500px] bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md flex items-center justify-center">
+                      <p className="text-gray-500 dark:text-gray-400">No map provided</p>
+                    </div>
+                  )}
+                  <p className="text-sm text-gray-500 dark:text-gray-300 font-montserrat mt-2">
+                    Interactive map with full Google Maps functionality
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Inspiration Section - only show if has content or editing */}
         {(isEditing || (currentData.inspiration && currentData.inspiration.trim() !== "")) && (
           <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
@@ -490,22 +757,6 @@ export default function ViewProjectPage() {
           </div>
         )}
 
-        {/* Description Section */}
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">DESCRIPTION</h2>
-          {isEditing ? (
-            <Textarea
-              value={currentData.description}
-              onChange={(e) => updateEditData("description", e.target.value)}
-              className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
-              rows={4}
-            />
-          ) : (
-            <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
-              {currentData.description}
-            </p>
-          )}
-        </div>
 
         {/* Features Section - only show if has features or editing */}
         {(isEditing || (currentData.features && currentData.features.some(f => f && f.trim() !== ""))) && (
@@ -603,178 +854,8 @@ export default function ViewProjectPage() {
           </div>
         )}
 
-        {/* Color Palette Section */}
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm relative">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">COLOR PALETTE</h2>
-          <div className="flex flex-wrap gap-4">
-            {currentData.colorPalette?.map((color, index) => (
-              <div key={index} className="relative">
-                <div
-                  className="w-16 h-16 rounded-xl border-2 border-gray-200 dark:border-white/60 cursor-pointer shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105 relative"
-                  style={{ backgroundColor: color.color || color }}
-                  onClick={(e) => handleColorClick(index, e)}
-                />
-                {!isEditing && (
-                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 dark:text-white font-mono">
-                    {(color.color || color).toUpperCase()}
-                  </div>
-                )}
-                {isEditing && (
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeColor(index)
-                    }}
-                    className="absolute -top-2 -right-2 w-6 h-6 p-0 bg-transparent hover:bg-transparent border-none shadow-none"
-                    size="sm"
-                  >
-                    <span className="text-red-500 text-sm font-bold hover:text-red-700">X</span>
-                  </Button>
-                )}
-              </div>
-            )) || []}
-            {isEditing && (
-              <div className="flex items-center">
-                <Button
-                  onClick={addColor}
-                  variant="outline"
-                  size="sm"
-                  className="h-16 w-16 rounded-xl bg-transparent border-2 border-dashed border-gray-300 dark:border-white/60 hover:border-[#001F4B] dark:hover:border-red-500 hover:bg-[#001F4B]/5 dark:hover:bg-red-500/5 transition-all duration-200"
-                >
-                  <PlusIcon />
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Gallery Section */}
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
-          <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">GALLERY</h2>
-          {isEditing ? (
-            <div className="space-y-4">
-              <div className="flex flex-wrap gap-3">
-                {currentData.galleryImages?.map((image, index) => (
-                  <div key={index} className="relative group">
-                    <Image
-                      src={image || "/placeholder.svg?height=120&width=120&query=gallery image"}
-                      alt={`Gallery image ${index + 1}`}
-                      width={120}
-                      height={120}
-                      className="w-24 h-24 object-cover rounded-lg shadow-md transition-transform duration-200 group-hover:scale-105"
-                    />
-                    <Button
-                      onClick={() => removeGalleryImage(index)}
-                      className="absolute -top-2 -right-2 w-6 h-6 p-0 bg-transparent hover:bg-transparent border-none shadow-none"
-                      size="sm"
-                    >
-                      <span className="text-red-500 text-sm font-bold hover:text-red-700">X</span>
-                    </Button>
-                  </div>
-                )) || []}
-              </div>
-              <input
-                type="file"
-                ref={galleryAddRef}
-                onChange={handleAddGalleryImage}
-                accept="image/*"
-                className="hidden"
-              />
-              <Button
-                onClick={addGalleryImage}
-                className="bg-[#001F4B] hover:bg-[#001F4B]/90 dark:bg-red-500 dark:hover:bg-red-600 text-white shadow-lg transition-all duration-200"
-              >
-                <PlusIcon />
-                <span className="ml-1">Add Gallery Image</span>
-              </Button>
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-3">
-              {currentData.galleryImages?.map((image, index) => (
-                <div key={index} className="relative group">
-                  <Image
-                    src={image || "/placeholder.svg?height=120&width=120&query=gallery image"}
-                    alt={`Gallery image ${index + 1}`}
-                    width={120}
-                    height={120}
-                    className="w-24 h-24 object-cover rounded-lg shadow-md transition-transform duration-200 group-hover:scale-105"
-                  />
-                </div>
-              )) || []}
-            </div>
-          )}
-        </div>
 
-        {/* Content Sections */}
-        {currentData.contentSections && currentData.contentSections.length > 0 && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-[#001F4B] dark:text-red-500 font-montserrat uppercase tracking-wide">CONTENT SECTIONS</h2>
-            {currentData.contentSections.map((section) => (
-              <div key={section.id} className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
-                {section.title && (
-                  <h3 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">
-                    {section.title}
-                  </h3>
-                )}
-                
-                {section.type === "description" && (
-                  <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
-                    {section.content as string}
-                  </p>
-                )}
-
-                {section.type === "photo" && (
-                  <div className="relative">
-                    <Image
-                      src={typeof section.content === "string" ? section.content : URL.createObjectURL(section.content as File)}
-                      alt="Content photo"
-                      width={600}
-                      height={400}
-                      className="w-full h-64 object-cover rounded-lg shadow-md"
-                    />
-                  </div>
-                )}
-
-                {section.type === "video" && (
-                  <div className="relative">
-                    <video
-                      src={typeof section.content === "string" ? section.content : URL.createObjectURL(section.content as File)}
-                      controls
-                      className="w-full h-64 object-cover rounded-lg shadow-md"
-                    />
-                  </div>
-                )}
-
-                {section.type === "list" && (
-                  <ul className="space-y-3">
-                    {(section.content as string[]).map((item, index) => (
-                      <li key={index} className="flex items-center gap-3">
-                        <span className="w-2 h-2 bg-[#001F4B] dark:bg-red-500 rounded-full"></span>
-                        <span className="text-gray-600 dark:text-gray-300 font-montserrat">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                {section.type === "360tour" && (
-                  <div className="space-y-4">
-                    <p className="text-sm text-gray-500 dark:text-gray-300 font-montserrat">
-                      360° Tour Link:
-                    </p>
-                    <a 
-                      href={section.content as string}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline break-all font-montserrat"
-                    >
-                      {section.content as string}
-                    </a>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
 
         {/* Custom Fields Section */}
         {currentData.customFields && currentData.customFields.length > 0 && (
@@ -874,14 +955,14 @@ export default function ViewProjectPage() {
             <p className="text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Select Color</p>
             <input
               type="color"
-              value={currentData.colorPalette[colorPickerIndex]?.color || "#000000"}
+              value={currentData.colorPalette[colorPickerIndex] || "#000000"}
               onChange={(e) => {
                 updateColorPalette(colorPickerIndex, e.target.value)
               }}
               className="w-20 h-20 rounded-lg border-2 border-gray-200 dark:border-white/60 cursor-pointer hover:border-[#001F4B] dark:hover:border-red-500 transition-colors"
             />
             <div className="text-sm font-mono font-bold text-[#001F4B] dark:text-red-500">
-              {currentData.colorPalette[colorPickerIndex]?.color.toUpperCase()}
+              {currentData.colorPalette[colorPickerIndex]?.toUpperCase()}
             </div>
           </div>
         </div>

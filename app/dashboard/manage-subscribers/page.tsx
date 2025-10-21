@@ -21,7 +21,7 @@ export default function ManageSubscribersPage() {
   const router = useRouter()
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+  const itemsPerPage = 8
   const [searchTerm, setSearchTerm] = useState("")
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; subscriberId: string | null }>({
     isOpen: false,
