@@ -83,7 +83,6 @@ export default function AddReviewPage() {
 
           <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
         <CardHeader>
-          <CardTitle className="text-[#001F4B] dark:text-white font-medium">Review Information</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">

@@ -1,20 +1,15 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-const ArrowLeftIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-  </svg>
-)
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useData } from "@/lib/data-context";
-import ConfirmationModal from "@/components/Confirmation-modal";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useData } from "@/lib/data-context"
+import ConfirmationModal from "@/components/Confirmation-modal"
 
 import {
   FaInstagram, 
@@ -31,28 +26,35 @@ const FaX = ({ className }: { className?: string }) => (
   </svg>
 );
 
-interface TeamMember {
-  id: string;
-  name: string;
-  position: string;
-  description: string;
+interface Founder {
+  id: string
+  name: string
+  position: string
+  description: string
   socialMedia: {
-    instagram?: string;
-    tiktok?: string;
-    behance?: string;
-    pinterest?: string;
-    linkedin?: string;
-    twitter?: string;
-  };
-  avatar?: string;
+    instagram?: string
+    tiktok?: string
+    behance?: string
+    pinterest?: string
+    linkedin?: string
+    twitter?: string
+  }
+  avatar?: string
 }
 
-export default function AddTeamMemberPage() {
-  const router = useRouter();
-  const { addTeamMember } = useData();
-  const [showConfirmation, setShowConfirmation] = useState(false);
+const ArrowLeftIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+)
 
-  const [newMember, setNewMember] = useState<Partial<TeamMember>>({
+export default function AddFounderPage() {
+  const router = useRouter()
+  const { addFounder } = useData()
+  const [showConfirmation, setShowConfirmation] = useState(false)
+
+  const [newFounder, setNewFounder] = useState<Founder>({
+    id: "",
     name: "",
     position: "",
     description: "",
@@ -74,29 +76,21 @@ export default function AddTeamMemberPage() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setNewMember({ ...newMember, avatar: reader.result as string });
+      reader.onload = (e) => {
+        setNewFounder({ ...newFounder, avatar: e.target?.result as string });
+      };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleAddMember = () => {
-    if (newMember.name && newMember.position && newMember.description) {
-      setShowConfirmation(true);
-    }
-  };
-
   const handleConfirmAdd = () => {
-    const memberToAdd: TeamMember = {
+    const founderData = {
+      ...newFounder,
       id: Date.now().toString(),
-      name: newMember.name!,
-      position: newMember.position!,
-      description: newMember.description!.slice(0, 85), // max 85 chars
-      socialMedia: newMember.socialMedia || {},
-      avatar: newMember.avatar,
     };
-    addTeamMember(memberToAdd);
+    addFounder(founderData);
     setShowConfirmation(false);
-    router.push("/dashboard/manage-team");
+    router.push("/dashboard/manage-founders");
   };
 
   return (
@@ -108,7 +102,7 @@ export default function AddTeamMemberPage() {
           <Button variant="ghost" size="sm" className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white" onClick={() => router.back()}>
             <ArrowLeftIcon />
           </Button>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Add Team Member</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Add Founder</h1>
         </div>
 
         {/* Card */}
@@ -121,8 +115,8 @@ export default function AddTeamMemberPage() {
           <div className="flex flex-col items-center space-y-2">
             <label className="cursor-pointer">
               <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-white/50 bg-gray-100 dark:bg-[#1a1d23] flex items-center justify-center">
-                {newMember.avatar ? (
-                  <img src={newMember.avatar} alt="Avatar Preview" className="w-full h-full object-cover" />
+                {newFounder.avatar ? (
+                  <img src={newFounder.avatar} alt="Avatar Preview" className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-gray-400 dark:text-white/60 text-3xl">+</span>
                 )}
@@ -138,8 +132,8 @@ export default function AddTeamMemberPage() {
               <Label htmlFor="name" className="text-gray-700 dark:text-white/80">Name <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
               <Input
                 id="name"
-                value={newMember.name || ""}
-                onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
+                value={newFounder.name || ""}
+                onChange={(e) => setNewFounder({ ...newFounder, name: e.target.value })}
                 placeholder="Enter full name"
               />
             </div>
@@ -147,8 +141,8 @@ export default function AddTeamMemberPage() {
               <Label htmlFor="position" className="text-gray-700 dark:text-white/80">Position <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
               <Input
                 id="position"
-                value={newMember.position || ""}
-                onChange={(e) => setNewMember({ ...newMember, position: e.target.value })}
+                value={newFounder.position || ""}
+                onChange={(e) => setNewFounder({ ...newFounder, position: e.target.value })}
                 placeholder="Enter job position"
               />
             </div>
@@ -159,14 +153,14 @@ export default function AddTeamMemberPage() {
             <Label htmlFor="description" className="text-gray-700 dark:text-white/80">Description <span className="text-[#ec1e24] dark:text-[#ec1e24]">*</span></Label>
             <Textarea
               id="description"
-              value={newMember.description || ""}
+              value={newFounder.description || ""}
               onChange={(e) =>
-                setNewMember({ ...newMember, description: e.target.value.slice(0, 85) })
+                setNewFounder({ ...newFounder, description: e.target.value.slice(0, 85) })
               }
               placeholder="Brief description (max 85 chars)"
               rows={3}
             />
-            <p className="text-sm text-gray-500 dark:text-white/60">{newMember.description?.length || 0}/85 characters</p>
+            <p className="text-sm text-gray-500 dark:text-white/60">{newFounder.description?.length || 0}/85 characters</p>
           </div>
 
           {/* Social Media */}
@@ -178,12 +172,12 @@ export default function AddTeamMemberPage() {
                   <span className="text-gray-600 dark:text-white/80">{socialPlatforms[platform]}</span>
                   <Input
                     placeholder={platform === 'twitter' ? 'X profile URL' : `${platform} profile URL`}
-                    value={newMember.socialMedia?.[platform as keyof typeof newMember.socialMedia] || ""}
+                    value={newFounder.socialMedia?.[platform as keyof typeof newFounder.socialMedia] || ""}
                     onChange={(e) =>
-                      setNewMember({
-                        ...newMember,
+                      setNewFounder({
+                        ...newFounder,
                         socialMedia: {
-                          ...newMember.socialMedia,
+                          ...newFounder.socialMedia,
                           [platform]: e.target.value,
                         },
                       })
@@ -195,13 +189,17 @@ export default function AddTeamMemberPage() {
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <Link href="/dashboard/manage-team">
+          <div className="flex gap-4 pt-4">
+            <Button
+              type="button"
+              onClick={() => setShowConfirmation(true)}
+              className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white"
+            >
+              Add Founder
+            </Button>
+            <Link href="/dashboard/manage-founders">
               <Button variant="outline">Cancel</Button>
             </Link>
-            <Button onClick={handleAddMember} className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white">
-              Add Member
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -211,8 +209,8 @@ export default function AddTeamMemberPage() {
           isOpen={showConfirmation}
           onClose={() => setShowConfirmation(false)}
           onConfirm={handleConfirmAdd}
-          title="Add Team Member"
-          message={`Are you sure you want to add ${newMember.name} to the team?`}
+          title="Add Founder"
+          message={`Are you sure you want to add ${newFounder.name} as a founder?`}
           type="add"
         />
         </div>

@@ -10,9 +10,15 @@ import {
   FaTiktok, 
   FaBehance, 
   FaPinterest, 
-  FaLinkedin, 
-  FaTwitter 
+  FaLinkedin
 } from "react-icons/fa"
+
+// Custom X (Twitter) Icon Component
+const FaX = ({ className }: { className?: string }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+  </svg>
+);
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,6 +37,7 @@ interface PortfolioProfile {
     linkedin: string
     pinterest: string
     behance: string
+    twitter: string
   }
 }
 
@@ -50,6 +57,7 @@ const DEFAULT_PROFILE: PortfolioProfile = {
     linkedin: "https://linkedin.com/company/nedfstudios",
     pinterest: "https://pinterest.com/nedfstudios",
     behance: "https://behance.net/nedfstudios",
+    twitter: "https://x.com/nedfstudios",
   },
 }
 
@@ -59,8 +67,7 @@ const socialPlatforms: Record<string, React.ReactNode> = {
   behance: <FaBehance className="w-4 h-4" />,
   pinterest: <FaPinterest className="w-4 h-4" />,
   linkedin: <FaLinkedin className="w-4 h-4" />,
-  twitter: <FaTwitter className="w-4 h-4" />,
-  x: <FaTwitter className="w-4 h-4" />,
+  twitter: <FaX className="w-4 h-4" />,
 }
 
 const getSocialIcon = (platform: string) => {
@@ -331,76 +338,29 @@ export default function EditProfilePage() {
               </div>
 
               {/* Social Media Links */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-4">
-                  Social Media Links
-                </label>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-600 dark:text-white/60 mb-1">Instagram</label>
-                    <input
-                      type="url"
-                      value={editProfile.socialMedia.instagram}
-                      onChange={(e) => setEditProfile((prev) => ({ 
-                        ...prev, 
-                        socialMedia: { ...prev.socialMedia, instagram: e.target.value }
-                      }))}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-white/50 rounded-lg focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none text-sm dark:bg-[#1a1d23] dark:text-white"
-                      placeholder="https://instagram.com/yourcompany"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 dark:text-white/60 mb-1">TikTok</label>
-                    <input
-                      type="url"
-                      value={editProfile.socialMedia.tiktok}
-                      onChange={(e) => setEditProfile((prev) => ({ 
-                        ...prev, 
-                        socialMedia: { ...prev.socialMedia, tiktok: e.target.value }
-                      }))}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-white/50 rounded-lg focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none text-sm dark:bg-[#1a1d23] dark:text-white"
-                      placeholder="https://tiktok.com/@yourcompany"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 dark:text-white/60 mb-1">LinkedIn</label>
-                    <input
-                      type="url"
-                      value={editProfile.socialMedia.linkedin}
-                      onChange={(e) => setEditProfile((prev) => ({ 
-                        ...prev, 
-                        socialMedia: { ...prev.socialMedia, linkedin: e.target.value }
-                      }))}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-white/50 rounded-lg focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none text-sm dark:bg-[#1a1d23] dark:text-white"
-                      placeholder="https://linkedin.com/company/yourcompany"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 dark:text-white/60 mb-1">Pinterest</label>
-                    <input
-                      type="url"
-                      value={editProfile.socialMedia.pinterest}
-                      onChange={(e) => setEditProfile((prev) => ({ 
-                        ...prev, 
-                        socialMedia: { ...prev.socialMedia, pinterest: e.target.value }
-                      }))}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-white/50 rounded-lg focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none text-sm dark:bg-[#1a1d23] dark:text-white"
-                      placeholder="https://pinterest.com/yourcompany"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600 dark:text-white/60 mb-1">Behance</label>
-                    <input
-                      type="url"
-                      value={editProfile.socialMedia.behance}
-                      onChange={(e) => setEditProfile((prev) => ({ 
-                        ...prev, 
-                        socialMedia: { ...prev.socialMedia, behance: e.target.value }
-                      }))}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-white/50 rounded-lg focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none text-sm dark:bg-[#1a1d23] dark:text-white"
-                      placeholder="https://behance.net/yourcompany"
-                    />
-                  </div>
+              <div className="space-y-4">
+                <label className="text-base font-semibold text-gray-700 dark:text-white/80">Social Media Links</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Object.keys(socialPlatforms).map((platform) => (
+                    <div key={platform} className="flex items-center gap-2">
+                      <span className="text-gray-600 dark:text-white/80">{socialPlatforms[platform]}</span>
+                      <input
+                        type="url"
+                        value={editProfile.socialMedia[platform as keyof typeof editProfile.socialMedia] || ""}
+                        onChange={(e) =>
+                          setEditProfile((prev) => ({
+                            ...prev,
+                            socialMedia: {
+                              ...prev.socialMedia,
+                              [platform]: e.target.value,
+                            },
+                          }))
+                        }
+                        placeholder={platform === 'twitter' ? 'X profile URL' : `${platform} profile URL`}
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-white/50 rounded-lg focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none text-sm dark:bg-[#1a1d23] dark:text-white"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
 

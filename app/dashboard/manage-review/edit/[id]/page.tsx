@@ -130,14 +130,12 @@ export default function EditReviewPage() {
 
           <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
           <CardHeader>
-            <CardTitle className="text-[#001F4B] dark:text-white font-medium">Review Information</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               
               {/* Profile Picture (Noticeable uploader) */}
               <div className="flex flex-col items-center space-y-2">
-                <Label className="text-gray-700 dark:text-white/80">Profile Picture</Label>
                 <label className="cursor-pointer">
                   <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-white/50 bg-gray-100 dark:bg-[#1a1d23] flex items-center justify-center">
                     {preview ? (

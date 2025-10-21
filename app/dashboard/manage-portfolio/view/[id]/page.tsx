@@ -108,7 +108,32 @@ export default function ViewProjectPage() {
           colorPalette: ["#000000"],
           features: ["Feature 1", "Feature 2"],
           materials: ["Material 1", "Material 2"],
-          contentSections: [],
+          contentSections: [
+            {
+              id: "1",
+              type: "photo",
+              title: "Project Overview",
+              content: "/room1.jpg"
+            },
+            {
+              id: "2", 
+              type: "video",
+              title: "Project Video",
+              content: "/forma Visita.mp4"
+            },
+            {
+              id: "3",
+              type: "description",
+              title: "Project Description",
+              content: "This is a detailed description of the project showcasing the design process and final results."
+            },
+            {
+              id: "4",
+              type: "360tour",
+              title: "360° Virtual Tour",
+              content: "https://nedf-studios.github.io/Lula_Beauty_Salon_360/"
+            }
+          ],
           companyMap: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7577!3d9.0320!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sAddis%20Ababa!5e0!3m2!1sen!2set!4v1647000000000!5m2!1sen!2set"
         }
         setCurrentData(sampleProject)
@@ -368,7 +393,6 @@ export default function ViewProjectPage() {
         {/* Project Information */}
         <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
           <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">PROJECT INFORMATION</h2>
-          
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-6">
               {[
@@ -382,7 +406,7 @@ export default function ViewProjectPage() {
                 { label: "ROLE", field: "role" as keyof ProjectData, required: false },
                 { label: "STATUS", field: "status" as keyof ProjectData, required: false },
               ].map(({ label, field, required }) => {
-                const fieldValue = currentData[field] as string
+                const fieldValue = currentData?.[field] as string
                 
                 // Only show field if it has a value OR if we're editing OR if it's required
                 if (!isEditing && !required && (!fieldValue || fieldValue.trim() === "")) {
@@ -438,7 +462,7 @@ export default function ViewProjectPage() {
               </>
             )}
             <Image
-              src={currentData.beforeImage || "/placeholder.svg?height=300&width=400&query=before renovation"}
+              src={currentData?.beforeImage || "/placeholder.svg?height=300&width=400&query=before renovation"}
               alt="Before renovation"
               width={400}
               height={300}
@@ -470,7 +494,7 @@ export default function ViewProjectPage() {
               </>
             )}
             <Image
-              src={currentData.afterImage || "/placeholder.svg?height=300&width=400&query=after renovation"}
+              src={currentData?.afterImage || "/placeholder.svg?height=300&width=400&query=after renovation"}
               alt="After renovation"
               width={400}
               height={300}
@@ -576,6 +600,7 @@ export default function ViewProjectPage() {
         )}
 
         {/* Color Palette Section */}
+        {currentData.colorPalette && currentData.colorPalette.length > 0 && (
         <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm relative">
           <div className="flex flex-wrap gap-4">
             {currentData.colorPalette?.map((color, index) => (
@@ -616,10 +641,12 @@ export default function ViewProjectPage() {
             )}
           </div>
         </div>
+        )}
 
         {/* Gallery Section */}
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
-          {isEditing ? (
+        {currentData.galleryImages && currentData.galleryImages.length > 0 && (
+          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+            {isEditing ? (
             <div className="space-y-4">
               <div className="flex flex-wrap gap-3">
                 {currentData.galleryImages.map((image, index) => (
@@ -672,10 +699,12 @@ export default function ViewProjectPage() {
             </div>
           )}
         </div>
+        )}
 
-        {/* Company Map - without title */}
+        {/* Company Map */}
         {currentData.companyMap && (
           <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">COMPANY LOCATION</h2>
             <div className="space-y-4">
               {isEditing ? (
                 <div className="space-y-4">
@@ -683,10 +712,10 @@ export default function ViewProjectPage() {
                     value={currentData.companyMap}
                     onChange={(e) => updateEditData("companyMap", e.target.value)}
                     placeholder="Enter Google Maps embed URL"
-                    className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 font-montserrat">
-                    Enter the full Google Maps embed URL for interactive map display
+                    Enter Google Maps embed URL for interactive map display
                   </p>
                 </div>
               ) : (
@@ -696,32 +725,11 @@ export default function ViewProjectPage() {
                       <iframe
                         src={currentData.companyMap}
                         title="Project Location"
-                        className="w-full h-full border-0 rounded-lg shadow-md dark:invert dark:brightness-90 dark:contrast-125 dark:sepia-[0.1] dark:hue-rotate-[320deg] dark:saturate-150"
+                        className="w-full h-full border-0 dark:invert dark:brightness-90 dark:contrast-125 dark:sepia-[0.1] dark:hue-rotate-[320deg] dark:saturate-150"
                         allowFullScreen
-                        loading="lazy"
+                        loading="eager"
                         referrerPolicy="no-referrer-when-downgrade"
-                        onLoad={() => console.log("Map loaded successfully")}
-                        onError={(e) => {
-                          console.log("Map failed to load:", e)
-                          const target = e.target as HTMLIFrameElement
-                          target.style.display = "none"
-                          const fallback = document.createElement("div")
-                          fallback.className = "w-full h-full bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md flex flex-col items-center justify-center p-4"
-                          fallback.innerHTML = `
-                            <p class="text-gray-500 dark:text-gray-400 text-center mb-4">
-                              Map could not be loaded. This might be a short URL that needs to be converted to an embed URL.
-                            </p>
-                            <a 
-                              href="${currentData.companyMap}"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline break-all text-sm"
-                            >
-                              Open in Google Maps: ${currentData.companyMap}
-                            </a>
-                          `
-                          target.parentNode?.insertBefore(fallback, target)
-                        }}
+                        style={{ pointerEvents: "auto" }}
                       />
                     </div>
                   ) : (
@@ -729,9 +737,6 @@ export default function ViewProjectPage() {
                       <p className="text-gray-500 dark:text-gray-400">No map provided</p>
                     </div>
                   )}
-                  <p className="text-sm text-gray-500 dark:text-gray-300 font-montserrat mt-2">
-                    Interactive map with full Google Maps functionality
-                  </p>
                 </div>
               )}
             </div>
@@ -740,21 +745,21 @@ export default function ViewProjectPage() {
 
         {/* Inspiration Section - only show if has content or editing */}
         {(isEditing || (currentData.inspiration && currentData.inspiration.trim() !== "")) && (
-          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">INSPIRATION</h2>
-            {isEditing ? (
-              <Textarea
+          {isEditing ? (
+            <Textarea
                 value={currentData.inspiration || ""}
                 onChange={(e) => updateEditData("inspiration", e.target.value)}
-                className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+              className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                 rows={2}
-              />
-            ) : (
-              <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
+            />
+          ) : (
+            <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
                 {currentData.inspiration}
-              </p>
-            )}
-          </div>
+            </p>
+          )}
+        </div>
         )}
 
 

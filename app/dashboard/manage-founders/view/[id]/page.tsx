@@ -1,11 +1,13 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
-import { Edit } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Label } from "@/components/ui/label"
+import { Edit } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useData } from "@/lib/data-context"
 import {
   FaInstagram,
   FaTiktok,
@@ -26,32 +28,27 @@ const ArrowLeftIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
   </svg>
 )
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useData } from "@/lib/data-context";
 
-interface TeamMember {
-  id: string;
-  name: string;
-  position: string;
-  description: string;
+interface Founder {
+  id: string
+  name: string
+  position: string
+  description: string
   socialMedia: {
-    instagram?: string;
-    tiktok?: string;
-    behance?: string;
-    pinterest?: string;
-    linkedin?: string;
-    twitter?: string;
-  };
-  avatar?: string;
+    instagram?: string
+    tiktok?: string
+    behance?: string
+    pinterest?: string
+    linkedin?: string
+    twitter?: string
+  }
+  avatar?: string
 }
 
-export default function ViewTeamMemberPage() {
-  const params = useParams();
-  const router = useRouter();
-  const memberId = params.id as string;
-  const { teamMembers } = useData();
-  const member = teamMembers.find((m) => m.id === memberId);
+export default function ViewFounderPage() {
+  const router = useRouter()
+  const { founders } = useData()
+  const [founder, setFounder] = useState<Founder | null>(null)
 
   const socialPlatforms: Record<string, React.ReactNode> = {
     instagram: <FaInstagram className="w-4 h-4" />,
@@ -60,14 +57,21 @@ export default function ViewTeamMemberPage() {
     pinterest: <FaPinterest className="w-4 h-4" />,
     linkedin: <FaLinkedin className="w-4 h-4" />,
     twitter: <FaX className="w-4 h-4" />,
-    x: <FaX className="w-4 h-4" />,
-  };
+  }
 
   const getSocialIcon = (platform: string) => {
-    return socialPlatforms[platform] || <span className="w-4 h-4 text-gray-600 dark:text-white/60 text-xs">{platform[0].toUpperCase()}</span>;
-  };
+    return socialPlatforms[platform] || <span className="w-4 h-4 text-gray-600 dark:text-white/60 text-xs">{platform[0].toUpperCase()}</span>
+  }
 
-  if (!member) {
+  useEffect(() => {
+    const founderId = window.location.pathname.split('/').pop()
+    const foundFounder = founders.find(f => f.id === founderId)
+    if (foundFounder) {
+      setFounder(foundFounder)
+    }
+  }, [founders])
+
+  if (!founder) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#15171a] font-['Montserrat']">
         <div className="w-full p-4 sm:p-6">
@@ -76,18 +80,18 @@ export default function ViewTeamMemberPage() {
               <Button variant="ghost" size="sm" className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white" onClick={() => router.back()}>
                 <ArrowLeftIcon />
               </Button>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Team Member Details</h1>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Founder Details</h1>
             </div>
             <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
               <CardContent className="py-12 text-center">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Team member not found</h2>
-                <p className="text-gray-600 dark:text-white/80">The requested team member could not be found.</p>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Founder not found</h2>
+                <p className="text-gray-600 dark:text-white/80">The requested founder could not be found.</p>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -95,18 +99,16 @@ export default function ViewTeamMemberPage() {
       <div className="w-full p-4 sm:p-6">
         <div className="w-full space-y-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
               <Button variant="ghost" size="sm" className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white" onClick={() => router.back()}>
                 <ArrowLeftIcon />
               </Button>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Team Member Details</h1>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#001F4B] dark:text-[#ec1e24] uppercase tracking-wide">Founder Details</h1>
             </div>
-            <Link href={`/dashboard/manage-team/edit/${member.id}`}>
-              <Button className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white">
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Member
-              </Button>
-            </Link>
+            <Button className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white">
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Founder
+            </Button>
           </div>
 
           <Card className="mb-8 dark:bg-[#1a1d23] dark:border-gray-700">
@@ -114,15 +116,15 @@ export default function ViewTeamMemberPage() {
           <div className="flex items-center space-x-4">
             {/* Avatar or initials */}
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-[#001F4B] dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
-              {member.avatar ? (
+              {founder.avatar ? (
                 <img
-                  src={member.avatar}
-                  alt={member.name}
+                  src={founder.avatar}
+                  alt={founder.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <span className="text-white font-bold text-lg sm:text-xl">
-                  {member.name
+                  {founder.name
                     .split(" ")
                     .map((n) => n[0])
                     .join("")
@@ -132,25 +134,25 @@ export default function ViewTeamMemberPage() {
             </div>
 
             <div>
-              <CardTitle className="text-2xl text-[#001F4B] dark:text-white">{member.name}</CardTitle>
-              <Badge className="mt-2 bg-[#001F4B] dark:bg-[#ec1e24] text-white">{member.position}</Badge>
+              <CardTitle className="text-2xl text-[#001F4B] dark:text-white">{founder.name}</CardTitle>
+              <Badge className="mt-2 bg-[#001F4B] dark:bg-[#ec1e24] text-white">{founder.position}</Badge>
             </div>
           </div>
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {member.description && (
+          {founder.description && (
             <div>
               <Label className="text-sm font-medium text-gray-700 dark:text-white/80">Description</Label>
-              <p className="text-gray-900 dark:text-white/80 mt-1 leading-relaxed">{member.description}</p>
+              <p className="text-gray-900 dark:text-white/80 mt-1 leading-relaxed">{founder.description}</p>
             </div>
           )}
 
-          {member.socialMedia && Object.keys(member.socialMedia).length > 0 && (
+          {founder.socialMedia && Object.keys(founder.socialMedia).length > 0 && (
             <div>
               <Label className="text-sm font-medium text-gray-700 dark:text-white/80">Social Media</Label>
               <div className="flex flex-wrap gap-3 mt-3">
-                {Object.entries(member.socialMedia).map(
+                {Object.entries(founder.socialMedia).map(
                   ([platform, url]) =>
                     url && (
                       <a
@@ -173,5 +175,5 @@ export default function ViewTeamMemberPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

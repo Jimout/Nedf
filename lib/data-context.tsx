@@ -22,6 +22,22 @@ export interface TeamMember {
   email?: string;
 }
 
+export interface Founder {
+  id: string;
+  name: string;
+  position: string;
+  description: string;
+  socialMedia: {
+    instagram?: string;
+    tiktok?: string;
+    behance?: string;
+    pinterest?: string;
+    linkedin?: string;
+    twitter?: string;
+  };
+  avatar?: string;
+}
+
 export interface Review {
   id: string;
   name: string;
@@ -32,10 +48,14 @@ export interface Review {
 
 interface DataContextType {
   teamMembers: TeamMember[];
+  founders: Founder[];
   reviews: Review[];
   addTeamMember: (member: TeamMember) => void;
   updateTeamMember: (id: string, member: TeamMember) => void;
   deleteTeamMember: (id: string) => void;
+  addFounder: (founder: Founder) => void;
+  updateFounder: (id: string, founder: Founder) => void;
+  deleteFounder: (id: string) => void;
   addReview: (review: Review) => void;
   updateReview: (id: string, review: Review) => void;
   deleteReview: (id: string) => void;
@@ -97,18 +117,26 @@ const initialReviews: Review[] = [
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [founders, setFounders] = useState<Founder[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
 
   // Load data from localStorage on mount
   useEffect(() => {
     try {
       const savedTeamMembers = localStorage.getItem("teamMembers");
+      const savedFounders = localStorage.getItem("founders");
       const savedReviews = localStorage.getItem("reviews");
 
       if (savedTeamMembers) {
         setTeamMembers(JSON.parse(savedTeamMembers));
       } else {
         setTeamMembers(initialTeamMembers);
+      }
+
+      if (savedFounders) {
+        setFounders(JSON.parse(savedFounders));
+      } else {
+        setFounders([]);
       }
 
       if (savedReviews) {
@@ -119,6 +147,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error("Error loading from localStorage:", error);
       setTeamMembers(initialTeamMembers);
+      setFounders([]);
       setReviews(initialReviews);
     }
   }, []);
@@ -149,6 +178,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
   }, [reviews]);
 
+  // Save founders safely
+  useEffect(() => {
+    try {
+      localStorage.setItem("founders", JSON.stringify(founders));
+    } catch (error) {
+      console.error("Error saving founders:", error);
+    }
+  }, [founders]);
+
   const addTeamMember = (member: TeamMember) => {
     setTeamMembers((prev) => [...prev, member]);
   };
@@ -161,6 +199,20 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   const deleteTeamMember = (id: string) => {
     setTeamMembers((prev) => prev.filter((member) => member.id !== id));
+  };
+
+  const addFounder = (founder: Founder) => {
+    setFounders((prev) => [...prev, founder]);
+  };
+
+  const updateFounder = (id: string, updatedFounder: Founder) => {
+    setFounders((prev) =>
+      prev.map((founder) => (founder.id === id ? updatedFounder : founder))
+    );
+  };
+
+  const deleteFounder = (id: string) => {
+    setFounders((prev) => prev.filter((founder) => founder.id !== id));
   };
 
   const addReview = (review: Review) => {
@@ -181,10 +233,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     <DataContext.Provider
       value={{
         teamMembers,
+        founders,
         reviews,
         addTeamMember,
         updateTeamMember,
         deleteTeamMember,
+        addFounder,
+        updateFounder,
+        deleteFounder,
         addReview,
         updateReview,
         deleteReview,

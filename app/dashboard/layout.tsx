@@ -8,13 +8,14 @@ import {
   LayoutDashboard,
   Layers,
   PenTool,
-  UserCircle2,
+  Building2,
   UsersRound,
   Star,
   Mail,
   LogOut,
   ChevronRight,
   ChevronLeft,
+  Crown,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -50,7 +51,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { id: "overview", label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
     { id: "portfolio", label: "Portfolio", icon: Layers, href: "/dashboard/manage-portfolio" },
     { id: "blog", label: "Blog Posts", icon: PenTool, href: "/dashboard/manage-blog" },
-    { id: "profile", label: "Profile", icon: UserCircle2, href: "/dashboard/manage-profile" },
+    { id: "profile", label: "Profile", icon: Building2, href: "/dashboard/manage-profile" },
+    { id: "founders", label: "Founders", icon: Crown, href: "/dashboard/manage-founders" },
     { id: "team", label: "Team", icon: UsersRound, href: "/dashboard/manage-team" },
     { id: "testimonial", label: "Reviews", icon: Star, href: "/dashboard/manage-review" },
     { id: "subscribers", label: "Subscribers", icon: Mail, href: "/dashboard/manage-subscribers" },
@@ -130,7 +132,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
             </div>
 
-            <nav className="flex-1 flex flex-col py-6 overflow-hidden">
+            <nav className="flex-1 flex flex-col py-6 overflow-y-auto">
               {menuItems.map((item) => {
                 const Icon = item.icon
                 const isActive =
