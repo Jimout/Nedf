@@ -3,14 +3,9 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 import { Button } from "./ui/button"
+import Pagination from "./Pagination"
+import { motion } from "framer-motion"
 
 const posts = [
   {
@@ -65,6 +60,9 @@ const posts = [
 
 export default function StudioNotes() {
   const [isMobile, setIsMobile] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
@@ -76,6 +74,40 @@ export default function StudioNotes() {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(0)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe && currentPage < totalPages) {
+      setCurrentPage(currentPage + 1)
+    }
+    if (isRightSwipe && currentPage > 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
+  // Different items per page for mobile vs desktop
+  const mobileItemsPerPage = 1
+  const desktopItemsPerPage = 3
+  const itemsPerPage = isMobile ? mobileItemsPerPage : desktopItemsPerPage
+  
+  const totalPages = Math.ceil(posts.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentPosts = posts.slice(startIndex, endIndex)
   
   const handleReadMore = (postId: number) => {
     // Map post IDs to blog pages
@@ -86,70 +118,107 @@ export default function StudioNotes() {
 
   return (
     <section className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-      <div className="flex justify-center">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: false,
-            dragFree: false,
-            containScroll: "trimSnaps",
-          }}
-          className="w-full max-w-[calc(100%-180px)] mx-auto"
+      <div className="flex flex-col">
+        {/* Posts Grid with Horizontal Slide */}
+        <div 
+          className="relative overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {posts.map(({ id, image, categories, title, description }, i) => {
-              return (
-                <CarouselItem key={i} className="pl-2 md:pl-4 basis-1/3">
-                  <article className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 h-[400px] border border-[rgba(0,31,75,0.1)] dark:border-transparent">
-                    <div className="relative w-full h-[170px]">
-                      <Image
-                        src={image || "/placeholder.svg"}
-                        alt={title}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        sizes={isMobile ? "260px" : "300px"}
-                      />
-                      <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-all duration-300 group-hover:scale-105" />
-                    </div>
+          <motion.div
+            className="flex transition-transform duration-1000 ease-in-out"
+            style={{
+              transform: `translateX(-${(currentPage - 1) * 100}%)`,
+            }}
+          >
+            {Array.from({ length: totalPages }, (_, pageIndex) => (
+              <div
+                key={pageIndex}
+                className="w-full flex-shrink-0"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
+                  {posts.slice(pageIndex * (isMobile ? mobileItemsPerPage : desktopItemsPerPage), (pageIndex + 1) * (isMobile ? mobileItemsPerPage : desktopItemsPerPage)).map(({ id, image, categories, title, description }, i) => {
+                    return (
+                      <article
+                        key={`${pageIndex}-${id}`}
+                        className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 h-[400px] border border-[rgba(0,31,75,0.1)] dark:border-transparent"
+                      >
+                        <div className="relative w-full h-[170px]">
+                          <Image
+                            src={image || "/placeholder.svg"}
+                            alt={title}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            sizes={isMobile ? "260px" : "300px"}
+                          />
+                          <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-all duration-300 group-hover:scale-105" />
+                        </div>
 
-                    <div className="relative p-4 flex flex-col h-[230px]">
-                      <div className="flex flex-wrap gap-2 mb-2" style={{ minHeight: "24px" }}>
-                        {categories.map((cat, idx) => (
-                          <span
-                            key={idx}
-                            className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground/70 rounded-full"
-                          >
-                            {cat}
-                          </span>
-                        ))}
-                      </div>
+                        <div className="relative p-4 flex flex-col h-[230px]">
+                          <div className="flex flex-wrap gap-2 mb-2" style={{ minHeight: "24px" }}>
+                            {categories.map((cat, idx) => (
+                              <span
+                                key={idx}
+                                className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground/70 rounded-full"
+                              >
+                                {cat}
+                              </span>
+                            ))}
+                          </div>
 
-                      <h2 className="text-[18px] text-[#333333] dark:text-white font-regular leading-6 mb-2">{title}</h2>
+                          <h2 className="text-[18px] text-[#333333] dark:text-white font-regular leading-6 mb-2">{title}</h2>
 
-                      <div className="flex-1 mb-3">
-                        <p
-                          className="text-[#333333]/60 dark:text-white/60 text-[12px] line-clamp-3"
-                         
-                        >
-                          {description}
-                        </p>
-                      </div>
+                          <div className="flex-1 mb-3">
+                            <p
+                              className="text-[#333333]/60 dark:text-white/60 text-[12px] line-clamp-3"
+                             
+                            >
+                              {description}
+                            </p>
+                          </div>
 
-                      <div className="flex justify-end">
-                        <Button
-                          onClick={() => handleReadMore(id)}>
-                          Read More
-                        </Button>
-                      </div>
-                    </div>
-                  </article>
-                </CarouselItem>
-              )
-            })}
-          </CarouselContent>
-          <CarouselPrevious className="absolute -left-12 sm:-left-16 lg:-left-20 xl:-left-24 2xl:-left-28 top-1/2 -translate-y-1/2 z-10" />
-          <CarouselNext className="absolute -right-12 sm:-right-16 lg:-right-20 xl:-right-24 2xl:-right-28 top-1/2 -translate-y-1/2 z-10" />
-        </Carousel>
+                          <div className="flex justify-end">
+                            <Button
+                              onClick={() => handleReadMore(id)}>
+                              Read More
+                            </Button>
+                          </div>
+                        </div>
+                      </article>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Mobile: Dot Indicators, Desktop: Pagination */}
+        {totalPages > 1 && (
+          <>
+            {/* Mobile - Dot Indicators */}
+            <div className="flex justify-center gap-2 mt-6 md:hidden">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentPage === index + 1
+                      ? "bg-[#001F4B] dark:bg-[#ec1e24] scale-125"
+                      : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
+                  }`}
+                  aria-label={`Go to page ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Desktop - Pagination */}
+            <div className="hidden md:flex justify-end mt-6">
+              <Pagination page={currentPage} setPage={setCurrentPage} total={totalPages} />
+            </div>
+          </>
+        )}
       </div>
     </section>
   )

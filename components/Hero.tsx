@@ -85,7 +85,7 @@ export default function HeroWithStats() {
               className="flex items-center max-sm:flex-col max-sm:items-start"
               style={{ height: `${lineHeight}px` }}
             >
-              <span className="text-[32px] font-thin text-[#333333]/80 dark:text-white/60 tracking-wide mr-2 max-sm:text-[16px] max-sm:mb-[-4px] max-sm:ml-[24px] lg:text-[38px] xl:text-[42px] 2xl:text-[46px] 2xl:font-normal">
+              <span className="text-[32px] font-thin text-[#333333]/80 dark:text-white/80 tracking-wide mr-2 max-sm:text-[16px] max-sm:mb-[-4px] max-sm:ml-[24px] lg:text-[38px] xl:text-[42px] 2xl:text-[46px] 2xl:font-normal">
                 We Are
               </span>
 

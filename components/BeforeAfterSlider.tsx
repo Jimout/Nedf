@@ -49,7 +49,9 @@ export default function BeforeAfterSlider({
     setSliderPosition(percentage)
   }, [])
 
-  const handleMouseDown = useCallback(() => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIsDragging(true)
   }, [])
 
@@ -58,7 +60,7 @@ export default function BeforeAfterSlider({
   }, [])
 
   const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
+    (e: MouseEvent) => {
       if (!isDragging) return
       e.preventDefault()
       updatePosition(e.clientX)
@@ -66,12 +68,14 @@ export default function BeforeAfterSlider({
     [isDragging, updatePosition]
   )
 
-  const handleTouchStart = useCallback(() => {
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIsDragging(true)
   }, [])
 
   const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
+    (e: TouchEvent) => {
       if (!isDragging || !e.touches[0]) return
       e.preventDefault()
       updatePosition(e.touches[0].clientX)
@@ -95,6 +99,28 @@ export default function BeforeAfterSlider({
       updatePosition(e.touches[0].clientX)
     }
   }, [isDragging, updatePosition])
+
+  // Add global event listeners for smooth dragging
+  useEffect(() => {
+    if (isDragging) {
+      const handleGlobalMouseMove = (e: MouseEvent) => handleMouseMove(e)
+      const handleGlobalMouseUp = () => handleMouseUp()
+      const handleGlobalTouchMove = (e: TouchEvent) => handleTouchMove(e)
+      const handleGlobalTouchEnd = () => handleTouchEnd()
+
+      document.addEventListener('mousemove', handleGlobalMouseMove)
+      document.addEventListener('mouseup', handleGlobalMouseUp)
+      document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false })
+      document.addEventListener('touchend', handleGlobalTouchEnd)
+
+      return () => {
+        document.removeEventListener('mousemove', handleGlobalMouseMove)
+        document.removeEventListener('mouseup', handleGlobalMouseUp)
+        document.removeEventListener('touchmove', handleGlobalTouchMove)
+        document.removeEventListener('touchend', handleGlobalTouchEnd)
+      }
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd])
 
   // Determine label visibility
   const showAfter = sliderPosition < 80
@@ -156,14 +182,7 @@ export default function BeforeAfterSlider({
       className={`relative overflow-hidden cursor-ew-resize select-none touch-none bg-white dark:bg-[#15171a] ${className}`}
       style={{ width, height, touchAction: 'none', WebkitTouchCallout: 'none' }}
       onClick={handleContainerClick}
-      onMouseMove={handleMouseMove}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
       onTouchStart={handleContainerTouch}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchEnd}
     >
       {/* After Image (Background) */}
       <Image
@@ -269,35 +288,49 @@ export default function BeforeAfterSlider({
         />
       </div>
 
-      {/* Slider Line */}
+      {/* Slider Line and Handle - Positioned Together */}
       <div
-        className="absolute top-0 bottom-0 w-[3px] bg-white dark:bg-[#15171a] shadow-lg z-10 pointer-events-none"
+        className="absolute top-0 bottom-0 z-20"
         style={{ 
           left: `${sliderPosition}%`,
           transform: 'translateX(-50%)'
         }}
-      />
-
-      {/* Slider Handle */}
-      <div
-        className="absolute top-1/2 w-12 h-12 bg-white dark:bg-[#15171a] shadow-xl border-3 border-gray-300 dark:border-[#ec1e24] rounded-full z-20 flex items-center justify-center cursor-grab active:cursor-grabbing active:scale-110 transition-all duration-200 touch-none"
-        style={{ 
-          left: `${sliderPosition}%`,
-          transform: 'translate(-50%, -50%)',
-          touchAction: 'none'
-        }}
-        onMouseDown={(e) => {
-          e.stopPropagation()
-          handleMouseDown()
-        }}
-        onTouchStart={(e) => {
-          e.stopPropagation()
-          handleTouchStart()
-        }}
       >
-        <div className="flex gap-1 pointer-events-none">
-          <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
-          <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
+        {/* Slider Line */}
+        <div
+          className="absolute top-0 bottom-0 w-[3px] bg-white dark:bg-[#15171a] shadow-lg left-1/2 pointer-events-none"
+          style={{ 
+            transform: 'translateX(-50%)',
+            boxShadow: '0 0 10px rgba(0,0,0,0.3), inset 0 0 5px rgba(255,255,255,0.5)'
+          }}
+        />
+
+        {/* Slider Handle */}
+        <div
+          className={`absolute top-1/2 w-12 h-12 bg-white dark:bg-[#15171a] shadow-xl border-3 border-gray-300 dark:border-[#ec1e24] rounded-full flex items-center justify-center transition-all duration-200 touch-none ${
+            isDragging ? 'cursor-grabbing scale-110 shadow-2xl' : 'cursor-grab hover:scale-105'
+          }`}
+          style={{ 
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            touchAction: 'none',
+            userSelect: 'none'
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleMouseDown(e)
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleTouchStart(e)
+          }}
+        >
+          <div className="flex gap-1 pointer-events-none">
+            <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
+            <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
+          </div>
         </div>
       </div>
 

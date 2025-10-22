@@ -3,6 +3,7 @@
 import { ClientReflections } from "@/components/ClientReflections"
 import Hero from "@/components/Hero"
 import { Navbar } from "@/components/Navbar"
+import { OurTeam } from "@/components/OurTeam"
 import Portfolio from "@/components/Portfolio"
 import StudioNotesPage from "@/components/StudioNotes"
 import { TheCrew } from "@/components/TheCrew"
@@ -39,12 +40,13 @@ export default function HomePage() {
       <Navbar />
       <Hero />
       <Portfolio />
-      <p className="text-center text-[32px] sm:text-[32px] md:text-[40px] font-light text-[#1a1a1a] dark:text-[#ec1e24] font-montserrat tracking-wider pt-20 mb-12">
+      <p className="text-center text-[28px] md:text-[32px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat tracking-wider pt-20 mb-12">
         STUDIO NOTES
       </p>
       <StudioNotesPage />
       <ClientReflections />
       <TheCrew />
+      <OurTeam />
     </motion.div>
   )
 }

@@ -75,7 +75,10 @@ export default function PanoramaViewer({ imageUrl, iframeUrl, title = "360° Vir
           allow="accelerometer; gyroscope; magnetometer; vr; xr-spatial-tracking; fullscreen"
           loading="lazy"
           style={{
-            touchAction: "manipulation",
+            touchAction: "auto",
+            pointerEvents: "auto",
+            position: "relative",
+            zIndex: 1,
           }}
         />
       </div>

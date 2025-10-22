@@ -93,26 +93,26 @@ export default function Hero() {
       {/* Full-width Section */}
       <section className="pt-20 font-montserrat relative overflow-hidden w-full">
         <div
-          className={`flex justify-center items-center gap-6 sm:gap-6 md:gap-14 text-[12px] text-gray-500 mb-12 flex-nowrap transition-all duration-1000 ease-out ${
+          className={`flex justify-center items-center gap-6 sm:gap-6 md:gap-14 text-[12px] text-gray-500 mb-12 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
           <span
-            className={`text-[10px] sm:text-base tracking-widest transition-all duration-700 delay-100 dark:text-[#ec1e24]/60 ${
+            className={`text-[10px] sm:text-sm tracking-widest transition-all duration-100 delay-50 dark:text-[#ec1e24]/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             }`}
           >
             2023
           </span>
           <h1
-            className={`text-[32px] sm:text-[32px] md:text-[40px] font-light text-[#1a1a1a] dark:text-[#ec1e24] font-montserrat whitespace-nowrap tracking-wider transition-all duration-700 delay-200 ${
+            className={`text-[28px] md:text-[32px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat whitespace-nowrap tracking-wider transition-all duration-100 delay-100 ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
             PORTFOLIO
           </h1>
           <span
-            className={`text-[10px] sm:text-base tracking-widest transition-all duration-700 delay-300 dark:text-[#ec1e24]/60 ${
+            className={`text-[10px] sm:text-sm tracking-widest transition-all duration-100 delay-150 dark:text-[#ec1e24]/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
             }`}
           >
@@ -143,7 +143,7 @@ export default function Hero() {
                     fill
                     className="object-cover transition-all duration-700 ease-out hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-[#15171a] opacity-50" />
+                  <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-10" />
                 </div>
 
                 <div
@@ -202,7 +202,7 @@ export default function Hero() {
                   fill
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-[#15171a] opacity-50" />
+                <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-10" />
               </div>
 
               {/* Right column */}
@@ -221,7 +221,7 @@ export default function Hero() {
                   fill
                   className="object-cover transition-all duration-700 ease-out hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-[#15171a] opacity-50" />
+                <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-10" />
               </div>
             </div>
 
@@ -241,7 +241,7 @@ export default function Hero() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-[#15171a] opacity-50" />
+                <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-10" />
               </div>
               <h2
                 className={`text-2xl font-light text-[#001F4B] dark:text-white leading-tight mt-6 whitespace-nowrap text-center transition-all duration-700 ${

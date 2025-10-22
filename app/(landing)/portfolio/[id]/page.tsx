@@ -99,12 +99,12 @@ function ProjectDetailContent() {
         className="relative mx-auto w-full px-4 md:px-12 2xl:px-32 py-10 bg-white dark:bg-[#15171a]"
         style={!isDarkMode ? {
           maskImage: `
-            linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%),
-            linear-gradient(to top, transparent 0%, white 1%, white 99%, transparent 100%)
+            linear-gradient(to right, transparent 0%, white 5%, white 95%, transparent 100%),
+            linear-gradient(to top, transparent 0%, white 0.5%, white 99.5%, transparent 100%)
           `,
           WebkitMaskImage: `
-            linear-gradient(to right, transparent 0%, white 10%, white 90%, transparent 100%),
-            linear-gradient(to top, transparent 0%, white 1%, white 99%, transparent 100%)
+            linear-gradient(to right, transparent 0%, white 5%, white 95%, transparent 100%),
+            linear-gradient(to top, transparent 0%, white 0.5%, white 99.5%, transparent 100%)
           `,
           maskComposite: "intersect",
           WebkitMaskComposite: "intersect",
@@ -343,7 +343,7 @@ function ProjectDetailContent() {
             variants={fadeUpVariants}
           >
             <h2 className="text-2xl font-medium text-[#333333] dark:text-white mb-6">360° VIRTUAL TOUR</h2>
-            <div className="w-full h-[600px]">
+            <div className="w-full h-[500px] mb-8">
               <PanoramaViewer
                 iframeUrl="https://nedf-studios.github.io/Lula_Beauty_Salon_360/"
                 title="360° Virtual Tour"

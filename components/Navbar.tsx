@@ -63,14 +63,14 @@ export function Navbar() {
   return (
     <div className="w-full relative z-[100]" style={{ pointerEvents: 'auto', touchAction: 'manipulation' }}>
       <nav
-        className="w-full relative  overflow-visible"
+        className="w-full relative overflow-visible"
         style={{
           pointerEvents: 'auto',
         }}
       >
         {/* Reduced height navbar */}
         <div className="w-full py-1.5 relative z-20" style={{ pointerEvents: 'auto' }}>
-          <div className="flex items-center w-full px-4 md:px-12 2xl:px-32">
+          <div className="flex items-center w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             {/* Logo */}
             <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
               <Image 
@@ -91,11 +91,6 @@ export function Navbar() {
               />
             </Link>
 
-            {/* Theme toggle near logo */}
-            <div className="ml-3 flex items-center">
-              <ThemeToggle />
-            </div>
-
           {/* Desktop nav */}
           <div className="hidden md:flex items-center justify-center flex-1 ml-28 2xl:ml-36 space-x-16 2xl:space-x-20">
             {navItems.map((item) => {
@@ -110,7 +105,7 @@ export function Navbar() {
                     "transition duration-300 ease-in-out pb-1 whitespace-nowrap text-sm 2xl:text-base",
                     isActive
                       ? "text-[#001F4B] dark:text-[#ec1e24] underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24]"
-                      : "text-[#333333] dark:text-white/60 hover:text-[#003366] dark:hover:text-[#ec1e24] hover:scale-105",
+                      : "text-[#333333] dark:text-white hover:text-[#003366] dark:hover:text-[#ec1e24] hover:scale-105",
                   )}
                 >
                   {item.name}
@@ -119,15 +114,16 @@ export function Navbar() {
             })}
           </div>
 
-          {/* Contact Button */}
-          <div className="hidden md:flex items-center gap-2">
+          {/* Contact Button and Theme Toggle */}
+          <div className="hidden md:flex items-center gap-3">
             <Link
               href={contactItem.href}
               onClick={(e) => handleNavClick(e, contactItem)}
-              className="flex items-center px-5 py-1.5 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24]/80 transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
+              className="flex items-center px-5 py-1.5 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
             >
               {contactItem.name}
             </Link>
+            <ThemeToggle />
           </div>
 
           {/* Mobile hamburger */}
@@ -203,7 +199,7 @@ export function Navbar() {
               href={item.href}
               onClick={(e) => handleNavClick(e, item)}
               className={cn(
-                "block transition-all duration-150 ease-out text-base text-[#333333] dark:text-white/60 text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 dark:active:bg-gray-800 min-h-[44px] flex items-center justify-center",
+                "transition-all duration-150 ease-out text-base text-[#333333] dark:text-white text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 dark:active:bg-gray-800 min-h-[44px] flex items-center justify-center",
                 isActive ? "underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24] font-medium" : "hover:text-[#003366] dark:hover:text-[#ec1e24] active:scale-95",
               )}
               style={{ 
@@ -221,7 +217,7 @@ export function Navbar() {
           <Link
             href={contactItem.href}
             onClick={(e) => handleNavClick(e, contactItem)}
-            className="block px-8 py-3 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24]/80 active:bg-[#002850] dark:active:bg-[#ec1e24]/90 transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center"
+            className="px-8 py-3 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24] active:bg-[#002850] dark:active:bg-[#ec1e24] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center"
             style={{ 
               WebkitTapHighlightColor: 'transparent',
               pointerEvents: 'auto',
