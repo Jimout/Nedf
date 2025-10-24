@@ -119,7 +119,7 @@ export function Navbar() {
             <Link
               href={contactItem.href}
               onClick={(e) => handleNavClick(e, contactItem)}
-              className="flex items-center px-5 py-1.5 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap"
+              className="flex items-center px-5 py-1.5 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24] transition duration-300 ease-in-out font-medium text-sm 2xl:text-base whitespace-nowrap font-montserrat"
             >
               {contactItem.name}
             </Link>
@@ -199,8 +199,8 @@ export function Navbar() {
               href={item.href}
               onClick={(e) => handleNavClick(e, item)}
               className={cn(
-                "transition-all duration-150 ease-out text-base text-[#333333] dark:text-white text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 dark:active:bg-gray-800 min-h-[44px] flex items-center justify-center",
-                isActive ? "underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24] font-medium" : "hover:text-[#003366] dark:hover:text-[#ec1e24] active:scale-95",
+                "transition-all duration-150 ease-out text-base text-[#333333]/70 dark:text-white/80 text-center touch-manipulation select-none px-6 py-3 rounded-md active:bg-gray-100 dark:active:bg-gray-800 min-h-[44px] flex items-center justify-center font-light",
+                isActive ? "underline underline-offset-4 decoration-[#001F4B] dark:decoration-[#ec1e24] font-medium font-montserrat" : "hover:text-[#003366] dark:hover:text-[#ec1e24] active:scale-95 font-montserrat",
               )}
               style={{ 
                 WebkitTapHighlightColor: 'transparent',
@@ -217,7 +217,7 @@ export function Navbar() {
           <Link
             href={contactItem.href}
             onClick={(e) => handleNavClick(e, contactItem)}
-            className="px-8 py-3 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24] active:bg-[#002850] dark:active:bg-[#ec1e24] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center"
+            className="px-8 py-3 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24] active:bg-[#002850] dark:active:bg-[#ec1e24] transition-all duration-150 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md min-h-[44px] flex items-center justify-center font-montserrat"
             style={{ 
               WebkitTapHighlightColor: 'transparent',
               pointerEvents: 'auto',

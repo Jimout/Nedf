@@ -10,7 +10,7 @@ import SplashScreenWrapper from "@/components/SplashScreenWrapper"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["200", "400", "700"],
+  weight: ["200", "300", "400", "700"],
   display: "swap",
 })
 
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={montserrat.className}>
+      <body className={`${montserrat.className} font-montserrat`}>
         <SplashScreenWrapper />
         <DynamicBackground />
         <ThemeProvider 

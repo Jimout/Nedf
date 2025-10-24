@@ -1,282 +1,223 @@
 "use client"
 
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useEffect, useState, useRef } from "react"
 
-interface Client {
+interface Testimonial {
+  id: number
+  quote: string
   name: string
   role: string
-  image: string
-  testimonial: string
+  avatar: string
+  photo: string
+  work: string
 }
 
-const clients: Client[] = [
+const testimonials: Testimonial[] = [
   {
-    name: "Mac Jessile",
-    role: "CEO at NEDFB",
-    image: "/test2.png",
-    testimonial:
-      "Working with NEDF was the best part of our renovation. They listened to what we wanted and delivered more than we imagined. Their attention to detail transformed our space beautifully.",
+    id: 1,
+    quote:
+      "NEDF transformed our office space into a modern, functional environment that perfectly reflects our company culture. The attention to detail and innovative design solutions exceeded our expectations.",
+    name: "Sarah Johnson",
+    role: "CEO",
+    avatar: "SJ",
+    photo: "/placeholder-user.jpg",
+    work: "Tech Solutions Inc."
   },
   {
-    name: "Mac Jessile",
-    role: "CEO at MERFB",
-    image: "/tes4.png",
-    testimonial:
-      "They exceeded our expectations and made the process seamless from start to finish. The team's expertise and dedication to quality were evident throughout. We couldn't be happier with the results.",
+    id: 2,
+    quote:
+      "Working with NEDF was an incredible experience. They understood our vision and brought it to life with creativity and precision. Our new headquarters is now a landmark in the city.",
+    name: "Michael Chen",
+    role: "Founder",
+    avatar: "MC",
+    photo: "/placeholder-user.jpg",
+    work: "Innovation Labs"
   },
   {
-    name: "Samrawit M",
-    role: "Homeowner",
-    image: "/test3.png",
-    testimonial:
-      "From design to execution, everything was flawless and thoughtful. The team demonstrated incredible skill while maintaining clear communication. They brought our vision to life beautifully.",
+    id: 3,
+    quote:
+      "The team's expertise in sustainable design helped us create an eco-friendly workspace that not only looks amazing but also reduces our environmental footprint significantly.",
+    name: "Emily Rodriguez",
+    role: "Director",
+    avatar: "ER",
+    photo: "/placeholder-user.jpg",
+    work: "Green Future Co."
+  },
+  {
+    id: 4,
+    quote:
+      "NEDF's ability to blend traditional elements with modern design created a unique space that honors our heritage while embracing the future. Simply outstanding work.",
+    name: "Ahmed Hassan",
+    role: "Managing Partner",
+    avatar: "AH",
+    photo: "/placeholder-user.jpg",
+    work: "Heritage Foundation"
+  },
+  {
+    id: 5,
+    quote:
+      "From concept to completion, NEDF delivered beyond our wildest dreams. Their collaborative approach and innovative solutions made the entire process seamless and enjoyable.",
+    name: "Lisa Thompson",
+    role: "Operations Manager",
+    avatar: "LT",
+    photo: "/placeholder-user.jpg",
+    work: "Creative Studios"
+  },
+  {
+    id: 6,
+    quote:
+      "The attention to detail and commitment to excellence is evident in every corner of our new space. NEDF didn't just design a building, they created an experience.",
+    name: "David Kim",
+    role: "President",
+    avatar: "DK",
+    photo: "/placeholder-user.jpg",
+    work: "Global Enterprises"
   },
 ]
 
-export function ClientReflections() {
-  const [rotation, setRotation] = useState(0)
-  const [svgWidth, setSvgWidth] = useState(1000)
-  const [svgHeight, setSvgHeight] = useState(600)
-  const [radius, setRadius] = useState(220)
-  const [centerX, setCenterX] = useState(300)
-  const startAngle = (3 * Math.PI) / 2
-  const totalArc = Math.PI
+export default function SlidingTestimonials() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [scrollLeft, setScrollLeft] = useState(0)
+  const [isHovered, setIsHovered] = useState(false)
 
-  // Responsive sizing
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth
-      if (width < 768) {
-        setSvgWidth(width)
-        setSvgHeight(500)
-        setRadius(160)
-        setCenterX(160)
-      } else if (width < 1280) {
-        setSvgWidth(width)
-        setSvgHeight(550)
-        setRadius(200)
-        setCenterX(200)
-      } else {
-        setSvgWidth(width)
-        setSvgHeight(800)
-        setRadius(300)
-        setCenterX(300)
-      }
-    }
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!containerRef.current) return
+    setIsDragging(true)
+    setStartX(e.pageX - containerRef.current.offsetLeft)
+    setScrollLeft(containerRef.current.scrollLeft)
+  }
 
-  // Continuous orbit animation
-  useEffect(() => {
-    let startTime: number | null = null
-    let animationFrame: number
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !containerRef.current) return
+    e.preventDefault()
+    const x = e.pageX - containerRef.current.offsetLeft
+    const walk = (x - startX) * 2
+    containerRef.current.scrollLeft = scrollLeft - walk
+  }
 
-    const animate = (time: number) => {
-      if (startTime === null) startTime = time
-      const elapsed = time - startTime
-      const speed = 0.00025 // smaller = slower orbit
-      setRotation(elapsed * speed)
-      animationFrame = requestAnimationFrame(animate)
-    }
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
 
-    animationFrame = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(animationFrame)
-  }, [])
+  const handleMouseLeave = () => {
+    setIsDragging(false)
+  }
 
-  const getPosition = (angle: number) => ({
-    x: centerX + radius * Math.cos(angle),
-    y: svgHeight / 2 + radius * Math.sin(angle),
-  })
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!containerRef.current) return
+    setIsDragging(true)
+    setStartX(e.touches[0].pageX - containerRef.current.offsetLeft)
+    setScrollLeft(containerRef.current.scrollLeft)
+  }
 
-  // Compute positions dynamically
-  const allClients = clients.map((client, i) => {
-    const progress = ((i / clients.length) + (rotation % (2 * Math.PI)) / (2 * Math.PI)) % 1
-    const angle = startAngle + progress * totalArc
-    const middleAngle = startAngle + totalArc / 2
-    const distanceFromMiddle = Math.abs(angle - middleAngle)
-    const normalized = 1 - distanceFromMiddle / (totalArc / 2)
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !containerRef.current) return
+    const x = e.touches[0].pageX - containerRef.current.offsetLeft
+    const walk = (x - startX) * 2
+    containerRef.current.scrollLeft = scrollLeft - walk
+  }
 
-    return {
-      ...client,
-      angle,
-      normalized,
-    }
-  })
-
-  // Determine active client (closest to center)
-  const middleAngle = startAngle + totalArc / 2
-  const activeClient = allClients.reduce((closest, client) => {
-    const diff = Math.abs(client.angle - middleAngle)
-    const closestDiff = Math.abs(closest.angle - middleAngle)
-    return diff < closestDiff ? client : closest
-  }, allClients[0])
+  const handleTouchEnd = () => {
+    setIsDragging(false)
+  }
 
   return (
-    <section className="relative pt-20 w-full flex justify-center overflow-hidden">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <motion.h2
-          className="text-center text-[26px] md:text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-12"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          CLIENT REFLECTIONS
-        </motion.h2>
-
-        {/* Desktop */}
-        <div className="hidden md:flex relative w-full items-center justify-start">
-          <div
-            style={{
-              width: svgWidth,
-              height: svgHeight,
-              position: "relative",
-            }}
-          >
-            {/* Arc path */}
-            <svg
-              width={svgWidth}
-              height={svgHeight}
-              viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              className="absolute inset-0"
-            >
-              <path
-                d={`M ${getPosition(startAngle).x} ${getPosition(startAngle).y}
-                    A ${radius} ${radius} 0 0 1 ${getPosition(startAngle + totalArc).x} ${
-                  getPosition(startAngle + totalArc).y
-                }`}
-                stroke="#e2e8f0"
-                strokeWidth="3"
-                strokeOpacity="0.6"
-                fill="none"
-              />
-            </svg>
-
-            {/* Avatars moving along the arc */}
-            {allClients.map((client, index) => {
-              const pos = getPosition(client.angle)
-              const size = 70 + client.normalized * 50
-              const opacity = 0.5 + client.normalized * 0.5
-              const scale = 0.8 + client.normalized * 0.4
-              const zIndex = Math.round(10 + client.normalized * 10)
-
-              return (
-                <motion.div
-                  key={index}
-                  className="absolute flex flex-col items-center"
-                  style={{
-                    left: pos.x - size / 2,
-                    top: pos.y - size / 2,
-                    zIndex,
-                  }}
-                  animate={{
-                    left: pos.x - size / 2,
-                    top: pos.y - size / 2,
-                    scale,
-                    opacity,
-                  }}
-                  transition={{
-                    type: "tween",
-                    duration: 0.3,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    style={{ width: size, height: size }}
-                  >
-                    <Image
-                      src={client.image}
-                      alt={client.name}
-                      width={100}
-                      height={100}
-                      className="rounded-full border-4 border-white shadow-lg object-cover w-full h-full"
-                    />
-                  </motion.div>
-                </motion.div>
-              )
-            })}
-
-            {/* Active testimonial area */}
-            <div
-              className="absolute text-left"
-              style={{
-                left: svgWidth >= 1200 ? centerX + radius + 140 : centerX + radius + 60,
-                top: svgHeight / 2 - 60,
-                width: svgWidth >= 1200 ? 600 : 400,
-              }}
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeClient.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <motion.p className="text-[#333333]/80 dark:text-white/40 text-base md:text-lg xl:text-xl font-medium leading-relaxed relative">
-                    <span className="absolute -left-4 -top-6 text-4xl text-gray-300 dark:text-[#ec1e24]/40">
-                      ❝
-                    </span>
-                    {activeClient.testimonial}
-                    <span className="absolute -right-4 -bottom-6 text-4xl text-gray-300 dark:text-[#ec1e24]/40">
-                      ❞
-                    </span>
-                  </motion.p>
-                  <motion.h3
-                    className="mt-6 text-lg font-semibold text-[#333333] dark:text-white/80"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    {activeClient.name}
-                  </motion.h3>
-                  <p className="text-sm text-gray-500 dark:text-[#ec1e24]/40">
-                    {activeClient.role}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile */}
-        <div className="block md:hidden px-6 mt-10">
-          <div className="bg-white dark:bg-[#15171a] shadow-xl rounded-2xl p-6 text-center relative overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeClient.name}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-col items-center"
-              >
-                <Image
-                  src={activeClient.image}
-                  alt={activeClient.name}
-                  width={100}
-                  height={100}
-                  className="mx-auto rounded-full border-4 border-gray-200 shadow-lg object-cover"
-                />
-                <h3 className="mt-4 text-lg font-semibold text-[#333333] dark:text-white/80">
-                  {activeClient.name}
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-[#ec1e24]/40">
-                  {activeClient.role}
-                </p>
-                <p className="mt-4 text-sm xl:text-lg text-[#333333]/80 dark:text-white/40 italic leading-relaxed text-center">
-                  ❝{activeClient.testimonial}❞
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
+    <div className="relative py-12 sm:py-16 md:py-20 pb-20 sm:pb-24 md:pb-32">
+      {/* Title */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 pb-8">
+        <p className="text-center text-xl sm:text-2xl md:text-[28px] lg:text-[32px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat tracking-wider">
+          CLIENT REFLECTION
+        </p>
       </div>
-    </section>
+
+      {/* Auto-scrolling Cards Container */}
+      <div className="relative px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div 
+          ref={containerRef}
+          className="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={(e) => {
+            handleMouseLeave()
+            setIsHovered(false)
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseEnter={() => setIsHovered(true)}
+        >
+          <div className={`flex gap-6 ${!isDragging && !isHovered ? 'animate-scroll' : ''}`} style={{ width: '200%' }}>
+            {/* Duplicate cards for seamless loop */}
+            {[...testimonials, ...testimonials].map((testimonial, index) => (
+              <div
+                key={`${testimonial.id}-${index}`}
+                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] bg-white dark:bg-[#15171a] shadow-md p-6 border-0 dark:border dark:border-white/10 dark:shadow-[#ec1e24]/20 mb-8 hover:shadow-lg hover:dark:shadow-[#ec1e24]/40 hover:scale-105 transition-all duration-300 cursor-pointer"
+              >
+                {/* Quotation Marks */}
+                <div className="text-6xl text-gray-300 dark:text-[#ec1e24] font-bold mb-4">
+                  "
+                </div>
+
+                {/* Testimonial Text */}
+                <blockquote className="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-6">
+                  {testimonial.quote}
+                </blockquote>
+
+                {/* Author Information */}
+                <div className="flex items-center gap-3">
+                  {/* Profile Picture */}
+                  <img
+                    src={testimonial.photo}
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  
+                  {/* Name and Title */}
+                  <div>
+                      <h3 className="font-bold text-gray-900 dark:text-[#ec1e24] text-sm">
+                        {testimonial.name}
+                      </h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-xs">
+                      {testimonial.role}, {testimonial.work}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .animate-scroll {
+          animation: scroll 40s linear infinite;
+          animation-timing-function: linear;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .cursor-grab {
+          cursor: grab;
+        }
+        .cursor-grabbing {
+          cursor: grabbing;
+        }
+      `}</style>
+    </div>
   )
 }

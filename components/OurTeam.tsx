@@ -11,6 +11,7 @@ interface TeamMemberProps {
   name: string;
   role: string;
   bio: string;
+  idx: number;
   socials?: {
     linkedin?: string;
     instagram?: string;
@@ -19,7 +20,7 @@ interface TeamMemberProps {
   };
 }
 
-function TeamMemberCard({ image, name, role, bio, socials }: TeamMemberProps) {
+function TeamMemberCard({ image, name, role, bio, socials, idx }: TeamMemberProps) {
   const socialData = [
     { Icon: FaLinkedin, url: socials?.linkedin },
     { Icon: FaInstagram, url: socials?.instagram },
@@ -28,7 +29,7 @@ function TeamMemberCard({ image, name, role, bio, socials }: TeamMemberProps) {
   ];
 
   return (
-    <div className="flex flex-col items-center text-center space-y-4 w-full max-w-[300px] mx-auto">
+    <div className={`flex flex-col items-center text-center space-y-4 w-full max-w-[300px] ${idx === 0 ? "lg:mr-auto" : idx === 2 ? "lg:ml-auto" : "lg:mx-auto"}`}>
       {/* Avatar */}
       <div className="relative">
         <Image
@@ -36,21 +37,21 @@ function TeamMemberCard({ image, name, role, bio, socials }: TeamMemberProps) {
           alt={name}
           width={120}
           height={120}
-          className="rounded-full object-cover shadow-lg"
+          className="rounded-full object-cover shadow-lg w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40"
         />
-        <div className="absolute inset-0 rounded-full bg-[#15171a] opacity-0 dark:opacity-50" />
+        <div className="absolute inset-0 rounded-full bg-[#15171a] opacity-10" />
       </div>
 
       {/* Content */}
       <div className="space-y-3 w-full">
         <div>
-          <h3 className="text-lg font-medium text-[#333333] dark:text-white">{name}</h3>
-          <p className="text-xs text-[#333333]/40 dark:text-white/60">{role}</p>
+          <h3 className="text-lg font-medium text-[#001F4B] dark:text-[#ec1e24] font-montserrat">{name}</h3>
+          <p className="text-xs text-[#333333]/40 dark:text-white/60 font-montserrat">{role}</p>
         </div>
 
         <div className="border-t border-gray-300 dark:border-white/20 w-16 mx-auto" />
 
-        <p className="text-sm text-[#333333]/80 dark:text-white/70 leading-relaxed px-4">
+        <p className="text-sm text-[#333333]/80 dark:text-white/70 leading-relaxed px-4 font-montserrat">
           {bio}
         </p>
 
@@ -205,7 +206,7 @@ export function OurTeam() {
   const currentTeam = team.slice(startIndex, endIndex);
 
   return (
-    <section id="OurTeam" className="pt-20 pb-20 w-full flex justify-center scroll-mt-20 relative z-10">
+    <section id="OurTeam" className="pb-20 w-full relative z-10">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <h2 className="text-center text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-12">
           OUR TEAM
@@ -226,9 +227,9 @@ export function OurTeam() {
           >
             {Array.from({ length: totalPages }, (_, pageIndex) => (
               <div key={pageIndex} className="w-full flex-shrink-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12 justify-items-center">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
                   {team.slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage).map((member, idx) => (
-                    <TeamMemberCard key={idx} {...member} />
+                    <TeamMemberCard key={idx} {...member} idx={idx} />
                   ))}
                 </div>
               </div>
