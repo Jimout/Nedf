@@ -1,7 +1,6 @@
 "use client"
 
 import ClientReflections from "@/components/ClientReflections"
-import FloatingSubscription from "@/components/FloatingSubscription"
 import Hero from "@/components/Hero"
 import { Navbar } from "@/components/Navbar"
 import { OurTeam } from "@/components/OurTeam"
@@ -58,7 +57,6 @@ export default function HomePage() {
       <OurTeam />
       <ClientReflections/>
       <Subscription />
-      <FloatingSubscription />
      
     </motion.div>
   )

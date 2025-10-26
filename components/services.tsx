@@ -1,121 +1,116 @@
 "use client"
 
-import { useState } from "react"
+import { CardStack } from "@/components/CardStack"
 
 interface Service {
   id: number
-  number: string
   title: string
-  description: string
+  description?: string
+  isSpecial?: boolean
 }
 
 const services: Service[] = [
   {
     id: 1,
-    number: "01",
-    title: "ARCHITECTURAL DESIGN",
-    description: "Innovative and sustainable architectural solutions tailored to your vision and requirements.",
+    title: "GRAPHIC DESIGN",
   },
   {
     id: 2,
-    number: "02",
-    title: "INTERIOR DESIGN",
-    description: "Transform your spaces with creative interior design that combines aesthetics and functionality.",
+    title: "BRAND DESIGN",
   },
   {
     id: 3,
-    number: "03",
-    title: "LANDSCAPE DESIGN",
-    description: "Beautiful outdoor spaces designed to enhance your property and create lasting impressions.",
+    title: "WEB DEVELOPMENT",
   },
   {
     id: 4,
-    number: "04",
-    title: "URBAN DESIGN AND PLANNING",
-    description: "Strategic urban planning solutions that shape vibrant and sustainable communities.",
+    title: "SMM",
   },
   {
     id: 5,
-    number: "05",
-    title: "CONSTRUCTION SUPERVISION",
-    description: "Expert oversight and management throughout the construction process to ensure quality delivery.",
+    title: "MEDIA PRODUCTION",
   },
   {
     id: 6,
-    number: "06",
-    title: "CONTRACT ADMINISTRATION",
-    description: "Professional contract management and administration services for seamless project execution.",
+    title: "PHOTOGRAPHY",
   },
   {
     id: 7,
-    number: "07",
-    title: "CONSULTANCY",
-    description: "Strategic consulting services to guide your projects from conception to completion.",
+    title: "VIDEO EDITING",
   },
   {
     id: 8,
-    number: "08",
-    title: "VISUALIZATION",
-    description: "High-quality 3D renderings and visualizations to bring your designs to life.",
+    title: "COPYWRITING",
+  },
+  {
+    id: 9,
+    title: "ROHA SPECIAL",
+    description:
+      "A touch of Roha Digitals creative spark, given to you with no strings attached (except maybe good vibes).",
+    isSpecial: true,
   },
 ]
 
 export function Services() {
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const regularServices = services.filter((s) => !s.isSpecial)
+  const specialService = services.find((s) => s.isSpecial)
+
+  const cardStackItems = regularServices.map((service) => ({
+    id: service.id,
+    name: service.title,
+    designation: "Service",
+    content: <p className="text-sm">{service.title}</p>,
+  }))
+
+  if (specialService) {
+    cardStackItems.push({
+      id: specialService.id,
+      name: specialService.title,
+      designation: "Special",
+      content: (
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="w-20 h-20 mb-4 flex items-center justify-center" style={{ color: '#ec1e24' }}>
+            <svg viewBox="0 0 256 256" fill="currentColor" className="w-full h-full">
+              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM128,40a88,88,0,0,0-88,88,8,8,0,0,1-16,0A104,104,0,0,1,128,24a8,8,0,0,1,0,16Zm0,176a8,8,0,0,1,0-16,88,88,0,0,0,88-88,8,8,0,0,1,16,0A104,104,0,0,1,128,216ZM40,128a8,8,0,0,1,16,0,88,88,0,0,0,88,88,8,8,0,0,1,0,16A104,104,0,0,1,40,128Zm176,0a104,104,0,0,1-104,104,8,8,0,0,1,0-16,88,88,0,0,0,88-88A8,8,0,0,1,216,128ZM128,64a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64Zm0,112a48,48,0,1,1,48-48A48.05,48.05,0,0,1,128,176Zm0-80a32,32,0,1,0,32,32A32,32,0,0,0,128,96Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,128,144Z"/>
+            </svg>
+          </div>
+          <p className="text-xs text-center leading-relaxed max-w-xs">{specialService.description}</p>
+        </div>
+      ),
+    })
+  }
 
   return (
-    <section className="w-full py-20">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        {/* Title */}
-        <div className="pb-12 sm:pb-16">
-          <p className="text-center text-[16px] sm:text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat tracking-wider">
-            OUR SERVICES
-          </p>
-        </div>
-        
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 items-center">
-      {services.map((service) => (
-        <div
-          key={service.id}
-          onMouseEnter={() => setHoveredId(service.id)}
-          onMouseLeave={() => setHoveredId(null)}
-          className={`relative h-48 sm:h-56 lg:h-64 overflow-hidden cursor-pointer transition-all duration-300 ${
-            hoveredId === service.id
-              ? "bg-primary text-primary-foreground shadow-lg scale-105"
-              : "bg-white dark:bg-[#15171a] text-foreground border border-border shadow-lg shadow-[#001F4B]/20 dark:shadow-[#ec1e24]/20"
-          }`}
-        >
-          {/* Content Container */}
-          <div className="h-full flex flex-col justify-between p-3 sm:p-4 lg:p-6">
-            {/* Number and Title - Default State */}
-            <div className={`transition-all duration-300 h-full flex flex-col justify-center ${
-              hoveredId === service.id ? "opacity-0" : "opacity-100"
-            }`}>
-              <div className="text-xl sm:text-2xl lg:text-3xl font-medium text-[#001F4B] dark:text-[#ec1e24] mb-1">{service.number}/</div>
-              <h3 className="text-sm sm:text-base lg:text-lg font-medium leading-tight text-[#001F4B] dark:text-foreground opacity-70 dark:opacity-80">{service.title}</h3>
+    <section className="w-full">
+      {/* Sticky CardStack Container */}
+      <div className="sticky top-0 h-screen flex items-center justify-center">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+            {/* Left Section - Text Content */}
+            <div className="flex-1 lg:max-w-md">
+              <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white uppercase tracking-wider mb-6">
+                EXPERTISE
+              </h2>
+              <div className="space-y-2 mb-8">
+                <p className="text-2xl lg:text-3xl xl:text-4xl font-bold" style={{ color: '#ec1e24' }}>We craft experiences, not just structures.</p>
+              </div>
+              <p className="text-sm lg:text-base text-white mb-8">
+                Every detail <span style={{ color: '#ec1e24' }}>reflects</span> intent and innovation.
+              </p>
             </div>
 
-            {/* Description Only - Visible on Hover */}
-            <div
-              className={`transition-all duration-300 h-full flex flex-col justify-start ${
-                hoveredId === service.id ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
-            >
-              <p className="text-xs sm:text-sm font-medium leading-tight">{service.description}</p>
+            {/* Right Section - CardStack Component */}
+            <div className="flex-1 lg:max-w-2xl w-full flex items-center justify-center">
+              <CardStack items={cardStackItems} offset={10} scaleFactor={0.06} />
             </div>
           </div>
-
-          {/* Accent Line */}
-          <div
-            className={`absolute bottom-0 left-0 h-1 bg-primary dark:bg-primary transition-all duration-300 ${
-              hoveredId === service.id ? "w-full" : "w-0"
-            }`}
-          />
-        </div>
-      ))}
         </div>
       </div>
+
+      {/* Scroll Spacer - provides scroll space for the animation */}
+      {Array.from({ length: Math.max(5, cardStackItems.length) }).map((_, i) => (
+        <div key={i} className="h-screen" />
+      ))}
     </section>
   )
 }

@@ -118,19 +118,19 @@ export default function ArcTestimonials() {
 
     if (vw < 768) {
       // Mobile: 20px avatar
-      p0 = [vw * 0.05, 400]
-      p1 = [vw * 0.5, 100]
-      p2 = [vw * 0.95, 400]
+      p0 = [0, window.innerHeight * 0.55]
+      p1 = [vw * 0.5, window.innerHeight * 0.08]
+      p2 = [vw, window.innerHeight * 0.55]
     } else if (vw < 1024) {
       // Tablet: 40px avatar
-      p0 = [vw * 0.125, 450]
-      p1 = [vw * 0.5, 100]
-      p2 = [vw * 0.875, 450]
+      p0 = [0, window.innerHeight * 0.6]
+      p1 = [vw * 0.5, window.innerHeight * 0.08]
+      p2 = [vw, window.innerHeight * 0.6]
     } else {
       // Desktop: 60px avatar
-      p0 = [vw * 0.083, 500]
-      p1 = [vw * 0.5, 100]
-      p2 = [vw * 0.917, 500]
+      p0 = [0, window.innerHeight * 0.65]
+      p1 = [vw * 0.5, window.innerHeight * 0.08]
+      p2 = [vw, window.innerHeight * 0.65]
     }
 
     const [arcX, arcY] = getPointOnBezier(progress, p0, p1, p2)
@@ -161,46 +161,35 @@ export default function ArcTestimonials() {
   const { opacity: textOpacity, scale: textScale } = getTextAnimation()
 
   return (
-    <div ref={sectionRef} className="relative min-h-screen py-12 sm:py-16 md:py-20">
-      {/* Title */}
-      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 pb-0">
-        <p className="text-center text-xl sm:text-2xl md:text-[28px] lg:text-[32px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat tracking-wider">
-          HOW NEDF WORKS
-        </p>
-      </div>
-      {/* Sticky Arc Container */}
+    <div ref={sectionRef} className="relative min-h-screen">
+      {/* Sticky Arc Container - Full Height */}
       <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none">
+          {/* Title */}
+          <div className="absolute top-[6%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6 z-20">
+          <h2 className="text-center text-xl sm:text-2xl md:text-[28px] lg:text-[32px] font-medium text-[#15171a] dark:text-white font-montserrat tracking-wider">
+            HOW NEDF WORKS
+          </h2>
+        </div>
         <div className="relative w-screen h-full -mx-[calc(50vw-50%)] overflow-visible">
           {/* SVG Arc Path - responsive viewBox */}
           <svg
             className="absolute inset-0 w-full h-full"
-            viewBox={`0 0 ${viewportWidth} 600`}
-            preserveAspectRatio="xMidYMid meet"
+            viewBox={`0 0 ${viewportWidth} ${window.innerHeight}`}
+            preserveAspectRatio="none"
             style={{ overflow: "visible" }}
           >
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                <feMerge> 
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
             <path
               d={
                 viewportWidth < 768
-                  ? `M ${viewportWidth * 0.05} 400 Q ${viewportWidth * 0.5} 100 ${viewportWidth * 0.95} 400`
+                  ? `M 0 ${window.innerHeight * 0.55} Q ${viewportWidth * 0.5} ${window.innerHeight * 0.08} ${viewportWidth} ${window.innerHeight * 0.55}`
                   : viewportWidth < 1024
-                    ? `M ${viewportWidth * 0.125} 450 Q ${viewportWidth * 0.5} 100 ${viewportWidth * 0.875} 450`
-                    : `M ${viewportWidth * 0.083} 500 Q ${viewportWidth * 0.5} 100 ${viewportWidth * 0.917} 500`
+                    ? `M 0 ${window.innerHeight * 0.6} Q ${viewportWidth * 0.5} ${window.innerHeight * 0.08} ${viewportWidth} ${window.innerHeight * 0.6}`
+                    : `M 0 ${window.innerHeight * 0.65} Q ${viewportWidth * 0.5} ${window.innerHeight * 0.08} ${viewportWidth} ${window.innerHeight * 0.65}`
               }
-              stroke="#001F4B"
-              strokeWidth="3"
+              stroke="white"
+              strokeWidth="2"
               fill="none"
-              opacity="0.8"
-              filter="url(#glow)"
-              className="dark:stroke-[#ec1e24]"
+              opacity="1"
             />
           </svg>
 
@@ -214,26 +203,24 @@ export default function ArcTestimonials() {
             }}
           >
             <div className="w-[20px] h-[20px] sm:w-[40px] sm:h-[40px] md:w-[60px] md:h-[60px] shadow-lg relative">
-              <img 
-                src="/LOGO FOR THE WEBISTE-06.png" 
-                alt="NEDF Studios Logo" 
-                className="w-full h-full object-contain"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
+              {/* Circle background */}
+              <div className="w-full h-full bg-white rounded-full shadow-lg flex items-center justify-center">
+                {/* Title text */}
                 <span 
-                  className="text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white bg-black/50 px-1 py-0.5 rounded transition-opacity duration-300"
+                  className="text-[6px] sm:text-[8px] md:text-[10px] font-bold text-center px-1 transition-opacity duration-300"
                   style={{ 
-                    opacity: opacity > 0.9 ? 1 : 0
+                    opacity: opacity > 0.9 ? 1 : 0,
+                    color: '#15171a'
                   }}
                 >
-                  {activeTestimonial.avatar}
+                  {activeTestimonial.name}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Description text positioned at bottom with avatar overlaying */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6 pb-6 sm:pb-8 md:pb-12">
+          {/* Description text positioned below the arc */}
+          <div className="absolute top-[62%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6">
             <div className="max-w-xs sm:max-w-sm md:max-w-2xl mx-auto text-center">
               <div
                 style={{
