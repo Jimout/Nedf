@@ -127,7 +127,7 @@ export default function SlidingTestimonials() {
     <div className="relative py-12 sm:py-16 md:py-20 pb-20 sm:pb-24 md:pb-32">
       {/* Title */}
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 pb-8">
-        <p className="text-center text-xl sm:text-2xl md:text-[28px] lg:text-[32px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat tracking-wider">
+        <p className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
           CLIENT REFLECTION
         </p>
       </div>

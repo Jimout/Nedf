@@ -142,7 +142,7 @@ export default function StudioNotes() {
                     return (
                       <article
                         key={`${pageIndex}-${id}`}
-                        className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 h-[400px] border border-[rgba(0,31,75,0.1)] dark:border-transparent"
+                        className="group bg-white dark:bg-[#15171a] border border-white/10 flex flex-col overflow-hidden transition-shadow h-[400px]"
                       >
                         <div className="relative w-full h-[170px]">
                           <Image
@@ -180,7 +180,11 @@ export default function StudioNotes() {
 
                           <div className="flex justify-end">
                             <Button
-                              onClick={() => handleReadMore(id)}>
+                              onClick={() => handleReadMore(id)}
+                              style={{ backgroundColor: '#ec1e24', color: 'white' }}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ec1e24' + 'dd'}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ec1e24'}
+                            >
                               Read More
                             </Button>
                           </div>
@@ -198,7 +202,7 @@ export default function StudioNotes() {
         {totalPages > 1 && (
           <>
             {/* Mobile - Dot Indicators */}
-            <div className="flex justify-center gap-2 mt-6 md:hidden">
+            <div className="flex justify-end gap-2 mt-6 md:hidden">
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index}

@@ -5,11 +5,12 @@ import Hero from "@/components/Hero"
 import { Navbar } from "@/components/Navbar"
 import { OurTeam } from "@/components/OurTeam"
 import Portfolio from "@/components/Portfolio"
+import { Slogan } from "@/components/Slogan"
 import Subscription from "@/components/Subscription"
 import { TheCrew } from "@/components/TheCrew"
 import StudioNotesPage from "@/components/StudioNotes"
 import Steps from "@/components/Steps"
-import { Services } from "@/components/services"
+import Services from "@/components/services"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -42,20 +43,18 @@ export default function HomePage() {
     >
       <Navbar />
       <Hero />
-      <Portfolio />
+      <Slogan />
       <Services />
-      <p className="text-center text-[28px] md:text-[32px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat tracking-wider pt-20 mb-12">
+      <Portfolio />
+      <TheCrew />
+      <Steps />
+      <OurTeam />
+      <ClientReflections/>
+      
+      <p className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight pt-20 mb-12" style={{ color: '#ec1e24' }}>
         STUDIO NOTES
       </p>
       <StudioNotesPage />
-      <Steps />
-      
-      <TheCrew />
-     
-      
-      
-      <OurTeam />
-      <ClientReflections/>
       <Subscription />
      
     </motion.div>

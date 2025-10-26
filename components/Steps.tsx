@@ -166,7 +166,7 @@ export default function ArcTestimonials() {
       <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none">
           {/* Title */}
           <div className="absolute top-[6%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6 z-20">
-          <h2 className="text-center text-xl sm:text-2xl md:text-[28px] lg:text-[32px] font-medium text-[#15171a] dark:text-white font-montserrat tracking-wider">
+          <h2 className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
             HOW NEDF WORKS
           </h2>
         </div>

@@ -32,21 +32,25 @@ export default function Footer() {
           <p className="text-[16px] text-[#001F4B]/60 dark:text-[#ec1e24]/60 mt-2 font-montserrat">Less, but Better.</p>
         </div>
 
-        {/* About Us */}
-        <div className="flex flex-col justify-center items-center md:items-start md:max-w-lg text-center md:text-left w-full md:w-auto">
-          <h3 className="text-[32px] text-[#001F4B] dark:text-[#ec1e24] font-medium mb-2 font-montserrat">About Us</h3>
-          <p className="text-sm font-medium text-[#333333]/80 dark:text-white/70 leading-relaxed max-w-md md:max-w-none font-montserrat">
-            NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural
-            design, interior spaces, and high-end visualizations. We blend design with technology to
-            create thoughtful, innovative, and visually compelling environments. From concept to
-            execution, our work reflects a commitment to clarity, craft, and bold creative
-            expression.
-          </p>
+        {/* Navigation Links - 2 Columns */}
+        <div className="flex flex-col justify-center items-center md:items-start">
+          <div className="grid grid-cols-2 gap-y-6 text-sm text-[#333333] dark:text-white/70 font-montserrat" style={{ columnGap: '60px' }}>
+            <Link href="/" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Home</Link>
+            <Link href="/#services" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Services</Link>
+            <Link href="/#portfolio" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Portfolio</Link>
+            <Link href="/#crew" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">About</Link>
+            <Link href="/#steps" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">How NEDF Works</Link>
+            <Link href="/#OurTeam" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Our Team</Link>
+            <Link href="/#testimonials" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Client Reflection</Link>
+            <Link href="/#studio-notes" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Studio Notes</Link>
+            <Link href="/#subscription" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Subscribe</Link>
+            <Link href="/#footer" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Contact Us</Link>
+          </div>
         </div>
 
         {/* Contact Us */}
         <div className="flex flex-col justify-center items-center md:items-start">
-          <h3 className="text-[32px] text-[#001F4B] dark:text-[#ec1e24] font-medium mt-1 mb-3 font-montserrat">Contact Us</h3>
+          <h3 className="text-[32px] text-[#001F4B] dark:text-[#ec1e24] font-medium mb-3 font-montserrat">Contact Us</h3>
           <div className="flex flex-row gap-2 text-sm mb-4 text-center md:text-left text-[#333333] dark:text-white/70 font-montserrat">
             <span>
               <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24] font-montserrat">Call</span>: +251945289012
@@ -76,42 +80,6 @@ export default function Footer() {
           </div>
 
           <p className="font-bold text-[#001F4B]/60 dark:text-[#ec1e24]/60 text-center md:text-left font-montserrat">Follow Us</p>
-        </div>
-      </div>
-
-      {/* Navigation Links */}
-      <div className="max-w-7xl mx-auto mt-8 px-6 lg:px-[200px]">
-        <div className="flex flex-wrap justify-center gap-6 md:gap-20 text-sm text-[#333333] dark:text-white/70 mb-6 font-montserrat">
-          <Link
-            href="/#hero"
-            className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transform hover:scale-110 hover:-translate-y-1 transition duration-300"
-          >
-            Home
-          </Link>
-          <Link
-            href="/#portfolio"
-            className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transform hover:scale-110 hover:-translate-y-1 transition duration-300"
-          >
-            Portfolio
-          </Link>
-          <Link
-            href="/#crew"
-            className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transform hover:scale-110 hover:-translate-y-1 transition duration-300"
-          >
-            Team
-          </Link>
-          <Link
-            href="/blog"
-            className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transform hover:scale-110 hover:-translate-y-1 transition duration-300"
-          >
-            Blog
-          </Link>
-          <Link
-            href="/#footer"
-            className="hover:text-[#001F4B] transform hover:scale-110 hover:-translate-y-1 transition duration-300 font-bold font-montserrat"
-          >
-            Contact Us
-          </Link>
         </div>
       </div>
 

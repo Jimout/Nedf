@@ -105,9 +105,10 @@ export default function Hero() {
             2023
           </span>
           <h1
-            className={`text-[28px] md:text-[32px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat whitespace-nowrap tracking-wider transition-all duration-100 delay-100 ${
+            className={`text-4xl font-bold sm:text-5xl text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
+            style={{ color: '#ec1e24' }}
           >
             PORTFOLIO
           </h1>

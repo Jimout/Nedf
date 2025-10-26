@@ -21,7 +21,7 @@ export default function Subscription() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title and Subtitle */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#001F4B] dark:text-[#ec1e24] mb-4 font-montserrat">
+          <h2 className="text-4xl font-bold sm:text-5xl mb-4 font-montserrat tracking-tight text-center" style={{ color: '#ec1e24' }}>
             Stay Updated with NEDF
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -39,7 +39,7 @@ export default function Subscription() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Your Email"
-                className="w-full px-6 py-4 text-gray-900 dark:text-white bg-white dark:bg-[#15171a] border border-gray-300 dark:border-white/20 rounded-l-lg sm:rounded-l-lg rounded-r-none sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-transparent transition-all duration-300"
+                className="w-full px-6 py-4 text-gray-900 dark:text-white bg-white dark:bg-[#15171a] border border-gray-300 dark:border-white/20 rounded-none focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-transparent transition-all duration-300"
                 required
               />
             </div>
@@ -47,7 +47,7 @@ export default function Subscription() {
             {/* Subscribe Button */}
             <button
               type="submit"
-              className="px-8 py-4 bg-[#001F4B] dark:bg-[#ec1e24] text-white font-bold text-lg rounded-r-lg sm:rounded-r-lg rounded-l-none sm:rounded-l-none hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:ring-offset-2"
+              className="px-8 py-4 bg-[#001F4B] dark:bg-[#ec1e24] text-white font-bold text-sm rounded-none hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:ring-offset-2"
             >
               Subscribe Now
             </button>

@@ -65,8 +65,8 @@ function TeamMemberCard({ image, name, role, bio, socials, idx }: TeamMemberProp
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full border border-[#001F4B] dark:border-[#ec1e24] flex items-center justify-center 
-                             hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white dark:hover:text-white transition-colors duration-300 text-[#001F4B] dark:text-[#ec1e24]"
+                  className="w-8 h-8 rounded-full border border-[#001F4B]/20 dark:border-white/20 flex items-center justify-center 
+                             hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white dark:hover:text-white hover:border-transparent transition-colors duration-300 text-[#001F4B]/20 dark:text-white/20"
                 >
                   <Icon size={12} />
                 </a>
@@ -208,7 +208,7 @@ export function OurTeam() {
   return (
     <section id="OurTeam" className="pb-20 w-full relative z-10">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <h2 className="text-center text-[30px] font-medium text-[#333333] dark:text-[#ec1e24] font-montserrat mb-12">
+        <h2 className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight mb-12" style={{ color: '#ec1e24' }}>
           OUR TEAM
         </h2>
 
@@ -227,7 +227,7 @@ export function OurTeam() {
           >
             {Array.from({ length: totalPages }, (_, pageIndex) => (
               <div key={pageIndex} className="w-full flex-shrink-0">
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full justify-end">
                   {team.slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage).map((member, idx) => (
                     <TeamMemberCard key={idx} {...member} idx={idx} />
                   ))}
@@ -241,7 +241,7 @@ export function OurTeam() {
         {totalPages > 1 && (
           <>
         {/* Mobile & Tablet - Dot Indicators */}
-        <div className="flex justify-center gap-2 mt-12 lg:hidden">
+        <div className="flex justify-end gap-2 mt-12 lg:hidden">
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
@@ -257,7 +257,7 @@ export function OurTeam() {
         </div>
 
         {/* Desktop - Pagination */}
-        <div className="hidden lg:flex justify-center mt-12">
+        <div className="hidden lg:flex justify-end mt-12">
           <Pagination
             page={currentIndex + 1}
             setPage={handlePageChange}
