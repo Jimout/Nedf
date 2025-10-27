@@ -69,13 +69,13 @@ export const TextRevealCard = ({
       onTouchMove={touchMoveHandler}
       ref={cardRef}
       className={cn(
-        "bg-[#15171a] border border-white/[0.08] w-full max-w-6xl p-8 relative overflow-hidden",
+        "bg-[#15171a] border border-white/[0.08] w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 relative overflow-hidden",
         className,
       )}
     >
       {children}
 
-      <div className="h-40 relative flex items-center justify-center overflow-hidden">
+      <div className="h-24 sm:h-32 md:h-40 relative flex items-center justify-center overflow-hidden">
         <motion.div
           style={{
             width: "100%",
@@ -91,13 +91,13 @@ export const TextRevealCard = ({
                 }
           }
           transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-          className="absolute bg-[#15171a] z-20 will-change-transform"
+          className="absolute bg-[#15171a] z-20 will-change-transform h-full flex items-center"
         >
           <p
             style={{
               textShadow: "4px 4px 15px rgba(0,0,0,0.5)",
             }}
-            className="text-base sm:text-[3rem] py-10 font-bold text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-300 text-center w-full"
+            className="text-lg sm:text-3xl md:text-4xl lg:text-5xl xl:text-[3rem] py-4 sm:py-6 lg:py-10 font-bold text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-300 text-center w-full"
           >
             {revealText}
           </p>
@@ -110,11 +110,11 @@ export const TextRevealCard = ({
             opacity: widthPercentage > 0 ? 1 : 0,
           }}
           transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-          className="h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent absolute z-50 will-change-transform"
+          className="h-24 sm:h-32 md:h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent absolute z-50 will-change-transform"
         />
 
         <div className="overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
-          <p className="text-base sm:text-[3rem] py-10 font-bold bg-clip-text text-transparent bg-[#323238] text-center w-full">{text}</p>
+          <p className="text-lg sm:text-3xl md:text-4xl lg:text-5xl xl:text-[3rem] py-4 sm:py-6 lg:py-10 font-bold bg-clip-text text-transparent bg-[#323238] text-center w-full">{text}</p>
           <MemoizedStars />
         </div>
       </div>
@@ -184,8 +184,8 @@ export const MemoizedStars = memo(Stars)
 
 export function Slogan() {
   return (
-    <section className="w-full h-screen flex items-center justify-center bg-transparent">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+    <section className="w-full h-screen flex items-center justify-center bg-transparent px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto">
         <TextRevealCard
           text="We are fully integrated design firm"
           revealText="based in Addis Ababa, Ethiopia"

@@ -114,23 +114,24 @@ export default function ArcTestimonials() {
     const progress = Math.max(0, Math.min(1, localProgress))
 
     let p0: [number, number], p1: [number, number], p2: [number, number]
-    const vw = viewportWidth
+    const vw = viewportWidth || window.innerWidth
+    const vh = window.innerHeight
 
     if (vw < 768) {
-      // Mobile: 20px avatar
-      p0 = [0, window.innerHeight * 0.55]
-      p1 = [vw * 0.5, window.innerHeight * 0.08]
-      p2 = [vw, window.innerHeight * 0.55]
+      // Mobile
+      p0 = [0, vh * 0.55]
+      p1 = [vw * 0.5, vh * 0.08]
+      p2 = [vw, vh * 0.55]
     } else if (vw < 1024) {
-      // Tablet: 40px avatar
-      p0 = [0, window.innerHeight * 0.6]
-      p1 = [vw * 0.5, window.innerHeight * 0.08]
-      p2 = [vw, window.innerHeight * 0.6]
+      // Tablet
+      p0 = [0, vh * 0.6]
+      p1 = [vw * 0.5, vh * 0.08]
+      p2 = [vw, vh * 0.6]
     } else {
-      // Desktop: 60px avatar
-      p0 = [0, window.innerHeight * 0.65]
-      p1 = [vw * 0.5, window.innerHeight * 0.08]
-      p2 = [vw, window.innerHeight * 0.65]
+      // Desktop
+      p0 = [0, vh * 0.65]
+      p1 = [vw * 0.5, vh * 0.08]
+      p2 = [vw, vh * 0.65]
     }
 
     const [arcX, arcY] = getPointOnBezier(progress, p0, p1, p2)
@@ -140,7 +141,8 @@ export default function ArcTestimonials() {
 
     const opacity = Math.abs(Math.cos((progress - 0.5) * Math.PI)) * 0.5 + 0.5
 
-    return { x: arcX, y: arcY, opacity, scale, rotation }
+    // Return both x/y coordinates and viewport dimensions for proper scaling
+    return { x: arcX, y: arcY, opacity, scale, rotation, vw, vh }
   }
 
   const getTextAnimation = () => {
@@ -157,7 +159,7 @@ export default function ArcTestimonials() {
   }
 
   const activeTestimonial = testimonials[activeIndex] || testimonials[0]
-  const { x, y, opacity, scale, rotation } = getActiveAvatarPosition()
+  const { x, y, opacity, scale, rotation, vw, vh } = getActiveAvatarPosition()
   const { opacity: textOpacity, scale: textScale } = getTextAnimation()
 
   return (
@@ -174,17 +176,17 @@ export default function ArcTestimonials() {
           {/* SVG Arc Path - responsive viewBox */}
           <svg
             className="absolute inset-0 w-full h-full"
-            viewBox={`0 0 ${viewportWidth} ${window.innerHeight}`}
+            viewBox={`0 0 ${viewportWidth || window.innerWidth} ${window.innerHeight}`}
             preserveAspectRatio="none"
             style={{ overflow: "visible" }}
           >
             <path
               d={
-                viewportWidth < 768
-                  ? `M 0 ${window.innerHeight * 0.55} Q ${viewportWidth * 0.5} ${window.innerHeight * 0.08} ${viewportWidth} ${window.innerHeight * 0.55}`
-                  : viewportWidth < 1024
-                    ? `M 0 ${window.innerHeight * 0.6} Q ${viewportWidth * 0.5} ${window.innerHeight * 0.08} ${viewportWidth} ${window.innerHeight * 0.6}`
-                    : `M 0 ${window.innerHeight * 0.65} Q ${viewportWidth * 0.5} ${window.innerHeight * 0.08} ${viewportWidth} ${window.innerHeight * 0.65}`
+                (viewportWidth || window.innerWidth) < 768
+                  ? `M 0 ${window.innerHeight * 0.55} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.55}`
+                  : (viewportWidth || window.innerWidth) < 1024
+                    ? `M 0 ${window.innerHeight * 0.6} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.6}`
+                    : `M 0 ${window.innerHeight * 0.65} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.65}`
               }
               stroke="white"
               strokeWidth="2"
@@ -196,8 +198,8 @@ export default function ArcTestimonials() {
           <div
             className="absolute z-10"
             style={{
-              left: `${(x / viewportWidth) * 100}%`,
-              top: `${(y / 600) * 100}%`,
+              left: `${(x / vw) * 100}%`,
+              top: `${(y / vh) * 100}%`,
               transform: `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`,
               opacity,
             }}
@@ -220,7 +222,7 @@ export default function ArcTestimonials() {
           </div>
 
           {/* Description text positioned below the arc */}
-          <div className="absolute top-[62%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6">
+          <div className="absolute top-[55%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6">
             <div className="max-w-xs sm:max-w-sm md:max-w-2xl mx-auto text-center">
               <div
                 style={{

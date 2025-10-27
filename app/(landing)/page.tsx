@@ -10,7 +10,7 @@ import Subscription from "@/components/Subscription"
 import { TheCrew } from "@/components/TheCrew"
 import StudioNotesPage from "@/components/StudioNotes"
 import Steps from "@/components/Steps"
-import Services from "@/components/services"
+import { Services } from "@/components/services"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
