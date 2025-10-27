@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { PinContainer } from "@/components/ui/3d-pin"
+import { CardStack } from "@/components/CardStack"
 
 interface Service {
   id: number
@@ -14,144 +13,106 @@ const services: Service[] = [
   {
     id: 1,
     title: "GRAPHIC DESIGN",
-    description: "Creative visual solutions that captivate and communicate your brand message effectively.",
   },
   {
     id: 2,
     title: "BRAND DESIGN",
-    description: "Comprehensive branding strategies that establish your unique identity in the market.",
   },
   {
     id: 3,
     title: "WEB DEVELOPMENT",
-    description: "Cutting-edge web solutions built with modern technologies and best practices.",
   },
   {
     id: 4,
     title: "SMM",
-    description: "Strategic social media management to grow your online presence and engagement.",
   },
   {
     id: 5,
     title: "MEDIA PRODUCTION",
-    description: "Professional media content creation tailored to your brand's unique story.",
   },
   {
     id: 6,
     title: "PHOTOGRAPHY",
-    description: "Stunning visual storytelling through professional photography services.",
   },
   {
     id: 7,
     title: "VIDEO EDITING",
-    description: "Polished video content that brings your vision to life with precision and creativity.",
   },
   {
     id: 8,
     title: "COPYWRITING",
-    description: "Compelling written content that resonates with your audience and drives results.",
+  },
+  {
+    id: 9,
+    title: "ROHA SPECIAL",
+    description:
+      "A touch of Roha Digitals creative spark, given to you with no strings attached (except maybe good vibes).",
+    isSpecial: true,
   },
 ]
 
 export function Services() {
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const [isHovered, setIsHovered] = useState(false)
+  const regularServices = services.filter((s) => !s.isSpecial)
+  const specialService = services.find((s) => s.isSpecial)
 
-  const firstRow = services.slice(0, 4)
-  const secondRow = services.slice(4, 8)
+  const cardStackItems = regularServices.map((service) => ({
+    id: service.id,
+    name: service.title,
+    designation: "Service",
+    content: <p className="text-sm">{service.title}</p>,
+  }))
+
+  if (specialService) {
+    cardStackItems.push({
+      id: specialService.id,
+      name: specialService.title,
+      designation: "Special",
+      content: (
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="w-20 h-20 mb-4 flex items-center justify-center" style={{ color: "#ec1e24" }}>
+            <svg viewBox="0 0 256 256" fill="currentColor" className="w-full h-full">
+              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM128,40a88,88,0,0,0-88,88,8,8,0,0,1-16,0A104,104,0,0,1,128,24a8,8,0,0,1,0,16Zm0,176a8,8,0,0,1,0-16,88,88,0,0,0,88-88,8,8,0,0,1,16,0A104,104,0,0,1,128,216ZM40,128a8,8,0,0,1,16,0,88,88,0,0,0,88,88,8,8,0,0,1,0,16A104,104,0,0,1,40,128Zm176,0a104,104,0,0,1-104,104,8,8,0,0,1,0-16,88,88,0,0,0,88-88A8,8,0,0,1,216,128ZM128,64a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64Zm0,112a48,48,0,1,1,48-48A48.05,48.05,0,0,1,128,176Zm0-80a32,32,0,1,0,32,32A32,32,0,0,0,128,96Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,128,144Z" />
+            </svg>
+          </div>
+          <p className="text-xs text-center leading-relaxed max-w-xs">{specialService.description}</p>
+        </div>
+      ),
+    })
+  }
 
   return (
-    <section className="w-full py-20">
+    <section className="w-full">
+      {/* Sticky CardStack Container */}
+      <div className="sticky top-0 h-screen flex items-center justify-center">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="mb-16">
-          <h2 className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight mb-12" style={{ color: '#ec1e24' }}>
-            OUR SERVICES
-          </h2>
-        </div>
-
-        <div 
-          className="overflow-x-hidden"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <div className={`flex gap-16 mb-4 ${!isHovered ? 'animate-slide-right' : ''}`} style={{ width: '200%' }}>
-          {[...firstRow, ...firstRow].map((service, index) => {
-            return (
-              <div key={`${service.id}-${index}`} className="flex justify-center flex-shrink-0">
-                <PinContainer
-                  title={service.title}
-                  description={service.description}
-                  href="#"
-                  containerClassName="w-full"
-                  onMouseEnter={() => setHoveredId(service.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                >
-                  <div className="flex flex-col items-center justify-center text-center min-h-[220px] w-[350px] sm:w-[380px] md:w-[400px]">
-                    <h3 className="text-sm font-semibold text-white/80 mb-3 uppercase tracking-wider line-clamp-3">
-                      {hoveredId === service.id ? service.description : service.title}
-                    </h3>
-                  </div>
-                </PinContainer>
+          <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+            {/* Left Section - Text Content */}
+            <div className="flex-1 lg:max-w-md">
+              <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white uppercase tracking-wider mb-6">
+                EXPERTISE
+              </h2>
+              <div className="space-y-2 mb-8">
+                <p className="text-2xl lg:text-3xl xl:text-4xl font-bold" style={{ color: "#ec1e24" }}>
+                  We craft experiences, not just structures.
+                </p>
               </div>
-            )
-          })}
+              <p className="text-sm lg:text-base text-white mb-8">
+                Every detail <span style={{ color: "#ec1e24" }}>reflects</span> intent and innovation.
+              </p>
+            </div>
+
+            {/* Right Section - CardStack Component */}
+            <div className="flex-1 lg:max-w-2xl w-full flex items-center justify-center">
+              <CardStack items={cardStackItems} offset={10} scaleFactor={0} />
+            </div>
           </div>
         </div>
-
-        <div 
-          className="overflow-x-hidden"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <div className={`flex gap-16 mb-12 ${!isHovered ? 'animate-slide-left' : ''}`} style={{ width: '200%' }}>
-          {[...secondRow, ...secondRow].map((service, index) => {
-            return (
-              <div key={`${service.id}-${index}`} className="flex justify-center flex-shrink-0">
-                <PinContainer
-                  title={service.title}
-                  description={service.description}
-                  href="#"
-                  containerClassName="w-full"
-                  onMouseEnter={() => setHoveredId(service.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                >
-                  <div className="flex flex-col items-center justify-center text-center min-h-[220px] w-[350px] sm:w-[380px] md:w-[400px]">
-                    <h3 className="text-sm font-semibold text-white/80 mb-3 uppercase tracking-wider line-clamp-3">
-                      {hoveredId === service.id ? service.description : service.title}
-                    </h3>
-                  </div>
-                </PinContainer>
-              </div>
-            )
-          })}
-          </div>
-        </div>
-
-        <style jsx>{`
-          @keyframes slide-right {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-50%);
-            }
-          }
-          @keyframes slide-left {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(50%);
-            }
-          }
-          .animate-slide-right {
-            animation: slide-right 30s linear infinite;
-          }
-          .animate-slide-left {
-            animation: slide-left 30s linear infinite;
-          }
-        `}</style>
       </div>
+
+      {/* Scroll Spacer - provides scroll space for the animation */}
+      {Array.from({ length: Math.max(5, cardStackItems.length) }).map((_, i) => (
+        <div key={i} className="h-screen" />
+      ))}
     </section>
   )
 }
