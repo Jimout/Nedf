@@ -124,10 +124,10 @@ export default function SlidingTestimonials() {
   }
 
   return (
-    <div className="relative py-12 sm:py-16 md:py-20 pb-20 sm:pb-24 md:pb-32">
+    <div className="relative py-12 sm:py-16 md:py-20">
       {/* Title */}
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 pb-8">
-        <p className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
+        <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
           CLIENT REFLECTION
         </p>
       </div>
@@ -154,7 +154,7 @@ export default function SlidingTestimonials() {
             {[...testimonials, ...testimonials].map((testimonial, index) => (
               <div
                 key={`${testimonial.id}-${index}`}
-                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] bg-white dark:bg-[#15171a] shadow-md p-6 border-0 dark:border dark:border-white/10 dark:shadow-[#ec1e24]/20 mb-8 hover:shadow-lg hover:dark:shadow-[#ec1e24]/40 hover:scale-105 transition-all duration-300 cursor-pointer"
+                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] bg-white dark:bg-[#15171a] p-6 border border-white/20 dark:border-white/10 mb-8 hover:scale-105 transition-all duration-300 cursor-pointer"
               >
                 {/* Quotation Marks */}
                 <div className="text-6xl text-gray-300 dark:text-[#ec1e24] font-bold mb-4">

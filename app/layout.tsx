@@ -15,9 +15,14 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: "Professional Next.js App",
-  description: "A professional Next.js application with Tailwind CSS and shadcn/ui",
+  title: "NEDF STUDIO",
+  description: "We are a fully integrated Design firm based in Addis Ababa, Ethiopia. We craft perfection through every line and form.",
   generator: "v0.app",
+  icons: {
+    icon: "/FAV ICON 180x180.png",
+    shortcut: "/FAV ICON 180x180.png",
+    apple: "/FAV ICON 180x180.png",
+  },
 }
 
 export default function RootLayout({
@@ -27,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${montserrat.className} font-montserrat`}>
+      <body className={`${montserrat.className} font-montserrat bg-white dark:bg-[#15171a]`}>
         <SplashScreenWrapper />
         <DynamicBackground />
         <ThemeProvider 

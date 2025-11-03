@@ -105,7 +105,7 @@ export default function Hero() {
             2023
           </span>
           <h1
-            className={`text-4xl font-bold sm:text-5xl text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 ${
+            className={`text-3xl font-bold sm:text-4xl text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             style={{ color: '#ec1e24' }}
@@ -128,7 +128,7 @@ export default function Hero() {
               {/* Left column */}
               <div className="flex flex-col w-[28%] lg:w-[26%] xl:w-[24%] items-start">
                 <div
-                  className={`relative w-full h-[400px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
+                  className={`relative w-full h-[500px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -189,7 +189,7 @@ export default function Hero() {
 
               {/* Middle Image */}
               <div
-                className={`relative w-[40%] lg:w-[42%] xl:w-[40%] h-[400px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[1000ms] ${
+                className={`relative w-[40%] lg:w-[42%] xl:w-[40%] h-[500px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -208,7 +208,7 @@ export default function Hero() {
 
               {/* Right column */}
               <div
-                className={`relative w-[28%] lg:w-[26%] xl:w-[24%] h-[400px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
+                className={`relative w-[28%] lg:w-[26%] xl:w-[24%] h-[500px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{
@@ -229,7 +229,7 @@ export default function Hero() {
             {/* Mobile */}
             <div className="md:hidden w-full flex flex-col items-center">
               <div
-                className={`relative w-11/12 h-72 sm:h-96 overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
+                className={`relative w-11/12 h-96 sm:h-[450px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-y-[100%] opacity-0 scale-98" : "transform translate-y-0 opacity-100 scale-100"
                 }`}
                 style={{

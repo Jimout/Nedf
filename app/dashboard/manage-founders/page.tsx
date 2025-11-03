@@ -143,7 +143,6 @@ export default function ManageFoundersPage() {
                       Add Founder
                     </Button>
                   </Link>
-                )}
               </CardContent>
             </Card>
           )}

@@ -12,20 +12,16 @@ export default function HeroWithStats() {
   // 🧮 Dynamically calculate line height based on screen size
   const getLineHeight = () => {
     if (typeof window !== "undefined") {
-      if (window.innerWidth >= 1536) return 160
-      if (window.innerWidth >= 1280) return 140
-      if (window.innerWidth >= 1024) return 120
-      if (window.innerWidth < 640) return 60
+      if (window.innerWidth >= 1536) return 180
+      if (window.innerWidth >= 1280) return 160
+      if (window.innerWidth >= 1024) return 140
+      if (window.innerWidth < 640) return 72
     }
-    return 80
+    return 96
   }
 
-  const [lineHeight, setLineHeight] = useState(getLineHeight)
+  const [lineHeight, setLineHeight] = useState(() => getLineHeight())
   const [index, setIndex] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(true)
-
-  // 👇 Duplicate the first word at the end to make the loop smooth
-  const extendedWords = [...words, words[0]]
 
   // 📐 Update line height on window resize
   useEffect(() => {
@@ -35,57 +31,41 @@ export default function HeroWithStats() {
     return () => window.removeEventListener("resize", updateLineHeight)
   }, [])
 
-  // 🔁 Rotate words every 1.5 seconds
+  // 🔁 Rotate words every 1.5 seconds - simple cycling
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => prev + 1)
+      setIndex((prev) => (prev + 1) % words.length)
     }, 1500)
     return () => clearInterval(interval)
   }, [])
 
-  // 🪄 When we hit the fake last slide (duplicate), snap back to 0 without transition
-  useEffect(() => {
-    if (index === extendedWords.length - 1) {
-      const timeout = setTimeout(() => {
-        setIsTransitioning(false)
-        setIndex(0)
-      }, 400) // match transition duration
-      return () => clearTimeout(timeout)
-    } else {
-      setIsTransitioning(true)
-    }
-  }, [index, extendedWords.length])
-
   return (
     <>
       {/* 🧭 Hero Section */}
-      <section className="relative flex items-center justify-start font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] mt-16 max-sm:mt-8 z-10">
+      <section className="relative flex items-center justify-start font-sans overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] mt-16 max-sm:mt-8 z-10">
         <div className="flex items-center max-sm:items-start gap-8 max-sm:gap-6">
           {/* 🪙 Logo */}
           <div className="select-none -ml-2 max-sm:-ml-1">
             <Image
-              src="/HERO SECTION LOGO.png"
+              src="/NAVIGATION BAR LOGO OPTION 1.png"
               alt="NEDF Logo"
-              width={120}
-              height={120}
-              className="object-contain max-sm:w-[100px] max-sm:h-[100px] lg:w-[180px] lg:h-[180px] xl:w-[200px] xl:h-[200px] 2xl:w-[220px] 2xl:h-[220px] dark:hidden"
+              width={140}
+              height={140}
+              className="object-contain max-sm:w-[110px] max-sm:h-[110px] lg:w-[200px] lg:h-[200px] xl:w-[220px] xl:h-[220px] 2xl:w-[240px] 2xl:h-[240px] dark:hidden"
             />
             <Image
-              src="/LOGO FOR THE WEBISTE-04.png"
+              src="/LOGO FOR THE WEBISTE-06.png"
               alt="NEDF Logo Dark"
-              width={120}
-              height={120}
-              className="object-contain max-sm:w-[100px] max-sm:h-[100px] lg:w-[180px] lg:h-[180px] xl:w-[200px] xl:h-[200px] 2xl:w-[220px] 2xl:h-[220px] hidden dark:block"
+              width={140}
+              height={140}
+              className="object-contain max-sm:w-[110px] max-sm:h-[110px] lg:w-[200px] lg:h-[200px] xl:w-[220px] xl:h-[220px] 2xl:w-[240px] 2xl:h-[240px] hidden dark:block"
             />
           </div>
 
           {/* 📝 Text Block */}
           <div className="flex flex-col justify-center max-sm:mt-[-24px] max-sm:ml-[-6px]">
-            <div
-              className="flex items-center max-sm:flex-col max-sm:items-start"
-              style={{ height: `${lineHeight}px` }}
-            >
-              <span className="text-[32px] font-thin text-[#333333]/80 dark:text-white/80 tracking-wide mr-2 max-sm:text-[16px] max-sm:mb-[-4px] max-sm:ml-[24px] lg:text-[38px] xl:text-[42px] 2xl:text-[46px] 2xl:font-normal">
+            <div className="flex items-center max-sm:flex-col max-sm:items-start" style={{ height: `${lineHeight}px` }}>
+              <span className="text-[48px] font-thin text-[#333333]/80 dark:text-white/80 tracking-wide mr-2 max-sm:text-[24px] max-sm:mb-[-4px] max-sm:ml-[24px] lg:text-[54px] xl:text-[60px] 2xl:text-[68px] 2xl:font-normal">
                 We Are
               </span>
 
@@ -94,27 +74,32 @@ export default function HeroWithStats() {
                 style={{
                   height: `${lineHeight}px`,
                   maxHeight: `${lineHeight}px`,
+                  minHeight: `${lineHeight}px`,
+                  contain: "layout style",
                 }}
               >
                 <div
                   ref={containerRef}
                   style={{
                     transform: `translateY(-${index * lineHeight}px)`,
-                    transition: isTransitioning
-                      ? "transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)"
-                      : "none",
+                    transition: "transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                    willChange: "transform",
                   }}
                 >
-                  {extendedWords.map((word, i) => (
+                  {words.map((word, i) => (
                     <span
                       key={i}
-                      className="block font-medium text-[#001F4B] dark:text-[#ec1e24] text-[55px] leading-none whitespace-nowrap max-sm:text-[28px] lg:text-[65px] xl:text-[75px] 2xl:text-[85px]"
+                      className="block font-medium text-[#002E47] dark:text-[#ec1e24] text-[80px] leading-none whitespace-nowrap max-sm:text-[42px] lg:text-[90px] xl:text-[100px] 2xl:text-[110px]"
                       style={{
                         height: `${lineHeight}px`,
                         lineHeight: `${lineHeight}px`,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
+                        paddingBottom: "8px",
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        transform: "translateZ(0)",
                       }}
                     >
                       {word}

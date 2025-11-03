@@ -61,7 +61,7 @@ export default function Stats() {
       >
         {stats.map((stat, index) => (
           <div key={index} className="max-sm:bg-white dark:max-sm:bg-[#15171a] dark:max-sm:border dark:max-sm:border-[#ec1e24]/20 max-sm:p-4 max-sm:rounded-md max-sm:shadow-md dark:max-sm:shadow-lg dark:max-sm:shadow-[#ec1e24]/10">
-            <div className="text-2xl max-sm:text-lg font-bold text-[#001F4B] dark:text-[#ec1e24] font-mono">
+            <div className="text-2xl sm:text-3xl lg:text-4xl max-sm:text-xl font-bold text-[#001F4B] dark:text-[#ec1e24] font-mono">
               {animatedValues[index]}
             </div>
             <div className="text-xs max-sm:text-[10px] text-[#333333]/70 dark:text-white/80 mt-1">{stat.label}</div>

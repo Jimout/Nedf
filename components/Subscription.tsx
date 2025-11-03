@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 
 export default function Subscription() {
   const [email, setEmail] = useState("")
   const [isSubscribed, setIsSubscribed] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (email) {
       setIsSubscribed(true)
@@ -37,7 +37,7 @@ export default function Subscription() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 placeholder="Enter Your Email"
                 className="w-full px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base text-gray-900 dark:text-white bg-white dark:bg-[#15171a] border border-gray-300 dark:border-white/20 rounded-none focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-transparent transition-all duration-300"
                 required
@@ -56,7 +56,7 @@ export default function Subscription() {
           {/* Success Message */}
           {isSubscribed && (
             <div className="mt-4 text-center px-4">
-              <p className="text-sm sm:text-base text-green-600 dark:text-green-400 font-medium">
+              <p className="text-sm sm:text-base font-medium" style={{ color: '#ec1e24' }}>
                 Thank you for subscribing! You'll receive updates from NEDF.
               </p>
             </div>

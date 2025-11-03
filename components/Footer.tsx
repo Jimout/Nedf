@@ -13,7 +13,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer id="footer" className="bg-white dark:bg-[#15171a] text-gray-800 dark:text-white relative pt-16 scroll-smooth scroll-mt-20">
+    <footer id="footer" className="bg-white dark:bg-[#15171a] text-gray-800 dark:text-white relative min-h-screen flex flex-col justify-center scroll-smooth scroll-mt-20">
       {/* Divider Line */}
       <div
         className="mx-auto mb-8 bg-[#001F4B] dark:bg-[#ec1e24]"
@@ -25,11 +25,11 @@ export default function Footer() {
       />
 
       {/* Main Grid */}
-      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-6 md:px-[100px] gap-10">
+      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-6 md:px-[100px] gap-10 flex-grow items-center">
         {/* Logo */}
-        <div className="flex flex-col justify-center items-center md:items-start">
-          <h2 className="text-[32px] text-[#333333]/80 dark:text-white/70 font-medium font-montserrat">NEDF</h2>
-          <p className="text-[16px] text-[#001F4B]/60 dark:text-[#ec1e24]/60 mt-2 font-montserrat">Less, but Better.</p>
+        <div className="flex flex-col justify-center items-center md:items-start md:pl-8 lg:pl-12 xl:pl-16">
+          <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#333333]/80 dark:text-white/70 font-medium font-montserrat">NEDF</h2>
+          <p className="text-xl sm:text-2xl md:text-3xl text-[#001F4B]/60 dark:text-[#ec1e24]/60 mt-2 font-montserrat">Less, but Better.</p>
         </div>
 
         {/* Navigation Links - 2 Columns */}
@@ -50,15 +50,15 @@ export default function Footer() {
 
         {/* Contact Us */}
         <div className="flex flex-col justify-center items-center md:items-start">
-          <h3 className="text-[32px] text-[#001F4B] dark:text-[#ec1e24] font-medium mb-3 font-montserrat">Contact Us</h3>
-          <div className="flex flex-row gap-2 text-sm mb-4 text-center md:text-left text-[#333333] dark:text-white/70 font-montserrat">
+          <h3 className="text-3xl sm:text-4xl md:text-5xl text-[#001F4B] dark:text-[#ec1e24] font-medium mb-3 font-montserrat">Contact Us</h3>
+          <div className="flex flex-row gap-2 text-base sm:text-lg mb-4 text-center md:text-left text-[#333333] dark:text-white/70 font-montserrat">
             <span>
               <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24] font-montserrat">Call</span>: +251945289012
             </span>
             <span>/</span>
             <span>+251900672518</span>
           </div>
-          <p className="text-sm mb-4 text-center md:text-left text-[#333333] dark:text-white/70 font-montserrat">
+          <p className="text-base sm:text-lg mb-4 text-center md:text-left text-[#333333] dark:text-white/70 font-montserrat">
             <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24] font-montserrat">Email</span>: Nedf123@gmail.com
           </p>
 
@@ -84,7 +84,7 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom */}
-      <div className="bg-[#001F4B] dark:bg-[#15171a] text-white text-center text-sm py-3 px-6 lg:px-[200px] dark:px-0 dark:mx-auto dark:w-[90%] dark:shadow-[0_-4px_8px_rgba(236,30,36,0.3)] font-montserrat">&copy; 2025, NEDF</div>
+      <div className="bg-[#001F4B] dark:bg-[#15171a] text-white text-center text-sm py-3 px-6 lg:px-[200px] dark:px-0 dark:mx-auto dark:w-[90%] dark:shadow-[0_-4px_8px_rgba(236,30,36,0.3)] font-montserrat mt-auto">&copy; 2025, NEDF</div>
     </footer>
   );
 }

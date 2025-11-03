@@ -147,13 +147,34 @@ export default function ArcTestimonials() {
 
   const getTextAnimation = () => {
     const totalProgress = scrollProgress * testimonials.length
-    const localProgress = totalProgress - activeIndex
-
+    const activeIdx = Math.floor(totalProgress)
+    const localProgress = Math.min(totalProgress - activeIdx, 1)
+    
     const progress = Math.max(0, Math.min(1, localProgress))
 
-    const distanceFromCenter = Math.abs(progress - 0.5)
-    const opacity = Math.max(0, 1 - distanceFromCenter * 2)
-    const scale = 0.8 + (1 - distanceFromCenter * 2) * 0.2
+    // Text should stay faded until circle reaches center (progress = 0.5)
+    // Distance from center: 0 = at center, 0.5 = at edges
+    const distanceFromCenter = Math.abs(progress - 0.5) * 2 // 0 to 1
+    
+    // Keep text very faded until very close to center
+    // Use a sharper curve that peaks sharply at center
+    // Text stays at ~0.2 opacity until circle is within 20% of center, then quickly rises
+    let opacity
+    if (distanceFromCenter > 0.8) {
+      // Very far from center - very faded
+      opacity = 0.15
+    } else if (distanceFromCenter > 0.4) {
+      // Approaching center - gradually increasing
+      opacity = 0.15 + ((0.8 - distanceFromCenter) / 0.4) * 0.5
+    } else {
+      // Close to center - quickly rise to full visibility
+      opacity = 0.65 + ((0.4 - distanceFromCenter) / 0.4) * 0.35
+    }
+    
+    opacity = Math.max(0, Math.min(1, opacity))
+    
+    // Scale animation - smaller when faded, full size when visible
+    const scale = 0.65 + (opacity * 0.35)
 
     return { opacity, scale }
   }
@@ -163,12 +184,12 @@ export default function ArcTestimonials() {
   const { opacity: textOpacity, scale: textScale } = getTextAnimation()
 
   return (
-    <div ref={sectionRef} className="relative min-h-screen">
+    <div ref={sectionRef} className="relative min-h-screen z-30">
       {/* Sticky Arc Container - Full Height */}
-      <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none">
+      <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none z-30">
           {/* Title */}
-          <div className="absolute top-[6%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6 z-20">
-          <h2 className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
+          <div className="absolute top-[6%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6 z-30">
+          <h2 className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
             HOW NEDF WORKS
           </h2>
         </div>
@@ -233,16 +254,13 @@ export default function ArcTestimonials() {
                 }}
               >
                 <div className="space-y-3 sm:space-y-4 md:space-y-6">
+                  <div className="space-y-1 sm:space-y-2">
+                    <p className="text-sm sm:text-base md:text-lg text-[#ec1e24]">{activeTestimonial.role}</p>
+                  </div>
+
                   <p className="text-sm sm:text-base md:text-xl lg:text-2xl text-foreground leading-relaxed font-light">
                     "{activeTestimonial.quote}"
                   </p>
-
-                  <div className="space-y-1 sm:space-y-2">
-                    <p className="text-base sm:text-lg md:text-lg font-semibold text-foreground">
-                      {activeTestimonial.name}
-                    </p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">{activeTestimonial.role}</p>
-                  </div>
                 </div>
               </div>
             </div>

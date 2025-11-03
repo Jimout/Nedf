@@ -208,7 +208,7 @@ export function OurTeam() {
   return (
     <section id="OurTeam" className="pb-20 w-full relative z-10">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <h2 className="text-center text-4xl font-bold sm:text-5xl font-montserrat tracking-tight mb-12" style={{ color: '#ec1e24' }}>
+        <h2 className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight mb-12" style={{ color: '#ec1e24' }}>
           OUR TEAM
         </h2>
 
