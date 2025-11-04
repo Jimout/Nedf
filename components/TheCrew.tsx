@@ -231,8 +231,8 @@ export function Founders({ founders }: FoundersProps) {
                   className={`space-y-4 max-w-md mx-auto founder-card visible ${index === 0 ? "md:order-1" : "md:order-2"}`}
                 >
                 <CometCard>
-                  <div className="relative w-full bg-[#15171a] p-4 border-[0.25px] border-white/15 flex flex-col">
-                    <div className="relative aspect-[3/4] w-full overflow-hidden mb-3 group border-[0.25px] border-white/15">
+                  <div className="relative w-full bg-white dark:bg-[#15171a] p-4 border-[0.25px] border-gray-300 dark:border-white/15 flex flex-col">
+                    <div className="relative aspect-[3/4] w-full overflow-hidden mb-3 group border-[0.25px] border-gray-300 dark:border-white/15">
                       <img
                         src={founder.image || "/placeholder.svg"}
                         alt={founder.name}
@@ -247,14 +247,14 @@ export function Founders({ founders }: FoundersProps) {
                       )}
                     </div>
                     <div className="px-1">
-                      <h3 className="text-base font-bold text-white mb-1">{founder.name}</h3>
-                      <p className="text-xs font-medium text-white/80">{founder.title}</p>
+                      <h3 className="text-base font-bold text-[#333333] dark:text-white mb-1">{founder.name}</h3>
+                      <p className="text-xs font-medium text-[#333333]/80 dark:text-white/80">{founder.title}</p>
                     </div>
                   </div>
                 </CometCard>
 
                 <div className="space-y-2">
-                  <p className="text-white leading-relaxed text-base">{founder.description}</p>
+                  <p className="text-[#333333] dark:text-white leading-relaxed text-base">{founder.description}</p>
 
                   <div className="flex gap-4 justify-start flex-wrap pt-4">
                     {founder.social.instagram && (
