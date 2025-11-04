@@ -62,6 +62,7 @@ export default function CursorAnimation() {
 
     const handleMouseEnter = (e: MouseEvent) => {
       const target = e.target as HTMLElement
+      if (!target || typeof target.closest !== "function") return
       if (
         target.tagName === "H1" ||
         target.tagName === "H2" ||
@@ -70,7 +71,7 @@ export default function CursorAnimation() {
         target.tagName === "BUTTON" ||
         target.closest("a") ||
         target.closest("button") ||
-        target.classList.contains("cursor-pointer")
+        (target.classList && target.classList.contains("cursor-pointer"))
       ) {
         setIsHovering(true)
         cursorSize.set(32)
@@ -79,6 +80,7 @@ export default function CursorAnimation() {
 
     const handleMouseLeave = (e: MouseEvent) => {
       const target = e.target as HTMLElement
+      if (!target || typeof target.closest !== "function") return
       if (
         target.tagName === "H1" ||
         target.tagName === "H2" ||
@@ -87,7 +89,7 @@ export default function CursorAnimation() {
         target.tagName === "BUTTON" ||
         target.closest("a") ||
         target.closest("button") ||
-        target.classList.contains("cursor-pointer")
+        (target.classList && target.classList.contains("cursor-pointer"))
       ) {
         setIsHovering(false)
         cursorSize.set(12)
@@ -97,7 +99,7 @@ export default function CursorAnimation() {
     // Check for interactive elements on mouse move
     const handleMouseMove = (e: MouseEvent) => {
       const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement
-      if (target) {
+      if (target && typeof target.closest === "function") {
         if (
           target.tagName === "H1" ||
           target.tagName === "H2" ||
@@ -106,7 +108,7 @@ export default function CursorAnimation() {
           target.tagName === "BUTTON" ||
           target.closest("a") ||
           target.closest("button") ||
-          target.classList.contains("cursor-pointer")
+          (target.classList && target.classList.contains("cursor-pointer"))
         ) {
           setIsHovering(true)
           cursorSize.set(32)

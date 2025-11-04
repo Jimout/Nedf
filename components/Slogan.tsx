@@ -46,7 +46,7 @@ export default function HeroTextFadeScroll() {
         duration: 2,
       })
 
-      // Animate second block in (overlapping)
+      // Animate second block in (sequential, no overlap)
       tl.fromTo(
         splitSecond.lines,
         { opacity: 0, x: 80 },
@@ -56,8 +56,7 @@ export default function HeroTextFadeScroll() {
           stagger: { each: 0.25, from: "start" },
           ease: "power4.inOut",
           duration: 2,
-        },
-        "-=1.5" // overlap for smooth transition
+        }
       )
 
       // Optional: fade out second block near end

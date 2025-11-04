@@ -38,7 +38,7 @@ const slides = [
   },
 ]
 
-export default function Hero() {
+export default function Portfolio() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)

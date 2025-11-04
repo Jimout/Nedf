@@ -72,7 +72,7 @@ function getRotationAngle(t: number, p0: [number, number], p1: [number, number],
   return Math.atan2(dy, dx) * (180 / Math.PI)
 }
 
-export default function ArcTestimonials() {
+export default function Steps() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [activeIndex, setActiveIndex] = useState(0)

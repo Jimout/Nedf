@@ -52,10 +52,12 @@ export default function HomePage() {
         <OurTeam />
         <AnimatedTestimonials />
         
-        <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12" style={{ color: '#ec1e24' }}>
-          STUDIO NOTES
-        </p>
-        <StudioNotesPage />
+        <div id="studio-notes" className="scroll-mt-20">
+          <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12" style={{ color: '#ec1e24' }}>
+            STUDIO NOTES
+          </p>
+          <StudioNotesPage />
+        </div>
         <Subscription />
        
       </motion.div>
