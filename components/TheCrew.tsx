@@ -216,8 +216,8 @@ export function Founders({ founders }: FoundersProps) {
 
           <div ref={meetFoundersRef} className="relative z-20 pb-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             <p
-              className={`text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight animate-on-scroll visible`}
-              style={{ color: '#ec1e24' }}
+              className={`text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight animate-on-scroll visible dark:text-[#ec1e24]`}
+              style={{ color: 'rgba(51, 51, 51, 0.8)' }}
             >
               MEET THE FOUNDERS
             </p>

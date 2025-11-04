@@ -1,6 +1,6 @@
 "use client"
 
-import AnimatedTestimonials from "@/components/AnimatedTestimonials"
+import SlidingTestimonials from "@/components/ClientReflections"
 import Hero from "@/components/Hero"
 import { Navbar } from "@/components/Navbar"
 import { OurTeam } from "@/components/OurTeam"
@@ -50,10 +50,13 @@ export default function HomePage() {
         <TheCrew />
         <Steps />
         <OurTeam />
-        <AnimatedTestimonials />
+        <SlidingTestimonials />
         
         <div id="studio-notes" className="scroll-mt-20">
-          <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12" style={{ color: '#ec1e24' }}>
+          <p 
+            className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12 dark:text-[#ec1e24]"
+            style={{ color: 'rgba(51, 51, 51, 0.8)' }}
+          >
             STUDIO NOTES
           </p>
           <StudioNotesPage />

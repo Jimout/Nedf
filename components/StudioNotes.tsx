@@ -142,7 +142,7 @@ export default function StudioNotes() {
                     return (
                       <article
                         key={`${pageIndex}-${id}`}
-                        className="group bg-white dark:bg-[#15171a] border border-white/10 flex flex-col overflow-hidden transition-shadow h-[400px]"
+                        className="group bg-white dark:bg-[#15171a] border border-gray-300 dark:border-white/10 flex flex-col overflow-hidden transition-shadow h-[400px]"
                       >
                         <div className="relative w-full h-[170px]">
                           <Image
@@ -181,9 +181,10 @@ export default function StudioNotes() {
                           <div className="flex justify-end">
                             <Button
                               onClick={() => handleReadMore(id)}
-                              style={{ backgroundColor: '#ec1e24', color: 'white' }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ec1e24' + 'dd'}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ec1e24'}
+                              className="bg-[#002e47] dark:bg-[#ec1e24] text-white hover:bg-[#001f35] dark:hover:bg-[#ec1e24]/90"
+                              style={{
+                                color: 'white'
+                              }}
                             >
                               Read More
                             </Button>

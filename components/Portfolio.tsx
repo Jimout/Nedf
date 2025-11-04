@@ -102,13 +102,13 @@ export default function Portfolio() {
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             }`}
           >
-            2023
+            2024
           </span>
           <h1
-            className={`text-3xl font-bold sm:text-4xl text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 ${
+            className={`text-3xl font-bold sm:text-4xl text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 dark:text-[#ec1e24] ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
-            style={{ color: '#ec1e24' }}
+            style={{ color: 'rgba(51, 51, 51, 0.8)' }}
           >
             PORTFOLIO
           </h1>

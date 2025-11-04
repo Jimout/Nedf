@@ -180,8 +180,8 @@ export default function ServicesSection() {
                         }}
                       >
                         {services[index].name}
-                      </p>
-                    </div>
+                </p>
+              </div>
                     {/* Back face - Description */}
                     <div
                       className="absolute inset-0 flex items-center justify-center"
@@ -198,10 +198,10 @@ export default function ServicesSection() {
                         }}
                       >
                         {services[index].description}
-                      </p>
-                    </div>
+              </p>
+            </div>
                   </div>
-                </div>
+            </div>
           </div>
             )
           })}

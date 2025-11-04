@@ -127,7 +127,10 @@ export default function SlidingTestimonials() {
     <div id="testimonials" className="relative py-12 sm:py-16 md:py-20">
       {/* Title */}
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 pb-8">
-        <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
+        <p 
+          className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight dark:text-[#ec1e24]"
+          style={{ color: 'rgba(51, 51, 51, 0.8)' }}
+        >
           CLIENT REFLECTION
         </p>
       </div>
@@ -154,7 +157,7 @@ export default function SlidingTestimonials() {
             {[...testimonials, ...testimonials].map((testimonial, index) => (
               <div
                 key={`${testimonial.id}-${index}`}
-                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] bg-white dark:bg-[#15171a] p-6 border border-white/20 dark:border-white/10 mb-8 hover:scale-105 transition-all duration-300 cursor-pointer"
+                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] bg-white dark:bg-[#15171a] p-6 border border-gray-300 dark:border-white/10 mb-8 hover:scale-105 transition-all duration-300 cursor-pointer"
               >
                 {/* Quotation Marks */}
                 <div className="text-6xl text-gray-300 dark:text-[#ec1e24] font-bold mb-4">
@@ -162,7 +165,7 @@ export default function SlidingTestimonials() {
                 </div>
 
                 {/* Testimonial Text */}
-                <blockquote className="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-6">
+                <blockquote className="text-[#333333] dark:text-gray-300 text-base leading-relaxed mb-6">
                   {testimonial.quote}
                 </blockquote>
 
@@ -177,10 +180,10 @@ export default function SlidingTestimonials() {
                   
                   {/* Name and Title */}
                   <div>
-                      <h3 className="font-bold text-gray-900 dark:text-[#ec1e24] text-sm">
+                      <h3 className="font-bold text-[#333333] dark:text-[#ec1e24] text-sm">
                         {testimonial.name}
                       </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-xs">
+                    <p className="text-[#333333] dark:text-gray-400 text-xs">
                       {testimonial.role}, {testimonial.work}
                     </p>
                   </div>

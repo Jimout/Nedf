@@ -105,7 +105,7 @@ export default function HeroTextFadeScroll() {
         {/* First block */}
         <div
           ref={firstBlockRef}
-          className="text-center font-semibold text-4xl md:text-6xl lg:text-7xl leading-[1.2] tracking-tight"
+          className="text-center font-semibold text-3xl md:text-5xl lg:text-6xl leading-[1.2] tracking-tight"
           style={{
             willChange: "transform, opacity",
             backfaceVisibility: "hidden",
@@ -120,7 +120,7 @@ export default function HeroTextFadeScroll() {
         {/* Second block */}
         <div
           ref={secondBlockRef}
-          className="absolute text-center font-semibold text-4xl md:text-6xl lg:text-7xl leading-[1.2] tracking-tight"
+          className="absolute text-center font-semibold text-3xl md:text-5xl lg:text-6xl leading-[1.2] tracking-tight"
           style={{
             willChange: "transform, opacity",
             backfaceVisibility: "hidden",

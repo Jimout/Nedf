@@ -21,7 +21,10 @@ export default function Subscription() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Title and Subtitle */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
-          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 font-montserrat tracking-tight text-center" style={{ color: '#ec1e24' }}>
+          <h2 
+            className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 font-montserrat tracking-tight text-center dark:text-[#ec1e24]"
+            style={{ color: 'rgba(51, 51, 51, 0.8)' }}
+          >
             Stay Updated with NEDF
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4 sm:px-0">

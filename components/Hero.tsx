@@ -89,7 +89,7 @@ export default function HeroWithStats() {
                   {words.map((word, i) => (
                     <span
                       key={i}
-                      className="block font-medium text-[#002E47] dark:text-[#ec1e24] text-[80px] leading-none whitespace-nowrap max-sm:text-[42px] lg:text-[90px] xl:text-[100px] 2xl:text-[110px]"
+                      className="block font-medium text-[#002e47] dark:text-[#ec1e24] text-[80px] leading-none whitespace-nowrap max-sm:text-[42px] lg:text-[90px] xl:text-[100px] 2xl:text-[110px]"
                       style={{
                         height: `${lineHeight}px`,
                         lineHeight: `${lineHeight}px`,
