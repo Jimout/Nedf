@@ -1,118 +1,212 @@
 "use client"
 
-import { CardStack } from "@/components/CardStack"
+import { useState, useEffect } from "react"
 
-interface Service {
-  id: number
-  title: string
-  description?: string
-  isSpecial?: boolean
-}
+export default function ServicesSection() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [isDark, setIsDark] = useState(false)
 
-const services: Service[] = [
-  {
-    id: 1,
-    title: "GRAPHIC DESIGN",
-  },
-  {
-    id: 2,
-    title: "BRAND DESIGN",
-  },
-  {
-    id: 3,
-    title: "WEB DEVELOPMENT",
-  },
-  {
-    id: 4,
-    title: "SMM",
-  },
-  {
-    id: 5,
-    title: "MEDIA PRODUCTION",
-  },
-  {
-    id: 6,
-    title: "PHOTOGRAPHY",
-  },
-  {
-    id: 7,
-    title: "VIDEO EDITING",
-  },
-  {
-    id: 8,
-    title: "COPYWRITING",
-  },
-  {
-    id: 9,
-    title: "ROHA SPECIAL",
-    description:
-      "A touch of Roha Digitals creative spark, given to you with no strings attached (except maybe good vibes).",
-    isSpecial: true,
-  },
-]
-
-export function Services() {
-  const regularServices = services.filter((s) => !s.isSpecial)
-  const specialService = services.find((s) => s.isSpecial)
-
-  const cardStackItems = regularServices.map((service) => ({
-    id: service.id,
-    name: service.title,
-    designation: "Service",
-    content: <p className="text-sm">{service.title}</p>,
-  }))
-
-  if (specialService) {
-    cardStackItems.push({
-      id: specialService.id,
-      name: specialService.title,
-      designation: "Special",
-      content: (
-        <div className="flex flex-col items-center justify-center h-full">
-          <div className="w-20 h-20 mb-4 flex items-center justify-center" style={{ color: "#ec1e24" }}>
-            <svg viewBox="0 0 256 256" fill="currentColor" className="w-full h-full">
-              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM128,40a88,88,0,0,0-88,88,8,8,0,0,1-16,0A104,104,0,0,1,128,24a8,8,0,0,1,0,16Zm0,176a8,8,0,0,1,0-16,88,88,0,0,0,88-88,8,8,0,0,1,16,0A104,104,0,0,1,128,216ZM40,128a8,8,0,0,1,16,0,88,88,0,0,0,88,88,8,8,0,0,1,0,16A104,104,0,0,1,40,128Zm176,0a104,104,0,0,1-104,104,8,8,0,0,1,0-16,88,88,0,0,0,88-88A8,8,0,0,1,216,128ZM128,64a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64Zm0,112a48,48,0,1,1,48-48A48.05,48.05,0,0,1,128,176Zm0-80a32,32,0,1,0,32,32A32,32,0,0,0,128,96Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,128,144Z" />
-            </svg>
-          </div>
-          <p className="text-xs text-center leading-relaxed max-w-xs">{specialService.description}</p>
-        </div>
-      ),
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    }
+    checkDarkMode()
+    const observer = new MutationObserver(checkDarkMode)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
     })
-  }
+    return () => observer.disconnect()
+  }, [])
+
+  const services = [
+    {
+      name: "Architectural Design",
+      description: "Innovative building designs that blend aesthetics and functionality",
+    },
+    { name: "Interior Design", description: "Creating beautiful and functional interior spaces" },
+    { name: "Landscape Design", description: "Outdoor spaces designed with nature and beauty in mind" },
+    { name: "Urban Design and Planning", description: "Shaping cities and communities for sustainable living" },
+    { name: "Construction Supervision", description: "Expert oversight throughout the construction process" },
+    { name: "Contract Administration", description: "Managing contracts and project documentation professionally" },
+    { name: "Consultancy", description: "Strategic advice for your architectural and design needs" },
+    { name: "Visualization", description: "Bringing concepts to life with stunning visual renderings" },
+  ]
+
+  const servicePositions = Array.from({ length: 8 }, (_, i) => {
+    // Leave margins on left and right (80px on each side)
+    const startX = 80
+    const endX = 920
+    const availableWidth = endX - startX
+    const xSpacing = availableWidth / (services.length - 1)
+    const x = startX + (i * xSpacing)
+    // Create a wavy pattern - alternating up and down
+    const y = 300 + Math.sin((i * Math.PI) / 4) * 150
+    return { x, y, label: `${Math.round((i / (services.length - 1)) * 100)}%` }
+  })
 
   return (
-    <section className="w-full">
-      {/* Sticky CardStack Container */}
-      <div className="sticky top-0 h-screen flex items-center justify-center">
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
-            {/* Left Section - Text Content */}
-            <div className="flex-1 lg:max-w-md">
-              <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white uppercase tracking-wider mb-6">
-                EXPERTISE
-              </h2>
-              <div className="space-y-2 mb-8">
-                <p className="text-2xl lg:text-3xl xl:text-4xl font-bold" style={{ color: "#ec1e24" }}>
-                  We craft experiences, not just structures.
-                </p>
-              </div>
-              <p className="text-sm lg:text-base text-white mb-8">
-                Every detail <span style={{ color: "#ec1e24" }}>reflects</span> intent and innovation.
-              </p>
-            </div>
+    <section id="services" className="bg-white py-20 font-montserrat relative overflow-hidden w-full">
+      <div className="relative w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div className="mb-4 text-center relative z-20 pt-8">
+          <h2 className="text-5xl font-bold text-gray-900 dark:text-white">Our Services</h2>
+        </div>
 
-            {/* Right Section - CardStack Component */}
-            <div className="flex-1 lg:max-w-2xl w-full flex items-center justify-center">
-              <CardStack items={cardStackItems} offset={10} scaleFactor={0} />
-            </div>
+        <div className="relative w-full h-screen overflow-hidden">
+          {/* SVG Curved Line Chart */}
+          <svg viewBox="0 0 1000 600" className="absolute inset-0 w-full h-full" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
+            <defs>
+              <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor={isDark ? "#ec1e24" : "#002e47"} stopOpacity="1" />
+                <stop offset="50%" stopColor={isDark ? "#ec1e24" : "#002e47"} stopOpacity="0.9" />
+                <stop offset="100%" stopColor={isDark ? "#ec1e24" : "#002e47"} stopOpacity="1" />
+              </linearGradient>
+              <filter id="shadowFilter">
+                <feDropShadow dx="0" dy="4" stdDeviation="3" floodOpacity="0.3" />
+              </filter>
+            </defs>
+
+            {servicePositions.map((pos, index) => {
+              if (index === servicePositions.length - 1) return null
+
+              const nextPos = servicePositions[index + 1]
+              const midX = (pos.x + nextPos.x) / 2
+              const baseControlY = (pos.y + nextPos.y) / 2 + (index % 2 === 0 ? 40 : -40)
+
+              const waveAmplitude = 8
+              const delay = index * 0.2
+              
+              return (
+                <g key={`curve-${index}`}>
+                  {/* Animated wavy line */}
+                  <path
+                    stroke="url(#lineGradient)"
+                    strokeWidth="6"
+                    fill="none"
+                    vectorEffect="non-scaling-stroke"
+                    filter="url(#shadowFilter)"
+                  >
+                    <animate
+                      attributeName="d"
+                      values={`
+                        M ${pos.x},${pos.y} Q ${midX},${baseControlY - waveAmplitude} ${nextPos.x},${nextPos.y};
+                        M ${pos.x},${pos.y} Q ${midX},${baseControlY} ${nextPos.x},${nextPos.y};
+                        M ${pos.x},${pos.y} Q ${midX},${baseControlY + waveAmplitude} ${nextPos.x},${nextPos.y};
+                        M ${pos.x},${pos.y} Q ${midX},${baseControlY} ${nextPos.x},${nextPos.y};
+                        M ${pos.x},${pos.y} Q ${midX},${baseControlY - waveAmplitude} ${nextPos.x},${nextPos.y}
+                      `}
+                      dur="3s"
+                      repeatCount="indefinite"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      keySplines="0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1"
+                      begin={`${delay}s`}
+                    />
+                  </path>
+                </g>
+              )
+            })}
+
+            {/* Dots on the line */}
+            {servicePositions.map((pos, index) => (
+              <circle 
+                key={index} 
+                cx={pos.x} 
+                cy={pos.y} 
+                r="6" 
+                fill={isDark ? "#ffffff" : "#333333"}
+              />
+            ))}
+          </svg>
+
+          {servicePositions.map((pos, index) => {
+            const viewBoxWidth = 1000
+            const viewBoxHeight = 600
+            const xPercent = (pos.x / viewBoxWidth) * 100
+            const yPercent = (pos.y / viewBoxHeight) * 100
+            const isHovered = hoveredIndex === index
+
+  return (
+              <div
+                key={index}
+                className="absolute z-10 transform -translate-x-1/2 -translate-y-1/2"
+                style={{ 
+                  left: `${xPercent}%`, 
+                  top: `${yPercent}%`,
+                  maxWidth: '100%',
+                  overflow: 'visible'
+                }}
+              >
+                <div 
+                  className="absolute top-8 left-1/2 transform -translate-x-1/2 text-5xl font-bold select-none"
+                  style={{
+                    color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(51, 51, 51, 0.3)'
+                  }}
+                >
+                  {index + 1}
+                </div>
+                <div
+                  className="absolute top-24 left-1/2 transform -translate-x-1/2 cursor-pointer"
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  style={{ 
+                    maxWidth: '200px', 
+                    overflow: 'visible',
+                    perspective: '1000px',
+                    width: '200px',
+                    height: '80px'
+                  }}
+                >
+                  <div
+                    className="relative w-full h-full transition-transform duration-500 ease-in-out"
+                    style={{
+                      transformStyle: 'preserve-3d',
+                      transform: isHovered ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                    }}
+                  >
+                    {/* Front face - Service Name */}
+                    <div
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                        transform: 'rotateY(0deg)'
+                      }}
+                    >
+                      <p 
+                        className="text-[10px] sm:text-xs font-bold whitespace-nowrap bg-white px-4 py-2.5 rounded shadow-md inline-block"
+                        style={{
+                          color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(51, 51, 51, 0.8)'
+                        }}
+                      >
+                        {services[index].name}
+                      </p>
+                    </div>
+                    {/* Back face - Description */}
+                    <div
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                        transform: 'rotateY(180deg)'
+                      }}
+                    >
+                      <p 
+                        className="text-[10px] sm:text-xs font-bold whitespace-normal bg-white px-4 py-2.5 rounded shadow-md text-center inline-block max-w-[200px]"
+                        style={{
+                          color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(51, 51, 51, 0.8)'
+                        }}
+                      >
+                        {services[index].description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
           </div>
+            )
+          })}
         </div>
       </div>
-
-      {/* Scroll Spacer - provides scroll space for the animation */}
-      {Array.from({ length: Math.max(5, cardStackItems.length) }).map((_, i) => (
-        <div key={i} className="h-screen" />
-      ))}
     </section>
   )
 }

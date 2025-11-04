@@ -114,7 +114,7 @@ export function Founders({ founders }: FoundersProps) {
 
   return (
     <div className="pt-24 md:pt-32 lg:pt-40">
-      <section className="w-full">
+      <section id="TheCrew" className="w-full">
         <style>{`
           @keyframes fadeInUp {
             from {

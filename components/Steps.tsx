@@ -77,6 +77,20 @@ export default function ArcTestimonials() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [activeIndex, setActiveIndex] = useState(0)
   const [viewportWidth, setViewportWidth] = useState(0)
+  const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    }
+    checkDarkMode()
+    const observer = new MutationObserver(checkDarkMode)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     setViewportWidth(window.innerWidth)
@@ -184,12 +198,18 @@ export default function ArcTestimonials() {
   const { opacity: textOpacity, scale: textScale } = getTextAnimation()
 
   return (
-    <div ref={sectionRef} className="relative min-h-screen z-30">
+    <div id="steps" ref={sectionRef} className="relative min-h-screen z-30">
       {/* Sticky Arc Container - Full Height */}
       <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none z-30">
           {/* Title */}
           <div className="absolute top-[6%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6 z-30">
-          <h2 className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight" style={{ color: '#ec1e24' }}>
+          <h2 
+            className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight"
+            style={{ 
+              color: isDark ? '#ec1e24' : '#333333',
+              opacity: isDark ? 1 : 0.8
+            }}
+          >
             HOW NEDF WORKS
           </h2>
         </div>
@@ -209,7 +229,7 @@ export default function ArcTestimonials() {
                     ? `M 0 ${window.innerHeight * 0.6} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.6}`
                     : `M 0 ${window.innerHeight * 0.65} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.65}`
               }
-              stroke="white"
+              stroke={isDark ? "white" : "rgba(51, 51, 51, 0.8)"}
               strokeWidth="2"
               fill="none"
               opacity="1"
@@ -225,15 +245,20 @@ export default function ArcTestimonials() {
               opacity,
             }}
           >
-            <div className="w-[20px] h-[20px] sm:w-[40px] sm:h-[40px] md:w-[60px] md:h-[60px] shadow-lg relative">
+            <div className="w-[20px] h-[20px] sm:w-[40px] sm:h-[40px] md:w-[60px] md:h-[60px] relative">
               {/* Circle background */}
-              <div className="w-full h-full bg-white rounded-full shadow-lg flex items-center justify-center">
+              <div 
+                className="w-full h-full rounded-full flex items-center justify-center"
+                style={{
+                  backgroundColor: isDark ? '#ffffff' : '#333333'
+                }}
+              >
                 {/* Title text */}
                 <span 
                   className="text-[6px] sm:text-[8px] md:text-[10px] font-bold text-center px-1 transition-opacity duration-300"
                   style={{ 
                     opacity: opacity > 0.9 ? 1 : 0,
-                    color: '#15171a'
+                    color: isDark ? '#15171a' : '#ffffff'
                   }}
                 >
                   {activeTestimonial.name}
@@ -255,7 +280,12 @@ export default function ArcTestimonials() {
               >
                 <div className="space-y-3 sm:space-y-4 md:space-y-6">
                   <div className="space-y-1 sm:space-y-2">
-                    <p className="text-sm sm:text-base md:text-lg text-[#ec1e24]">{activeTestimonial.role}</p>
+                    <p 
+                      className="text-sm sm:text-base md:text-lg"
+                      style={{ color: isDark ? '#ec1e24' : '#001F4B' }}
+                    >
+                      {activeTestimonial.role}
+                    </p>
                   </div>
 
                   <p className="text-sm sm:text-base md:text-xl lg:text-2xl text-foreground leading-relaxed font-light">

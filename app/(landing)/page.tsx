@@ -1,6 +1,6 @@
 "use client"
 
-import ClientReflections from "@/components/ClientReflections"
+import AnimatedTestimonials from "@/components/AnimatedTestimonials"
 import Hero from "@/components/Hero"
 import { Navbar } from "@/components/Navbar"
 import { OurTeam } from "@/components/OurTeam"
@@ -10,8 +10,7 @@ import Subscription from "@/components/Subscription"
 import { TheCrew } from "@/components/TheCrew"
 import StudioNotesPage from "@/components/StudioNotes"
 import Steps from "@/components/Steps"
-import { Services } from "@/components/services"
-import { ThemeToggle } from "@/components/theme-toggle"
+import ServicesSection from "@/components/services"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -46,12 +45,12 @@ export default function HomePage() {
         <Navbar />
         <Hero />
         <HeroTextFadeScroll />
-        <Services />
+        <ServicesSection />
         <Portfolio />
         <TheCrew />
         <Steps />
         <OurTeam />
-        <ClientReflections/>
+        <AnimatedTestimonials />
         
         <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12" style={{ color: '#ec1e24' }}>
           STUDIO NOTES
@@ -60,19 +59,6 @@ export default function HomePage() {
         <Subscription />
        
       </motion.div>
-
-      {/* Theme Toggle - Sticky/Fixed position on the right side of hamburger icon */}
-      <div 
-        className="fixed top-2 right-4 z-[9999] flex items-center h-20" 
-        style={{ 
-          position: 'fixed', 
-          pointerEvents: 'auto',
-          willChange: 'transform',
-          transform: 'translateZ(0)'
-        }}
-      >
-        <ThemeToggle />
-      </div>
     </>
   )
 }

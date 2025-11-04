@@ -5,26 +5,27 @@ import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { gsap } from "gsap"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navItems = [
-  { name: "Home", href: "/" },
-  { name: "Service", href: "/#services", scrollOnLanding: true, sectionId: "services" },
-  { name: "Portfolio", href: "/portfolio", scrollOnLanding: false },
-  { name: "About Us", href: "/#TheCrew", scrollOnLanding: true, sectionId: "TheCrew" },
-  { name: "Process", href: "/#steps", scrollOnLanding: true, sectionId: "steps" },
+  { name: "Home", href: "/", scrollOnLanding: true, sectionId: "" },
+  { name: "Services", href: "/#services", scrollOnLanding: true, sectionId: "services" },
+  { name: "Portfolio", href: "/#portfolio", scrollOnLanding: true, sectionId: "portfolio" },
+  { name: "About", href: "/#TheCrew", scrollOnLanding: true, sectionId: "TheCrew" },
+  { name: "How It Works", href: "/#steps", scrollOnLanding: true, sectionId: "steps" },
   { name: "Team", href: "/#OurTeam", scrollOnLanding: true, sectionId: "OurTeam" },
   { name: "Testimonial", href: "/#testimonials", scrollOnLanding: true, sectionId: "testimonials" },
   { name: "Blog", href: "/blog", scrollOnLanding: false },
-  { name: "Subscribe", href: "/#subscription", scrollOnLanding: true, sectionId: "subscription" },
+  { name: "Contact", href: "/#footer", scrollOnLanding: true, sectionId: "footer" },
 ]
-
-const contactItem = { name: "Contact", href: "/#footer", scrollOnLanding: true, sectionId: "footer" }
 
 export function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const navRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (isOpen) {
@@ -37,6 +38,29 @@ export function Navbar() {
     }
   }, [isOpen])
 
+  // Animate navbar expanding from top to bottom smoothly
+  useEffect(() => {
+    if (navRef.current) {
+      const navElement = navRef.current
+      // Set initial state: collapsed height
+      gsap.set(navElement, { 
+        height: 0,
+        overflow: 'hidden',
+        opacity: 1
+      })
+      
+      // Animate expanding from top to bottom with smooth easing
+      gsap.to(navElement, {
+        height: 'auto',
+        duration: 0.9,
+        ease: "power2.out",
+        onComplete: () => {
+          gsap.set(navElement, { overflow: 'visible' })
+        }
+      })
+    }
+  }, [])
+
   const handleToggle = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -48,27 +72,49 @@ export function Navbar() {
   }
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: { href: string; scrollOnLanding?: boolean; sectionId?: string }) => {
-    if (item.scrollOnLanding && item.sectionId) {
+    if (item.scrollOnLanding) {
       e.preventDefault()
       handleClose()
       
-      const sectionId = item.sectionId // Capture for use in setTimeout
-      
-      if (pathname === "/") {
-        // Already on landing page, just scroll
-        const section = document.getElementById(sectionId)
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth", block: "start" })
+      // Handle Home - scroll to top
+      if (item.sectionId === "") {
+        if (pathname === "/") {
+          window.scrollTo({ top: 0, behavior: "smooth" })
+        } else {
+          router.push("/")
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" })
+          }, 100)
         }
-      } else {
-        // Navigate to landing page first, then scroll
-        router.push("/")
-        setTimeout(() => {
+        return
+      }
+      
+      // Handle other sections with IDs
+      if (item.sectionId) {
+        const sectionId = item.sectionId // Capture for use in setTimeout
+        
+        if (pathname === "/") {
+          // Already on landing page, just scroll
           const section = document.getElementById(sectionId)
           if (section) {
             section.scrollIntoView({ behavior: "smooth", block: "start" })
+          } else {
+            // Fallback: scroll to top if section not found
+            window.scrollTo({ top: 0, behavior: "smooth" })
           }
-        }, 100)
+        } else {
+          // Navigate to landing page first, then scroll
+          router.push("/")
+          setTimeout(() => {
+            const section = document.getElementById(sectionId)
+            if (section) {
+              section.scrollIntoView({ behavior: "smooth", block: "start" })
+            } else {
+              // Fallback: scroll to top if section not found
+              window.scrollTo({ top: 0, behavior: "smooth" })
+            }
+          }, 100)
+        }
       }
     } else {
       handleClose()
@@ -76,7 +122,7 @@ export function Navbar() {
   }
 
   return (
-    <div className="w-full relative z-[100]" style={{ pointerEvents: 'auto', touchAction: 'manipulation' }}>
+    <div ref={navRef} className="w-full relative z-[100]" style={{ pointerEvents: 'auto', touchAction: 'manipulation' }}>
       <nav
         className="w-full relative overflow-visible"
         style={{
@@ -84,10 +130,10 @@ export function Navbar() {
         }}
       >
         {/* Reduced height navbar */}
-        <div className="w-full py-1.5 relative z-20" style={{ pointerEvents: 'auto' }}>
-          <div className="flex items-center justify-between w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div className="w-full relative z-20" style={{ pointerEvents: 'auto' }}>
+          <div className="flex items-start justify-between w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center flex-shrink-0 relative z-30">
+            <Link href="/" className="flex items-start flex-shrink-0 relative z-30 pt-2">
               <Image 
                 src="/NEDF TEXT BASED LOGO-14.png" 
                 alt="NEDF Studios Logo" 
@@ -106,13 +152,25 @@ export function Navbar() {
               />
             </Link>
 
-            {/* Hamburger menu for all screens */}
+            {/* Theme Toggle and Hamburger container */}
+            <div className="ml-auto flex items-center gap-2 pt-2">
+              {/* Theme Toggle */}
+              <div className="flex items-center justify-center">
+                <ThemeToggle />
+              </div>
+              
+              {/* Spacer for hamburger button (which is fixed positioned) */}
+              <div className="w-20 h-20 flex-shrink-0"></div>
+            </div>
+            
+            {/* Hamburger menu for all screens - fixed position to stay visible in menu */}
             <button
               onClick={handleToggle}
               onTouchEnd={handleToggle}
               className={cn(
-                "ml-auto relative w-20 h-20 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-[110] transition-all duration-150 active:bg-gray-200 active:scale-95",
+                "fixed w-20 h-20 flex items-center justify-center focus:outline-none bg-transparent border-0 cursor-pointer z-[120] transition-all duration-150 outline-none",
                 "touch-manipulation select-none",
+                "top-0 right-4 sm:right-6 lg:right-8 xl:right-12 2xl:right-16"
               )}
               aria-label="Toggle menu"
               aria-expanded={isOpen}
@@ -122,7 +180,11 @@ export function Navbar() {
                 touchAction: 'manipulation',
                 pointerEvents: 'auto',
                 userSelect: 'none',
-                WebkitUserSelect: 'none'
+                WebkitUserSelect: 'none',
+                outline: 'none',
+                border: 'none',
+                boxShadow: 'none',
+                marginTop: '0.5rem'
               }}
             >
               {/* Animated Hamburger to X */}
@@ -133,38 +195,44 @@ export function Navbar() {
                 stroke="currentColor"
                 strokeWidth={1.5}
                 className="w-12 h-12 pointer-events-none text-[#001F4B] dark:text-[#ec1e24]"
+                style={{ overflow: 'visible' }}
               >
-                {/* Top line - rotates and moves to form top part of X */}
+                {/* Top line - rotates 45deg and translates to center to form X */}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M2 6h20"
-                  className={cn(
-                    "transition-all duration-700 ease-out",
-                    isOpen ? "rotate-45 translate-y-3" : "rotate-0 translate-y-0"
-                  )}
-                  style={{ transformOrigin: '12px 12px' }}
+                  style={{ 
+                    transformOrigin: '12px 12px',
+                    transform: isOpen ? 'rotate(45deg) translateY(6px)' : 'rotate(0deg) translateY(0px)',
+                    transition: 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    willChange: 'transform',
+                  }}
                 />
-                {/* Middle line - fades out */}
+                {/* Middle line - fades out smoothly */}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M2 12h10"
-                  className={cn(
-                    "transition-all duration-500 ease-out",
-                    isOpen ? "opacity-0 scale-0" : "opacity-100 scale-100"
-                  )}
+                  d="M2 12h20"
+                  style={{ 
+                    opacity: isOpen ? 0 : 1,
+                    transform: isOpen ? 'scaleX(0)' : 'scaleX(1)',
+                    transformOrigin: '12px 12px',
+                    transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    willChange: 'opacity, transform',
+                  }}
                 />
-                {/* Bottom line - rotates and moves to form bottom part of X */}
+                {/* Bottom line - rotates -45deg and translates to center to form X */}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M2 18h20"
-                  className={cn(
-                    "transition-all duration-700 ease-out",
-                    isOpen ? "-rotate-45 -translate-y-3" : "rotate-0 translate-y-0"
-                  )}
-                  style={{ transformOrigin: '12px 12px' }}
+                  style={{ 
+                    transformOrigin: '12px 12px',
+                    transform: isOpen ? 'rotate(-45deg) translateY(-6px)' : 'rotate(0deg) translateY(0px)',
+                    transition: 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    willChange: 'transform',
+                  }}
                 />
               </svg>
             </button>
@@ -181,54 +249,22 @@ export function Navbar() {
         onClick={handleClose}
       />
 
-      {/* Full-width slide-in menu */}
+      {/* Full-width expand menu from top to bottom */}
       <div
         className={cn(
-          "fixed top-0 right-0 h-full w-full bg-white dark:bg-[#15171a] z-[105] flex flex-col shadow-2xl transition-transform duration-300 ease-out overflow-y-auto",
-          isOpen ? "translate-x-0" : "translate-x-full"
+          "fixed top-0 right-0 h-full w-full bg-white dark:bg-[#15171a] z-[105] flex flex-col shadow-2xl overflow-y-auto",
+          isOpen ? "scale-y-100 opacity-100 pointer-events-auto" : "scale-y-0 opacity-0 pointer-events-none"
         )}
         style={{ 
           WebkitTapHighlightColor: 'transparent',
-          touchAction: 'manipulation'
+          touchAction: 'manipulation',
+          transformOrigin: 'top center',
+          transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          willChange: 'transform, opacity'
         }}
       >
-        {/* Header with close button */}
-        <div className="flex justify-end p-6">
-          <button
-            onClick={handleClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Close menu"
-          >
-            {/* Same X icon as the transformed hamburger */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-              className="w-8 h-8 text-[#001F4B] dark:text-[#ec1e24]"
-            >
-              {/* X shape - same as hamburger when transformed */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M2 6h20"
-                className="rotate-45 translate-y-3"
-                style={{ transformOrigin: '12px 12px' }}
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M2 18h20"
-                className="-rotate-45 -translate-y-3"
-                style={{ transformOrigin: '12px 12px' }}
-              />
-            </svg>
-          </button>
-        </div>
-
         {/* Menu Items */}
-        <div className="flex flex-col space-y-1 px-6 flex-1 items-center max-w-md mx-auto w-full">
+        <div className="flex flex-col space-y-1 px-6 flex-1 items-center justify-start w-full pt-0">
           {navItems.map((item) => {
             // Active state: exact match for pages, never active for hash/scroll sections
             const isActive = pathname === item.href && !item.href.includes("#")
@@ -238,10 +274,10 @@ export function Navbar() {
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item)}
                 className={cn(
-                  "transition-all duration-200 ease-out text-lg text-[#333333] dark:text-white text-center touch-manipulation select-none px-4 py-3 font-medium font-montserrat w-full",
+                  "transition-all duration-200 ease-out text-xl sm:text-2xl text-[#333333] dark:text-white touch-manipulation select-none px-4 py-3 font-medium font-montserrat text-center w-full",
                   isActive 
-                    ? "bg-[#001F4B]/10 dark:bg-[#ec1e24]/10 text-[#001F4B] dark:text-[#ec1e24] underline underline-offset-4" 
-                    : "hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-95",
+                    ? "text-[#001F4B] dark:text-[#ec1e24] underline underline-offset-4" 
+                    : "active:scale-95",
                 )}
                 style={{ 
                   WebkitTapHighlightColor: 'transparent',
@@ -256,22 +292,6 @@ export function Navbar() {
           })}
         </div>
 
-        {/* Bottom Section */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-800 space-y-4 max-w-md mx-auto w-full">
-          <Link
-            href={contactItem.href}
-            onClick={(e) => handleNavClick(e, contactItem)}
-            className="block px-6 py-3 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#ec1e24] active:bg-[#002850] dark:active:bg-[#ec1e24] transition-all duration-200 ease-out font-medium text-base text-center touch-manipulation select-none active:scale-95 shadow-md font-montserrat"
-            style={{ 
-              WebkitTapHighlightColor: 'transparent',
-              pointerEvents: 'auto',
-              userSelect: 'none',
-              WebkitUserSelect: 'none'
-            }}
-          >
-            {contactItem.name}
-          </Link>
-        </div>
       </div>
     </div>
   )

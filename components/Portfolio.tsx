@@ -91,7 +91,7 @@ export default function Hero() {
       </AnimatePresence>
 
       {/* Full-width Section */}
-      <section className="pt-20 font-montserrat relative overflow-hidden w-full">
+      <section id="portfolio" className="pt-20 font-montserrat relative overflow-hidden w-full">
         <div
           className={`flex justify-center items-center gap-6 sm:gap-6 md:gap-14 text-[12px] text-gray-500 mb-12 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
