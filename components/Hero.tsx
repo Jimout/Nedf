@@ -22,6 +22,7 @@ export default function HeroWithStats() {
 
   const [lineHeight, setLineHeight] = useState(() => getLineHeight())
   const [index, setIndex] = useState(0)
+  const [isResetting, setIsResetting] = useState(false)
 
   // 📐 Update line height on window resize
   useEffect(() => {
@@ -31,18 +32,41 @@ export default function HeroWithStats() {
     return () => window.removeEventListener("resize", updateLineHeight)
   }, [])
 
-  // 🔁 Rotate words every 1.5 seconds - simple cycling
+  // 🔁 Rotate words every 1.5 seconds - perfect loop in one direction
   useEffect(() => {
+    let resetTimeout: NodeJS.Timeout
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % words.length)
+      setIndex((prev) => {
+        const next = prev + 1
+        // When we complete one full cycle, reset seamlessly
+        if (next >= words.length) {
+          // Wait for transition to finish, then instantly reset to 0 (no transition)
+          resetTimeout = setTimeout(() => {
+            setIsResetting(true)
+            setIndex(0)
+            // Re-enable transition immediately after reset
+            setTimeout(() => {
+              setIsResetting(false)
+            }, 50)
+          }, 450) // Slightly longer than transition duration
+          return words.length // Show duplicate (visually identical to first)
+        }
+        return next
+      })
     }, 1500)
-    return () => clearInterval(interval)
-  }, [])
+    return () => {
+      clearInterval(interval)
+      if (resetTimeout) clearTimeout(resetTimeout)
+    }
+  }, [words.length])
+
+  // Create duplicated words array for seamless loop
+  const duplicatedWords = [...words, ...words]
 
   return (
     <>
       {/* 🧭 Hero Section */}
-      <section className="relative flex items-center justify-start font-sans overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] mt-16 max-sm:mt-8 z-10">
+      <section className="relative flex items-center justify-start font-montserrat overflow-hidden px-1 sm:px-2 lg:px-4 2xl:px-8 max-w-7xl mx-auto min-h-[65vh] mt-16 max-sm:mt-8 z-10">
         <div className="flex items-center max-sm:items-start gap-8 max-sm:gap-6">
           {/* 🪙 Logo */}
           <div className="select-none -ml-2 max-sm:-ml-1">
@@ -82,11 +106,13 @@ export default function HeroWithStats() {
                   ref={containerRef}
                   style={{
                     transform: `translateY(-${index * lineHeight}px)`,
-                    transition: "transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                    transition: isResetting 
+                      ? "none" 
+                      : "transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                     willChange: "transform",
                   }}
                 >
-                  {words.map((word, i) => (
+                  {duplicatedWords.map((word, i) => (
                     <span
                       key={i}
                       className="block font-medium text-[#002e47] dark:text-[#ec1e24] text-[80px] leading-none whitespace-nowrap max-sm:text-[42px] lg:text-[90px] xl:text-[100px] 2xl:text-[110px]"

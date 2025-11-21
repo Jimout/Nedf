@@ -20,9 +20,11 @@ export function DynamicBackground() {
     return () => observer.disconnect()
   }, [])
 
-  const lightModeGrid = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 40 0 L 0 0 0 40' fill='none' stroke='%23001F4B' stroke-opacity='0.4' stroke-width='0.2'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grid)'/%3E%3C/svg%3E")`
+  // Light mode: no grid background
+  const lightModeGrid = "none"
   
-  const darkModeGrid = `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 40 0 L 0 0 0 40' fill='none' stroke='%23ffffff' stroke-opacity='0.2' stroke-width='0.2'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grid)'/%3E%3C/svg%3E")`
+  // Dark mode: also no grid background now
+  const darkModeGrid = "none"
 
   return (
     <div
@@ -30,8 +32,8 @@ export function DynamicBackground() {
       style={{
         zIndex: 0,
         backgroundImage: isDark ? darkModeGrid : lightModeGrid,
-        backgroundRepeat: "repeat",
-        backgroundSize: "40px 40px",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "auto",
         pointerEvents: "none",
       }}
     />
