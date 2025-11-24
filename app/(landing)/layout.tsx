@@ -1,4 +1,5 @@
 import Footer from "@/components/Footer"
+import { Navbar } from "@/components/Navbar"
 import type React from "react"
 export default function Layout({
   children,
@@ -7,7 +8,10 @@ export default function Layout({
 }>) {
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-full">
+      {/* Navbar - Full width, outside padding */}
+      <Navbar />
+      {/* Content wrapper with responsive padding */}
+      <div className="w-full px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-20">
         {children}
       </div>
       <Footer />

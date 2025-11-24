@@ -18,7 +18,7 @@ export default function Subscription() {
 
   return (
     <div className="relative py-12 sm:py-16 md:py-20 lg:py-24">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+      <div className="w-full max-w-none">
         {/* Title and Subtitle */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
           <h2 
@@ -27,13 +27,13 @@ export default function Subscription() {
           >
             Stay Updated with NEDF
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4 sm:px-0">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-300 max-w-4xl mx-auto px-4 sm:px-0">
             Subscribe to get notified whenever we publish a new project or blog post.
           </p>
         </div>
 
         {/* Subscription Form */}
-        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="flex flex-row gap-0">
             {/* Email Input */}
             <div className="flex-1">

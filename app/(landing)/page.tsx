@@ -2,7 +2,6 @@
 
 import SlidingTestimonials from "@/components/ClientReflections"
 import Hero from "@/components/Hero"
-import { Navbar } from "@/components/Navbar"
 import { OurTeam } from "@/components/OurTeam"
 import Portfolio from "@/components/Portfolio"
 import HeroTextFadeScroll from "@/components/Slogan"
@@ -42,7 +41,6 @@ export default function HomePage() {
         className="min-h-screen flex flex-col relative z-10"
         style={{ pointerEvents: 'auto' }}
       >
-        <Navbar />
         <Hero />
         <HeroTextFadeScroll />
         <ServicesSection />
@@ -53,10 +51,7 @@ export default function HomePage() {
         <SlidingTestimonials />
         
         <div id="studio-notes" className="scroll-mt-20">
-          <p 
-            className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12 dark:text-[#ec1e24]"
-            style={{ color: 'rgba(51, 51, 51, 0.8)' }}
-          >
+          <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12 text-[#333333]/80 dark:text-[#ec1e24]">
             STUDIO NOTES
           </p>
           <StudioNotesPage />

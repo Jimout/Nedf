@@ -43,9 +43,9 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <CursorAnimation />
-          <div className="bg-transparent relative z-10 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <main className="w-full relative z-10">
             {children}
-          </div>
+          </main>
           <Toaster />
         </ThemeProvider>
         <Analytics />

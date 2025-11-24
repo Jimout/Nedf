@@ -25,7 +25,7 @@ export default function Footer() {
       />
 
       {/* Main Grid */}
-      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-6 md:px-[100px] gap-10 flex-grow items-center">
+      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-20 gap-10 flex-grow items-center">
         {/* Logo */}
         <div className="flex flex-col justify-center items-center md:items-start md:pl-8 lg:pl-12 xl:pl-16">
           <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#333333]/80 dark:text-white/70 font-medium font-montserrat">NEDF</h2>

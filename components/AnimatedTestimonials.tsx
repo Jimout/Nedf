@@ -126,7 +126,7 @@ export default function AnimatedTestimonials() {
 
   return (
     <section className="relative py-20 sm:py-24 md:py-32 overflow-hidden">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="w-full">
         {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

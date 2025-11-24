@@ -91,29 +91,28 @@ export default function Portfolio() {
       </AnimatePresence>
 
       {/* Full-width Section */}
-      <section id="portfolio" className="pt-20 font-montserrat relative overflow-hidden w-full">
+      <section id="portfolio" className="pt-12 sm:pt-14 md:pt-16 lg:pt-18 xl:pt-20 2xl:pt-24 font-montserrat relative overflow-hidden w-full">
         <div
-          className={`flex justify-center items-center gap-6 sm:gap-6 md:gap-14 text-[12px] text-gray-500 mb-12 flex-nowrap transition-all duration-300 ease-out ${
+          className={`flex justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
           <span
-            className={`text-[10px] sm:text-sm tracking-widest transition-all duration-100 delay-50 dark:text-[#ec1e24]/60 ${
+            className={`text-[10px] sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base tracking-widest transition-all duration-100 delay-50 text-gray-500 dark:text-white/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             }`}
           >
             2024
           </span>
           <h1
-            className={`text-3xl font-bold sm:text-4xl text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 dark:text-[#ec1e24] ${
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-bold text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-[#333333]/80 dark:text-[#ec1e24] ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
-            style={{ color: 'rgba(51, 51, 51, 0.8)' }}
           >
             PORTFOLIO
           </h1>
           <span
-            className={`text-[10px] sm:text-sm tracking-widest transition-all duration-100 delay-150 dark:text-[#ec1e24]/60 ${
+            className={`text-[10px] sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base tracking-widest transition-all duration-100 delay-150 text-gray-500 dark:text-white/60 ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
             }`}
           >
@@ -122,13 +121,13 @@ export default function Portfolio() {
         </div>
 
         {/* Full-width container aligned with navbar */}
-        <div className="relative w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 w-full">
-            <div className="hidden md:flex justify-between items-start gap-14 w-full">
+        <div className="relative w-full">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 w-full">
+            <div className="hidden md:flex justify-between items-start gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 w-full">
               {/* Left column */}
-              <div className="flex flex-col w-[28%] lg:w-[26%] xl:w-[24%] items-start">
+              <div className="flex flex-col w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] items-start">
                 <div
-                  className={`relative w-full h-[500px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
+                  className={`relative w-full h-[380px] md:h-[420px] lg:h-[480px] xl:h-[540px] 2xl:h-[600px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -148,7 +147,7 @@ export default function Portfolio() {
                 </div>
 
                 <div
-                  className={`mt-6 transition-all duration-700 ${
+                  className={`mt-4 md:mt-5 lg:mt-6 xl:mt-7 2xl:mt-8 transition-all duration-700 ${
                     transitioning ? "transform translate-y-8 opacity-0" : "transform translate-y-0 opacity-100"
                   }`}
                   style={{
@@ -156,7 +155,7 @@ export default function Portfolio() {
                     transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                   }}
                 >
-                  <h2 className="text-3xl md:text-4xl font-light text-[#1a1a1a] dark:text-white leading-[1.1] mb-4 tracking-tight">
+                  <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-light text-[#1a1a1a] dark:text-white leading-[1.1] mb-3 md:mb-3 lg:mb-4 xl:mb-4 2xl:mb-5 tracking-tight">
                     {slide.title1 === "Architectural" ? (
                       <>
                         Architectural{" "}
@@ -178,7 +177,7 @@ export default function Portfolio() {
                   <Button
                     variant="outline"
                     onClick={handleExploreClick}
-                    className="rounded-full px-6 py-2 text-sm transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0 dark:border-[#ec1e24] dark:text-[#ec1e24] dark:hover:bg-[#ec1e24] dark:hover:text-white"
+                    className="rounded-full px-5 md:px-6 lg:px-7 xl:px-8 2xl:px-9 py-2 md:py-2.5 lg:py-2.5 xl:py-3 2xl:py-3 text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0 dark:border-[#ec1e24] dark:text-[#ec1e24] dark:hover:bg-[#ec1e24] dark:hover:text-white"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                   >
@@ -189,7 +188,7 @@ export default function Portfolio() {
 
               {/* Middle Image */}
               <div
-                className={`relative w-[40%] lg:w-[42%] xl:w-[40%] h-[500px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[1000ms] ${
+                className={`relative w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[380px] md:h-[420px] lg:h-[480px] xl:h-[540px] 2xl:h-[600px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -208,7 +207,7 @@ export default function Portfolio() {
 
               {/* Right column */}
               <div
-                className={`relative w-[28%] lg:w-[26%] xl:w-[24%] h-[500px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
+                className={`relative w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] h-[380px] md:h-[420px] lg:h-[480px] xl:h-[540px] 2xl:h-[600px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{
@@ -229,7 +228,7 @@ export default function Portfolio() {
             {/* Mobile */}
             <div className="md:hidden w-full flex flex-col items-center">
               <div
-                className={`relative w-11/12 h-96 sm:h-[450px] overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
+                className={`relative w-11/12 h-80 sm:h-96 overflow-hidden dark:shadow-xl dark:shadow-[#15171a]/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-y-[100%] opacity-0 scale-98" : "transform translate-y-0 opacity-100 scale-100"
                 }`}
                 style={{
@@ -245,7 +244,7 @@ export default function Portfolio() {
                 <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-10" />
               </div>
               <h2
-                className={`text-2xl font-light text-[#001F4B] dark:text-white leading-tight mt-6 whitespace-nowrap text-center transition-all duration-700 ${
+                className={`text-xl sm:text-2xl font-light text-[#001F4B] dark:text-white leading-tight mt-4 sm:mt-5 whitespace-nowrap text-center transition-all duration-700 ${
                   transitioning ? "transform translate-y-6 opacity-0" : "transform translate-y-0 opacity-100"
                 }`}
                 style={{
@@ -274,7 +273,7 @@ export default function Portfolio() {
               <Button
                 variant="outline"
                 onClick={handleExploreClick}
-                className={`rounded-full px-6 py-2 text-sm mt-4 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0 dark:border-[#ec1e24] dark:text-[#ec1e24] dark:hover:bg-[#ec1e24] dark:hover:text-white ${
+                className={`rounded-full px-5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm mt-3 sm:mt-4 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0 dark:border-[#ec1e24] dark:text-[#ec1e24] dark:hover:bg-[#ec1e24] dark:hover:text-white ${
                   transitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
                 }`}
                 style={{
@@ -291,14 +290,14 @@ export default function Portfolio() {
         </div>
 
         {/* Pagination Dots */}
-        <div className="flex justify-center mt-6 gap-3">
+        <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 gap-2 sm:gap-2.5 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4">
           {slides.map((_, index) => (
             <div
               key={index}
               className={`transition-all duration-500 cursor-pointer hover:scale-125 ${
                 index === currentIndex
-                  ? "bg-gradient-to-r from-gray-400 to-gray-500 dark:from-[#ec1e24] dark:to-[#ec1e24]/80 w-8 h-2 shadow-md"
-                  : "bg-gray-300 hover:bg-gray-400 dark:bg-[#ec1e24]/30 dark:hover:bg-[#ec1e24]/50 w-2 h-2"
+                  ? "bg-gradient-to-r from-gray-400 to-gray-500 dark:from-[#ec1e24] dark:to-[#ec1e24]/80 w-6 sm:w-7 md:w-8 lg:w-9 xl:w-10 2xl:w-11 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5 shadow-md"
+                  : "bg-gray-300 hover:bg-gray-400 dark:bg-[#ec1e24]/30 dark:hover:bg-[#ec1e24]/50 w-1.5 sm:w-1.5 md:w-2 lg:w-2 xl:w-2.5 2xl:w-2.5 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5"
               }`}
               style={{
                 transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",

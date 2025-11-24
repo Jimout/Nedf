@@ -1,73 +1,213 @@
-"use client";
+"use client"
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react"
 
-const stats = [
+// ==================== CONSTANTS ====================
+
+const STATS_DATA = [
   { value: "100+", label: "Projects Completed" },
   { value: "95%", label: "Client Engagement Rate" },
   { value: "98%", label: "Client Satisfaction Rate" },
   { value: "99%", label: "On-Time Project Completion" },
-];
+] as const
+
+const ANIMATION_DURATION_MS = 3000 // Longer animation to see the counting
+const INTERSECTION_THRESHOLD = 0.3
+const SHUFFLE_INTERVAL_MS = 80 // Slower shuffling - more visible
+
+// ==================== TYPES ====================
+
+interface StatItem {
+  value: string
+  label: string
+}
+
+// ==================== COMPONENT ====================
 
 export default function Stats() {
-  const [animatedValues, setAnimatedValues] = useState(["0+", "0%", "0%", "0%"]);
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [animatedValues, setAnimatedValues] = useState(getInitialValues())
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const [isShuffling, setIsShuffling] = useState(true)
+  const [isCounting, setIsCounting] = useState(false)
+  const ref = useRef<HTMLDivElement | null>(null)
+  const shuffleIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
+  // ==================== HELPERS ====================
+
+  function getInitialValues(): string[] {
+    return generateRandomValues()
+  }
+
+  function generateRandomValues(): string[] {
+    // Generate random futuristic-looking numbers
+    return STATS_DATA.map((stat) => {
+      const randomNum = Math.floor(Math.random() * 100)
+      if (stat.value.includes("%")) return `${randomNum}%`
+      if (stat.value.includes("+")) return `${randomNum}+`
+      return `${randomNum}`
+    })
+  }
+
+  function startShuffling() {
+    // Rapidly cycle through random numbers for futuristic effect
+    shuffleIntervalRef.current = setInterval(() => {
+      setAnimatedValues(generateRandomValues())
+    }, SHUFFLE_INTERVAL_MS)
+  }
+
+  function stopShuffling() {
+    if (shuffleIntervalRef.current) {
+      clearInterval(shuffleIntervalRef.current)
+      shuffleIntervalRef.current = null
+    }
+    setIsShuffling(false)
+  }
+
+  function parseStatValue(value: string): { number: number; suffix: string } {
+    const numberMatch = value.match(/\d+/)
+    const number = numberMatch ? parseInt(numberMatch[0]) : 0
+    const suffix = value.includes("%") ? "%" : value.includes("+") ? "+" : ""
+    return { number, suffix }
+  }
+
+  function easeOutExpo(x: number): number {
+    // Smooth easing function for professional animation
+    return x === 1 ? 1 : 1 - Math.pow(2, -10 * x)
+  }
+
+  function animateNumbers() {
+    stopShuffling() // Stop the random shuffling
+    setIsCounting(true) // Mark that we're counting
+    
+    // Small delay to show transition from shuffle to count
+    setTimeout(() => {
+      const startTime = performance.now()
+      const targetStats = STATS_DATA.map(parseStatValue)
+      const startValues = animatedValues.map(parseStatValue) // Start from current shuffled values
+
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime
+        const linearProgress = Math.min(elapsed / ANIMATION_DURATION_MS, 1)
+        
+        // Apply smooth easing for professional feel
+        const progress = easeOutExpo(linearProgress)
+
+        const updatedValues = targetStats.map(({ number, suffix }, index) => {
+          const startNum = startValues[index].number
+          const range = number - startNum
+          const currentNumber = Math.floor(startNum + (progress * range))
+          return `${currentNumber}${suffix}`
+        })
+        
+        setAnimatedValues(updatedValues)
+
+        if (linearProgress < 1) {
+          requestAnimationFrame(animate)
+        } else {
+          setIsCounting(false)
+        }
+      }
+
+      requestAnimationFrame(animate)
+    }, 200) // 200ms delay to see the transition
+  }
+
+  // ==================== EFFECTS ====================
+
+  // Start futuristic shuffling effect on mount
+  useEffect(() => {
+    startShuffling()
+    
+    return () => {
+      stopShuffling()
+    }
+  }, [])
+
+  // Animate to real values when scrolled into view
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated) {
-          animateNumbers();
-          setHasAnimated(true);
+          // Wait 1.5 seconds of visible shuffling before animating
+          setTimeout(() => {
+            animateNumbers()
+            setHasAnimated(true)
+          }, 1500)
         }
       },
-      { threshold: 0.3 }
-    );
+      { threshold: INTERSECTION_THRESHOLD }
+    )
 
-    if (ref.current) observer.observe(ref.current);
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
 
     return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
-  }, [hasAnimated]);
+      if (ref.current) {
+        observer.unobserve(ref.current)
+      }
+    }
+  }, [hasAnimated])
 
-  const animateNumbers = () => {
-    const duration = 2000;
-    const startTimestamp = performance.now();
-
-    const targetValues = stats.map((stat) => parseInt(stat.value.replace(/[^\d]/g, "")) || 0);
-    const suffixes = stats.map((stat) => (stat.value.includes("%") ? "%" : stat.value.includes("+") ? "+" : ""));
-
-    const step = (timestamp: number) => {
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const updatedValues = targetValues.map((target, index) => `${Math.floor(progress * target)}${suffixes[index]}`);
-      setAnimatedValues(updatedValues);
-
-      if (progress < 1) requestAnimationFrame(step);
-    };
-
-    requestAnimationFrame(step);
-  };
+  // ==================== RENDER ====================
 
   return (
-    <section ref={ref} className="w-full py-4 max-sm:-mt-12 relative z-10">
-      <div
-        className="
-          w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16
-          grid grid-cols-2 sm:flex sm:flex-row sm:justify-between sm:items-center
-          gap-y-10 gap-x-6 sm:gap-y-0 sm:gap-x-0 text-center
-        "
-      >
-        {stats.map((stat, index) => (
-          <div key={index} className="max-sm:bg-white dark:max-sm:bg-[#15171a] dark:max-sm:border dark:max-sm:border-[#ec1e24]/20 max-sm:p-4 max-sm:rounded-md max-sm:shadow-md dark:max-sm:shadow-lg dark:max-sm:shadow-[#ec1e24]/10">
-            <div className="text-2xl sm:text-3xl lg:text-4xl max-sm:text-xl font-bold text-[#001F4B] dark:text-[#ec1e24] font-mono">
-              {animatedValues[index]}
-            </div>
-            <div className="text-xs max-sm:text-[10px] text-[#333333]/70 dark:text-white/80 mt-1">{stat.label}</div>
-          </div>
+    <section 
+      ref={ref} 
+      className="
+        w-full relative z-10 
+        max-sm:-mt-8
+        py-4 sm:py-5 md:py-6 lg:py-8 xl:py-10 2xl:py-12
+      "
+    >
+      <div className="
+        w-full text-center
+        grid grid-cols-2 
+        sm:flex sm:flex-row sm:justify-between sm:items-center
+        gap-y-8 gap-x-6 
+        sm:gap-y-0 sm:gap-x-0
+      ">
+        {STATS_DATA.map((stat, index) => (
+          <StatCard
+            key={stat.label}
+            value={animatedValues[index]}
+            label={stat.label}
+            isCounting={isCounting}
+          />
         ))}
       </div>
     </section>
-  );
+  )
+}
+
+// ==================== SUB-COMPONENTS ====================
+
+function StatCard({ value, label, isCounting }: { value: string; label: string; isCounting: boolean }) {
+  return (
+    <div className="
+      max-sm:bg-white max-sm:p-4 max-sm:rounded-md max-sm:shadow-md
+      dark:max-sm:bg-[#15171a] 
+      dark:max-sm:border dark:max-sm:border-[#ec1e24]/20 
+      dark:max-sm:shadow-sm dark:max-sm:shadow-[#ec1e24]/5
+      transition-all duration-200
+    ">
+      <div className={`
+        font-bold font-mono
+        text-[#001F4B] dark:text-[#ec1e24]
+        text-lg sm:text-xl md:text-2xl 
+        lg:text-3xl xl:text-3xl 2xl:text-4xl
+        transition-all duration-200 ease-out
+        ${isCounting ? 'scale-110' : 'scale-100'}
+      `}>
+        {value}
+      </div>
+      <div className="
+        text-[#333333]/70 dark:text-white/80
+        text-[10px] sm:text-xs md:text-sm lg:text-base
+        mt-1 sm:mt-2
+      ">
+        {label}
+      </div>
+    </div>
+  )
 }

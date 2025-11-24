@@ -100,12 +100,13 @@ export default function ServicesSection() {
 
   return (
     <section id="services" className="bg-white pt-20 font-montserrat relative overflow-hidden w-full">
-      <div className="relative w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="relative w-full">
         <div className="mb-8 text-center relative z-20 pt-2">
           <h2 className="text-5xl font-bold text-gray-900 dark:text-white">Our Services</h2>
         </div>
 
-        <div className="relative w-full h-[600px] overflow-hidden">
+        <div className="w-full max-w-none">
+          <div className="relative w-full h-[600px] overflow-hidden">
           {/* SVG Curved Line Chart */}
           <svg viewBox="0 0 1000 600" className="absolute inset-0 w-full h-full" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
             <defs>
@@ -316,6 +317,7 @@ export default function ServicesSection() {
           </div>
             )
           })}
+          </div>
         </div>
       </div>
     </section>

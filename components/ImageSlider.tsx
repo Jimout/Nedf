@@ -60,7 +60,7 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
                   alt={alts[idx]}
                   width={700}
                   height={400}
-                  className="w-full h-[400px] object-cover"
+                  className="w-full h-[400px] xl:h-[600px] 2xl:h-[800px] object-cover"
                 />
               </div>
 
@@ -71,7 +71,7 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
                     alt={alts[idx + 1]}
                     width={300}
                     height={400}
-                    className="w-full h-[400px] object-cover opacity-30"
+                    className="w-full h-[400px] xl:h-[600px] 2xl:h-[800px] object-cover opacity-30"
                   />
                 </div>
               )}

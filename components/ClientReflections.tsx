@@ -124,11 +124,11 @@ export default function SlidingTestimonials() {
   }
 
   return (
-    <div id="testimonials" className="relative py-12 sm:py-16 md:py-20">
+    <div id="testimonials" className="relative py-12 sm:py-16 md:py-20 xl:py-24 2xl:py-28">
       {/* Title */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 pb-8">
+      <div className="w-full pb-8 xl:pb-10 2xl:pb-12">
         <p 
-          className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight dark:text-[#ec1e24]"
+          className="text-center text-3xl font-bold sm:text-4xl xl:text-5xl 2xl:text-6xl font-montserrat tracking-tight dark:text-[#ec1e24]"
           style={{ color: 'rgba(51, 51, 51, 0.8)' }}
         >
           CLIENT REFLECTION
@@ -136,7 +136,7 @@ export default function SlidingTestimonials() {
       </div>
 
       {/* Auto-scrolling Cards Container */}
-      <div className="relative px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="relative">
         <div 
           ref={containerRef}
           className="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
@@ -152,38 +152,38 @@ export default function SlidingTestimonials() {
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setIsHovered(true)}
         >
-          <div className={`flex gap-6 ${!isDragging && !isHovered ? 'animate-scroll' : ''}`} style={{ width: '200%' }}>
+          <div className={`flex gap-6 xl:gap-8 2xl:gap-10 ${!isDragging && !isHovered ? 'animate-scroll' : ''}`} style={{ width: '200%' }}>
             {/* Duplicate cards for seamless loop */}
             {[...testimonials, ...testimonials].map((testimonial, index) => (
               <div
                 key={`${testimonial.id}-${index}`}
-                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] bg-white dark:bg-[#15171a] p-6 border border-gray-300 dark:border-white/10 mb-8 hover:scale-105 transition-all duration-300 cursor-pointer"
+                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] xl:w-[560px] 2xl:w-[640px] bg-white dark:bg-[#15171a] p-6 xl:p-7 2xl:p-8 border border-gray-300 dark:border-white/10 mb-8 xl:mb-10 2xl:mb-12 hover:scale-105 transition-all duration-300 cursor-pointer"
               >
                 {/* Quotation Marks */}
-                <div className="text-6xl text-gray-300 dark:text-[#ec1e24] font-bold mb-4">
+                <div className="text-6xl xl:text-7xl 2xl:text-8xl text-gray-300 dark:text-[#ec1e24] font-bold mb-4 xl:mb-5 2xl:mb-6">
                   "
                 </div>
 
                 {/* Testimonial Text */}
-                <blockquote className="text-[#333333] dark:text-gray-300 text-base leading-relaxed mb-6">
+                <blockquote className="text-[#333333] dark:text-gray-300 text-base xl:text-lg 2xl:text-xl leading-relaxed mb-6 xl:mb-7 2xl:mb-8">
                   {testimonial.quote}
                 </blockquote>
 
                 {/* Author Information */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 xl:gap-4 2xl:gap-5">
                   {/* Profile Picture */}
                   <img
                     src={testimonial.photo}
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-12 h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 rounded-full object-cover"
                   />
                   
                   {/* Name and Title */}
                   <div>
-                      <h3 className="font-bold text-[#333333] dark:text-[#ec1e24] text-sm">
+                      <h3 className="font-bold text-[#333333] dark:text-[#ec1e24] text-sm xl:text-base 2xl:text-lg">
                         {testimonial.name}
                       </h3>
-                    <p className="text-[#333333] dark:text-gray-400 text-xs">
+                    <p className="text-[#333333] dark:text-gray-400 text-xs xl:text-sm 2xl:text-base">
                       {testimonial.role}, {testimonial.work}
                     </p>
                   </div>

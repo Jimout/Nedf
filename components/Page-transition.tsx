@@ -15,17 +15,14 @@ export function PageTransition({ children }: PageTransitionProps) {
     <motion.div
       key={pathname}
       initial={{
-        opacity: 0,
         scale: 0.98,
         filter: "blur(4px)",
       }}
       animate={{
-        opacity: 1,
         scale: 1,
         filter: "blur(0px)",
       }}
       exit={{
-        opacity: 0,
         scale: 0.98,
         filter: "blur(4px)",
       }}
@@ -34,7 +31,7 @@ export function PageTransition({ children }: PageTransitionProps) {
         ease: [0.25, 0.46, 0.45, 0.94], // Premium easing curve
       }}
       style={{
-        willChange: "opacity, transform, filter",
+        willChange: "transform, filter",
       }}
     >
       {children}

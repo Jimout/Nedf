@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react"
 
-interface Testimonial {
+// ==================== TYPES ====================
+
+interface Step {
   id: number
   quote: string
   name: string
@@ -10,7 +12,24 @@ interface Testimonial {
   avatar: string
 }
 
-const testimonials: Testimonial[] = [
+interface ArcPosition {
+  x: number
+  y: number
+  opacity: number
+  scale: number
+  rotation: number
+  vw: number
+  vh: number
+}
+
+interface TextAnimation {
+  opacity: number
+  scale: number
+}
+
+// ==================== CONSTANTS ====================
+
+const STEPS_DATA: Step[] = [
   {
     id: 1,
     quote:
@@ -53,6 +72,29 @@ const testimonials: Testimonial[] = [
   },
 ]
 
+const BREAKPOINTS = {
+  MOBILE: 640,
+  TABLET: 768,
+  DESKTOP: 1024,
+  WIDE: 1280,
+  ULTRA_WIDE: 1536,
+} as const
+
+const ARC_CONFIG = {
+  MOBILE: { startY: 0.65, endY: 0.65, peakY: 0.35 },
+  TABLET: { startY: 0.65, endY: 0.65, peakY: 0.08 },
+  DESKTOP: { startY: 0.65, endY: 0.65, peakY: 0.08 },
+} as const
+
+const ANIMATION_CONFIG = {
+  CIRCLE_SCALE: 4,
+  TEXT_MIN_OPACITY: 0.15,
+  TEXT_BASE_SCALE: 0.65,
+  TEXT_SCALE_RANGE: 0.35,
+} as const
+
+// ==================== HELPER FUNCTIONS ====================
+
 function getPointOnBezier(
   t: number,
   p0: [number, number],
@@ -65,12 +107,34 @@ function getPointOnBezier(
   return [x, y]
 }
 
-function getRotationAngle(t: number, p0: [number, number], p1: [number, number], p2: [number, number]): number {
+function getRotationAngle(
+  t: number,
+  p0: [number, number],
+  p1: [number, number],
+  p2: [number, number]
+): number {
   const mt = 1 - t
   const dx = 2 * mt * (p1[0] - p0[0]) + 2 * t * (p2[0] - p1[0])
   const dy = 2 * mt * (p1[1] - p0[1]) + 2 * t * (p2[1] - p1[1])
   return Math.atan2(dy, dx) * (180 / Math.PI)
 }
+
+function getArcConfig(viewportWidth: number) {
+  if (viewportWidth < BREAKPOINTS.TABLET) return ARC_CONFIG.MOBILE
+  if (viewportWidth < BREAKPOINTS.DESKTOP) return ARC_CONFIG.TABLET
+  return ARC_CONFIG.DESKTOP
+}
+
+function calculateScrollProgress(element: HTMLDivElement): number {
+  const rect = element.getBoundingClientRect()
+  const windowHeight = window.innerHeight
+  const elementTop = rect.top
+  const elementHeight = rect.height
+
+  return Math.max(0, Math.min(1, (windowHeight - elementTop) / (windowHeight + elementHeight)))
+}
+
+// ==================== MAIN COMPONENT ====================
 
 export default function Steps() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -79,40 +143,45 @@ export default function Steps() {
   const [viewportWidth, setViewportWidth] = useState(0)
   const [isDark, setIsDark] = useState(false)
 
+  // Track dark mode changes
   useEffect(() => {
     const checkDarkMode = () => {
       setIsDark(document.documentElement.classList.contains('dark'))
     }
+    
     checkDarkMode()
+    
     const observer = new MutationObserver(checkDarkMode)
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     })
+    
     return () => observer.disconnect()
   }, [])
 
+  // Track viewport width
   useEffect(() => {
     setViewportWidth(window.innerWidth)
+    
     const handleResize = () => setViewportWidth(window.innerWidth)
     window.addEventListener("resize", handleResize)
+    
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // Track scroll progress
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return
 
-      const rect = sectionRef.current.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-      const elementTop = rect.top
-      const elementHeight = rect.height
-
-      const progress = Math.max(0, Math.min(1, (windowHeight - elementTop) / (windowHeight + elementHeight)))
-
+      const progress = calculateScrollProgress(sectionRef.current)
       setScrollProgress(progress)
 
-      const activeIdx = Math.min(Math.floor(progress * testimonials.length), testimonials.length - 1)
+      const activeIdx = Math.min(
+        Math.floor(progress * STEPS_DATA.length), 
+        STEPS_DATA.length - 1
+      )
       setActiveIndex(activeIdx)
     }
 
@@ -120,187 +189,168 @@ export default function Steps() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const getActiveAvatarPosition = () => {
-    const totalProgress = scrollProgress * testimonials.length
-    const activeIdx = Math.floor(totalProgress)
-    const localProgress = Math.min(totalProgress - activeIdx, 1)
-
+  const getActiveAvatarPosition = (): ArcPosition => {
+    const totalProgress = scrollProgress * STEPS_DATA.length
+    const localProgress = Math.min(totalProgress - Math.floor(totalProgress), 1)
     const progress = Math.max(0, Math.min(1, localProgress))
 
-    let p0: [number, number], p1: [number, number], p2: [number, number]
     const vw = viewportWidth || window.innerWidth
     const vh = window.innerHeight
-
-    if (vw < 768) {
-      // Mobile
-      p0 = [0, vh * 0.55]
-      p1 = [vw * 0.5, vh * 0.08]
-      p2 = [vw, vh * 0.55]
-    } else if (vw < 1024) {
-      // Tablet
-      p0 = [0, vh * 0.6]
-      p1 = [vw * 0.5, vh * 0.08]
-      p2 = [vw, vh * 0.6]
-    } else {
-      // Desktop
-      p0 = [0, vh * 0.65]
-      p1 = [vw * 0.5, vh * 0.08]
-      p2 = [vw, vh * 0.65]
-    }
+    
+    const arcConfig = getArcConfig(vw)
+    
+    const p0: [number, number] = [0, vh * arcConfig.startY]
+    const p1: [number, number] = [vw * 0.5, vh * arcConfig.peakY]
+    const p2: [number, number] = [vw, vh * arcConfig.endY]
 
     const [arcX, arcY] = getPointOnBezier(progress, p0, p1, p2)
     const rotation = getRotationAngle(progress, p0, p1, p2)
-
-    const scale = 4
-
     const opacity = Math.abs(Math.cos((progress - 0.5) * Math.PI)) * 0.5 + 0.5
 
-    // Return both x/y coordinates and viewport dimensions for proper scaling
-    return { x: arcX, y: arcY, opacity, scale, rotation, vw, vh }
+    return { 
+      x: arcX, 
+      y: arcY, 
+      opacity, 
+      scale: ANIMATION_CONFIG.CIRCLE_SCALE, 
+      rotation, 
+      vw, 
+      vh 
+    }
   }
 
-  const getTextAnimation = () => {
-    const totalProgress = scrollProgress * testimonials.length
-    const activeIdx = Math.floor(totalProgress)
-    const localProgress = Math.min(totalProgress - activeIdx, 1)
-    
+  const getTextAnimation = (): TextAnimation => {
+    const totalProgress = scrollProgress * STEPS_DATA.length
+    const localProgress = Math.min(totalProgress - Math.floor(totalProgress), 1)
     const progress = Math.max(0, Math.min(1, localProgress))
 
-    // Text should stay faded until circle reaches center (progress = 0.5)
-    // Distance from center: 0 = at center, 0.5 = at edges
-    const distanceFromCenter = Math.abs(progress - 0.5) * 2 // 0 to 1
-    
-    // Keep text very faded until very close to center
-    // Use a sharper curve that peaks sharply at center
-    // Text stays at ~0.2 opacity until circle is within 20% of center, then quickly rises
-    let opacity
+    const distanceFromCenter = Math.abs(progress - 0.5) * 2
+
+    let opacity: number
     if (distanceFromCenter > 0.8) {
-      // Very far from center - very faded
-      opacity = 0.15
+      opacity = ANIMATION_CONFIG.TEXT_MIN_OPACITY
     } else if (distanceFromCenter > 0.4) {
-      // Approaching center - gradually increasing
-      opacity = 0.15 + ((0.8 - distanceFromCenter) / 0.4) * 0.5
+      opacity = ANIMATION_CONFIG.TEXT_MIN_OPACITY + 
+        ((0.8 - distanceFromCenter) / 0.4) * 0.5
     } else {
-      // Close to center - quickly rise to full visibility
       opacity = 0.65 + ((0.4 - distanceFromCenter) / 0.4) * 0.35
     }
-    
+
     opacity = Math.max(0, Math.min(1, opacity))
-    
-    // Scale animation - smaller when faded, full size when visible
-    const scale = 0.65 + (opacity * 0.35)
+    const scale = ANIMATION_CONFIG.TEXT_BASE_SCALE + 
+      (opacity * ANIMATION_CONFIG.TEXT_SCALE_RANGE)
 
     return { opacity, scale }
   }
 
-  const activeTestimonial = testimonials[activeIndex] || testimonials[0]
+  const activeStep = STEPS_DATA[activeIndex] || STEPS_DATA[0]
   const { x, y, opacity, scale, rotation, vw, vh } = getActiveAvatarPosition()
   const { opacity: textOpacity, scale: textScale } = getTextAnimation()
 
   return (
-    <div id="steps" ref={sectionRef} className="relative min-h-screen z-30">
-      {/* Sticky Arc Container - Full Height */}
-      <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none z-30">
+    <div className="w-full max-w-none">
+      <div id="steps" ref={sectionRef} className="relative min-h-screen z-30">
+        {/* Sticky Arc Container */}
+        <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none z-30">
           {/* Title */}
-          <div className="absolute top-[6%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6 z-30">
-          <h2 
-            className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight"
-            style={{ 
-              color: isDark ? '#ec1e24' : '#333333',
-              opacity: isDark ? 1 : 0.8
-            }}
-          >
-            HOW NEDF WORKS
-          </h2>
-        </div>
-        <div className="relative w-screen h-full -mx-[calc(50vw-50%)] overflow-visible">
-          {/* SVG Arc Path - responsive viewBox */}
-          <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox={`0 0 ${viewportWidth || window.innerWidth} ${window.innerHeight}`}
-            preserveAspectRatio="none"
-            style={{ overflow: "visible" }}
-          >
-            <path
-              d={
-                (viewportWidth || window.innerWidth) < 768
-                  ? `M 0 ${window.innerHeight * 0.55} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.55}`
-                  : (viewportWidth || window.innerWidth) < 1024
-                    ? `M 0 ${window.innerHeight * 0.6} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.6}`
-                    : `M 0 ${window.innerHeight * 0.65} Q ${(viewportWidth || window.innerWidth) * 0.5} ${window.innerHeight * 0.08} ${viewportWidth || window.innerWidth} ${window.innerHeight * 0.65}`
-              }
-              stroke={isDark ? "white" : "rgba(51, 51, 51, 0.8)"}
-              strokeWidth="2"
-              fill="none"
-              opacity="1"
-            />
-          </svg>
+          <div className="absolute top-[30%] sm:top-[6%] lg:top-[3%] xl:top-[2%] 2xl:top-[1%] left-1/2 transform -translate-x-1/2 w-full z-30">
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-bold font-montserrat tracking-tight text-[#333333]/80 dark:text-[#ec1e24]">
+              HOW NEDF WORKS
+            </h2>
+          </div>
+          {/* Arc Path SVG */}
+          <div className="relative w-screen h-full -mx-[calc(50vw-50%)] overflow-visible">
+            <svg
+              className="absolute inset-0 w-full h-full"
+              viewBox={`0 0 ${vw} ${vh}`}
+              preserveAspectRatio="none"
+              style={{ overflow: "visible" }}
+            >
+              <ArcPath 
+                viewportWidth={vw} 
+                viewportHeight={vh} 
+                isDark={isDark} 
+              />
+            </svg>
 
-          <div
-            className="absolute z-10"
-            style={{
-              left: `${(x / vw) * 100}%`,
-              top: `${(y / vh) * 100}%`,
-              transform: `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`,
-              opacity,
-            }}
-          >
-            <div className="w-[20px] h-[20px] sm:w-[40px] sm:h-[40px] md:w-[60px] md:h-[60px] relative">
-              {/* Circle background */}
-              <div 
-                className="w-full h-full rounded-full flex items-center justify-center"
-                style={{
-                  backgroundColor: isDark ? '#ffffff' : '#333333'
-                }}
-              >
-                {/* Title text */}
-                <span 
-                  className="text-[6px] sm:text-[8px] md:text-[10px] font-bold text-center px-1 transition-opacity duration-300"
-                  style={{ 
-                    opacity: opacity > 0.9 ? 1 : 0,
-                    color: isDark ? '#15171a' : '#ffffff'
-                  }}
+            {/* Animated Circle */}
+            <div
+              className="absolute z-10"
+              style={{
+                left: `${(x / vw) * 100}%`,
+                top: `${(y / vh) * 100}%`,
+                transform: `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`,
+                opacity,
+              }}
+            >
+              <div className="w-[16px] h-[16px] sm:w-[20px] sm:h-[20px] md:w-[40px] md:h-[40px] lg:w-[50px] lg:h-[50px] xl:w-[60px] xl:h-[60px] 2xl:w-[70px] 2xl:h-[70px] relative">
+                <div 
+                  className="w-full h-full rounded-full flex items-center justify-center bg-[#333333] dark:bg-white"
                 >
-                  {activeTestimonial.name}
-                </span>
+                  <span 
+                    className="text-[4px] sm:text-[5px] md:text-[8px] lg:text-[9px] xl:text-[10px] 2xl:text-[12px] font-bold text-center px-1 transition-opacity duration-300 text-white dark:text-[#15171a]"
+                    style={{ opacity: opacity > 0.9 ? 1 : 0 }}
+                  >
+                    {activeStep.name}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Description text positioned below the arc */}
-          <div className="absolute top-[55%] left-1/2 transform -translate-x-1/2 w-full px-3 sm:px-4 md:px-6">
-            <div className="max-w-xs sm:max-w-sm md:max-w-2xl mx-auto text-center">
-              <div
-                style={{
-                  opacity: textOpacity,
-                  transform: `scale(${textScale})`,
-                  transition: "opacity 0.3s ease-out, transform 0.3s ease-out",
-                  pointerEvents: textOpacity > 0.1 ? "auto" : "none",
-                }}
-              >
-                <div className="space-y-3 sm:space-y-4 md:space-y-6">
-                  <div className="space-y-1 sm:space-y-2">
-                    <p 
-                      className="text-sm sm:text-base md:text-lg"
-                      style={{ color: isDark ? '#ec1e24' : '#001F4B' }}
-                    >
-                      {activeTestimonial.role}
+            {/* Description Text */}
+            <div className="absolute top-[58%] sm:top-[55%] lg:top-[58%] xl:top-[60%] 2xl:top-[62%] left-1/2 transform -translate-x-1/2 w-full">
+              <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto text-center">
+                <div
+                  style={{
+                    opacity: textOpacity,
+                    transform: `scale(${textScale})`,
+                    transition: "opacity 0.3s ease-out, transform 0.3s ease-out",
+                    pointerEvents: textOpacity > 0.1 ? "auto" : "none",
+                  }}
+                >
+                  <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5 xl:space-y-6 2xl:space-y-6">
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl text-[#001F4B] dark:text-[#ec1e24] font-medium">
+                      {activeStep.role}
+                    </p>
+                    <p className="text-sm sm:text-base md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl text-foreground leading-relaxed font-light">
+                      "{activeStep.quote}"
                     </p>
                   </div>
-
-                  <p className="text-sm sm:text-base md:text-xl lg:text-2xl text-foreground leading-relaxed font-light">
-                    "{activeTestimonial.quote}"
-                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {Array.from({ length: Math.max(5, testimonials.length) }).map((_, i) => (
-        <div key={i} className="h-screen" />
-      ))}
+        {/* Spacer divs for scroll */}
+        {Array.from({ length: STEPS_DATA.length }).map((_, i) => (
+          <div key={i} className="h-screen" />
+        ))}
+      </div>
     </div>
+  )
+}
+
+// ==================== SUB-COMPONENTS ====================
+
+function ArcPath({ 
+  viewportWidth, 
+  viewportHeight, 
+  isDark 
+}: { 
+  viewportWidth: number
+  viewportHeight: number
+  isDark: boolean
+}) {
+  const arcConfig = getArcConfig(viewportWidth)
+  const pathData = `M 0 ${viewportHeight * arcConfig.startY} Q ${viewportWidth * 0.5} ${viewportHeight * arcConfig.peakY} ${viewportWidth} ${viewportHeight * arcConfig.endY}`
+
+  return (
+    <path
+      d={pathData}
+      stroke={isDark ? "white" : "rgba(51, 51, 51, 0.8)"}
+      strokeWidth="2"
+      fill="none"
+      opacity="1"
+    />
   )
 }

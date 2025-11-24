@@ -3,7 +3,6 @@
 import type React from "react"
 
 import RelatedBlogs from "@/components/Related-blogs"
-import { Navbar } from "@/components/Navbar"
 import { Menu } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -151,8 +150,6 @@ export default function BlogDetailPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-
       <div className="flex-1 py-8 bg-white dark:bg-[#15171a]">
         <main className="flex-1 flex flex-col lg:flex-row gap-10 relative px-4 md:px-12 2xl:px-32">
           <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
