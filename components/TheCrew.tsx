@@ -59,11 +59,11 @@ const SOCIAL_ICONS: Record<SocialPlatform, React.ComponentType<{ size?: number }
 const FOUNDERS_DATA: Founder[] = [
   {
     id: "1",
-    name: "MUSSIE G. SELASSIE",
+    name: "Founder 2",
     title: "Co-founder",
     description:
       "Blender is his second home, and pixel fear his perfection. If it's not beautifully rendered, he's not done yet.",
-    image: "/mos.jpg",
+    image: "/mus.jpg",
     hoverImage: "/mos2.jpg",
     social: {
       instagram: "https://instagram.com/mussiegs",
@@ -77,11 +77,11 @@ const FOUNDERS_DATA: Founder[] = [
   },
   {
     id: "2",
-    name: "NATNAEL TIBEBE",
+    name: "Founder 1",
     title: "Co-founder",
     description:
       "He can spot a misaligned pixel from space. Brands trust him, but perfectionism keeps him up at night.",
-    image: "/natty.jpg",
+    image: "/nat.jpg",
     hoverImage: "/natty2.jpg",
     social: {
       instagram: "https://instagram.com/natnaeltibebe",
