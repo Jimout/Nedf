@@ -38,7 +38,7 @@ export default function RootLayout({
         <DynamicBackground />
         <ThemeProvider 
           attribute="class" 
-          defaultTheme="dark" 
+          defaultTheme="light" 
           enableSystem={false}
           disableTransitionOnChange={false}
         >

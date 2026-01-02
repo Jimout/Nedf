@@ -159,7 +159,6 @@ function NavbarContent({
         w-full relative z-20 
         backdrop-blur-md 
         bg-white/80 dark:bg-[#15171a]/80 
-        border-b border-gray-200/50 dark:border-white/10
       ">
         <div className="
           flex items-center justify-between w-full 

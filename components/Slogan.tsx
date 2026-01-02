@@ -16,20 +16,68 @@ export default function HeroTextFadeScroll() {
     const ctx = gsap.context(() => {
       if (!firstBlockRef.current || !secondBlockRef.current || !sectionRef.current) return
 
-      // Split text by lines for smoother animation
-      let splitFirst = new SplitType(firstBlockRef.current, { types: "lines" })
-      let splitSecond = new SplitType(secondBlockRef.current, { types: "lines" })
+      // Split first block into words
+      let splitFirst = new SplitType(firstBlockRef.current, { 
+        types: "words",
+        tagName: "span"
+      })
 
-      // Set initial state
-      gsap.set(splitFirst.lines, { opacity: 1, x: 0 })
-      gsap.set(splitSecond.lines, { opacity: 0, x: 50 })
+      // Split second block into words
+      let splitSecond = new SplitType(secondBlockRef.current, { 
+        types: "words",
+        tagName: "span"
+      })
 
-      // Master timeline
+      // Get all word elements
+      const wordsFirst = splitFirst.words || []
+      const wordsSecond = splitSecond.words || []
+
+      if (wordsFirst.length === 0 || wordsSecond.length === 0) return
+
+      // Helper function to create clip-path for reveal (right to left)
+      // Starts with right side visible, reveals left side
+      const getClipPathReveal = (percent: number) => {
+        // When percent is 0, only right edge is visible
+        // When percent is 100, full word is visible
+        return `polygon(${100 - percent}% 0%, 100% 0%, 100% 100%, ${100 - percent}% 100%)`
+      }
+
+      // Helper function to create clip-path for hide (left to right)
+      // Starts with full word visible, hides from left to right
+      const getClipPathHide = (percent: number) => {
+        // When percent is 0, full word is visible
+        // When percent is 100, word is completely hidden
+        return `polygon(${percent}% 0%, 100% 0%, 100% 100%, ${percent}% 100%)`
+      }
+
+      // Set initial state for first block words - hidden (only right edge visible)
+      wordsFirst.forEach((word) => {
+        gsap.set(word, {
+          clipPath: getClipPathReveal(0),
+          willChange: "clip-path"
+        })
+      })
+
+      // Set initial state for second block words - completely hidden
+      wordsSecond.forEach((word) => {
+        gsap.set(word, {
+          clipPath: getClipPathReveal(0),
+          opacity: 0,
+          willChange: "clip-path, opacity"
+        })
+      })
+      
+      // Ensure first block is visible initially
+      gsap.set(firstBlockRef.current, { opacity: 1 })
+      // Ensure second block is hidden initially
+      gsap.set(secondBlockRef.current, { opacity: 0 })
+
+      // Create master timeline with scroll trigger
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: () => "+=" + window.innerHeight * 3, // scroll length
+          end: () => "+=" + (window.innerHeight * 1.5),
           scrub: 1,
           pin: true,
           anticipatePin: 1,
@@ -37,43 +85,54 @@ export default function HeroTextFadeScroll() {
         },
       })
 
-      // Animate first block out (left + fade)
-      tl.to(splitFirst.lines, {
-        opacity: 0,
-        x: -80,
-        stagger: { each: 0.2, from: "end" },
-        ease: "power4.inOut",
-        duration: 2,
+      // Animate first block words in - reveal from right to left
+      wordsFirst.forEach((word, index) => {
+        tl.to(word, {
+          clipPath: getClipPathReveal(100),
+          ease: "power2.out",
+          duration: 0.15,
+        }, index * 0.08)
       })
 
-      // Animate second block in (sequential, no overlap)
-      tl.fromTo(
-        splitSecond.lines,
-        { opacity: 0, x: 80 },
-        {
-          opacity: 1,
-          x: 0,
-          stagger: { each: 0.25, from: "start" },
-          ease: "power4.inOut",
-          duration: 2,
-        }
-      )
+      // Hold first block visible after all words appear
+      tl.to({}, { duration: 0.2 })
 
-      // Optional: fade out second block near end
-      tl.to(splitSecond.lines, {
+      // Fade out entire first block together (not word by word)
+      tl.to(firstBlockRef.current, {
         opacity: 0,
-        x: -60,
-        stagger: { each: 0.15, from: "end" },
-        ease: "power4.inOut",
-        duration: 2,
-      }, "+=0.5")
+        ease: "power2.in",
+        duration: 0.4
+      })
+
+      // Small gap between blocks
+      tl.to({}, { duration: 0.1 })
+
+      // Show second block and animate words in - reveal from right to left
+      tl.to(secondBlockRef.current, {
+        opacity: 1,
+        duration: 0.1
+      })
+      
+      wordsSecond.forEach((word, index) => {
+        tl.to(word, {
+          clipPath: getClipPathReveal(100),
+          ease: "power2.out",
+          duration: 0.15,
+        }, index * 0.08)
+      })
 
       // Handle resize (rebuild SplitType)
       const handleResize = () => {
         splitFirst.revert()
         splitSecond.revert()
-        splitFirst = new SplitType(firstBlockRef.current!, { types: "lines" })
-        splitSecond = new SplitType(secondBlockRef.current!, { types: "lines" })
+        splitFirst = new SplitType(firstBlockRef.current!, { 
+          types: "words",
+          tagName: "span"
+        })
+        splitSecond = new SplitType(secondBlockRef.current!, { 
+          types: "words",
+          tagName: "span"
+        })
         ScrollTrigger.refresh()
       }
 
@@ -94,7 +153,7 @@ export default function HeroTextFadeScroll() {
     <>
       <section
         ref={sectionRef}
-        className="relative flex flex-col items-center justify-center min-h-screen text-[#333333] dark:text-[#ec1e24] overflow-hidden bg-white dark:bg-[#111]"
+        className="relative flex flex-col items-center justify-center min-h-screen text-[#333333] dark:text-[#ec1e24] overflow-hidden"
         style={{
           willChange: "transform, opacity",
           backfaceVisibility: "hidden",
@@ -105,30 +164,33 @@ export default function HeroTextFadeScroll() {
         {/* First block */}
         <div
           ref={firstBlockRef}
-          className="text-center font-semibold text-3xl md:text-5xl lg:text-6xl leading-[1.2] tracking-tight"
+          className="absolute text-center font-bold text-3xl sm:text-4xl md:text-xl lg:text-6xl xl:text-7xl 2xl:text-8xl leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-12"
           style={{
-            willChange: "transform, opacity",
+            willChange: "clip-path",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             transform: "translateZ(0)",
+            fontFamily: "inherit",
           }}
         >
-          <div>We are a fully integrated design firm</div>
-          <div className="mt-6">based in Addis Ababa, Ethiopia.</div>
+          WE ARE FULLY INTEGRATED DESIGN FIRM
+          <br />
+          BASED IN ADDIS ABABA, ETHIOPIA
         </div>
 
         {/* Second block */}
         <div
           ref={secondBlockRef}
-          className="absolute text-center font-semibold text-3xl md:text-5xl lg:text-6xl leading-[1.2] tracking-tight"
+          className="absolute text-center font-bold text-3xl sm:text-4xl md:text-xl lg:text-6xl xl:text-7xl 2xl:text-8xl leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-12"
           style={{
-            willChange: "transform, opacity",
+            willChange: "clip-path",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             transform: "translateZ(0)",
+            fontFamily: "inherit",
           }}
         >
-          We craft perfection through every line and form.
+          WE CRAFT PERFECTION THROUGH EVERY LINE AND FORM
         </div>
       </section>
 

@@ -64,7 +64,7 @@ const FOUNDERS_DATA: Founder[] = [
     description:
       "Blender is his second home, and pixel fear his perfection. If it's not beautifully rendered, he's not done yet.",
     image: "/mus.jpg",
-    hoverImage: "/mos2.jpg",
+    hoverImage: "/mus2.jpg",
     social: {
       instagram: "https://instagram.com/mussiegs",
       tiktok: "https://tiktok.com/@mussiegs",
@@ -82,7 +82,7 @@ const FOUNDERS_DATA: Founder[] = [
     description:
       "He can spot a misaligned pixel from space. Brands trust him, but perfectionism keeps him up at night.",
     image: "/nat.jpg",
-    hoverImage: "/natty2.jpg",
+    hoverImage: "/nat2.jpg",
     social: {
       instagram: "https://instagram.com/natnaeltibebe",
       tiktok: "https://tiktok.com/@natnaeltibebe",
