@@ -7,7 +7,7 @@ import Portfolio from "@/components/Portfolio"
 import HeroTextFadeScroll from "@/components/Slogan"
 import Subscription from "@/components/Subscription"
 import { TheCrew } from "@/components/TheCrew"
-import StudioNotesPage from "@/components/StudioNotes"
+import { StudioNotesCard } from "@/components/StudioNoteCards"
 import Steps from "@/components/Steps"
 import ServicesSection from "@/components/services"
 import { motion } from "framer-motion"
@@ -54,7 +54,7 @@ export default function HomePage() {
           <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12 text-[#333333]/80 dark:text-[#ec1e24]">
             STUDIO NOTES
           </p>
-          <StudioNotesPage />
+          <StudioNotesCard />
         </div>
         <Subscription />
        

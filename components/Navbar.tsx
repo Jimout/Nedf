@@ -162,8 +162,8 @@ function NavbarContent({
       ">
         <div className="
           flex items-center justify-between w-full 
-          px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-20 
-          py-5 md:py-6
+          px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 
+          py-2.5 md:py-3
         ">
           <NavLogo />
           <DesktopNavLinks pathname={pathname} onNavClick={onNavClick} />
@@ -184,7 +184,7 @@ function NavbarContent({
 }
 
 function NavLogo() {
-  const logoClasses = "transition-opacity duration-300 w-[80px] h-auto sm:w-[90px] md:w-[100px] lg:w-[110px] xl:w-[120px] 2xl:w-[130px]"
+  const logoClasses = "transition-opacity duration-300 w-[60px] h-auto sm:w-[70px] md:w-[80px] lg:w-[88px] xl:w-[96px] 2xl:w-[100px]"
 
   return (
     <Link 
@@ -194,16 +194,16 @@ function NavLogo() {
       <Image 
         src="/NEDF TEXT BASED LOGO-14.png" 
         alt="NEDF Studios Logo" 
-        width={130} 
-        height={40} 
+        width={100} 
+        height={32} 
         priority 
         className={cn(logoClasses, "dark:hidden")}
       />
       <Image 
         src="/NEDF TEXT BASED LOGO-13.png" 
         alt="NEDF Studios Logo Dark" 
-        width={130} 
-        height={40} 
+        width={100} 
+        height={32} 
         priority 
         className={cn(logoClasses, "hidden dark:block")}
       />
@@ -221,8 +221,8 @@ function DesktopNavLinks({
   return (
     <div className="
       hidden md:flex items-center justify-center flex-1 
-      gap-6 md:gap-8 lg:gap-12 xl:gap-16 2xl:gap-20 
-      ml-6 md:ml-8 lg:ml-12 xl:ml-16 2xl:ml-20
+      gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-10 
+      ml-4 md:ml-6 lg:ml-8 xl:ml-10 2xl:ml-12
     ">
       {NAV_ITEMS.map((item) => (
         <NavLink 
@@ -253,7 +253,7 @@ function NavLink({
       onClick={(e) => onClick(e, item)}
       className={cn(
         "transition-all duration-300 ease-out font-medium font-montserrat whitespace-nowrap",
-        "text-xs sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-xl",
+        "text-xs sm:text-sm md:text-sm lg:text-sm xl:text-base 2xl:text-base",
         "hover:scale-110",
         isActive 
           ? "text-[#002e47] dark:text-[#ec1e24]" 
@@ -275,7 +275,7 @@ function NavActions({
   onToggleMobile: () => void
 }) {
   return (
-    <div className="flex items-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 2xl:gap-8">
+    <div className="flex items-center gap-2 sm:gap-3 md:gap-3 lg:gap-4 xl:gap-4 2xl:gap-5">
       <ThemeToggle />
       <ContactButton onClick={onNavClick} />
       <HamburgerButton isOpen={mobileOpen} onClick={onToggleMobile} />
@@ -294,9 +294,9 @@ function ContactButton({
       onClick={(e) => onClick(e, CONTACT_ITEM)}
       className={cn(
         "hidden md:block text-white font-medium font-montserrat whitespace-nowrap",
-        "px-5 md:px-6 lg:px-7 xl:px-8 2xl:px-9",
-        "py-2.5 md:py-3 lg:py-3.5 xl:py-4 2xl:py-4",
-        "text-sm md:text-base lg:text-base xl:text-lg 2xl:text-xl",
+        "px-3.5 md:px-4 lg:px-5 xl:px-5 2xl:px-6",
+        "py-1.5 md:py-2 lg:py-2 xl:py-2.5 2xl:py-2.5",
+        "text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base",
         "bg-[#002e47] hover:bg-[#001f35]",
         "dark:bg-[#ec1e24] dark:hover:bg-[#d11920]",
         "shadow-md hover:shadow-lg",
@@ -323,14 +323,14 @@ function HamburgerButton({
       onClick={onClick}
       className="
         md:hidden inline-flex items-center justify-center 
-        p-3 -mr-2 rounded-lg
+        p-2 -mr-2 rounded-lg
         text-[#333333] dark:text-[#ec1e24]
         active:bg-gray-100 dark:active:bg-white/10
         transition-colors duration-150
         touch-manipulation
       "
     >
-      <div className="relative w-6 h-6">
+      <div className="relative w-5 h-5">
         <HamburgerLine isOpen={isOpen} position="top" />
         <HamburgerLine isOpen={isOpen} position="middle" />
         <HamburgerLine isOpen={isOpen} position="bottom" />
@@ -352,17 +352,17 @@ function HamburgerLine({
     top: cn(
       baseClasses,
       "transition-transform duration-300 ease-out",
-      isOpen ? "top-3 rotate-45" : "top-1.5 rotate-0"
+      isOpen ? "top-2.5 rotate-45" : "top-1 rotate-0"
     ),
     middle: cn(
       baseClasses,
       "transition-opacity duration-200 ease-out",
-      isOpen ? "top-3 opacity-0" : "top-1/2 -translate-y-1/2 opacity-100"
+      isOpen ? "top-2.5 opacity-0" : "top-1/2 -translate-y-1/2 opacity-100"
     ),
     bottom: cn(
       baseClasses,
       "transition-transform duration-300 ease-out",
-      isOpen ? "top-3 -rotate-45" : "bottom-1.5 rotate-0"
+      isOpen ? "top-2.5 -rotate-45" : "bottom-1 rotate-0"
     ),
   }
 

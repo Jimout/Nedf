@@ -1,325 +1,146 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState } from "react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { ChevronRight, Maximize2 } from "lucide-react";
+
+const SERVICES = [
+  {
+    id: "design",
+    name: "Design Service",
+    category: "DESIGN SERVICES",
+    headline: "Architectural. Interior. Landscape. Urban.",
+    subServices: [
+      "Architectural Design",
+      "Interior Design",
+      "Landscape Design",
+      "Urban Design and Planning",
+    ],
+    cta: "EXPLORE DESIGN",
+    image: "/interior1.jpg",
+  },
+  {
+    id: "management",
+    name: "Project Management",
+    category: "PROJECT DELIVERY",
+    headline: "Supervision. Administration. Consultancy.",
+    subServices: [
+      "Construction Supervision",
+      "Contract Administration",
+      "Consultancy",
+    ],
+    cta: "EXPLORE SERVICES",
+    image: "/room1.jpg",
+  },
+  {
+    id: "visualization",
+    name: "Visualization",
+    category: "VISUALIZATION",
+    headline: "Exterior. Interior. Site & Context.",
+    subServices: [
+      "Exterior Visualization",
+      "Interior Visualization",
+      "Site & Context Visualization",
+    ],
+    cta: "EXPLORE VISUALIZATION",
+    image: "/visual1.jpg",
+  },
+] as const;
 
 export default function ServicesSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [isDark, setIsDark] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    const checkDarkMode = () => {
-      setIsDark(document.documentElement.classList.contains('dark'))
-    }
-    checkDarkMode()
-    const observer = new MutationObserver(checkDarkMode)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    })
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const style = document.createElement('style')
-    style.textContent = `
-      @keyframes waveTravel {
-        0% { 
-          transform: translateX(-50%) translateY(0px) rotate(0deg);
-        }
-        12.5% { 
-          transform: translateX(-50%) translateY(-3px) rotate(0.8deg);
-        }
-        25% { 
-          transform: translateX(-50%) translateY(-4px) rotate(1deg);
-        }
-        37.5% { 
-          transform: translateX(-50%) translateY(-3px) rotate(0.8deg);
-        }
-        50% { 
-          transform: translateX(-50%) translateY(0px) rotate(0deg);
-        }
-        62.5% { 
-          transform: translateX(-50%) translateY(3px) rotate(-0.8deg);
-        }
-        75% { 
-          transform: translateX(-50%) translateY(4px) rotate(-1deg);
-        }
-        87.5% { 
-          transform: translateX(-50%) translateY(3px) rotate(-0.8deg);
-        }
-        100% { 
-          transform: translateX(-50%) translateY(0px) rotate(0deg);
-        }
-      }
-    `
-    document.head.appendChild(style)
-    return () => {
-      document.head.removeChild(style)
-    }
-  }, [])
-
-  const services = [
-    {
-      name: "Design Service",
-      subServices: [
-        "Architectural Design",
-        "Interior Design",
-        "Landscape Design",
-        "Urban Design and Planning"
-      ]
-    },
-    {
-      name: "Project Management",
-      subServices: [
-        "Construction Supervision",
-        "Contract Administration",
-        "Consultancy"
-      ]
-    },
-    {
-      name: "Visualization",
-      subServices: [
-        "Exterior Visualization",
-        "Interior Visualization",
-        "Site & Context Visualization"
-      ]
-    }
-  ]
-
-  const servicePositions = Array.from({ length: 3 }, (_, i) => {
-    // Leave margins on left and right (80px on each side)
-    const startX = 80
-    const endX = 920
-    const availableWidth = endX - startX
-    const xSpacing = availableWidth / (services.length - 1)
-    const x = startX + (i * xSpacing)
-    // Create a wavy pattern - alternating up and down, positioned higher
-    const y = 140 + Math.sin((i * Math.PI) / 4) * 100
-    return { x, y }
-  })
+  const active = SERVICES[activeIndex];
 
   return (
-    <section id="services" className="bg-white pt-20 font-montserrat relative overflow-hidden w-full">
-      <div className="relative w-full">
-        <div className="mb-8 text-center relative z-20 pt-2">
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white">Our Services</h2>
+    <section
+      id="services"
+      className="relative w-full overflow-visible bg-background pt-20 pb-24 font-montserrat"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-2">
+            {SERVICES.map((s, i) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setActiveIndex(i)}
+                className={cn(
+                  "rounded-full px-4 py-2 text-xs font-medium transition-colors",
+                  i === activeIndex
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:bg-muted"
+                )}
+              >
+                {s.name}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="w-full max-w-none">
-          <div className="relative w-full h-[600px] overflow-hidden">
-          {/* SVG Curved Line Chart */}
-          <svg viewBox="0 0 1000 600" className="absolute inset-0 w-full h-full" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-            <defs>
-              <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={isDark ? "#ec1e24" : "#002e47"} stopOpacity="1" />
-                <stop offset="50%" stopColor={isDark ? "#ec1e24" : "#002e47"} stopOpacity="0.9" />
-                <stop offset="100%" stopColor={isDark ? "#ec1e24" : "#002e47"} stopOpacity="1" />
-              </linearGradient>
-              <filter id="shadowFilter">
-                <feDropShadow dx="0" dy="4" stdDeviation="3" floodOpacity="0.3" />
-              </filter>
-            </defs>
-
-            {servicePositions.map((pos, index) => {
-              if (index === servicePositions.length - 1) return null
-
-              const nextPos = servicePositions[index + 1]
-              const midX = (pos.x + nextPos.x) / 2
-              const baseControlY = (pos.y + nextPos.y) / 2 + (index % 2 === 0 ? 100 : -100)
-
-              const waveAmplitude = 15
-              const delay = index * 0.2
-
-  return (
-                <g key={`curve-${index}`}>
-                  {/* Animated wavy line */}
-                  <path
-                    stroke="url(#lineGradient)"
-                    strokeWidth="6"
-                    fill="none"
-                    vectorEffect="non-scaling-stroke"
-                    filter="url(#shadowFilter)"
-                  >
-                    <animate
-                      attributeName="d"
-                      values={`
-                        M ${pos.x},${pos.y} Q ${midX},${baseControlY - waveAmplitude} ${nextPos.x},${nextPos.y};
-                        M ${pos.x},${pos.y} Q ${midX},${baseControlY} ${nextPos.x},${nextPos.y};
-                        M ${pos.x},${pos.y} Q ${midX},${baseControlY + waveAmplitude} ${nextPos.x},${nextPos.y};
-                        M ${pos.x},${pos.y} Q ${midX},${baseControlY} ${nextPos.x},${nextPos.y};
-                        M ${pos.x},${pos.y} Q ${midX},${baseControlY - waveAmplitude} ${nextPos.x},${nextPos.y}
-                      `}
-                      dur="3s"
-                      repeatCount="indefinite"
-                      calcMode="spline"
-                      keyTimes="0;0.25;0.5;0.75;1"
-                      keySplines="0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1"
-                      begin={`${delay}s`}
-                    />
-                  </path>
-                </g>
-              )
-            })}
-
-            {/* Dots on the line */}
-            {servicePositions.map((pos, index) => (
-              <circle 
-                key={index} 
-                cx={pos.x} 
-                cy={pos.y} 
-                r="6" 
-                fill={isDark ? "#ffffff" : "#333333"}
-              />
-            ))}
-          </svg>
-
-          {servicePositions.map((pos, index) => {
-            const viewBoxWidth = 1000
-            const viewBoxHeight = 600
-            const xPercent = (pos.x / viewBoxWidth) * 100
-            const yPercent = (pos.y / viewBoxHeight) * 100
-            const isHovered = hoveredIndex === index
-
-            return (
-              <div
-                key={index}
-                className="absolute z-10 transform -translate-x-1/2 -translate-y-1/2"
-                style={{ 
-                  left: `${xPercent}%`, 
-                  top: `${yPercent}%`,
-                  maxWidth: '100%',
-                  overflow: 'visible'
-                }}
-              >
-                {isDark && (
-                  <div 
-                    className="absolute top-[-2rem] left-1/2 transform -translate-x-1/2 text-5xl font-bold select-none"
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.3)'
-                    }}
-                  >
-                    {index + 1}
-                  </div>
-                )}
-                {/* Line connecting dot to card - extends from dot to card */}
-                <div 
-                  className="absolute left-1/2 pointer-events-none"
-                  style={{
-                    top: '0px', // Start from dot center
-                    width: '4px',
-                    height: '100px', // Extend down to reach card area  
-                    background: isDark ? '#ec1e24' : '#002e47',
-                    opacity: 0.9,
-                    zIndex: 9, // Above most elements but below card content
-                    borderRadius: '2px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                    animation: 'waveTravel 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite',
-                    animationDelay: `${index * 0.5}s`,
-                    transformOrigin: 'top center',
-                    willChange: 'transform'
-                  }}
-                />
-                <div
-                  className="absolute left-1/2 cursor-pointer"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                  style={{ 
-                    top: '2px', // Very close to dot (2px below center)
-                    animation: 'waveTravel 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite',
-                    animationDelay: `${index * 0.5}s`,
-                    willChange: 'transform',
-                    maxWidth: '320px', 
-                    overflow: 'visible',
-                    perspective: '1000px',
-                    width: '320px',
-                    height: '220px',
-                    zIndex: 10
-                  }}
+        <div className="relative overflow-visible py-2 px-2">
+          <span
+            className="absolute -left-2 -top-2 h-6 w-6 border-l-2 border-t-2 border-muted-foreground/40"
+            aria-hidden
+          />
+          <span
+            className="absolute -right-2 -top-2 h-6 w-6 border-r-2 border-t-2 border-muted-foreground/40"
+            aria-hidden
+          />
+          <span
+            className="absolute -left-2 -bottom-2 h-6 w-6 border-l-2 border-b-2 border-muted-foreground/40"
+            aria-hidden
+          />
+          <span
+            className="absolute -right-2 -bottom-2 h-6 w-6 border-r-2 border-b-2 border-muted-foreground/40"
+            aria-hidden
+          />
+          <div
+            className={cn(
+              "relative z-10 rounded-3xl border-2 border-border p-4 shadow-lg ring-1 ring-white/10",
+              "bg-zinc-800/95 text-zinc-100",
+              "sm:p-5 md:p-6"
+            )}
+          >
+            <div className="grid gap-4 md:grid-cols-[1fr,1fr] md:gap-6">
+              <div className="flex flex-col justify-center">
+                <div className="mb-2 flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-semibold text-foreground">
+                    {String(activeIndex + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                    {active.category}
+                  </span>
+                </div>
+                <h2 className="mb-4 text-xl font-bold leading-tight sm:text-2xl md:text-3xl">
+                  {active.headline}
+                </h2>
+                <a
+                  href="/#portfolio"
+                  className={cn(
+                    "inline-flex w-fit items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-opacity hover:opacity-90",
+                    "bg-primary text-primary-foreground"
+                  )}
                 >
-                  <div
-                    className="relative w-full h-full transition-transform duration-500 ease-in-out"
-                    style={{
-                      transformStyle: 'preserve-3d',
-                      transform: isHovered ? 'rotateY(180deg)' : 'rotateY(0deg)'
-                    }}
-                  >
-                    {/* Front face - Service Name */}
-                    <div
-                      className="absolute inset-0 flex items-center justify-center"
-                      style={{
-                        backfaceVisibility: 'hidden',
-                        WebkitBackfaceVisibility: 'hidden',
-                        transform: 'rotateY(0deg)'
-                      }}
-                    >
-                      <p 
-                        className="text-base sm:text-lg font-bold whitespace-nowrap bg-white px-6 py-4 rounded shadow-md inline-block"
-                        style={{
-                          color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(51, 51, 51, 0.8)'
-                        }}
-                      >
-                        {services[index].name}
-                </p>
+                  <span className="h-2 w-2 rounded-full bg-primary-foreground" />
+                  {active.cta}
+                </a>
               </div>
-                    {/* Back face - Sub Services */}
-                    <div
-                      className="absolute inset-0 flex items-center justify-center"
-                      style={{
-                        backfaceVisibility: 'hidden',
-                        WebkitBackfaceVisibility: 'hidden',
-                        transform: 'rotateY(180deg)'
-                      }}
-                    >
-                      <div 
-                        className="bg-white px-6 py-5 rounded shadow-md inline-block max-w-[320px]"
-                        style={{
-                          color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(51, 51, 51, 0.8)'
-                        }}
-                      >
-                        <ul className="text-left space-y-3" style={{ paddingLeft: '0', listStyle: 'none' }}>
-                          {services[index].subServices.map((subService, idx) => (
-                            <li 
-                              key={idx}
-                              className="flex items-start"
-                              style={{
-                                color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(51, 51, 51, 0.8)'
-                              }}
-                            >
-                              <span 
-                                style={{ 
-                                  color: isDark ? '#ec1e24' : 'rgba(51, 51, 51, 0.8)',
-                                  fontSize: '1.2rem',
-                                  fontWeight: 'bold',
-                                  marginRight: '8px',
-                                  lineHeight: '1.2'
-                                }}
-                              >
-                                •
-                              </span>
-                              <span 
-                                className="text-sm sm:text-base font-semibold"
-                                style={{ 
-                                  flex: 1,
-                                  fontWeight: '600',
-                                  lineHeight: '1.5',
-                                  color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(51, 51, 51, 0.8)'
-                                }}
-                              >
-                                {subService}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+
+              <div className="relative aspect-[4/2.25] min-h-[160px] overflow-hidden rounded-2xl bg-muted">
+                <Image
+                  src={active.image}
+                  alt={active.name}
+                  fill
+                  className="object-cover transition-opacity duration-300"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             </div>
-            </div>
-          </div>
-            )
-          })}
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -16,3 +16,8 @@ export const API_ENDPOINTS = {
   USERS: "/api/users",
   POSTS: "/api/posts",
 } as const
+
+export const SITE = {
+  studioNotesTagline:
+    "Stories and lessons from our studio on creativity, strategy, and social impact.",
+} as const
