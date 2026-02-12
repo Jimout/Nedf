@@ -194,8 +194,12 @@ export default function Steps() {
     const localProgress = Math.min(totalProgress - Math.floor(totalProgress), 1)
     const progress = Math.max(0, Math.min(1, localProgress))
 
-    const vw = viewportWidth || window.innerWidth
-    const vh = window.innerHeight
+    // Guard against `window` during server render. On the server we don't
+    // have a real viewport, so we fall back to 0 and let the client-side
+    // effect populate the correct values after hydration.
+    const isBrowser = typeof window !== "undefined"
+    const vw = viewportWidth || (isBrowser ? window.innerWidth : 0)
+    const vh = isBrowser ? window.innerHeight : 0
     
     const arcConfig = getArcConfig(vw)
     

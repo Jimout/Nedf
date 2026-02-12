@@ -24,13 +24,13 @@ const BREAKPOINTS = {
 } as const
 
 const LINE_HEIGHTS = {
-  MOBILE: 72,
-  SM: 90,
-  MD: 110,
-  LG: 140,
-  XL: 180,
-  "2XL": 200,
-  DEFAULT: 110,
+  MOBILE: 58,
+  SM: 72,
+  MD: 88,
+  LG: 110,
+  XL: 140,
+  "2XL": 160,
+  DEFAULT: 88,
 } as const
 
 // ==================== COMPONENT ====================
@@ -129,13 +129,13 @@ function HeroSection({
       relative w-full z-10 
       flex items-center justify-center 
       font-montserrat overflow-hidden
-      min-h-[45vh] sm:min-h-[48vh] md:min-h-[50vh] 
-      lg:min-h-[52vh] xl:min-h-[55vh] 2xl:min-h-[58vh]
-      mt-6 sm:mt-8 md:mt-10 lg:mt-12 xl:mt-14 2xl:mt-16
+      min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh] 
+      lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[38vh]
+      mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 2xl:mt-12
     ">
       <div className="
         flex items-center justify-center 
-        gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-10 2xl:gap-12
+        gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-10
       ">
         {children}
       </div>
@@ -144,7 +144,7 @@ function HeroSection({
 }
 
 function HeroLogo() {
-  const logoClasses = "object-contain w-[110px] h-[180px] sm:w-[120px] sm:h-[120px] md:w-[150px] md:h-[150px] lg:w-[180px] lg:h-[180px] xl:w-[260px] xl:h-[260px] 2xl:w-[300px] 2xl:h-[300px]"
+  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[220px] 2xl:h-[220px]"
   
   return (
     <div className="select-none">
@@ -193,8 +193,8 @@ function HeroContent({
           <span className="
             font-thin text-[#333333]/80 dark:text-white/80 
             tracking-wide mr-2 max-sm:mb-[-4px]
-            text-[24px] sm:text-[32px] md:text-[40px] 
-            lg:text-[48px] xl:text-[68px] 2xl:text-[80px]
+            text-[20px] sm:text-[26px] md:text-[32px] 
+            lg:text-[38px] xl:text-[52px] 2xl:text-[62px]
             md:font-normal xl:font-normal
           ">
             We Are
@@ -252,8 +252,8 @@ function AnimatedWords({
             className="
               block font-medium leading-none whitespace-nowrap
               text-[#002e47] dark:text-[#ec1e24]
-              text-[40px] sm:text-[56px] md:text-[68px] 
-              lg:text-[84px] xl:text-[116px] 2xl:text-[140px]
+              text-[32px] sm:text-[44px] md:text-[54px] 
+              lg:text-[66px] xl:text-[90px] 2xl:text-[108px]
             "
             style={{
               height: `${lineHeight}px`,
@@ -276,5 +276,5 @@ function AnimatedWords({
 }
 
 function Spacer() {
-  return <div className="h-6 sm:h-8 md:h-10 lg:h-12 xl:h-14 2xl:h-16" />
+  return <div className="h-2 sm:h-3 md:h-4 lg:h-5 xl:h-6 2xl:h-6" />
 }

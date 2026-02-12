@@ -156,15 +156,15 @@ export default function Stats() {
       ref={ref} 
       className="
         w-full relative z-10 
-        max-sm:-mt-8
-        py-4 sm:py-5 md:py-6 lg:py-8 xl:py-10 2xl:py-12
+        max-sm:-mt-4
+        py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 2xl:py-8
       "
     >
       <div className="
         w-full text-center
         grid grid-cols-2 
         sm:flex sm:flex-row sm:justify-between sm:items-center
-        gap-y-8 gap-x-6 
+        gap-y-5 gap-x-4 
         sm:gap-y-0 sm:gap-x-0
       ">
         {STATS_DATA.map((stat, index) => (
@@ -185,7 +185,7 @@ export default function Stats() {
 function StatCard({ value, label, isCounting }: { value: string; label: string; isCounting: boolean }) {
   return (
     <div className="
-      max-sm:bg-white max-sm:p-4 max-sm:rounded-md max-sm:shadow-md
+      max-sm:bg-white max-sm:p-3 max-sm:rounded-md max-sm:shadow-md
       dark:max-sm:bg-[#15171a] 
       dark:max-sm:border dark:max-sm:border-[#ec1e24]/20 
       dark:max-sm:shadow-sm dark:max-sm:shadow-[#ec1e24]/5
@@ -194,8 +194,8 @@ function StatCard({ value, label, isCounting }: { value: string; label: string; 
       <div className={`
         font-bold font-mono
         text-[#001F4B] dark:text-[#ec1e24]
-        text-lg sm:text-xl md:text-2xl 
-        lg:text-3xl xl:text-3xl 2xl:text-4xl
+        text-base sm:text-lg md:text-xl 
+        lg:text-2xl xl:text-2xl 2xl:text-3xl
         transition-all duration-200 ease-out
         ${isCounting ? 'scale-110' : 'scale-100'}
       `}>
@@ -203,8 +203,8 @@ function StatCard({ value, label, isCounting }: { value: string; label: string; 
       </div>
       <div className="
         text-[#333333]/70 dark:text-white/80
-        text-[10px] sm:text-xs md:text-sm lg:text-base
-        mt-1 sm:mt-2
+        text-[9px] sm:text-[10px] md:text-xs lg:text-sm
+        mt-0.5 sm:mt-1
       ">
         {label}
       </div>

@@ -253,7 +253,7 @@ function NavLink({
       onClick={(e) => onClick(e, item)}
       className={cn(
         "transition-all duration-300 ease-out font-medium font-montserrat whitespace-nowrap",
-        "text-xs sm:text-sm md:text-sm lg:text-sm xl:text-base 2xl:text-base",
+        "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm",
         "hover:scale-110",
         isActive 
           ? "text-[#002e47] dark:text-[#ec1e24]" 
