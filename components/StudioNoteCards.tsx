@@ -16,7 +16,7 @@ export function StudioNotesCard() {
       aria-labelledby="studio-notes-heading"
     >
       <div className="mx-auto w-full max-w-5xl">
-        <div className="relative aspect-[16/6] w-full overflow-hidden rounded-2xl bg-muted">
+        <div className="relative aspect-[16/6] w-full overflow-hidden bg-muted">
           {/* Background image */}
           <Image
             src="/room1.jpg"
@@ -35,7 +35,7 @@ export function StudioNotesCard() {
               href="/blog"
               className={cn(
                 "flex w-full max-w-xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between",
-                "rounded-2xl border border-border bg-background text-foreground shadow-lg",
+                "border border-border bg-background text-foreground shadow-lg",
                 "px-6 py-14 sm:px-10 sm:py-16",
                 "font-montserrat transition-transform hover:scale-[1.01]"
               )}

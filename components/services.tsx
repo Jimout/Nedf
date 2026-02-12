@@ -98,7 +98,7 @@ export default function ServicesSection() {
           />
           <div
             className={cn(
-              "relative z-10 rounded-3xl border-2 border-border p-4 shadow-lg ring-1 ring-white/10",
+              "relative z-10 border-2 border-border p-4 shadow-lg ring-1 ring-white/10",
               "bg-zinc-800/95 text-zinc-100",
               "sm:p-5 md:p-6"
             )}
@@ -128,7 +128,7 @@ export default function ServicesSection() {
                 </a>
               </div>
 
-              <div className="relative aspect-[4/2.25] min-h-[160px] overflow-hidden rounded-2xl bg-muted">
+              <div className="relative aspect-[4/2.25] min-h-[160px] overflow-hidden bg-muted">
                 <Image
                   src={active.image}
                   alt={active.name}

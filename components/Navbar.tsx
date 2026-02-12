@@ -221,7 +221,7 @@ function DesktopNavLinks({
   return (
     <div className="
       hidden md:flex items-center justify-center flex-1 
-      gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-10 
+      gap-5 md:gap-6 lg:gap-7 xl:gap-8 2xl:gap-9 
       ml-4 md:ml-6 lg:ml-8 xl:ml-10 2xl:ml-12
     ">
       {NAV_ITEMS.map((item) => (
