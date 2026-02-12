@@ -11,26 +11,13 @@ import { StudioNotesCard } from "@/components/StudioNoteCards"
 import Steps from "@/components/Steps"
 import ServicesSection from "@/components/services"
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 export default function HomePage() {
-  const [showContent, setShowContent] = useState(false)
-
+  // Reset scroll on load/refresh so hero is visible (avoids footer flash from scroll restoration)
   useEffect(() => {
-    // Wait for splash screen to finish (3 seconds + small buffer)
-    const timer = setTimeout(() => {
-      setShowContent(true)
-    }, 3200)
-    return () => clearTimeout(timer)
+    window.scrollTo({ top: 0, behavior: "auto" })
   }, [])
-
-  if (!showContent) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        {/* Empty div to prevent layout shift - matches splash screen background */}
-      </div>
-    )
-  }
 
   return (
     <>
