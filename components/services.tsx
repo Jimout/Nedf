@@ -1,9 +1,6 @@
-"use client";
-
 import { useState } from "react";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { ChevronRight, Maximize2 } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const SERVICES = [
   {
@@ -50,6 +47,7 @@ const SERVICES = [
 
 export default function ServicesSection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showSubServices, setShowSubServices] = useState(false);
 
   const active = SERVICES[activeIndex];
 
@@ -65,7 +63,10 @@ export default function ServicesSection() {
               <button
                 key={s.id}
                 type="button"
-                onClick={() => setActiveIndex(i)}
+                onClick={() => {
+                  setActiveIndex(i);
+                  setShowSubServices(false);
+                }}
                 className={cn(
                   "rounded-full px-4 py-2 sm:px-5 sm:py-2.5 md:px-5 md:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm md:text-base lg:text-base font-medium transition-colors",
                   i === activeIndex
@@ -116,25 +117,71 @@ export default function ServicesSection() {
                 <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-bold leading-tight">
                   {active.headline}
                 </h2>
-                <a
-                  href="/#portfolio"
+                <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+                  <a
+                    href="/#portfolio"
+                    className={cn(
+                      "inline-flex w-fit items-center gap-2 rounded-lg px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3 lg:px-7 lg:py-3.5 xl:px-8 xl:py-4 text-sm sm:text-base md:text-base lg:text-lg xl:text-lg font-semibold transition-opacity hover:opacity-90",
+                      "bg-primary text-primary-foreground"
+                    )}
+                  >
+                    <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary-foreground" />
+                    {active.cta}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setShowSubServices((v) => !v)}
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-lg border-2 border-muted-foreground/30 px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3 lg:px-7 lg:py-3.5 xl:px-8 xl:py-4 text-sm sm:text-base md:text-base lg:text-lg xl:text-lg font-semibold transition-all hover:border-primary/60",
+                      "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    SUB SERVICES
+                    <ChevronDown
+                      className={cn(
+                        "h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300",
+                        showSubServices && "rotate-180"
+                      )}
+                    />
+                  </button>
+                </div>
+
+                {/* Expandable Sub Services */}
+                <div
                   className={cn(
-                    "inline-flex w-fit items-center gap-2 rounded-lg px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3 lg:px-7 lg:py-3.5 xl:px-8 xl:py-4 text-sm sm:text-base md:text-base lg:text-lg xl:text-lg font-semibold transition-opacity hover:opacity-90",
-                    "bg-primary text-primary-foreground"
+                    "overflow-hidden transition-all duration-500 ease-in-out",
+                    showSubServices ? "max-h-[400px] opacity-100 mt-4 sm:mt-5 lg:mt-6" : "max-h-0 opacity-0 mt-0"
                   )}
                 >
-                  <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary-foreground" />
-                  {active.cta}
-                </a>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                    {active.subServices.map((sub, i) => (
+                      <div
+                        key={sub}
+                        className="flex items-center gap-3 rounded-lg border border-muted-foreground/20 bg-muted/10 px-4 py-3 sm:px-5 sm:py-3.5 transition-all hover:border-primary/50 hover:bg-muted/20"
+                        style={{
+                          transitionDelay: showSubServices ? `${i * 75}ms` : "0ms",
+                          transform: showSubServices ? "translateY(0)" : "translateY(8px)",
+                          opacity: showSubServices ? 1 : 0,
+                          transition: "all 0.4s ease-out",
+                        }}
+                      >
+                        <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary-foreground">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-sm sm:text-base font-medium text-foreground">
+                          {sub}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="relative w-full aspect-[4/2.25] min-h-[140px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[280px] xl:min-h-[320px] 2xl:min-h-[360px] overflow-hidden bg-muted order-1 md:order-2">
-                <Image
+                <img
                   src={active.image}
                   alt={active.name}
-                  fill
-                  className="object-cover transition-opacity duration-300"
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, 50vw"
+                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
                 />
               </div>
             </div>
