@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
+import { Minimize2, Plus } from "lucide-react";
 
 const SERVICES = [
   {
@@ -99,81 +99,86 @@ export default function ServicesSection() {
           />
           <div
             className={cn(
-              "relative z-10 border-2 border-border p-4 shadow-lg ring-1 ring-white/10",
-              "bg-zinc-800/95 text-zinc-100",
+              "relative z-10 border-2 border-primary-foreground/20 p-4 shadow-lg ring-1 ring-primary-foreground/10 dark:border-background/30 dark:ring-background/20",
+              "bg-primary text-primary-foreground dark:bg-primary-foreground dark:text-background",
               "sm:p-5 md:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-14 4xl:p-16"
             )}
           >
+            {/* Pill: Sub Services in bottom-right corner */}
+            <button
+              type="button"
+              onClick={() => setShowSubServices((v) => !v)}
+              className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 xl:bottom-10 xl:right-10 2xl:bottom-12 2xl:right-12 3xl:bottom-14 3xl:right-14 4xl:bottom-16 4xl:right-16 z-20 inline-flex items-center overflow-hidden rounded-full bg-muted text-foreground shadow-md transition-opacity hover:opacity-90"
+            >
+              <span className="px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold uppercase tracking-wider">
+                SUB SERVICES
+              </span>
+              <span className="flex h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 items-center justify-center rounded-full bg-white text-foreground">
+                <Minimize2 className={cn("h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300", showSubServices && "rotate-180")} />
+              </span>
+            </button>
+
+            {/* Expanded sub-services panel (bottom-right, like reference) */}
+            <div
+              className={cn(
+                "absolute right-4 bottom-14 sm:right-5 sm:bottom-16 md:right-6 md:bottom-20 lg:right-8 lg:bottom-24 xl:right-10 xl:bottom-28 2xl:right-12 2xl:bottom-32 3xl:right-14 3xl:bottom-36 4xl:right-16 4xl:bottom-40 z-30 w-[280px] sm:w-[320px] md:w-[360px] overflow-hidden rounded-2xl border border-white/20 bg-white/85 shadow-2xl backdrop-blur-xl transition-all duration-300 ease-out dark:bg-foreground/15 dark:border-white/10",
+                showSubServices ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
+              )}
+            >
+              <div className="flex items-center justify-between border-b border-foreground/10 bg-foreground/90 px-4 py-3 dark:bg-foreground/95">
+                <span className="text-sm font-semibold uppercase tracking-wider text-primary-foreground">
+                  SELECT TO EXPLORE
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowSubServices(false)}
+                  className="rounded-md p-1.5 text-primary-foreground transition-colors hover:bg-white/20"
+                  aria-label="Close sub services"
+                >
+                  <Minimize2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-2 p-3 sm:p-4">
+                {active.subServices.map((sub, i) => (
+                  <button
+                    key={sub}
+                    type="button"
+                    className="group relative flex min-h-[72px] sm:min-h-[80px] flex-col items-start justify-end rounded-xl bg-foreground/80 p-3 text-left backdrop-blur-sm transition-colors hover:bg-foreground/70 dark:bg-foreground/90 dark:hover:bg-foreground/80"
+                  >
+                    <span className="text-xs font-medium leading-tight text-primary-foreground sm:text-sm">
+                      {sub}
+                    </span>
+                    <span className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-primary-foreground transition-colors group-hover:bg-white/30">
+                      <Plus className="h-3.5 w-3.5" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-10 2xl:gap-12 3xl:gap-14 4xl:gap-16 md:grid-cols-[1fr,1fr]">
               <div className="flex flex-col justify-center order-2 md:order-1">
                 <div className="mb-2 sm:mb-2.5 md:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3 md:gap-3 lg:gap-4">
-                  <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 items-center justify-center rounded-full bg-muted text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-foreground">
+                  <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 items-center justify-center rounded-full bg-primary-foreground/20 text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-primary-foreground dark:bg-background/20 dark:text-background">
                     {String(activeIndex + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg font-medium uppercase tracking-wider text-muted-foreground">
+                  <span className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg font-medium uppercase tracking-wider text-primary-foreground/80 dark:text-background/80">
                     {active.category}
                   </span>
                 </div>
-                <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-6 3xl:mb-8 4xl:mb-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold leading-tight">
+                <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-6 3xl:mb-8 4xl:mb-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold leading-tight text-primary-foreground dark:text-background">
                   {active.headline}
                 </h2>
                 <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
                   <a
                     href="/#portfolio"
                     className={cn(
-                      "inline-flex w-fit items-center gap-2 rounded-lg px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3 lg:px-7 lg:py-3.5 xl:px-8 xl:py-4 text-sm sm:text-base md:text-base lg:text-lg xl:text-lg font-semibold transition-opacity hover:opacity-90",
-                      "bg-primary text-primary-foreground"
+                      "inline-flex w-fit items-center rounded-full px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold transition-opacity hover:opacity-90",
+                      "bg-primary-foreground text-primary dark:bg-primary dark:text-primary-foreground"
                     )}
                   >
-                    <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary-foreground" />
                     {active.cta}
                   </a>
-                  <button
-                    type="button"
-                    onClick={() => setShowSubServices((v) => !v)}
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-lg border-2 border-muted-foreground/30 px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3 lg:px-7 lg:py-3.5 xl:px-8 xl:py-4 text-sm sm:text-base md:text-base lg:text-lg xl:text-lg font-semibold transition-all hover:border-primary/60",
-                      "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    SUB SERVICES
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300",
-                        showSubServices && "rotate-180"
-                      )}
-                    />
-                  </button>
-                </div>
-
-                {/* Expandable Sub Services */}
-                <div
-                  className={cn(
-                    "overflow-hidden transition-all duration-500 ease-in-out",
-                    showSubServices ? "max-h-[400px] opacity-100 mt-4 sm:mt-5 lg:mt-6" : "max-h-0 opacity-0 mt-0"
-                  )}
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                    {active.subServices.map((sub, i) => (
-                      <div
-                        key={sub}
-                        className="flex items-center gap-3 rounded-lg border border-muted-foreground/20 bg-muted/10 px-4 py-3 sm:px-5 sm:py-3.5 transition-all hover:border-primary/50 hover:bg-muted/20"
-                        style={{
-                          transitionDelay: showSubServices ? `${i * 75}ms` : "0ms",
-                          transform: showSubServices ? "translateY(0)" : "translateY(8px)",
-                          opacity: showSubServices ? 1 : 0,
-                          transition: "all 0.4s ease-out",
-                        }}
-                      >
-                        <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary-foreground">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="text-sm sm:text-base font-medium text-foreground">
-                          {sub}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
 

@@ -314,7 +314,7 @@ function HamburgerButton({
       onClick={onClick}
       className="
         lg:hidden inline-flex items-center justify-center 
-        min-w-[44px] min-h-[44px] p-2.5 -mr-2 rounded-lg
+        min-w-[44px] min-h-[44px] p-2.5 -mr-2 rounded-none
         text-foreground
         active:bg-muted
         transition-colors duration-150
@@ -418,7 +418,7 @@ function MobileNavLink({
       href={item.href}
       onClick={onClick}
       className="
-        py-3 px-3 rounded-lg font-medium
+        py-3 px-3 rounded-none font-medium
         text-sm sm:text-base
         text-foreground
         hover:bg-muted
