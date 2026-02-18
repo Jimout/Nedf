@@ -231,12 +231,12 @@ export function Founders({ founders }: FoundersProps) {
 
         <div className="sticky-container">
           <div className="scroll-bg">
-            <div className="scroll-text-item text-black dark:text-white opacity-10">ABOUT US</div>
+            <div className="scroll-text-item text-foreground opacity-10">ABOUT US</div>
           </div>
 
           <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16 pt-0">
             <div className="w-full max-w-none animate-on-scroll visible">
-              <p className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl text-gray-700 dark:text-gray-300 leading-relaxed text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
+              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl 4xl:text-xl text-muted-foreground leading-relaxed text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
                 NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural design, interior
                 spaces, and high-end visualizations. We blend design with technology to create thoughtful, innovative, and
                 visually compelling environments. From concept to execution, our work reflects a commitment to clarity,
@@ -246,7 +246,7 @@ export function Founders({ founders }: FoundersProps) {
           </div>
 
           <div ref={meetFoundersRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
-            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight animate-on-scroll visible text-[#333333]/80 dark:text-[#ec1e24]">
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight animate-on-scroll visible text-foreground/80 dark:text-primary">
               MEET THE FOUNDERS
             </h2>
           </div>
@@ -281,8 +281,8 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       )}
     >
       <CometCard>
-        <div className="relative w-full bg-white dark:bg-[#15171a] p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-5 border-[0.25px] border-gray-300 dark:border-white/15 flex flex-col">
-          <div className="relative aspect-[3/4] w-full overflow-hidden mb-2 sm:mb-2 md:mb-2.5 lg:mb-3 xl:mb-3 2xl:mb-4 group border-[0.25px] border-gray-300 dark:border-white/15">
+        <div className="relative w-full bg-card p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-5 border border-border flex flex-col">
+          <div className="relative aspect-[3/4] w-full overflow-hidden mb-2 sm:mb-2 md:mb-2.5 lg:mb-3 xl:mb-3 2xl:mb-4 group border border-border">
             <img
               src={founder.image || "/placeholder.svg"}
               alt={founder.name}
@@ -297,10 +297,10 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
             )}
           </div>
           <div className="px-1">
-            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg font-bold text-[#333333] dark:text-white mb-1">
+            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg font-bold text-foreground mb-1">
               {founder.name}
             </h3>
-            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm font-medium text-[#333333]/80 dark:text-white/80">
+            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm font-medium text-muted-foreground">
               {founder.title}
             </p>
           </div>
@@ -308,7 +308,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       </CometCard>
 
       <div className="space-y-2">
-        <p className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg text-[#333333] dark:text-white leading-relaxed">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base text-foreground leading-relaxed">
           {founder.description}
         </p>
 
@@ -326,7 +326,7 @@ function SocialLinks({ social }: { social: SocialLinks }) {
     <div className="pt-3 sm:pt-3 md:pt-4 lg:pt-4 xl:pt-4 2xl:pt-5">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-base font-medium text-[#333333] dark:text-white/80 mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4 hover:text-[#002e47] dark:hover:text-[#ec1e24] transition-colors duration-300 cursor-pointer flex items-center gap-2"
+        className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-base font-medium text-muted-foreground mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4 hover:text-primary transition-colors duration-300 cursor-pointer flex items-center gap-2"
       >
         Follow Us
         <span className={cn(
@@ -385,9 +385,8 @@ function SocialLink({
       aria-label={label}
       className={cn(
         "w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10 2xl:w-10 2xl:h-10",
-        "rounded-full border-[0.25px] border-white flex items-center justify-center",
-        "text-white hover:bg-white hover:text-[#15171a]",
-        "dark:hover:bg-[#ec1e24] dark:hover:text-white dark:hover:border-[#ec1e24]",
+        "rounded-full border border-border flex items-center justify-center",
+        "text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary",
         "transition-all duration-300 hover:scale-110 active:scale-95",
         "transform",
         isVisible ? "scale-100 translate-y-0" : "scale-0 -translate-y-4"
