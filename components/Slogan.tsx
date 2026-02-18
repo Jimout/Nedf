@@ -5,16 +5,30 @@ import SplitType from "split-type";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const TEXT_CLASS =
+  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl 3xl:text-7xl 4xl:text-8xl";
+
 export default function HeroTextFadeScroll() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const firstRef = useRef<HTMLDivElement>(null);
+  const firstLine1Ref = useRef<HTMLDivElement>(null);
+  const firstLine2Ref = useRef<HTMLDivElement>(null);
   const secondRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!firstRef.current || !secondRef.current || !sectionRef.current) return;
+    if (
+      !firstLine1Ref.current ||
+      !firstLine2Ref.current ||
+      !secondRef.current ||
+      !sectionRef.current
+    )
+      return;
 
     const ctx = gsap.context(() => {
-      const split1 = new SplitType(firstRef.current!, {
+      const split1a = new SplitType(firstLine1Ref.current!, {
+        types: "words",
+        tagName: "span",
+      });
+      const split1b = new SplitType(firstLine2Ref.current!, {
         types: "words",
         tagName: "span",
       });
@@ -23,33 +37,42 @@ export default function HeroTextFadeScroll() {
         tagName: "span",
       });
 
-      const w1 = split1.words || [];
+      const w1a = split1a.words || [];
+      const w1b = split1b.words || [];
       const w2 = split2.words || [];
-      if (!w1.length || !w2.length) return;
+      if (!w1a.length || !w1b.length || !w2.length) return;
 
       const clipReveal = (p: number) =>
         `polygon(${100 - p}% 0%, 100% 0%, 100% 100%, ${100 - p}% 100%)`;
       const clipHide = (p: number) =>
         `polygon(${p}% 0%, 100% 0%, 100% 100%, ${p}% 100%)`;
 
-      // Initial: all words hidden
-      w1.forEach((w) =>
-        gsap.set(w, { clipPath: clipReveal(0), willChange: "clip-path" })
+      [w1a, w1b, w2].forEach((words) =>
+        words.forEach((w) =>
+          gsap.set(w, { clipPath: clipReveal(0), willChange: "clip-path" })
+        )
       );
-      w2.forEach((w) =>
-        gsap.set(w, { clipPath: clipReveal(0), willChange: "clip-path" })
+      gsap.set(
+        [
+          firstLine1Ref.current!,
+          firstLine2Ref.current!,
+          secondRef.current!,
+        ],
+        { visibility: "visible" }
       );
-      gsap.set([firstRef.current!, secondRef.current!], {
-        visibility: "visible",
-      });
 
       const dur = 0.15;
       const stag = 0.08;
-      const revealEnd = (w1.length - 1) * stag + dur;
-      const hideStart = revealEnd + 0.3;
-      const hideEnd = hideStart + (w1.length - 1) * stag + dur;
-      const secStart = hideEnd + 0.15;
-      const secHideStart = secStart + (w2.length - 1) * stag + dur + 0.3;
+
+      // Same page: line 1 then line 2 reveal (both visible), then hide both, then line 3
+      const t1aRevealEnd = (w1a.length - 1) * stag + dur;
+      const t1bStart = t1aRevealEnd + 0.15; // reveal line 2 while line 1 stays visible
+      const t1bRevealEnd = t1bStart + (w1b.length - 1) * stag + dur;
+      const t1HideStart = t1bRevealEnd + 0.3; // then hide both lines
+      const t1aHideEnd = t1HideStart + (w1a.length - 1) * stag + dur;
+      const t1bHideStart = t1HideStart; // hide line 1 and line 2 in parallel
+      const t2Start = t1aHideEnd + 0.15; // after first block hidden, reveal "based in..."
+      const t2HideStart = t2Start + (w2.length - 1) * stag + dur + 0.3;
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -63,44 +86,58 @@ export default function HeroTextFadeScroll() {
         },
       });
 
-      // Phase 1: Reveal first text word by word
-      w1.forEach((w, i) =>
+      // Phase 1: Reveal "We are a fully" word by word
+      w1a.forEach((w, i) =>
         tl.to(
           w,
           { clipPath: clipReveal(100), ease: "none", duration: dur },
           i * stag
         )
       );
-
-      // Phase 2: Hide first text word by word
-      w1.forEach((w, i) =>
+      // Phase 2: Reveal "integrated design firm" (both lines now on same page)
+      w1b.forEach((w, i) =>
+        tl.to(
+          w,
+          { clipPath: clipReveal(100), ease: "none", duration: dur },
+          t1bStart + i * stag
+        )
+      );
+      // Phase 3: Hide first line
+      w1a.forEach((w, i) =>
         tl.to(
           w,
           { clipPath: clipHide(100), ease: "none", duration: dur },
-          hideStart + i * stag
+          t1HideStart + i * stag
         )
       );
-
-      // Phase 3: Reveal second text word by word
+      // Phase 4: Hide second line
+      w1b.forEach((w, i) =>
+        tl.to(
+          w,
+          { clipPath: clipHide(100), ease: "none", duration: dur },
+          t1bHideStart + i * stag
+        )
+      );
+      // Phase 5: Reveal "based in Addis Ababa, Ethiopia" word by word
       w2.forEach((w, i) =>
         tl.to(
           w,
           { clipPath: clipReveal(100), ease: "none", duration: dur },
-          secStart + i * stag
+          t2Start + i * stag
         )
       );
-
-      // Phase 4: Hide second text word by word (same effect as first line)
+      // Phase 6: Hide third line
       w2.forEach((w, i) =>
         tl.to(
           w,
           { clipPath: clipHide(100), ease: "none", duration: dur },
-          secHideStart + i * stag
+          t2HideStart + i * stag
         )
       );
 
       return () => {
-        split1.revert();
+        split1a.revert();
+        split1b.revert();
         split2.revert();
         ScrollTrigger.getAll().forEach((t) => t.kill());
       };
@@ -112,19 +149,28 @@ export default function HeroTextFadeScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center justify-center min-h-screen bg-background overflow-hidden transform-gpu will-change-transform [backface-visibility:hidden]"
+      className="relative z-10 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible pb-12 sm:pb-16 transform-gpu will-change-transform [backface-visibility:hidden]"
     >
-      <div
-        ref={firstRef}
-        className="absolute text-center font-montserrat font-bold text-foreground leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl"
-        style={{ visibility: "hidden" }}
-      >
-        We are a fully integrated design firm
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-0">
+        <div
+          ref={firstLine1Ref}
+          className={`${TEXT_CLASS} !pb-0`}
+          style={{ visibility: "hidden", position: "relative" }}
+        >
+          We are a fully
+        </div>
+        <div
+          ref={firstLine2Ref}
+          className={`${TEXT_CLASS} !pt-0 -mt-1 sm:-mt-2`}
+          style={{ visibility: "hidden", position: "relative" }}
+        >
+          integrated design firm
+        </div>
       </div>
 
       <div
         ref={secondRef}
-        className="absolute text-center font-montserrat font-bold text-foreground leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl"
+        className={TEXT_CLASS}
         style={{ visibility: "hidden" }}
       >
         based in Addis Ababa, Ethiopia
