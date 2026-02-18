@@ -19,15 +19,17 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="pt-14 xl:pt-16">
+      {/* Main: responsive top padding for fixed nav (mobile→4K) */}
+      <main className="pt-14 sm:pt-14 md:pt-14 lg:pt-14 xl:pt-16 2xl:pt-16 3xl:pt-20 4xl:pt-24">
         <HeroWithStats />
         <HeroTextFadeScroll />
         <ServicesSection />
         <Portfolio />
         <TheCrew />
         <Steps />
-        <div id="studio-notes" className="scroll-mt-20">
-          <p className="text-center text-3xl font-bold sm:text-4xl font-montserrat tracking-tight pt-8 mb-12 text-[#333333]/80 dark:text-[#ec1e24]">
+        {/* Studio notes section: stack on mobile, responsive heading */}
+        <div id="studio-notes" className="scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-20 lg:scroll-mt-24">
+          <p className="text-center text-2xl font-bold sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-montserrat tracking-tight pt-6 sm:pt-8 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-12 mb-8 sm:mb-10 md:mb-12 lg:mb-12 xl:mb-14 2xl:mb-16 text-[#333333]/80 dark:text-[#ec1e24]">
             STUDIO NOTES
           </p>
           <StudioNotesCard />

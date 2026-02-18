@@ -115,7 +115,7 @@ function TeamMemberCard({ image, name, role, bio, socials, idx }: TeamMemberCard
     <div 
       className={cn(
         "flex flex-col items-center text-center w-full",
-        "max-w-[260px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-[320px] xl:max-w-[360px] 2xl:max-w-[400px]",
+        "max-w-[260px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-[320px] xl:max-w-[360px] 2xl:max-w-[400px] 3xl:max-w-[420px] 4xl:max-w-[460px]",
         "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-5",
         idx === 0 ? "lg:mr-auto" : idx === 2 ? "lg:ml-auto" : "lg:mx-auto"
       )}
@@ -134,7 +134,7 @@ function MemberAvatar({ image, name }: { image: string; name: string }) {
         alt={name}
         width={160}
         height={160}
-        className="rounded-full object-cover shadow-lg w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40"
+        className="rounded-full object-cover shadow-lg w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40 3xl:w-44 3xl:h-44 4xl:w-48 4xl:h-48"
       />
       <div className="absolute inset-0 rounded-full bg-[#15171a] opacity-10" />
     </div>
@@ -153,7 +153,8 @@ function MemberInfo({ name, role, bio, socials }: Omit<TeamMemberCardProps, 'ima
         </p>
       </div>
 
-      <div className="border-t border-gray-300 dark:border-white/20 w-12 sm:w-14 md:w-16 lg:w-16 xl:w-18 2xl:w-20 mx-auto" />
+      {/* Responsive divider width (fix non-standard `w-18`) */}
+      <div className="border-t border-gray-300 dark:border-white/20 w-12 sm:w-14 md:w-16 lg:w-16 xl:w-[4.5rem] 2xl:w-20 3xl:w-24 4xl:w-28 mx-auto" />
 
       <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg text-[#333333]/80 dark:text-white/70 leading-relaxed px-2 sm:px-3 md:px-4 lg:px-4 xl:px-4 2xl:px-6 font-montserrat">
         {bio}
@@ -256,9 +257,9 @@ export function OurTeam() {
   }
 
   return (
-    <section id="OurTeam" className="pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 w-full relative z-10">
+    <section id="OurTeam" className="pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-20 2xl:pb-24 3xl:pb-28 4xl:pb-32 w-full relative z-10">
       <div className="w-full">
-        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-bold font-montserrat tracking-tight mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 text-[#333333]/80 dark:text-[#ec1e24]">
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 text-[#333333]/80 dark:text-[#ec1e24]">
           OUR TEAM
         </h2>
 
@@ -314,7 +315,7 @@ function TeamSlider({
       >
         {Array.from({ length: totalPages }, (_, pageIndex) => (
           <div key={pageIndex} className="w-full flex-shrink-0">
-            <div className="flex flex-col md:flex-row gap-6 sm:gap-7 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 w-full justify-center lg:justify-end items-center">
+            <div className="flex flex-col md:flex-row gap-6 sm:gap-7 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 3xl:gap-20 4xl:gap-24 w-full justify-center lg:justify-end items-center">
               {TEAM_DATA.slice(
                 pageIndex * itemsPerPage,
                 (pageIndex + 1) * itemsPerPage
@@ -342,25 +343,29 @@ function NavigationControls({
 }) {
   return (
     <>
-      {/* Mobile & Tablet - Dot Indicators */}
-      <div className="flex justify-center gap-1.5 sm:gap-2 md:gap-2 lg:hidden mt-8 sm:mt-9 md:mt-10">
+      {/* Mobile & Tablet - Dot indicators; tap targets ≥44px */}
+      <div className="flex justify-center gap-1.5 sm:gap-2 md:gap-2 lg:hidden mt-8 sm:mt-9 md:mt-10 3xl:mt-12 4xl:mt-14">
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index}
             onClick={() => onDotClick(index)}
-            className={cn(
-              "w-2 h-2 rounded-full transition-all duration-300",
-              currentIndex === index
-                ? "bg-[#001F4B] dark:bg-[#ec1e24] scale-125"
-                : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
-            )}
+            className="group min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full transition-all duration-300"
             aria-label={`Go to page ${index + 1}`}
-          />
+          >
+            <span
+              className={cn(
+                "w-2 h-2 rounded-full block transition-all duration-300",
+                currentIndex === index
+                  ? "bg-[#001F4B] dark:bg-[#ec1e24] scale-125"
+                  : "bg-gray-300 dark:bg-gray-600 group-hover:bg-gray-400 dark:group-hover:bg-gray-500"
+              )}
+            />
+          </button>
         ))}
       </div>
 
       {/* Desktop - Pagination */}
-      <div className="hidden lg:flex justify-center mt-10 lg:mt-11 xl:mt-12 2xl:mt-14">
+      <div className="hidden lg:flex justify-center mt-10 lg:mt-11 xl:mt-12 2xl:mt-14 3xl:mt-16 4xl:mt-20">
         <Pagination page={currentIndex + 1} setPage={onPageChange} total={totalPages} />
       </div>
     </>

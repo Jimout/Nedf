@@ -21,6 +21,8 @@ const BREAKPOINTS = {
   LG: 1024,
   XL: 1280,
   "2XL": 1536,
+  "3XL": 1920,
+  "4XL": 2560,
 } as const
 
 const LINE_HEIGHTS = {
@@ -30,6 +32,8 @@ const LINE_HEIGHTS = {
   LG: 110,
   XL: 140,
   "2XL": 160,
+  "3XL": 180,
+  "4XL": 200,
   DEFAULT: 88,
 } as const
 
@@ -47,6 +51,8 @@ export default function HeroWithStats() {
     if (typeof window === "undefined") return LINE_HEIGHTS.DEFAULT
 
     const width = window.innerWidth
+    if (width >= BREAKPOINTS["4XL"]) return LINE_HEIGHTS["4XL"]
+    if (width >= BREAKPOINTS["3XL"]) return LINE_HEIGHTS["3XL"]
     if (width >= BREAKPOINTS["2XL"]) return LINE_HEIGHTS["2XL"]
     if (width >= BREAKPOINTS.XL) return LINE_HEIGHTS.XL
     if (width >= BREAKPOINTS.LG) return LINE_HEIGHTS.LG
@@ -129,13 +135,12 @@ function HeroSection({
       relative w-full z-10 
       flex items-center justify-center 
       font-montserrat overflow-hidden
-      min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh] 
-      lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[38vh]
-      mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 2xl:mt-12
+      min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh] lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[38vh] 3xl:min-h-[40vh] 4xl:min-h-[42vh]
+      mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 2xl:mt-12 3xl:mt-14 4xl:mt-16
     ">
       <div className="
         flex items-center justify-center 
-        gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-10
+        gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14
       ">
         {children}
       </div>
@@ -144,7 +149,7 @@ function HeroSection({
 }
 
 function HeroLogo() {
-  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[220px] 2xl:h-[220px]"
+  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[220px] 2xl:h-[220px] 3xl:w-[260px] 3xl:h-[260px] 4xl:w-[300px] 4xl:h-[300px]"
   
   return (
     <div className="select-none">
@@ -193,8 +198,7 @@ function HeroContent({
           <span className="
             font-thin text-[#333333]/80 dark:text-white/80 
             tracking-wide mr-2 max-sm:mb-[-4px]
-            text-[20px] sm:text-[26px] md:text-[32px] 
-            lg:text-[38px] xl:text-[52px] 2xl:text-[62px]
+            text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[62px] 3xl:text-[72px] 4xl:text-[80px]
             md:font-normal xl:font-normal
           ">
             We Are
@@ -237,7 +241,7 @@ function AnimatedWords({
       }}
     >
       <div
-        ref={containerRef}
+        ref={containerRef as React.RefObject<HTMLDivElement>}
         style={{
           transform: `translateY(-${index * lineHeight}px)`,
           transition: isResetting 
@@ -252,8 +256,7 @@ function AnimatedWords({
             className="
               block font-medium leading-none whitespace-nowrap
               text-[#002e47] dark:text-[#ec1e24]
-              text-[32px] sm:text-[44px] md:text-[54px] 
-              lg:text-[66px] xl:text-[90px] 2xl:text-[108px]
+              text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[108px] 3xl:text-[120px] 4xl:text-[140px]
             "
             style={{
               height: `${lineHeight}px`,
@@ -276,5 +279,5 @@ function AnimatedWords({
 }
 
 function Spacer() {
-  return <div className="h-2 sm:h-3 md:h-4 lg:h-5 xl:h-6 2xl:h-6" />
+  return <div className="h-2 sm:h-3 md:h-4 lg:h-5 xl:h-6 2xl:h-6 3xl:h-8 4xl:h-8" />
 }

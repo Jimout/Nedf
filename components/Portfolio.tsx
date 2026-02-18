@@ -91,9 +91,9 @@ export default function Portfolio() {
       </AnimatePresence>
 
       {/* Full-width Section */}
-      <section id="portfolio" className="pt-12 sm:pt-14 md:pt-16 lg:pt-18 xl:pt-20 2xl:pt-24 font-montserrat relative overflow-hidden w-full">
+      <section id="portfolio" className="pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-28 4xl:pt-32 font-montserrat relative overflow-hidden w-full">
         <div
-          className={`flex justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 flex-nowrap transition-all duration-300 ease-out ${
+          className={`flex justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 3xl:gap-16 4xl:gap-20 mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
@@ -105,7 +105,7 @@ export default function Portfolio() {
             2024
           </span>
           <h1
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-bold text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-[#333333]/80 dark:text-[#ec1e24] ${
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-[#333333]/80 dark:text-[#ec1e24] ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
@@ -290,7 +290,7 @@ export default function Portfolio() {
         </div>
 
         {/* Pagination Dots */}
-        <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 gap-2 sm:gap-2.5 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4">
+        <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 3xl:mt-10 4xl:mt-12 gap-2 sm:gap-2.5 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4 3xl:gap-4 4xl:gap-5">
           {slides.map((_, index) => (
             <div
               key={index}

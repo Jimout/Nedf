@@ -7,10 +7,10 @@ export default function Layout({
 }>) {
   return (
     <div className="flex flex-col gap-2">
-      {/* Navbar - Full width, outside padding */}
+      {/* Navbar: full width; mobile/tablet hamburger, desktop full menu */}
       <Navbar />
-      {/* Content wrapper with responsive padding */}
-      <div className="w-full px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-20">
+      {/* Main content: container for mobile→4K; responsive padding */}
+      <div className="mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 3xl:px-16 4xl:px-20">
         {children}
       </div>
     </div>

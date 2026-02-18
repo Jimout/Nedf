@@ -13,12 +13,29 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: {
+        DEFAULT: "2rem",
+        sm: "1.5rem",
+        lg: "2rem",
+        xl: "2.5rem",
+        "2xl": "3rem",
+        "3xl": "4rem",
+      },
       screens: {
-        "2xl": "1400px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
+        "3xl": "1920px",
+        "4xl": "2560px",
       },
     },
     extend: {
+      screens: {
+        "3xl": "1920px",
+        "4xl": "2560px",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -53,9 +70,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        nedfBlue: '#001F4B',
-        darkBg: '#111010',
-        darkAccent: '#ec1e24',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -82,15 +96,15 @@ const config: Config = {
         fade: "fade 0.5s ease-in-out",
       },
       fontSize: {
-        'huge': '100px', // custom huge font size
+        huge: "100px",
       },
       fontFamily: {
-        montserrat: ['Montserrat', 'sans-serif'],
+        sans: ["Montserrat", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
       },
       fontWeight: {
-        extralight: '50', // Tailwind already supports this but explicitly defining won't hurt
+        extralight: "50",
       },
-      
     },
   },
   plugins: [],

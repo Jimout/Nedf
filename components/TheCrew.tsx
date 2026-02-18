@@ -144,7 +144,7 @@ export function Founders({ founders }: FoundersProps) {
   const foundersVisible = useScrollAnimation(foundersContainerRef, ANIMATION_CONFIG.FOUNDERS_CONTAINER_DELAY)
 
   return (
-    <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-36 2xl:pt-40">
+    <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-36 2xl:pt-40 3xl:pt-44 4xl:pt-48">
       <section id="TheCrew" className="w-full">
         <style>{`
           @keyframes fadeInUp {
@@ -234,9 +234,9 @@ export function Founders({ founders }: FoundersProps) {
             <div className="scroll-text-item text-black dark:text-white opacity-10">ABOUT US</div>
           </div>
 
-          <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 pt-0">
+          <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16 pt-0">
             <div className="w-full max-w-none animate-on-scroll visible">
-              <p className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed text-center font-normal">
+              <p className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl text-gray-700 dark:text-gray-300 leading-relaxed text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
                 NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural design, interior
                 spaces, and high-end visualizations. We blend design with technology to create thoughtful, innovative, and
                 visually compelling environments. From concept to execution, our work reflects a commitment to clarity,
@@ -245,14 +245,14 @@ export function Founders({ founders }: FoundersProps) {
             </div>
           </div>
 
-          <div ref={meetFoundersRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12">
-            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-bold font-montserrat tracking-tight animate-on-scroll visible text-[#333333]/80 dark:text-[#ec1e24]">
+          <div ref={meetFoundersRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight animate-on-scroll visible text-[#333333]/80 dark:text-[#ec1e24]">
               MEET THE FOUNDERS
             </h2>
           </div>
 
-          <div ref={foundersContainerRef} className="relative z-20 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24">
-            <div className="flex flex-col md:flex-row justify-center items-start gap-6 sm:gap-8 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 w-full">
+          <div ref={foundersContainerRef} className="relative z-20 pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-20 2xl:pb-24 3xl:pb-28 4xl:pb-32">
+            <div className="flex flex-col md:flex-row justify-center items-start gap-6 sm:gap-8 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14 w-full">
               {founders.map((founder, index) => (
                 <FounderCard 
                   key={founder.id} 
@@ -275,7 +275,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
     <div
       className={cn(
         "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-5",
-        "w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[480px]",
+        "w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[480px] 3xl:max-w-[520px] 4xl:max-w-[560px]",
         "mx-auto founder-card visible",
         index === 0 ? "md:order-1" : "md:order-2"
       )}

@@ -162,7 +162,7 @@ function NavbarContent({
       ">
         <div className="
           flex items-center justify-between w-full 
-          px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 
+          px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24
           py-2.5 md:py-3
         ">
           <NavLogo />
@@ -220,7 +220,8 @@ function DesktopNavLinks({
 }) {
   return (
     <div className="
-      hidden md:flex items-center justify-center flex-1 
+      // Desktop menu starts at `lg` (tablet uses hamburger).
+      hidden lg:flex items-center justify-center flex-1 
       gap-5 md:gap-6 lg:gap-7 xl:gap-8 2xl:gap-9 
       ml-4 md:ml-6 lg:ml-8 xl:ml-10 2xl:ml-12
     ">
@@ -253,6 +254,8 @@ function NavLink({
       onClick={(e) => onClick(e, item)}
       className={cn(
         "transition-all duration-300 ease-out font-medium font-montserrat whitespace-nowrap",
+        // Tap targets (desktop): keep visual style, ensure >=44px click height.
+        "px-2 py-2",
         "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm",
         "hover:scale-110",
         isActive 
@@ -293,7 +296,8 @@ function ContactButton({
       href={CONTACT_ITEM.href}
       onClick={(e) => onClick(e, CONTACT_ITEM)}
       className={cn(
-        "hidden md:block text-white font-medium font-montserrat whitespace-nowrap",
+        // Desktop-only; minimum tap target height.
+        "hidden lg:inline-flex lg:items-center lg:justify-center min-h-[44px] text-white font-medium font-montserrat whitespace-nowrap",
         "px-3.5 md:px-4 lg:px-5 xl:px-5 2xl:px-6",
         "py-1.5 md:py-2 lg:py-2 xl:py-2.5 2xl:py-2.5",
         "text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base",
@@ -322,8 +326,8 @@ function HamburgerButton({
       aria-expanded={isOpen}
       onClick={onClick}
       className="
-        md:hidden inline-flex items-center justify-center 
-        p-2 -mr-2 rounded-lg
+        lg:hidden inline-flex items-center justify-center 
+        min-w-[44px] min-h-[44px] p-2.5 -mr-2 rounded-lg
         text-[#333333] dark:text-[#ec1e24]
         active:bg-gray-100 dark:active:bg-white/10
         transition-colors duration-150
@@ -381,7 +385,7 @@ function MobileMenu({
   return (
     <div
       className="
-        md:hidden absolute left-0 right-0 top-full z-[120]
+        lg:hidden absolute left-0 right-0 top-full z-[120]
         bg-white/95 dark:bg-[#15171a]/95 backdrop-blur-md
         border-t border-gray-200/50 dark:border-white/10 shadow-xl
         overflow-hidden

@@ -54,7 +54,7 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="relative w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-28 font-montserrat"
+      className="relative w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-28 4xl:pt-32 pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-28 3xl:pb-32 4xl:pb-36 font-montserrat"
     >
       <div className="relative w-full">
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 flex flex-col gap-3 sm:gap-4 md:gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -101,10 +101,10 @@ export default function ServicesSection() {
             className={cn(
               "relative z-10 border-2 border-border p-4 shadow-lg ring-1 ring-white/10",
               "bg-zinc-800/95 text-zinc-100",
-              "sm:p-5 md:p-6 lg:p-8 xl:p-10 2xl:p-12"
+              "sm:p-5 md:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-14 4xl:p-16"
             )}
           >
-            <div className="grid gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-10 2xl:gap-12 md:grid-cols-[1fr,1fr]">
+            <div className="grid gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-10 2xl:gap-12 3xl:gap-14 4xl:gap-16 md:grid-cols-[1fr,1fr]">
               <div className="flex flex-col justify-center order-2 md:order-1">
                 <div className="mb-2 sm:mb-2.5 md:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3 md:gap-3 lg:gap-4">
                   <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 items-center justify-center rounded-full bg-muted text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-foreground">
@@ -114,7 +114,7 @@ export default function ServicesSection() {
                     {active.category}
                   </span>
                 </div>
-                <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl font-bold leading-tight">
+                <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-6 3xl:mb-8 4xl:mb-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold leading-tight">
                   {active.headline}
                 </h2>
                 <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
@@ -177,7 +177,7 @@ export default function ServicesSection() {
                 </div>
               </div>
 
-              <div className="relative w-full aspect-[4/2.25] min-h-[140px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[280px] xl:min-h-[320px] 2xl:min-h-[360px] overflow-hidden bg-muted order-1 md:order-2">
+              <div className="relative w-full aspect-[4/2.25] min-h-[140px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[280px] xl:min-h-[320px] 2xl:min-h-[360px] 3xl:min-h-[400px] 4xl:min-h-[440px] overflow-hidden bg-muted order-1 md:order-2">
                 <img
                   src={active.image}
                   alt={active.name}

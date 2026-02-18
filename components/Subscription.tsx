@@ -25,11 +25,7 @@ const quickLinks = [
   { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/#TheCrew" },
   { label: "Blog", href: "/blog" },
-];
-
-const moreLinks = [
   { label: "Contact", href: "/#footer" },
-  { label: "Studio Notes", href: "/#studio-notes" },
 ];
 
 const connectSocialLinks = [
@@ -47,10 +43,10 @@ const policyLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-footer text-footer-foreground">
+    <footer id="footer" className="bg-footer text-footer-foreground border-t-2 border-footer-border">
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="max-w-7xl 3xl:max-w-screen-2xl 4xl:max-w-screen-2xl mx-auto px-6 3xl:px-10 4xl:px-12 py-16 3xl:py-20 4xl:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 3xl:gap-16 4xl:gap-20">
           {/* Left column */}
           <div className="space-y-8">
             {/* Logo */}
@@ -86,10 +82,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Right column - 2 columns only */}
-          <div className="grid grid-cols-2 gap-8">
-            {/* Column 1: Quick Links + Contact */}
-            <div className="space-y-8">
+          {/* Right column: Quick Links | Contact side by side, Connect With Us below */}
+          <div className="flex flex-col gap-8 3xl:gap-10 4xl:gap-12">
+            {/* Row 1: Quick Links and Contact side by side */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 3xl:gap-10 4xl:gap-12">
               <div>
                 <h3 className="font-display text-lg font-semibold text-footer-accent mb-4">
                   Quick Links
@@ -128,38 +124,22 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Column 2: More + Connect With Us Online */}
-            <div className="space-y-8">
-              <div>
-                <h3 className="font-display text-lg font-semibold text-footer-accent mb-4">
-                  More
-                </h3>
-                <ul className="space-y-2">
-                  {moreLinks.map((link) => (
-                    <li key={link.href}>
-                      <a href={link.href} className="text-footer-muted hover:text-footer-foreground transition-colors text-sm">
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-display text-lg font-semibold text-footer-foreground mb-4">
-                  Connect With Us Online
-                </h3>
-                <div className="flex flex-wrap gap-4">
-                  {connectSocialLinks.map(({ name, href, Icon }) => (
-                    <a
-                      key={name}
-                      href={href}
-                      aria-label={name}
-                      className="text-primary hover:opacity-80 transition-opacity flex items-center justify-center w-8 h-8"
-                    >
-                      <Icon className="w-5 h-5" />
-                    </a>
-                  ))}
-                </div>
+            {/* Row 2: Connect With Us Online (full width under Quick Links & Contact) */}
+            <div>
+              <h3 className="font-display text-lg font-semibold text-footer-foreground mb-4">
+                Connect With Us Online
+              </h3>
+              <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
+                {connectSocialLinks.map(({ name, href, Icon }) => (
+                  <a
+                    key={name}
+                    href={href}
+                    aria-label={name}
+                    className="text-primary hover:opacity-80 transition-opacity flex items-center justify-center min-w-[44px] min-h-[44px]"
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
@@ -170,7 +150,7 @@ export default function Footer() {
       <div className="border-t border-footer-border" />
 
       {/* Bottom bar */}
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="max-w-7xl 3xl:max-w-screen-2xl 4xl:max-w-screen-2xl mx-auto px-6 3xl:px-10 4xl:px-12 py-6 3xl:py-8 4xl:py-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-footer-muted">
           {/* Policy links */}
           <div className="flex flex-wrap gap-3">
