@@ -1,5 +1,3 @@
-"use client";
-
 import { Instagram, Linkedin } from "lucide-react";
 
 const socialIcons = [
@@ -22,20 +20,20 @@ const navLinks = [
 
 const Footer = () => {
   return (
-    <footer className="relative px-6 md:px-16 pt-12 pb-8">
+    <footer className="relative px-6 md:px-16 pt-12 pb-8 bg-primary">
       {/* Subtle top divider */}
-      <div className="w-full h-px mb-10" style={{ background: "hsla(0,0%,100%,0.15)" }} />
+      <div className="w-full h-px mb-10 bg-primary-foreground/15" />
 
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
         {/* Logo + tagline */}
         <div className="flex flex-col gap-1">
           <h3
-            className="text-2xl font-extrabold tracking-tight"
-            style={{ fontFamily: "var(--font-display)", color: "hsla(0,0%,100%,0.95)" }}
+            className="text-2xl font-extrabold tracking-tight text-primary-foreground/95"
+            style={{ fontFamily: "var(--font-display)" }}
           >
             NEDF
           </h3>
-          <p className="text-xs italic" style={{ color: "hsla(0,0%,100%,0.5)" }}>
+          <p className="text-xs italic text-primary-foreground/50">
             Less, but Better.
           </p>
         </div>
@@ -46,13 +44,8 @@ const Footer = () => {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm transition-colors duration-200"
-              style={{
-                fontFamily: "var(--font-body)",
-                color: "hsla(0,0%,100%,0.6)",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "hsla(0,0%,100%,0.95)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "hsla(0,0%,100%,0.6)")}
+              className="text-sm text-primary-foreground/60 hover:text-primary-foreground/95 transition-colors duration-200"
+              style={{ fontFamily: "var(--font-body)" }}
             >
               {link.label}
             </a>
@@ -60,14 +53,14 @@ const Footer = () => {
         </nav>
 
         {/* Contact info */}
-        <div className="flex flex-col gap-2 text-sm" style={{ color: "hsla(0,0%,100%,0.6)" }}>
+        <div className="flex flex-col gap-2 text-sm text-primary-foreground/60">
           <div className="flex flex-wrap items-center gap-x-1">
             <span>Call:</span>
-            <a href="tel:+251945289012" className="hover:underline" style={{ color: "hsla(0,0%,100%,0.85)" }}>+251945289012</a>
+            <a href="tel:+251945289012" className="hover:underline text-primary-foreground/85">+251945289012</a>
             <span>/</span>
-            <a href="tel:+251900672518" className="hover:underline" style={{ color: "hsla(0,0%,100%,0.85)" }}>+251900672518</a>
+            <a href="tel:+251900672518" className="hover:underline text-primary-foreground/85">+251900672518</a>
           </div>
-          <a href="mailto:Nedf123@gmail.com" className="hover:underline" style={{ color: "hsla(0,0%,100%,0.85)" }}>
+          <a href="mailto:Nedf123@gmail.com" className="hover:underline text-primary-foreground/85">
             Nedf123@gmail.com
           </a>
         </div>
@@ -81,19 +74,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
-              style={{
-                background: "hsla(0,0%,100%,0.12)",
-                color: "hsla(0,0%,100%,0.7)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "hsla(0,0%,100%,0.25)";
-                e.currentTarget.style.color = "hsla(0,0%,100%,1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "hsla(0,0%,100%,0.12)";
-                e.currentTarget.style.color = "hsla(0,0%,100%,0.7)";
-              }}
+              className="w-9 h-9 rounded-full flex items-center justify-center bg-primary-foreground/12 text-primary-foreground/70 hover:bg-primary-foreground/25 hover:text-primary-foreground transition-all duration-200"
             >
               <Icon className="w-4 h-4" />
             </a>
@@ -102,8 +83,8 @@ const Footer = () => {
       </div>
 
       {/* Bottom copyright */}
-      <div className="max-w-6xl mx-auto mt-10 pt-6" style={{ borderTop: "1px solid hsla(0,0%,100%,0.1)" }}>
-        <p className="text-xs text-center" style={{ color: "hsla(0,0%,100%,0.35)", fontFamily: "var(--font-body)" }}>
+      <div className="max-w-6xl mx-auto mt-10 pt-6 border-t border-primary-foreground/10">
+        <p className="text-xs text-center text-primary-foreground/35" style={{ fontFamily: "var(--font-body)" }}>
           © 2025 NEDF. All rights reserved.
         </p>
       </div>

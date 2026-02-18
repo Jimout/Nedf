@@ -1,4 +1,3 @@
-import Footer from "@/components/Footer"
 import { Navbar } from "@/components/Navbar"
 import type React from "react"
 export default function Layout({
@@ -14,7 +13,6 @@ export default function Layout({
       <div className="w-full px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-20">
         {children}
       </div>
-      <Footer />
     </div>
   )
 }
