@@ -257,7 +257,7 @@ export default function Steps() {
         <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none z-30">
           {/* Title */}
           <div className="absolute top-[30%] sm:top-[6%] lg:top-[3%] xl:top-[2%] 2xl:top-[1%] 3xl:top-[1%] 4xl:top-[1%] left-1/2 transform -translate-x-1/2 w-full z-30 px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight text-[#333333]/80 dark:text-[#ec1e24]">
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary">
               HOW NEDF WORKS
             </h2>
           </div>
@@ -288,10 +288,10 @@ export default function Steps() {
             >
               <div className="w-[16px] h-[16px] sm:w-[20px] sm:h-[20px] md:w-[40px] md:h-[40px] lg:w-[50px] lg:h-[50px] xl:w-[60px] xl:h-[60px] 2xl:w-[70px] 2xl:h-[70px] 3xl:w-[80px] 3xl:h-[80px] 4xl:w-[90px] 4xl:h-[90px] relative">
                 <div 
-                  className="w-full h-full rounded-full flex items-center justify-center bg-[#333333] dark:bg-white"
+                  className="w-full h-full rounded-full flex items-center justify-center bg-foreground dark:bg-primary-foreground"
                 >
                   <span 
-                    className="text-[4px] sm:text-[5px] md:text-[8px] lg:text-[9px] xl:text-[10px] 2xl:text-[12px] 3xl:text-[14px] 4xl:text-[16px] font-bold text-center px-1 transition-opacity duration-300 text-white dark:text-[#15171a]"
+                    className="text-[4px] sm:text-[5px] md:text-[8px] lg:text-[9px] xl:text-[10px] 2xl:text-[12px] 3xl:text-[14px] 4xl:text-[16px] font-bold text-center px-1 transition-opacity duration-300 text-primary-foreground dark:text-background"
                     style={{ opacity: opacity > 0.9 ? 1 : 0 }}
                   >
                     {activeStep.name}
@@ -312,10 +312,10 @@ export default function Steps() {
                   }}
                 >
                   <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5 xl:space-y-6 2xl:space-y-6">
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl 3xl:text-2xl 4xl:text-3xl text-[#001F4B] dark:text-[#ec1e24] font-medium">
+                    <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base text-primary font-medium">
                       {activeStep.role}
                     </p>
-                    <p className="text-sm sm:text-base md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl 3xl:text-2xl 4xl:text-3xl text-foreground leading-relaxed font-light">
+                    <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl 4xl:text-xl text-foreground leading-relaxed font-light">
                       "{activeStep.quote}"
                     </p>
                   </div>
@@ -351,7 +351,7 @@ function ArcPath({
   return (
     <path
       d={pathData}
-      stroke={isDark ? "white" : "rgba(51, 51, 51, 0.8)"}
+      stroke={isDark ? "hsl(var(--primary-foreground))" : "hsl(var(--foreground) / 0.8)"}
       strokeWidth="2"
       fill="none"
       opacity="1"
