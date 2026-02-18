@@ -91,7 +91,7 @@ export default function Portfolio() {
       </AnimatePresence>
 
       {/* Full-width Section */}
-      <section id="portfolio" className="pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-28 4xl:pt-32 font-montserrat relative overflow-hidden w-full">
+      <section id="portfolio" className="pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32 font-montserrat relative overflow-hidden w-full">
         <div
           className={`flex justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 3xl:gap-16 4xl:gap-20 mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"

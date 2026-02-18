@@ -112,16 +112,11 @@ export default function HeroTextFadeScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center justify-center min-h-screen bg-background overflow-hidden"
-      style={{
-        willChange: "transform",
-        backfaceVisibility: "hidden",
-        transform: "translateZ(0)",
-      }}
+      className="relative flex items-center justify-center min-h-screen bg-background overflow-hidden transform-gpu will-change-transform [backface-visibility:hidden]"
     >
       <div
         ref={firstRef}
-        className="absolute text-center font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-8xl 4xl:text-9xl leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32 text-foreground"
+        className="absolute text-center font-montserrat font-bold text-foreground leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl"
         style={{ visibility: "hidden" }}
       >
         We are a fully integrated design firm
@@ -129,7 +124,7 @@ export default function HeroTextFadeScroll() {
 
       <div
         ref={secondRef}
-        className="absolute text-center font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-8xl 4xl:text-9xl leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32 text-foreground"
+        className="absolute text-center font-montserrat font-bold text-foreground leading-[1.2] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl"
         style={{ visibility: "hidden" }}
       >
         based in Addis Ababa, Ethiopia

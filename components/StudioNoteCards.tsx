@@ -14,8 +14,8 @@ export function StudioNotesCard() {
       id="studio-notes"
       className={cn(
         "scroll-mt-20 font-montserrat",
-        "pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-28 4xl:pt-32",
-        "pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-28 3xl:pb-32 4xl:pb-36"
+        "pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32",
+        "pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-[112px] 3xl:pb-32 4xl:pb-36"
       )}
       aria-labelledby="studio-notes-heading"
     >
@@ -42,7 +42,7 @@ export function StudioNotesCard() {
           <div
             className={cn(
               "absolute flex items-center justify-center",
-              "inset-y-2 inset-x-4 sm:inset-y-3 sm:inset-x-6 md:inset-y-4 md:inset-x-8 lg:inset-y-5 lg:inset-x-12 xl:inset-y-6 xl:inset-x-16 2xl:inset-y-8 2xl:inset-x-20 3xl:inset-y-10 3xl:inset-x-24 4xl:inset-y-12 4xl:inset-x-28"
+              "inset-y-2 inset-x-4 sm:inset-y-3 sm:inset-x-6 md:inset-y-4 md:inset-x-8 lg:inset-y-5 lg:inset-x-12 xl:inset-y-6 xl:inset-x-16 2xl:inset-y-8 2xl:inset-x-20 3xl:inset-y-10 3xl:inset-x-24 4xl:inset-y-12 4xl:inset-x-[112px]"
             )}
           >
             <Link

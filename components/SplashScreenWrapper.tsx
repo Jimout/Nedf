@@ -1,58 +1,46 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { usePathname } from "next/navigation"
-import SplashScreen from "./SplashScreen"
+import { useEffect, useState } from "react";
+import SplashScreen from "./SplashScreen";
+
+const STORAGE_KEY = "nedf-splash-shown";
+
+function getShouldShowSplash(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return !sessionStorage.getItem(STORAGE_KEY);
+  } catch {
+    return false;
+  }
+}
+
+function setSplashShown(): void {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, "true");
+  } catch {
+    // ignore
+  }
+}
 
 export default function SplashScreenWrapper() {
-  const [showSplash, setShowSplash] = useState(false)
-  const [isHomePage, setIsHomePage] = useState(false)
-  const [isPageReady, setIsPageReady] = useState(false)
-  const pathname = usePathname()
+  const [showSplash, setShowSplash] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (pathname === "/") {
-      setIsHomePage(true)
-      setShowSplash(true)
-      
-      // Wait for page to be ready
-      const readyTimer = setTimeout(() => {
-        setIsPageReady(true)
-      }, 1000)
-      
-      // Hide splash screen after minimum time and page is ready
-      const splashTimer = setTimeout(() => {
-        setShowSplash(false)
-      }, 3000)
-      
-      return () => {
-        clearTimeout(readyTimer)
-        clearTimeout(splashTimer)
-      }
-    } else {
-      setIsHomePage(false)
-      setShowSplash(false)
-      setIsPageReady(true)
-    }
-  }, [pathname])
+    setMounted(true);
+  }, []);
 
-  // Ensure page background is always visible during transitions
   useEffect(() => {
-    if (isHomePage) {
-      document.body.style.backgroundColor = 'white'
-    } else {
-      document.body.style.backgroundColor = ''
-    }
-    
-    return () => {
-      document.body.style.backgroundColor = ''
-    }
-  }, [isHomePage])
+    if (!mounted) return;
+    setShowSplash(getShouldShowSplash());
+  }, [mounted]);
 
-  // If it's the home page, always show splash screen first
-  if (isHomePage && showSplash) {
-    return <SplashScreen />
-  }
+  const handleSplashComplete = () => {
+    setSplashShown();
+    setShowSplash(false);
+  };
 
-  return null
+  if (!mounted || !showSplash) return null;
+
+  return <SplashScreen onComplete={handleSplashComplete} />;
 }

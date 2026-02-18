@@ -134,7 +134,7 @@ function MemberAvatar({ image, name }: { image: string; name: string }) {
         alt={name}
         width={160}
         height={160}
-        className="rounded-full object-cover shadow-lg w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40 3xl:w-44 3xl:h-44 4xl:w-48 4xl:h-48"
+        className="rounded-full object-cover shadow-lg w-20 h-20 sm:w-24 sm:h-24 md:w-[112px] md:h-[112px] lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40 3xl:w-44 3xl:h-44 4xl:w-48 4xl:h-48"
       />
       <div className="absolute inset-0 rounded-full bg-[#15171a] opacity-10" />
     </div>
@@ -154,7 +154,7 @@ function MemberInfo({ name, role, bio, socials }: Omit<TeamMemberCardProps, 'ima
       </div>
 
       {/* Responsive divider width (fix non-standard `w-18`) */}
-      <div className="border-t border-gray-300 dark:border-white/20 w-12 sm:w-14 md:w-16 lg:w-16 xl:w-[4.5rem] 2xl:w-20 3xl:w-24 4xl:w-28 mx-auto" />
+      <div className="border-t border-gray-300 dark:border-white/20 w-12 sm:w-14 md:w-16 lg:w-16 xl:w-[4.5rem] 2xl:w-20 3xl:w-24 4xl:w-[112px] mx-auto" />
 
       <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg text-[#333333]/80 dark:text-white/70 leading-relaxed px-2 sm:px-3 md:px-4 lg:px-4 xl:px-4 2xl:px-6 font-montserrat">
         {bio}
@@ -257,7 +257,7 @@ export function OurTeam() {
   }
 
   return (
-    <section id="OurTeam" className="pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-20 2xl:pb-24 3xl:pb-28 4xl:pb-32 w-full relative z-10">
+    <section id="OurTeam" className="pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-20 2xl:pb-24 3xl:pb-[112px] 4xl:pb-32 w-full relative z-10">
       <div className="w-full">
         <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 text-[#333333]/80 dark:text-[#ec1e24]">
           OUR TEAM

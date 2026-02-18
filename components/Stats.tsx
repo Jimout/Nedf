@@ -83,7 +83,7 @@ export default function Stats() {
     // Small delay to show transition from shuffle to count
     setTimeout(() => {
       const startTime = performance.now()
-      const targetStats = STATS_DATA.map(parseStatValue)
+      const targetStats = STATS_DATA.map((stat) => parseStatValue(stat.value))
       const startValues = animatedValues.map(parseStatValue) // Start from current shuffled values
 
       const animate = (currentTime: number) => {
@@ -157,7 +157,7 @@ export default function Stats() {
       ref={ref} 
       className="
         w-full relative z-10 
-        max-sm:-mt-4
+        mt-6 sm:mt-8 md:mt-10
         py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 2xl:py-8
       "
     >
@@ -186,24 +186,22 @@ export default function Stats() {
 function StatCard({ value, label, isCounting }: { value: string; label: string; isCounting: boolean }) {
   return (
     <div className="
-      max-sm:bg-white max-sm:p-3 max-sm:rounded-md max-sm:shadow-md
-      dark:max-sm:bg-[#15171a] 
-      dark:max-sm:border dark:max-sm:border-[#ec1e24]/20 
-      dark:max-sm:shadow-sm dark:max-sm:shadow-[#ec1e24]/5
+      max-sm:bg-card max-sm:p-3 max-sm:rounded-md max-sm:shadow-md
+      dark:max-sm:border dark:max-sm:border-primary/20
+      dark:max-sm:shadow-primary/5
       transition-all duration-200
     ">
       <div className={`
-        font-bold font-mono
-        text-[#001F4B] dark:text-[#ec1e24]
+        font-bold font-mono text-primary
         text-base sm:text-lg md:text-xl 
         lg:text-2xl xl:text-2xl 2xl:text-3xl
         transition-all duration-200 ease-out
-        ${isCounting ? 'scale-110' : 'scale-100'}
+        ${isCounting ? "scale-110" : "scale-100"}
       `}>
         {value}
       </div>
       <div className="
-        text-[#333333]/70 dark:text-white/80
+        text-muted-foreground
         text-[9px] sm:text-[10px] md:text-xs lg:text-sm
         mt-0.5 sm:mt-1
       ">

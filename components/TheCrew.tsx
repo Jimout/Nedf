@@ -251,7 +251,7 @@ export function Founders({ founders }: FoundersProps) {
             </h2>
           </div>
 
-          <div ref={foundersContainerRef} className="relative z-20 pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-20 2xl:pb-24 3xl:pb-28 4xl:pb-32">
+          <div ref={foundersContainerRef} className="relative z-20 pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-20 2xl:pb-24 3xl:pb-[112px] 4xl:pb-32">
             <div className="flex flex-col md:flex-row justify-center items-start gap-6 sm:gap-8 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14 w-full">
               {founders.map((founder, index) => (
                 <FounderCard 

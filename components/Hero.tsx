@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
 import Stats from "./Stats"
 
 // ==================== CONSTANTS ====================
@@ -158,7 +159,7 @@ function HeroLogo() {
         alt="NEDF Logo"
         width={300}
         height={300}
-        className={`${logoClasses} dark:hidden`}
+        className={cn(logoClasses, "dark:hidden")}
         priority
       />
       <Image
@@ -166,7 +167,7 @@ function HeroLogo() {
         alt="NEDF Logo Dark"
         width={300}
         height={300}
-        className={`${logoClasses} hidden dark:block`}
+        className={cn(logoClasses, "hidden dark:block")}
         priority
       />
     </div>
@@ -196,7 +197,7 @@ function HeroContent({
           style={{ height: `${lineHeight}px` }}
         >
           <span className="
-            font-thin text-[#333333]/80 dark:text-white/80 
+            font-thin text-foreground/80
             tracking-wide mr-2 max-sm:mb-[-4px]
             text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[62px] 3xl:text-[72px] 4xl:text-[80px]
             md:font-normal xl:font-normal
@@ -253,11 +254,10 @@ function AnimatedWords({
         {words.map((word, i) => (
           <span
             key={i}
-            className="
-              block font-medium leading-none whitespace-nowrap
-              text-[#002e47] dark:text-[#ec1e24]
-              text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[108px] 3xl:text-[120px] 4xl:text-[140px]
-            "
+            className={cn(
+              "block font-medium leading-none whitespace-nowrap text-primary",
+              "text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[108px] 3xl:text-[120px] 4xl:text-[140px]"
+            )}
             style={{
               height: `${lineHeight}px`,
               lineHeight: `${lineHeight}px`,

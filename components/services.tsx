@@ -54,7 +54,7 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="relative w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-28 4xl:pt-32 pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-28 3xl:pb-32 4xl:pb-36 font-montserrat"
+      className="relative w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32 pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-[112px] 3xl:pb-32 4xl:pb-36 font-montserrat"
     >
       <div className="relative w-full">
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 flex flex-col gap-3 sm:gap-4 md:gap-4 sm:flex-row sm:items-center sm:justify-between">

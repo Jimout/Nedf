@@ -28,7 +28,7 @@ export function DynamicBackground() {
 
   return (
     <div
-      className="fixed inset-0 w-full h-full bg-white dark:bg-[#15171a] transition-colors duration-300"
+      className="fixed inset-0 w-full h-full bg-background transition-colors duration-300"
       style={{
         zIndex: 0,
         backgroundImage: isDark ? darkModeGrid : lightModeGrid,

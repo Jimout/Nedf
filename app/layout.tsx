@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${montserrat.className} font-montserrat bg-white dark:bg-[#15171a]`}>
+      <body className={`${montserrat.className} font-montserrat bg-background`}>
         <SplashScreenWrapper />
         <DynamicBackground />
         <ThemeProvider 

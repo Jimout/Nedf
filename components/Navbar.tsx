@@ -24,17 +24,6 @@ const CONTACT_ITEM = {
   sectionId: "footer" 
 } as const
 
-const COLORS = {
-  LIGHT: {
-    PRIMARY: '#002e47',
-    PRIMARY_HOVER: '#001f35',
-  },
-  DARK: {
-    PRIMARY: '#ec1e24',
-    PRIMARY_HOVER: '#d11920',
-  },
-} as const
-
 const NAVIGATION_DELAY_MS = 100
 
 // ==================== TYPES ====================
@@ -158,7 +147,7 @@ function NavbarContent({
       <div className="
         w-full relative z-20 
         backdrop-blur-md 
-        bg-white/80 dark:bg-[#15171a]/80 
+        bg-background/80 
       ">
         <div className="
           flex items-center justify-between w-full 
@@ -220,7 +209,6 @@ function DesktopNavLinks({
 }) {
   return (
     <div className="
-      // Desktop menu starts at `lg` (tablet uses hamburger).
       hidden lg:flex items-center justify-center flex-1 
       gap-5 md:gap-6 lg:gap-7 xl:gap-8 2xl:gap-9 
       ml-4 md:ml-6 lg:ml-8 xl:ml-10 2xl:ml-12
@@ -259,8 +247,8 @@ function NavLink({
         "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm",
         "hover:scale-110",
         isActive 
-          ? "text-[#002e47] dark:text-[#ec1e24]" 
-          : "text-[#333333] dark:text-white"
+          ? "text-primary" 
+          : "text-foreground"
       )}
     >
       {item.name}
@@ -297,12 +285,11 @@ function ContactButton({
       onClick={(e) => onClick(e, CONTACT_ITEM)}
       className={cn(
         // Desktop-only; minimum tap target height.
-        "hidden lg:inline-flex lg:items-center lg:justify-center min-h-[44px] text-white font-medium font-montserrat whitespace-nowrap",
+        "hidden lg:inline-flex lg:items-center lg:justify-center min-h-[44px] text-primary-foreground font-medium font-montserrat whitespace-nowrap",
         "px-3.5 md:px-4 lg:px-5 xl:px-5 2xl:px-6",
         "py-1.5 md:py-2 lg:py-2 xl:py-2.5 2xl:py-2.5",
         "text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base",
-        "bg-[#002e47] hover:bg-[#001f35]",
-        "dark:bg-[#ec1e24] dark:hover:bg-[#d11920]",
+        "bg-primary hover:bg-primary/90",
         "shadow-md hover:shadow-lg",
         "transition-all duration-300 ease-out",
         "hover:scale-105 active:scale-95"
@@ -328,8 +315,8 @@ function HamburgerButton({
       className="
         lg:hidden inline-flex items-center justify-center 
         min-w-[44px] min-h-[44px] p-2.5 -mr-2 rounded-lg
-        text-[#333333] dark:text-[#ec1e24]
-        active:bg-gray-100 dark:active:bg-white/10
+        text-foreground
+        active:bg-muted
         transition-colors duration-150
         touch-manipulation
       "
@@ -386,8 +373,8 @@ function MobileMenu({
     <div
       className="
         lg:hidden absolute left-0 right-0 top-full z-[120]
-        bg-white/95 dark:bg-[#15171a]/95 backdrop-blur-md
-        border-t border-gray-200/50 dark:border-white/10 shadow-xl
+        bg-background/95 backdrop-blur-md
+        border-t border-border shadow-xl
         overflow-hidden
       "
       style={{
@@ -433,9 +420,9 @@ function MobileNavLink({
       className="
         py-3 px-3 rounded-lg font-medium
         text-sm sm:text-base
-        text-[#333333] dark:text-white
-        hover:bg-gray-100 dark:hover:bg-white/5 
-        hover:pl-4 hover:text-[#002e47] dark:hover:text-[#ec1e24]
+        text-foreground
+        hover:bg-muted
+        hover:pl-4 hover:text-primary
         transition-all duration-200
       "
     >
@@ -455,10 +442,10 @@ function MobileContactButton({
       onClick={onClick}
       className="
         mt-2 w-full text-center px-4 py-3
-        text-white font-medium
+        text-primary-foreground font-medium
         text-sm sm:text-base
-        bg-[#002e47] dark:bg-[#ec1e24]
-        hover:bg-[#001f35] dark:hover:bg-[#d11920]
+        bg-primary
+        hover:bg-primary/90
         shadow-md hover:shadow-lg
         transition-all duration-300
         hover:scale-[1.02] active:scale-95
