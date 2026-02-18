@@ -63,10 +63,11 @@ export default function Stats() {
     setIsShuffling(false)
   }
 
-  function parseStatValue(value: string): { number: number; suffix: string } {
-    const numberMatch = value.match(/\d+/)
-    const number = numberMatch ? parseInt(numberMatch[0]) : 0
-    const suffix = value.includes("%") ? "%" : value.includes("+") ? "+" : ""
+  function parseStatValue(value: string | number | undefined): { number: number; suffix: string } {
+    const s = typeof value === "string" ? value : String(value ?? "")
+    const numberMatch = s.match(/\d+/)
+    const number = numberMatch ? parseInt(numberMatch[0], 10) : 0
+    const suffix = s.includes("%") ? "%" : s.includes("+") ? "+" : ""
     return { number, suffix }
   }
 

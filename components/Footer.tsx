@@ -1,90 +1,114 @@
 "use client";
 
-import Link from "next/link";
-import { SiInstagram, SiTiktok, SiLinkedin, SiPinterest, SiBehance } from "react-icons/si";
+import { Instagram, Linkedin } from "lucide-react";
 
-export default function Footer() {
-  const socialIcons = [
-    { Icon: SiInstagram, label: "Instagram", href: "https://www.instagram.com/nedf_studios/" },
-    { Icon: SiTiktok, label: "TikTok", href: "https://www.tiktok.com/@nedf_studios" },
-    { Icon: SiLinkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/nedfstudios" },
-    { Icon: SiPinterest, label: "Pinterest", href: "https://www.pinterest.com/nedfstudios" },
-    { Icon: SiBehance, label: "Behance", href: "https://www.behance.net/ndfjkindia" },
-  ];
+const socialIcons = [
+  { Icon: Instagram, label: "Instagram", href: "https://www.instagram.com/nedf_studios/" },
+  { Icon: () => (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/>
+    </svg>
+  ), label: "TikTok", href: "https://www.tiktok.com/@nedf_studios" },
+  { Icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/nedfstudios" },
+];
 
+const navLinks = [
+  { label: "Home", href: "#" },
+  { label: "Services", href: "#" },
+  { label: "Portfolio", href: "#" },
+  { label: "About", href: "#" },
+  { label: "Contact", href: "#" },
+];
+
+const Footer = () => {
   return (
-    <footer id="footer" className="bg-white dark:bg-[#15171a] text-gray-800 dark:text-white relative min-h-screen flex flex-col justify-center scroll-smooth scroll-mt-20">
-      {/* Divider Line */}
-      <div
-        className="mx-auto mb-8 bg-[#001F4B] dark:bg-[#ec1e24]"
-        style={{
-          width: "90%",
-          height: "1px",
-          borderRadius: "3px",
-        }}
-      />
+    <footer className="relative px-6 md:px-16 pt-12 pb-8">
+      {/* Subtle top divider */}
+      <div className="w-full h-px mb-10" style={{ background: "hsla(0,0%,100%,0.15)" }} />
 
-      {/* Main Grid */}
-      <div className="w-full mx-auto flex flex-col md:flex-row justify-between px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-20 gap-10 flex-grow items-center">
-        {/* Logo */}
-        <div className="flex flex-col justify-center items-center md:items-start md:pl-8 lg:pl-12 xl:pl-16">
-          <h2 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#333333]/80 dark:text-white/70 font-medium font-montserrat">NEDF</h2>
-          <p className="text-xl sm:text-2xl md:text-3xl text-[#001F4B]/60 dark:text-[#ec1e24]/60 mt-2 font-montserrat">Less, but Better.</p>
-        </div>
-
-        {/* Navigation Links - 2 Columns */}
-        <div className="flex flex-col justify-center items-center md:items-start">
-          <div className="grid grid-cols-2 gap-y-6 text-sm text-[#333333] dark:text-white/70 font-montserrat" style={{ columnGap: '60px' }}>
-            <Link href="/" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Home</Link>
-            <Link href="/#services" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Services</Link>
-            <Link href="/#portfolio" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Portfolio</Link>
-            <Link href="/#crew" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">About</Link>
-            <Link href="/#steps" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">How NEDF Works</Link>
-            <Link href="/#OurTeam" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Our Team</Link>
-            <Link href="/#testimonials" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Client Reflection</Link>
-            <Link href="/#studio-notes" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Studio Notes</Link>
-            <Link href="/#subscription" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Subscribe</Link>
-            <Link href="/#footer" className="hover:text-[#001F4B] dark:hover:text-[#ec1e24] transition duration-300">Contact Us</Link>
-          </div>
-        </div>
-
-        {/* Contact Us */}
-        <div className="flex flex-col justify-center items-center md:items-start">
-          <h3 className="text-3xl sm:text-4xl md:text-5xl text-[#001F4B] dark:text-[#ec1e24] font-medium mb-3 font-montserrat">Contact Us</h3>
-          <div className="flex flex-row gap-2 text-base sm:text-lg mb-4 text-center md:text-left text-[#333333] dark:text-white/70 font-montserrat">
-            <span>
-              <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24] font-montserrat">Call</span>: +251945289012
-            </span>
-            <span>/</span>
-            <span>+251900672518</span>
-          </div>
-          <p className="text-base sm:text-lg mb-4 text-center md:text-left text-[#333333] dark:text-white/70 font-montserrat">
-            <span className="font-medium text-[#001F4B]/60 dark:text-[#ec1e24] font-montserrat">Email</span>: Nedf123@gmail.com
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+        {/* Logo + tagline */}
+        <div className="flex flex-col gap-1">
+          <h3
+            className="text-2xl font-extrabold tracking-tight"
+            style={{ fontFamily: "var(--font-display)", color: "hsla(0,0%,100%,0.95)" }}
+          >
+            NEDF
+          </h3>
+          <p className="text-xs italic" style={{ color: "hsla(0,0%,100%,0.5)" }}>
+            Less, but Better.
           </p>
+        </div>
 
-          {/* Social Icons */}
-          <div className="flex gap-2 mb-4 justify-center md:justify-start">
-            {socialIcons.map(({ Icon, label, href }, idx) => (
-              <a
-                key={idx}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="w-8 h-8 rounded-full border border-[#001F4B] dark:border-[#ec1e24] flex items-center justify-center text-[#001F4B] dark:text-[#ec1e24]
-                           hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white transition-colors duration-300"
-              >
-                <Icon size={12} />
-              </a>
-            ))}
+        {/* Nav links */}
+        <nav className="flex flex-wrap gap-x-6 gap-y-2">
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-sm transition-colors duration-200"
+              style={{
+                fontFamily: "var(--font-body)",
+                color: "hsla(0,0%,100%,0.6)",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "hsla(0,0%,100%,0.95)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "hsla(0,0%,100%,0.6)")}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* Contact info */}
+        <div className="flex flex-col gap-2 text-sm" style={{ color: "hsla(0,0%,100%,0.6)" }}>
+          <div className="flex flex-wrap items-center gap-x-1">
+            <span>Call:</span>
+            <a href="tel:+251945289012" className="hover:underline" style={{ color: "hsla(0,0%,100%,0.85)" }}>+251945289012</a>
+            <span>/</span>
+            <a href="tel:+251900672518" className="hover:underline" style={{ color: "hsla(0,0%,100%,0.85)" }}>+251900672518</a>
           </div>
+          <a href="mailto:Nedf123@gmail.com" className="hover:underline" style={{ color: "hsla(0,0%,100%,0.85)" }}>
+            Nedf123@gmail.com
+          </a>
+        </div>
 
-          <p className="font-bold text-[#001F4B]/60 dark:text-[#ec1e24]/60 text-center md:text-left font-montserrat">Follow Us</p>
+        {/* Social icons */}
+        <div className="flex items-center gap-3">
+          {socialIcons.map(({ Icon, label, href }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+              style={{
+                background: "hsla(0,0%,100%,0.12)",
+                color: "hsla(0,0%,100%,0.7)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "hsla(0,0%,100%,0.25)";
+                e.currentTarget.style.color = "hsla(0,0%,100%,1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "hsla(0,0%,100%,0.12)";
+                e.currentTarget.style.color = "hsla(0,0%,100%,0.7)";
+              }}
+            >
+              <Icon className="w-4 h-4" />
+            </a>
+          ))}
         </div>
       </div>
 
-      {/* Footer Bottom */}
-      <div className="bg-[#001F4B] dark:bg-[#15171a] text-white text-center text-sm py-3 px-6 lg:px-[200px] dark:px-0 dark:mx-auto dark:w-[90%] dark:shadow-[0_-4px_8px_rgba(236,30,36,0.3)] font-montserrat mt-auto">&copy; 2025, NEDF</div>
+      {/* Bottom copyright */}
+      <div className="max-w-6xl mx-auto mt-10 pt-6" style={{ borderTop: "1px solid hsla(0,0%,100%,0.1)" }}>
+        <p className="text-xs text-center" style={{ color: "hsla(0,0%,100%,0.35)", fontFamily: "var(--font-body)" }}>
+          © 2025 NEDF. All rights reserved.
+        </p>
+      </div>
     </footer>
   );
-}
+};
+
+export default Footer;

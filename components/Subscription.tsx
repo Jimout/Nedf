@@ -1,71 +1,70 @@
-"use client"
+import { ArrowUpRight } from "lucide-react";
 
-import React, { useState } from "react"
+const marqueeItems = Array(10).fill("LET'S CHAT");
 
-export default function Subscription() {
-  const [email, setEmail] = useState("")
-  const [isSubscribed, setIsSubscribed] = useState(false)
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (email) {
-      setIsSubscribed(true)
-      setEmail("")
-      // Here you would typically send the email to your backend
-      console.log("Subscribed:", email)
-    }
-  }
-
+const GetInTouch = () => {
   return (
-    <div className="relative py-12 sm:py-16 md:py-20 lg:py-24">
-      <div className="w-full max-w-none">
-        {/* Title and Subtitle */}
-        <div className="text-center mb-8 sm:mb-10 md:mb-12">
-          <h2 
-            className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 font-montserrat tracking-tight text-center dark:text-[#ec1e24]"
-            style={{ color: 'rgba(51, 51, 51, 0.8)' }}
-          >
-            Stay Updated with NEDF
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-300 max-w-4xl mx-auto px-4 sm:px-0">
-            Subscribe to get notified whenever we publish a new project or blog post.
-          </p>
-        </div>
+    <section className="relative min-h-screen flex flex-col overflow-hidden">
+      {/* Giant "Get in Touch" heading */}
+      <div className="relative z-10 pt-12 md:pt-20 px-6 md:px-16">
+        <h2
+          className="text-[18vw] md:text-[16vw] leading-[0.85] font-extrabold tracking-tighter text-primary-foreground select-none"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Get in Touch
+        </h2>
+      </div>
 
-        {/* Subscription Form */}
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
-          <form onSubmit={handleSubmit} className="flex flex-row gap-0">
-            {/* Email Input */}
-            <div className="flex-1">
-              <input
-                type="email"
-                value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                placeholder="Enter Your Email"
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base text-gray-900 dark:text-white bg-white dark:bg-[#15171a] border border-gray-300 dark:border-white/20 rounded-none focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:border-transparent transition-all duration-300"
-                required
-              />
-            </div>
-            
-            {/* Subscribe Button */}
-            <button
-              type="submit"
-              className="px-4 sm:px-8 py-3 sm:py-4 bg-[#001F4B] dark:bg-[#ec1e24] text-white font-bold text-xs sm:text-sm md:text-base rounded-none hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] focus:ring-offset-2 whitespace-nowrap flex-shrink-0"
+      {/* Single row marquee */}
+      <div className="relative z-10 mt-4 overflow-hidden whitespace-nowrap">
+        <div className="animate-marquee inline-flex items-center gap-16">
+          {[...marqueeItems, ...marqueeItems].map((text, i) => (
+            <span
+              key={i}
+              className="text-sm md:text-base font-semibold uppercase tracking-[0.35em] text-primary-foreground/90 select-none"
+              style={{ fontFamily: "var(--font-body)" }}
             >
-              Subscribe Now
-            </button>
-          </form>
-          
-          {/* Success Message */}
-          {isSubscribed && (
-            <div className="mt-4 text-center px-4">
-              <p className="text-sm sm:text-base font-medium" style={{ color: '#ec1e24' }}>
-                Thank you for subscribing! You'll receive updates from NEDF.
-              </p>
-            </div>
-          )}
+              {text}
+            </span>
+          ))}
         </div>
       </div>
-    </div>
-  )
-}
+
+      {/* Spacer + CTA */}
+      <div className="relative z-10 flex-1 flex items-end justify-center pb-16 md:pb-24 pt-16">
+        <a
+          href="mailto:hello@example.com"
+          className="group relative inline-flex items-center justify-center"
+        >
+          {/* Glossy button */}
+          <div
+            className="relative px-16 md:px-24 py-8 md:py-10 rounded-3xl transition-transform duration-300 group-hover:scale-105 group-active:scale-95"
+            style={{
+              background:
+                "linear-gradient(180deg, hsla(30, 60%, 95%, 0.95) 0%, hsla(25, 50%, 88%, 0.9) 100%)",
+              boxShadow:
+                "0 4px 40px hsla(18, 80%, 40%, 0.3), inset 0 1px 0 hsla(0, 0%, 100%, 0.6), 0 20px 60px -10px hsla(18, 90%, 30%, 0.25)",
+              border: "1px solid hsla(0, 0%, 100%, 0.4)",
+            }}
+          >
+            <span
+              className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight"
+              style={{
+                fontFamily: "var(--font-display)",
+                color: "hsl(18, 90%, 45%)",
+              }}
+            >
+              Book Discovery Call
+            </span>
+            <ArrowUpRight
+              className="inline-block ml-4 w-8 h-8 md:w-10 md:h-10 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+              style={{ color: "hsl(18, 90%, 45%)" }}
+            />
+          </div>
+        </a>
+      </div>
+    </section>
+  );
+};
+
+export default GetInTouch;
