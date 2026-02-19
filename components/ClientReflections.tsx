@@ -127,7 +127,7 @@ export default function SlidingTestimonials() {
     <div id="testimonials" className="relative py-12 sm:py-16 md:py-20 xl:py-24 2xl:py-[112px] 3xl:py-32 4xl:py-36">
       {/* Title - responsive typography */}
       <div className="w-full pb-8 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
-        <p className="text-center text-3xl font-bold sm:text-4xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl font-montserrat tracking-tight text-[#333333]/80 dark:text-[#ec1e24]">
+        <p className="text-center text-3xl font-bold sm:text-4xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl font-montserrat tracking-tight text-foreground/80 dark:text-primary">
           CLIENT REFLECTION
         </p>
       </div>
@@ -154,15 +154,15 @@ export default function SlidingTestimonials() {
             {[...testimonials, ...testimonials].map((testimonial, index) => (
               <div
                 key={`${testimonial.id}-${index}`}
-                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] xl:w-[560px] 2xl:w-[640px] 3xl:w-[700px] 4xl:w-[760px] bg-white dark:bg-[#15171a] p-6 sm:p-6 md:p-6 xl:p-7 2xl:p-8 3xl:p-9 4xl:p-10 border border-gray-300 dark:border-white/10 mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 hover:scale-105 transition-all duration-300 cursor-pointer"
+                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] xl:w-[560px] 2xl:w-[640px] 3xl:w-[700px] 4xl:w-[760px] rounded-lg border border-border bg-card p-6 sm:p-6 md:p-6 xl:p-7 2xl:p-8 3xl:p-9 4xl:p-10 shadow-lg ring-1 ring-border/30 mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl hover:ring-primary/20"
               >
                 {/* Quotation Marks */}
-                <div className="text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-8xl 4xl:text-9xl text-gray-300 dark:text-[#ec1e24] font-bold mb-4 xl:mb-5 2xl:mb-6 3xl:mb-6 4xl:mb-8">
+                <div className="text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-8xl 4xl:text-9xl text-muted dark:text-primary font-bold mb-4 xl:mb-5 2xl:mb-6 3xl:mb-6 4xl:mb-8">
                   "
                 </div>
 
                 {/* Testimonial Text */}
-                <blockquote className="text-[#333333] dark:text-gray-300 text-base sm:text-base md:text-base xl:text-lg 2xl:text-xl 3xl:text-xl 4xl:text-2xl leading-relaxed mb-6 xl:mb-7 2xl:mb-8 3xl:mb-8 4xl:mb-10">
+                <blockquote className="text-foreground text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base leading-relaxed mb-6 xl:mb-7 2xl:mb-8 3xl:mb-8 4xl:mb-10">
                   {testimonial.quote}
                 </blockquote>
 
@@ -177,10 +177,10 @@ export default function SlidingTestimonials() {
                   
                   {/* Name and Title */}
                   <div>
-                      <h3 className="font-bold text-[#333333] dark:text-[#ec1e24] text-sm xl:text-base 2xl:text-lg 3xl:text-lg 4xl:text-xl">
+                      <h3 className="font-bold text-foreground dark:text-primary text-sm xl:text-base 2xl:text-lg 3xl:text-lg 4xl:text-xl">
                         {testimonial.name}
                       </h3>
-                    <p className="text-[#333333] dark:text-gray-400 text-xs xl:text-sm 2xl:text-base 3xl:text-base 4xl:text-lg">
+                    <p className="text-muted-foreground text-xs xl:text-sm 2xl:text-base 3xl:text-base 4xl:text-lg">
                       {testimonial.role}, {testimonial.work}
                     </p>
                   </div>
