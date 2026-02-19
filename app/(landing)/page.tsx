@@ -29,7 +29,7 @@ const Index = () => {
         <Steps />
         {/* Studio notes section: stack on mobile, responsive heading */}
         <div id="studio-notes" className="scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-20 lg:scroll-mt-24">
-          <p className="text-center text-2xl font-bold sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-montserrat tracking-tight pt-6 sm:pt-8 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-12 mb-8 sm:mb-10 md:mb-12 lg:mb-12 xl:mb-14 2xl:mb-16 text-[#333333]/80 dark:text-[#ec1e24]">
+          <p className="text-center text-2xl font-bold sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-montserrat tracking-tight pt-6 sm:pt-8 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-12 mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 text-foreground/80 dark:text-primary">
             STUDIO NOTES
           </p>
           <StudioNotesCard />

@@ -23,7 +23,7 @@ export function StudioNotesCard() {
         <div
           className={cn(
             "relative w-full overflow-hidden bg-muted",
-            "min-h-[200px] sm:min-h-[240px] md:min-h-[280px] lg:min-h-[320px] xl:min-h-[360px] 2xl:min-h-[400px] 3xl:min-h-[440px] 4xl:min-h-[480px]"
+            "min-h-[260px] sm:min-h-[300px] md:min-h-[360px] lg:min-h-[420px] xl:min-h-[480px] 2xl:min-h-[540px] 3xl:min-h-[600px] 4xl:min-h-[660px]"
           )}
         >
           {/* Background image */}
@@ -42,26 +42,26 @@ export function StudioNotesCard() {
           <div
             className={cn(
               "absolute flex items-center justify-center",
-              "inset-y-2 inset-x-4 sm:inset-y-3 sm:inset-x-6 md:inset-y-4 md:inset-x-8 lg:inset-y-5 lg:inset-x-12 xl:inset-y-6 xl:inset-x-16 2xl:inset-y-8 2xl:inset-x-20 3xl:inset-y-10 3xl:inset-x-24 4xl:inset-y-12 4xl:inset-x-[112px]"
+              "inset-y-3 inset-x-4 sm:inset-y-4 sm:inset-x-6 md:inset-y-5 md:inset-x-8 lg:inset-y-6 lg:inset-x-10 xl:inset-y-8 xl:inset-x-14 2xl:inset-y-10 2xl:inset-x-16 3xl:inset-y-12 3xl:inset-x-20 4xl:inset-y-14 4xl:inset-x-24"
             )}
           >
             <Link
               href="/blog"
               className={cn(
-                "flex w-full flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-10 2xl:gap-12 sm:flex-row sm:items-center sm:justify-between",
+                "flex w-full flex-col gap-5 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 sm:flex-row sm:items-center sm:justify-between",
                 "border border-border bg-background text-foreground shadow-lg",
-                "p-4 sm:p-5 md:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-14 4xl:p-16",
+                "p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 2xl:p-16 3xl:p-20 4xl:p-24",
                 "transition-transform hover:scale-[1.01]"
               )}
             >
               <div className="min-w-0 flex-1">
                 <h2
                   id="studio-notes-heading"
-                  className="mb-2 sm:mb-2.5 md:mb-3 lg:mb-4 xl:mb-6 2xl:mb-6 3xl:mb-8 4xl:mb-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold leading-tight tracking-tight"
+                  className="mb-3 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-10 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold leading-tight tracking-tight"
                 >
                   {STUDIO_NOTES_HEADING}
                 </h2>
-                <p className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-muted-foreground">
+                <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl text-muted-foreground">
                   {SITE.studioNotesTagline}
                 </p>
               </div>
@@ -69,13 +69,13 @@ export function StudioNotesCard() {
               <div className="mt-2 flex shrink-0 items-center justify-end sm:mt-0">
                 <span
                   className={cn(
-                    "flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 items-center justify-center rounded-full",
+                    "flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-11 lg:w-11 xl:h-12 xl:w-12 2xl:h-14 2xl:w-14 items-center justify-center rounded-full",
                     "bg-primary text-primary-foreground",
                     "transition-transform hover:scale-110"
                   )}
                   aria-hidden
                 >
-                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-5 md:w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6" strokeWidth={2.5} />
+                  <ArrowRight className="h-5 w-5 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-6 lg:w-6 xl:h-7 xl:w-7 2xl:h-8 2xl:w-8" strokeWidth={2.5} />
                 </span>
               </div>
             </Link>
