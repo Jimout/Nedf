@@ -92,6 +92,7 @@ export default function Portfolio() {
 
       {/* Full-width Section */}
       <section id="portfolio" className="pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32 font-montserrat relative overflow-hidden w-full">
+        <div className="2xl:-mx-12 2xl:px-16 3xl:-mx-16 3xl:px-20 4xl:-mx-20 4xl:px-24">
         <div
           className={`flex justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 3xl:gap-16 4xl:gap-20 mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
@@ -184,7 +185,7 @@ export default function Portfolio() {
 
               {/* Middle Image */}
               <div
-                className={`relative w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[520px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
+                className={`relative min-w-0 w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[520px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -303,6 +304,7 @@ export default function Portfolio() {
               }}
             />
           ))}
+        </div>
         </div>
       </section>
     </>
