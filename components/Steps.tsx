@@ -315,7 +315,7 @@ export default function Steps() {
                     <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base text-primary font-medium">
                       {activeStep.role}
                     </p>
-                    <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl 4xl:text-xl text-foreground leading-relaxed font-light">
+                    <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-[1.35rem] 3xl:text-[1.5rem] 4xl:text-[1.65rem] text-foreground leading-relaxed font-light">
                       "{activeStep.quote}"
                     </p>
                   </div>

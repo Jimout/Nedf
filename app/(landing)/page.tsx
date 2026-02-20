@@ -21,7 +21,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Main: responsive top padding for fixed nav (mobile→4K) */}
       <main className="pt-14 sm:pt-14 md:pt-14 lg:pt-14 xl:pt-16 2xl:pt-16 3xl:pt-20 4xl:pt-24">
-        <HeroWithStats />
+        <div className="2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24">
+          <HeroWithStats />
+        </div>
         <HeroTextFadeScroll />
         <ServicesSection />
         <Portfolio />
