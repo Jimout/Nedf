@@ -159,6 +159,8 @@ export default function Stats() {
         w-full relative z-10 
         mt-6 sm:mt-8 md:mt-10
         py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 2xl:py-8
+        2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw]
+        2xl:px-16 3xl:px-20 4xl:px-24
       "
     >
       <div className="

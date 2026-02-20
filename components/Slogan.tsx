@@ -6,7 +6,7 @@ import SplitType from "split-type";
 gsap.registerPlugin(ScrollTrigger);
 
 const TEXT_CLASS =
-  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl 3xl:text-7xl 4xl:text-8xl";
+  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4.75rem] 3xl:text-[5.25rem] 4xl:text-[6.5rem]";
 
 export default function HeroTextFadeScroll() {
   const sectionRef = useRef<HTMLDivElement>(null);

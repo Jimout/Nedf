@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { Search } from "lucide-react"
 import Pagination from "@/components/Pagination"
 import { AnimatePresence, motion } from "framer-motion"
@@ -122,7 +123,7 @@ function FilterTags({
   onTagChange: (tag: FilterTag) => void
 }) {
   return (
-    <div className="flex gap-8 sm:gap-9 md:gap-10 lg:gap-11 xl:gap-12 2xl:gap-14 border-b border-gray-300 dark:border-white/20 mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 overflow-x-auto no-scrollbar">
+    <div id="portfolio-filter" className="flex gap-8 sm:gap-9 md:gap-10 lg:gap-11 xl:gap-12 2xl:gap-14 border-b border-gray-300 dark:border-white/20 mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 overflow-x-auto no-scrollbar">
       {tags.map((tag) => (
         <button
           key={tag}
@@ -233,11 +234,23 @@ function EmptyState() {
 /**
  * Portfolio page with filterable project grid
  */
+const VALID_FILTER_TAGS: FilterTag[] = ["All", "Architecture", "Interior", "Visualization"]
+
 export default function PortfolioPage() {
+  const searchParams = useSearchParams()
   const [activeTag, setActiveTag] = useState<FilterTag>("All")
   const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
   const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const filter = searchParams.get("filter")
+    if (filter && VALID_FILTER_TAGS.includes(filter as FilterTag)) {
+      setActiveTag(filter as FilterTag)
+      setPage(1)
+      document.getElementById("portfolio-filter")?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }, [searchParams])
 
   useEffect(() => {
     const checkIfDesktop = () => setIsDesktop(window.innerWidth >= RESPONSIVE_BREAKPOINT_MD)
