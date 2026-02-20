@@ -146,6 +146,7 @@ export function Founders({ founders }: FoundersProps) {
   return (
     <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-36 2xl:pt-40 3xl:pt-44 4xl:pt-48">
       <section id="TheCrew" className="w-full">
+        <div className="2xl:-mx-12 2xl:px-16 3xl:-mx-16 3xl:px-20 4xl:-mx-20 4xl:px-24">
         <style>{`
           @keyframes fadeInUp {
             from {
@@ -236,7 +237,7 @@ export function Founders({ founders }: FoundersProps) {
 
           <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16 pt-0">
             <div className="w-full max-w-none animate-on-scroll visible">
-              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl 3xl:text-xl 4xl:text-xl text-muted-foreground leading-relaxed text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
+              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl 3xl:text-[1.25rem] 4xl:text-[1.35rem] text-muted-foreground leading-relaxed text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
                 NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural design, interior
                 spaces, and high-end visualizations. We blend design with technology to create thoughtful, innovative, and
                 visually compelling environments. From concept to execution, our work reflects a commitment to clarity,
@@ -246,13 +247,13 @@ export function Founders({ founders }: FoundersProps) {
           </div>
 
           <div ref={meetFoundersRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
-            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight animate-on-scroll visible text-foreground/80 dark:text-primary">
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold font-montserrat tracking-tight animate-on-scroll visible text-foreground/80 dark:text-primary">
               MEET THE FOUNDERS
             </h2>
           </div>
 
           <div ref={foundersContainerRef} className="relative z-20 pb-12 sm:pb-14 md:pb-16 lg:pb-20 xl:pb-20 2xl:pb-24 3xl:pb-[112px] 4xl:pb-32">
-            <div className="flex flex-col md:flex-row justify-center items-start gap-6 sm:gap-8 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14 w-full">
+            <div className="flex flex-col md:flex-row justify-center items-start gap-6 sm:gap-8 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14 w-full min-w-0">
               {founders.map((founder, index) => (
                 <FounderCard 
                   key={founder.id} 
@@ -262,6 +263,7 @@ export function Founders({ founders }: FoundersProps) {
               ))}
             </div>
           </div>
+        </div>
         </div>
       </section>
     </div>
@@ -297,10 +299,10 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
             )}
           </div>
           <div className="px-1">
-            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg font-bold text-foreground mb-1">
+            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl font-bold text-foreground mb-1">
               {founder.name}
             </h3>
-            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm font-medium text-muted-foreground">
+            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm 3xl:text-base 4xl:text-base font-medium text-muted-foreground">
               {founder.title}
             </p>
           </div>
@@ -308,7 +310,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       </CometCard>
 
       <div className="space-y-2">
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base text-foreground leading-relaxed">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-foreground leading-relaxed">
           {founder.description}
         </p>
 
@@ -326,7 +328,7 @@ function SocialLinks({ social }: { social: SocialLinks }) {
     <div className="pt-3 sm:pt-3 md:pt-4 lg:pt-4 xl:pt-4 2xl:pt-5">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-base font-medium text-muted-foreground mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4 hover:text-primary transition-colors duration-300 cursor-pointer flex items-center gap-2"
+        className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-base 3xl:text-lg 4xl:text-lg font-medium text-muted-foreground mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4 hover:text-primary transition-colors duration-300 cursor-pointer flex items-center gap-2"
       >
         Follow Us
         <span className={cn(
