@@ -131,7 +131,7 @@ export default function Portfolio() {
               {/* Left column */}
               <div className="flex flex-col w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] items-start">
                 <div
-                  className={`relative w-full h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[520px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
+                  className={`relative w-full h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[760px] 3xl:h-[820px] 4xl:h-[1080px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -188,7 +188,7 @@ export default function Portfolio() {
 
               {/* Middle Image */}
               <div
-                className={`relative min-w-0 w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[520px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
+                className={`relative min-w-0 w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[760px] 3xl:h-[820px] 4xl:h-[1080px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -207,7 +207,7 @@ export default function Portfolio() {
 
               {/* Right column */}
               <div
-                className={`relative w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[520px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
+                className={`relative w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[760px] 3xl:h-[820px] 4xl:h-[1080px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{
