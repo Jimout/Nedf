@@ -43,18 +43,21 @@ const policyLinks = [
 
 export default function Footer() {
   return (
-    <footer id="footer" className="bg-footer text-footer-foreground border-t-2 border-footer-border">
+    <footer
+      id="footer"
+      className="bg-footer text-footer-foreground border-t-2 border-footer-border 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+    >
       {/* Main content */}
-      <div className="max-w-7xl 3xl:max-w-screen-2xl 4xl:max-w-screen-2xl mx-auto px-6 3xl:px-10 4xl:px-12 py-16 3xl:py-20 4xl:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 3xl:gap-16 4xl:gap-20">
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-12 sm:py-14 md:py-16 lg:py-16 xl:py-20 2xl:py-20 3xl:py-24 4xl:py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-16 2xl:gap-20 3xl:gap-24 4xl:gap-28">
           {/* Left column */}
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8 md:space-y-8 2xl:space-y-10 3xl:space-y-10 4xl:space-y-12">
             {/* Logo */}
            
 
             {/* Headline */}
             <div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold leading-tight text-footer-foreground">
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold leading-tight text-footer-foreground">
                 WHERE EVERY
                 <br />
                 IDEA BECOMES
@@ -64,36 +67,36 @@ export default function Footer() {
             </div>
 
             {/* Newsletter form */}
-            <div className="space-y-3 max-w-md">
-              <div className="flex">
+            <div className="space-y-3 sm:space-y-4 max-w-md w-full">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 bg-footer-input text-footer-foreground placeholder:text-footer-muted border border-footer-border focus:outline-none focus:ring-1 focus:ring-footer-accent"
+                  className="flex-1 min-w-0 px-3 py-2.5 sm:px-4 sm:py-3 2xl:px-4 2xl:py-3 3xl:px-5 3xl:py-3.5 4xl:px-5 4xl:py-4 text-sm sm:text-base 2xl:text-base 3xl:text-base 4xl:text-lg bg-footer-input text-footer-foreground placeholder:text-footer-muted border border-footer-border focus:outline-none focus:ring-1 focus:ring-footer-accent"
                 />
-                <button className="px-5 py-3 bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity flex items-center gap-2">
-                  <Send className="w-4 h-4" />
+                <button className="px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-6 2xl:py-3 3xl:px-7 3xl:py-3.5 4xl:px-8 4xl:py-4 bg-primary text-primary-foreground text-sm sm:text-base 2xl:text-base 3xl:text-base 4xl:text-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shrink-0">
+                  <Send className="w-4 h-4 sm:w-4 sm:h-4 4xl:w-5 4xl:h-5" />
                   Subscribe
                 </button>
               </div>
-              <p className="text-sm text-footer-muted">
+              <p className="text-xs sm:text-sm 2xl:text-sm 3xl:text-base 4xl:text-base text-footer-muted">
                 We won't flood your inbox, just sweet updates and offers!
               </p>
             </div>
           </div>
 
           {/* Right column: Quick Links | Contact side by side, Connect With Us below */}
-          <div className="flex flex-col gap-8 3xl:gap-10 4xl:gap-12">
+          <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 2xl:gap-10 3xl:gap-12 4xl:gap-14">
             {/* Row 1: Quick Links and Contact side by side */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 3xl:gap-10 4xl:gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 md:gap-10 2xl:gap-10 3xl:gap-12 4xl:gap-14">
               <div>
-                <h3 className="font-display text-lg font-semibold text-footer-accent mb-4">
+                <h3 className="font-display text-base sm:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold text-footer-accent mb-3 sm:mb-4">
                   Quick Links
                 </h3>
                 <ul className="space-y-2">
                   {quickLinks.map((link) => (
                     <li key={link.href}>
-                      <a href={link.href} className="text-footer-muted hover:text-footer-foreground transition-colors text-sm">
+                      <a href={link.href} className="text-footer-muted hover:text-footer-foreground transition-colors text-sm 2xl:text-sm 3xl:text-base 4xl:text-base">
                         {link.label}
                       </a>
                     </li>
@@ -101,10 +104,10 @@ export default function Footer() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-display text-lg font-semibold text-footer-accent mb-4">
+                <h3 className="font-display text-base sm:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold text-footer-accent mb-3 sm:mb-4">
                   Contact
                 </h3>
-                <ul className="space-y-2 text-sm text-footer-muted">
+                <ul className="space-y-2 text-sm 2xl:text-sm 3xl:text-base 4xl:text-base text-footer-muted">
                   <li>
                     <a href="mailto:Nedf123@gmail.com" className="hover:text-footer-foreground transition-colors">
                       Nedf123@gmail.com
@@ -126,18 +129,18 @@ export default function Footer() {
 
             {/* Row 2: Connect With Us Online (full width under Quick Links & Contact) */}
             <div>
-              <h3 className="font-display text-lg font-semibold text-footer-foreground mb-4">
+              <h3 className="font-display text-base sm:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold text-footer-foreground mb-3 sm:mb-4">
                 Connect With Us Online
               </h3>
-              <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
+              <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 2xl:gap-4 3xl:gap-5 4xl:gap-5">
                 {connectSocialLinks.map(({ name, href, Icon }) => (
                   <a
                     key={name}
                     href={href}
                     aria-label={name}
-                    className="text-primary hover:opacity-80 transition-opacity flex items-center justify-center min-w-[44px] min-h-[44px]"
+                    className="text-primary hover:opacity-80 transition-opacity flex items-center justify-center min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] 2xl:min-w-[44px] 2xl:min-h-[44px] 4xl:min-w-[48px] 4xl:min-h-[48px]"
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-5 h-5 2xl:w-5 2xl:h-5 4xl:w-6 4xl:h-6" />
                   </a>
                 ))}
               </div>
@@ -150,8 +153,8 @@ export default function Footer() {
       <div className="border-t border-footer-border" />
 
       {/* Bottom bar */}
-      <div className="max-w-7xl 3xl:max-w-screen-2xl 4xl:max-w-screen-2xl mx-auto px-6 3xl:px-10 4xl:px-12 py-6 3xl:py-8 4xl:py-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-footer-muted">
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-5 sm:py-6 md:py-6 lg:py-7 2xl:py-8 3xl:py-10 4xl:py-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-xs 2xl:text-sm 3xl:text-sm 4xl:text-base text-footer-muted">
           {/* Policy links */}
           <div className="flex flex-wrap gap-3">
             {policyLinks.map((link) => (

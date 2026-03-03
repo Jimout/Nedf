@@ -145,8 +145,11 @@ export function Founders({ founders }: FoundersProps) {
 
   return (
     <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-36 2xl:pt-40 3xl:pt-44 4xl:pt-48">
-      <section id="TheCrew" className="w-full">
-        <div className="2xl:-mx-12 2xl:px-16 3xl:-mx-16 3xl:px-20 4xl:-mx-20 4xl:px-24">
+      <section
+        id="TheCrew"
+        className="w-full 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      >
+        <div className="w-full">
         <style>{`
           @keyframes fadeInUp {
             from {
@@ -276,14 +279,14 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
   return (
     <div
       className={cn(
-        "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-5",
-        "w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[480px] 3xl:max-w-[520px] 4xl:max-w-[560px]",
+        "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8",
+        "w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[520px] 3xl:max-w-[580px] 4xl:max-w-[640px]",
         "mx-auto founder-card visible",
         index === 0 ? "md:order-1" : "md:order-2"
       )}
     >
       <CometCard>
-        <div className="relative w-full bg-card p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-5 border border-border flex flex-col">
+        <div className="relative w-full bg-card p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-6 3xl:p-7 4xl:p-8 border border-border flex flex-col">
           <div className="relative aspect-[3/4] w-full overflow-hidden mb-2 sm:mb-2 md:mb-2.5 lg:mb-3 xl:mb-3 2xl:mb-4 group border border-border">
             <img
               src={founder.image || "/placeholder.svg"}
@@ -299,10 +302,10 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
             )}
           </div>
           <div className="px-1">
-            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl font-bold text-foreground mb-1">
+            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl font-bold text-foreground mb-1.5">
               {founder.name}
             </h3>
-            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm 3xl:text-base 4xl:text-base font-medium text-muted-foreground">
+            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-xl font-medium text-muted-foreground">
               {founder.title}
             </p>
           </div>
@@ -310,7 +313,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       </CometCard>
 
       <div className="space-y-2">
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-foreground leading-relaxed">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-2xl text-foreground leading-relaxed">
           {founder.description}
         </p>
 

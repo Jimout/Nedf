@@ -91,29 +91,32 @@ export default function Portfolio() {
       </AnimatePresence>
 
       {/* Full-width Section */}
-      <section id="portfolio" className="pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32 font-montserrat relative overflow-hidden w-full">
-        <div className="2xl:-mx-12 2xl:px-16 3xl:-mx-16 3xl:px-20 4xl:-mx-20 4xl:px-24">
+      <section
+        id="portfolio"
+        className="pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32 font-montserrat relative overflow-hidden w-full 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      >
+        <div className="w-full">
         <div
           className={`flex justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 3xl:gap-16 4xl:gap-20 mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
           <span
-            className={`text-[10px] sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base tracking-widest transition-all duration-100 delay-50 text-muted-foreground ${
+            className={`text-[10px] sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl tracking-widest transition-all duration-100 delay-50 text-muted-foreground ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             }`}
           >
             2024
           </span>
           <h1
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-foreground/80 dark:text-primary ${
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-foreground/80 dark:text-primary ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
             PORTFOLIO
           </h1>
           <span
-            className={`text-[10px] sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base tracking-widest transition-all duration-100 delay-150 text-muted-foreground ${
+            className={`text-[10px] sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl tracking-widest transition-all duration-100 delay-150 text-muted-foreground ${
               isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
             }`}
           >
@@ -156,7 +159,7 @@ export default function Portfolio() {
                     transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                   }}
                 >
-                  <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-light text-foreground leading-[1.1] mb-3 md:mb-3 lg:mb-4 xl:mb-4 2xl:mb-5 tracking-tight">
+                  <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-light text-foreground leading-[1.1] mb-3 md:mb-3 lg:mb-4 xl:mb-4 2xl:mb-5 tracking-tight">
                     {slide.title1 === "Architectural" ? (
                       <>
                         Architectural{" "}
@@ -174,7 +177,7 @@ export default function Portfolio() {
                   <Button
                     variant="outline"
                     onClick={handleExploreClick}
-                    className="rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground px-5 md:px-6 lg:px-7 xl:px-8 2xl:px-9 py-2 md:py-2.5 lg:py-2.5 xl:py-3 2xl:py-3 text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0"
+                    className="rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground px-5 md:px-6 lg:px-7 xl:px-8 2xl:px-9 3xl:px-10 4xl:px-11 py-2 md:py-2.5 lg:py-2.5 xl:py-3 2xl:py-3 3xl:py-3.5 4xl:py-4 text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                   >

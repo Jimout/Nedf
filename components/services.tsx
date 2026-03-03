@@ -124,7 +124,7 @@ export default function ServicesSection() {
               onClick={() => setShowSubServices((v) => !v)}
               className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 xl:bottom-10 xl:right-10 2xl:bottom-12 2xl:right-12 3xl:bottom-14 3xl:right-14 4xl:bottom-16 4xl:right-16 z-20 inline-flex items-center overflow-hidden rounded-full bg-muted text-foreground shadow-md transition-opacity hover:opacity-90"
             >
-              <span className="px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold uppercase tracking-wider">
+              <span className="px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm 2xl:text-sm 3xl:text-base 4xl:text-base font-semibold uppercase tracking-wider">
                 SUB SERVICES
               </span>
               <span className="flex h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 items-center justify-center rounded-full bg-card text-card-foreground">
@@ -140,7 +140,7 @@ export default function ServicesSection() {
               )}
             >
               <div className="flex items-center justify-between border-b border-border bg-primary px-4 py-3">
-                <span className="text-sm font-semibold uppercase tracking-wider text-primary-foreground">
+                <span className="text-sm 2xl:text-base 3xl:text-base 4xl:text-lg font-semibold uppercase tracking-wider text-primary-foreground">
                   SELECT TO EXPLORE
                 </span>
                 <button
@@ -159,9 +159,9 @@ export default function ServicesSection() {
                     type="button"
                     className="group relative flex min-h-[72px] sm:min-h-[80px] flex-col items-start justify-end rounded-xl bg-muted p-3 text-left transition-colors hover:bg-muted/80 dark:bg-muted dark:hover:bg-muted/80"
                   >
-                    <span className="text-xs font-medium leading-tight text-card-foreground sm:text-sm">
-                      {sub}
-                    </span>
+<span className="text-xs font-medium leading-tight text-card-foreground sm:text-sm 2xl:text-sm 3xl:text-base 4xl:text-base">
+                                      {sub}
+                                    </span>
                     <Link
                       href={`/portfolio?filter=${getPortfolioFilter(sub, active.id)}`}
                       onClick={(e) => e.stopPropagation()}
@@ -187,21 +187,21 @@ export default function ServicesSection() {
                 >
                   <div className="flex flex-col justify-center order-2 md:order-1">
                     <div className="mb-2 sm:mb-2.5 md:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3 md:gap-3 lg:gap-4">
-                      <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 items-center justify-center rounded-full bg-card-foreground/15 text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-card-foreground">
+                      <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 2xl:h-12 2xl:w-12 3xl:h-12 3xl:w-12 4xl:h-14 4xl:w-14 items-center justify-center rounded-full bg-card-foreground/15 text-xs sm:text-sm md:text-base lg:text-lg 2xl:text-xl 3xl:text-xl 4xl:text-2xl font-semibold text-card-foreground">
                         {String(activeIndex + 1).padStart(2, "0")}
                       </span>
-                      <span className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg font-medium uppercase tracking-wider text-card-foreground/80">
+                      <span className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl font-medium uppercase tracking-wider text-card-foreground/80">
                         {active.category}
                       </span>
                     </div>
-                    <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-6 3xl:mb-8 4xl:mb-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold leading-tight text-card-foreground">
+                    <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-6 3xl:mb-8 4xl:mb-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold leading-tight text-card-foreground">
                       {active.headline}
                     </h2>
                     <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
                       <a
                         href="/#portfolio"
                         className={cn(
-                          "inline-flex w-fit items-center rounded-full px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold transition-opacity hover:opacity-90",
+                          "inline-flex w-fit items-center rounded-full px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg font-semibold transition-opacity hover:opacity-90",
                           "bg-primary text-primary-foreground"
                         )}
                       >

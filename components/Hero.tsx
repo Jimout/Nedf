@@ -32,9 +32,9 @@ const LINE_HEIGHTS = {
   MD: 88,
   LG: 110,
   XL: 140,
-  "2XL": 180,
-  "3XL": 200,
-  "4XL": 224,
+  "2XL": 200,
+  "3XL": 224,
+  "4XL": 252,
   DEFAULT: 88,
 } as const
 
@@ -141,7 +141,7 @@ function HeroSection({
     ">
       <div className="
         flex items-center justify-center 
-        gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-12 3xl:gap-14 4xl:gap-16
+        gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-14 3xl:gap-16 4xl:gap-20
       ">
         {children}
       </div>
@@ -150,7 +150,7 @@ function HeroSection({
 }
 
 function HeroLogo() {
-  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[260px] 2xl:h-[260px] 3xl:w-[300px] 3xl:h-[300px] 4xl:w-[340px] 4xl:h-[340px]"
+  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[280px] 2xl:h-[280px] 3xl:w-[320px] 3xl:h-[320px] 4xl:w-[380px] 4xl:h-[380px]"
   
   return (
     <div className="select-none">
@@ -199,7 +199,7 @@ function HeroContent({
           <span className="
             font-thin text-foreground/80
             tracking-wide mr-2 max-sm:mb-[-4px]
-            text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[70px] 3xl:text-[80px] 4xl:text-[90px]
+            text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[78px] 3xl:text-[90px] 4xl:text-[102px]
             md:font-normal xl:font-normal
           ">
             We Are
@@ -256,7 +256,7 @@ function AnimatedWords({
             key={i}
             className={cn(
               "block font-medium leading-none whitespace-nowrap text-primary",
-              "text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[120px] 3xl:text-[136px] 4xl:text-[156px]"
+              "text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[132px] 3xl:text-[150px] 4xl:text-[172px]"
             )}
             style={{
               height: `${lineHeight}px`,

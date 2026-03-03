@@ -124,7 +124,10 @@ export default function SlidingTestimonials() {
   }
 
   return (
-    <div id="testimonials" className="relative py-12 sm:py-16 md:py-20 xl:py-24 2xl:py-[112px] 3xl:py-32 4xl:py-36">
+    <div
+      id="testimonials"
+      className="relative py-12 sm:py-16 md:py-20 xl:py-24 2xl:py-[112px] 3xl:py-32 4xl:py-36 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+    >
       {/* Title - responsive typography */}
       <div className="w-full pb-8 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
         <p className="text-center text-3xl font-bold sm:text-4xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl font-montserrat tracking-tight text-foreground/80 dark:text-primary">
