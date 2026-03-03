@@ -152,7 +152,7 @@ function NavbarContent({
         <div className="
           flex items-center justify-between w-full 
           px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24
-          py-2.5 md:py-3 2xl:py-3.5 3xl:py-4 4xl:py-[1.125rem]
+          py-2.5 md:py-3 2xl:py-6 3xl:py-[1.75rem] 4xl:py-8
         ">
           <NavLogo />
           <DesktopNavLinks pathname={pathname} onNavClick={onNavClick} />
@@ -173,7 +173,7 @@ function NavbarContent({
 }
 
 function NavLogo() {
-  const logoClasses = "transition-opacity duration-300 w-[60px] h-auto sm:w-[70px] md:w-[80px] lg:w-[88px] xl:w-[96px] 2xl:w-[124px] 3xl:w-[132px] 4xl:w-[148px]"
+  const logoClasses = "transition-opacity duration-300 w-[60px] h-auto sm:w-[70px] md:w-[80px] lg:w-[88px] xl:w-[96px] 2xl:w-[140px] 3xl:w-[152px] 4xl:w-[170px]"
 
   return (
     <Link 
@@ -210,7 +210,7 @@ function DesktopNavLinks({
   return (
     <div className="
       hidden lg:flex items-center justify-center flex-1 
-      gap-5 md:gap-6 lg:gap-7 xl:gap-8 2xl:gap-9 3xl:gap-10 4xl:gap-11 
+      gap-5 md:gap-6 lg:gap-7 xl:gap-8 2xl:gap-11 3xl:gap-14 4xl:gap-16 
       ml-4 md:ml-6 lg:ml-8 xl:ml-10 2xl:ml-12 3xl:ml-14 4xl:ml-16
     ">
       {NAV_ITEMS.map((item) => (
@@ -244,7 +244,7 @@ function NavLink({
         "transition-all duration-300 ease-out font-medium font-montserrat whitespace-nowrap",
         // Tap targets (desktop): keep visual style, ensure >=44px click height.
         "px-2 py-2",
-        "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-[18px] 3xl:text-[20px] 4xl:text-[22px]",
+        "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-[22px] 3xl:text-[24px] 4xl:text-[26px]",
         "hover:scale-110",
         isActive 
           ? "text-primary" 
@@ -285,10 +285,10 @@ function ContactButton({
       onClick={(e) => onClick(e, CONTACT_ITEM)}
       className={cn(
         // Desktop-only; minimum tap target height.
-        "hidden lg:inline-flex lg:items-center lg:justify-center min-h-[44px] 2xl:min-h-[48px] 3xl:min-h-[52px] 4xl:min-h-[56px] text-primary-foreground font-medium font-montserrat whitespace-nowrap",
+        "hidden lg:inline-flex lg:items-center lg:justify-center min-h-[44px] 2xl:min-h-[56px] 3xl:min-h-[64px] 4xl:min-h-[72px] text-primary-foreground font-medium font-montserrat whitespace-nowrap",
         "px-3.5 md:px-4 lg:px-5 xl:px-5 2xl:px-6 3xl:px-7 4xl:px-8",
         "py-1.5 md:py-2 lg:py-2 xl:py-2.5 2xl:py-2.5 3xl:py-3 4xl:py-3",
-        "text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base 3xl:text-[1.0625rem] 4xl:text-[1.125rem]",
+        "text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-[18px] 3xl:text-[21px] 4xl:text-[24px]",
         "bg-primary hover:bg-primary/90",
         "shadow-md hover:shadow-lg",
         "transition-all duration-300 ease-out",

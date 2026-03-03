@@ -15,8 +15,15 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon">
-        <Sun className="h-[1.2rem] w-[1.2rem] transition-all duration-300 hover:scale-110 hover:rotate-12" style={{ color: '#002e47', filter: 'brightness(1.2)' }} />
+      <Button 
+        variant="ghost" 
+        size="icon"
+        className="2xl:w-14 2xl:h-14 3xl:w-16 3xl:h-16 4xl:w-[4.5rem] 4xl:h-[4.5rem]"
+      >
+        <Sun 
+          className="h-[1.2rem] w-[1.2rem] 2xl:h-[2rem] 2xl:w-[2rem] 3xl:h-[2.25rem] 3xl:w-[2.25rem] 4xl:h-[2.5rem] 4xl:w-[2.5rem] transition-all duration-300 hover:scale-110 hover:rotate-12" 
+          style={{ color: '#002e47', filter: 'brightness(1.2)' }} 
+        />
         <span className="sr-only">Toggle theme</span>
       </Button>
     )
@@ -29,10 +36,16 @@ export function ThemeToggle() {
       variant="ghost" 
       size="icon" 
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="transition-all duration-300 hover:bg-white/50 rounded-lg"
+      className="transition-all duration-300 hover:bg-white/50 rounded-lg 2xl:w-14 2xl:h-14 3xl:w-16 3xl:h-16 4xl:w-[4.5rem] 4xl:h-[4.5rem]"
     >
-      <Sun className={`h-[1.2rem] w-[1.2rem] transition-all duration-300 hover:scale-110 hover:rotate-12 ${isDark ? "-rotate-90 scale-0" : "rotate-0 scale-100"}`} style={{ color: '#002e47', filter: 'brightness(1.2)' }} />
-      <Moon className={`absolute h-[1.2rem] w-[1.2rem] transition-all duration-300 hover:scale-110 hover:-rotate-12 ${isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} style={{ color: '#ec1e24' }} />
+      <Sun 
+        className={`h-[1.2rem] w-[1.2rem] 2xl:h-[2rem] 2xl:w-[2rem] 3xl:h-[2.25rem] 3xl:w-[2.25rem] 4xl:h-[2.5rem] 4xl:w-[2.5rem] transition-all duration-300 hover:scale-110 hover:rotate-12 ${isDark ? "-rotate-90 scale-0" : "rotate-0 scale-100"}`} 
+        style={{ color: '#002e47', filter: 'brightness(1.2)' }} 
+      />
+      <Moon 
+        className={`absolute h-[1.2rem] w-[1.2rem] 2xl:h-[2rem] 2xl:w-[2rem] 3xl:h-[2.25rem] 3xl:w-[2.25rem] 4xl:h-[2.5rem] 4xl:w-[2.5rem] transition-all duration-300 hover:scale-110 hover:-rotate-12 ${isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} 
+        style={{ color: '#ec1e24' }} 
+      />
       <span className="sr-only">Toggle theme</span>
     </Button>
   )
