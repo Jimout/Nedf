@@ -280,13 +280,13 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
     <div
       className={cn(
         "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8",
-        "w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[520px] 3xl:max-w-[580px] 4xl:max-w-[640px]",
+        "w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[780px] 3xl:max-w-[820px] 4xl:max-w-[960px]",
         "mx-auto founder-card visible",
         index === 0 ? "md:order-1" : "md:order-2"
       )}
     >
       <CometCard>
-        <div className="relative w-full bg-card p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-6 3xl:p-7 4xl:p-8 border border-border flex flex-col">
+        <div className="relative w-full bg-card p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-10 3xl:p-12 4xl:p-14 border border-border flex flex-col">
           <div className="relative aspect-[3/4] w-full overflow-hidden mb-2 sm:mb-2 md:mb-2.5 lg:mb-3 xl:mb-3 2xl:mb-4 group border border-border">
             <img
               src={founder.image || "/placeholder.svg"}
