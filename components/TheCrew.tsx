@@ -195,11 +195,32 @@ export function Founders({ founders }: FoundersProps) {
           }
 
           .scroll-text-item {
-            font-size: clamp(2.5rem, 8vw, 8rem);
+            font-size: clamp(2.5rem, 8vw, 6rem); /* base ≈ 8xl */
             font-weight: 900;
             white-space: nowrap;
             letter-spacing: 0.05em;
             text-transform: uppercase;
+          }
+
+          /* 2xl and up (≥1536px): about 12xl */
+          @media (min-width: 1536px) {
+            .scroll-text-item {
+              font-size: 9rem;
+            }
+          }
+
+          /* 3xl and up (≥1920px): about 14xl */
+          @media (min-width: 1920px) {
+            .scroll-text-item {
+              font-size: 10.5rem;
+            }
+          }
+
+          /* 4xl and up (≥2560px): about 16xl */
+          @media (min-width: 2560px) {
+            .scroll-text-item {
+              font-size: 12rem;
+            }
           }
 
           .animate-on-scroll {
@@ -240,7 +261,7 @@ export function Founders({ founders }: FoundersProps) {
 
           <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16 pt-0">
             <div className="w-full max-w-none animate-on-scroll visible">
-              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl 3xl:text-[1.25rem] 4xl:text-[1.35rem] text-muted-foreground leading-relaxed text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
+              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-muted-foreground leading-relaxed 2xl:leading-loose 3xl:leading-[1.8] 4xl:leading-[2] text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
                 NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural design, interior
                 spaces, and high-end visualizations. We blend design with technology to create thoughtful, innovative, and
                 visually compelling environments. From concept to execution, our work reflects a commitment to clarity,
@@ -250,7 +271,7 @@ export function Founders({ founders }: FoundersProps) {
           </div>
 
           <div ref={meetFoundersRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
-            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold font-montserrat tracking-tight animate-on-scroll visible text-foreground/80 dark:text-primary">
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight animate-on-scroll visible text-foreground/80 dark:text-primary">
               MEET THE FOUNDERS
             </h2>
           </div>
@@ -313,7 +334,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       </CometCard>
 
       <div className="space-y-2">
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-2xl text-foreground leading-relaxed">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-foreground leading-relaxed 2xl:leading-loose 3xl:leading-[1.8] 4xl:leading-[2]">
           {founder.description}
         </p>
 
