@@ -173,7 +173,7 @@ function NavbarContent({
 }
 
 function NavLogo() {
-  const logoClasses = "transition-opacity duration-300 w-[60px] h-auto sm:w-[70px] md:w-[80px] lg:w-[88px] xl:w-[96px] 2xl:w-[108px] 3xl:w-[116px] 4xl:w-[124px]"
+  const logoClasses = "transition-opacity duration-300 w-[60px] h-auto sm:w-[70px] md:w-[80px] lg:w-[88px] xl:w-[96px] 2xl:w-[124px] 3xl:w-[132px] 4xl:w-[148px]"
 
   return (
     <Link 
@@ -244,7 +244,7 @@ function NavLink({
         "transition-all duration-300 ease-out font-medium font-montserrat whitespace-nowrap",
         // Tap targets (desktop): keep visual style, ensure >=44px click height.
         "px-2 py-2",
-        "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-[0.9375rem] 3xl:text-base 4xl:text-[1.0625rem]",
+        "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-[18px] 3xl:text-[20px] 4xl:text-[22px]",
         "hover:scale-110",
         isActive 
           ? "text-primary" 
