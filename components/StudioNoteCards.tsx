@@ -44,7 +44,7 @@ export function StudioNotesCard() {
           <div
             className={cn(
               "absolute flex items-center justify-center",
-              "inset-y-3 inset-x-4 sm:inset-y-4 sm:inset-x-6 md:inset-y-5 md:inset-x-8 lg:inset-y-6 lg:inset-x-10 xl:inset-y-8 xl:inset-x-14 2xl:inset-y-6 2xl:inset-x-10 3xl:inset-y-6 3xl:inset-x-10 4xl:inset-y-6 4xl:inset-x-10"
+              "inset-y-3 inset-x-3 sm:inset-y-4 sm:inset-x-4 md:inset-y-5 md:inset-x-5 lg:inset-y-6 lg:inset-x-6 xl:inset-y-8 xl:inset-x-8 2xl:inset-y-6 2xl:inset-x-6 3xl:inset-y-6 3xl:inset-x-6 4xl:inset-y-6 4xl:inset-x-6"
             )}
           >
             <Link

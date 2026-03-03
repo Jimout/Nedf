@@ -126,13 +126,13 @@ export default function SlidingTestimonials() {
   return (
     <div
       id="testimonials"
-      className="relative py-12 sm:py-16 md:py-20 xl:py-24 2xl:py-[112px] 3xl:py-32 4xl:py-36 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="relative py-12 sm:py-16 md:py-20 xl:py-24 2xl:py-[120px] 3xl:py-36 4xl:py-40 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
     >
-      {/* Title - responsive typography */}
-      <div className="w-full pb-8 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
-        <p className="text-center text-3xl font-bold sm:text-4xl md:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-6xl 4xl:text-7xl font-montserrat tracking-tight text-foreground/80 dark:text-primary">
+      {/* Title - same size as MEET THE FOUNDERS */}
+      <div className="w-full pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary">
           CLIENT REFLECTION
-        </p>
+        </h2>
       </div>
 
       {/* Auto-scrolling Cards Container */}
@@ -152,38 +152,38 @@ export default function SlidingTestimonials() {
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setIsHovered(true)}
         >
-          <div className={`flex w-[200%] gap-6 sm:gap-6 md:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14 ${!isDragging && !isHovered ? 'animate-scroll' : ''}`}>
+          <div className={`flex w-[200%] gap-6 sm:gap-6 md:gap-6 xl:gap-8 2xl:gap-14 3xl:gap-16 4xl:gap-20 ${!isDragging && !isHovered ? 'animate-scroll' : ''}`}>
             {/* Duplicate cards for seamless loop; responsive card width */}
             {[...testimonials, ...testimonials].map((testimonial, index) => (
               <div
                 key={`${testimonial.id}-${index}`}
-                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] xl:w-[560px] 2xl:w-[640px] 3xl:w-[700px] 4xl:w-[760px] rounded-lg border border-border bg-card p-6 sm:p-6 md:p-6 xl:p-7 2xl:p-8 3xl:p-9 4xl:p-10 shadow-lg ring-1 ring-border/30 mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl hover:ring-primary/20"
+                className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] xl:w-[560px] 2xl:w-[820px] 3xl:w-[900px] 4xl:w-[1040px] rounded-lg border border-border bg-card p-6 sm:p-6 md:p-6 xl:p-7 2xl:p-12 3xl:p-14 4xl:p-16 shadow-lg ring-1 ring-border/30 mb-8 xl:mb-10 2xl:mb-16 3xl:mb-20 4xl:mb-24 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl hover:ring-primary/20"
               >
                 {/* Quotation Marks */}
-                <div className="text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-8xl 4xl:text-9xl text-muted dark:text-primary font-bold mb-4 xl:mb-5 2xl:mb-6 3xl:mb-6 4xl:mb-8">
+                <div className="text-6xl xl:text-7xl 2xl:text-[11rem] 3xl:text-[12rem] 4xl:text-[14rem] text-muted dark:text-primary font-bold mb-4 xl:mb-5 2xl:mb-10 3xl:mb-10 4xl:mb-12">
                   "
                 </div>
 
                 {/* Testimonial Text */}
-                <blockquote className="text-foreground text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base leading-relaxed mb-6 xl:mb-7 2xl:mb-8 3xl:mb-8 4xl:mb-10">
+                <blockquote className="text-foreground text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-3xl 3xl:text-4xl 4xl:text-4xl leading-relaxed mb-6 xl:mb-7 2xl:mb-12 3xl:mb-14 4xl:mb-16">
                   {testimonial.quote}
                 </blockquote>
 
                 {/* Author Information */}
-                <div className="flex items-center gap-3 xl:gap-4 2xl:gap-5 3xl:gap-5 4xl:gap-6">
+                <div className="flex items-center gap-3 xl:gap-4 2xl:gap-8 3xl:gap-8 4xl:gap-10">
                   {/* Profile Picture */}
                   <img
                     src={testimonial.photo}
                     alt={testimonial.name}
-                    className="w-12 h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 3xl:w-[4.5rem] 3xl:h-[4.5rem] 4xl:w-20 4xl:h-20 rounded-full object-cover"
+                    className="w-12 h-12 xl:w-14 xl:h-14 2xl:w-[5rem] 2xl:h-[5rem] 3xl:w-[5.5rem] 3xl:h-[5.5rem] 4xl:w-24 4xl:h-24 rounded-full object-cover"
                   />
                   
                   {/* Name and Title */}
                   <div>
-                      <h3 className="font-bold text-foreground dark:text-primary text-sm xl:text-base 2xl:text-lg 3xl:text-lg 4xl:text-xl">
+                      <h3 className="font-bold text-foreground dark:text-primary text-sm xl:text-base 2xl:text-3xl 3xl:text-4xl 4xl:text-4xl">
                         {testimonial.name}
                       </h3>
-                    <p className="text-muted-foreground text-xs xl:text-sm 2xl:text-base 3xl:text-base 4xl:text-lg">
+                    <p className="text-muted-foreground text-xs xl:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-2xl">
                       {testimonial.role}, {testimonial.work}
                     </p>
                   </div>
