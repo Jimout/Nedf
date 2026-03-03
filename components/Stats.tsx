@@ -196,7 +196,7 @@ function StatCard({ value, label, isCounting }: { value: string; label: string; 
       <div className={`
         font-bold font-mono text-primary
         text-base sm:text-lg md:text-xl 
-        lg:text-2xl xl:text-2xl 2xl:text-3xl 3xl:text-[2rem] 4xl:text-4xl
+        lg:text-2xl xl:text-2xl 2xl:text-2xl 3xl:text-4xl 4xl:text-6xl
         transition-all duration-200 ease-out
         ${isCounting ? "scale-110" : "scale-100"}
       `}>
@@ -204,7 +204,7 @@ function StatCard({ value, label, isCounting }: { value: string; label: string; 
       </div>
       <div className="
         text-muted-foreground
-        text-[9px] sm:text-[10px] md:text-xs lg:text-sm 2xl:text-sm 3xl:text-base 4xl:text-[1.0625rem]
+        text-[9px] sm:text-[10px] md:text-xs lg:text-sm 2xl:text-lg 3xl:text-2xl 4xl:text-3xl
         mt-0.5 sm:mt-1
       ">
         {label}

@@ -136,8 +136,8 @@ function HeroSection({
       relative w-full z-10 
       flex items-center justify-center 
       font-montserrat overflow-hidden
-      min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh] lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[40vh] 3xl:min-h-[44vh] 4xl:min-h-[48vh]
-      mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 2xl:mt-14 3xl:mt-16 4xl:mt-20
+      min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh] lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[48vh] 3xl:min-h-[58vh] 4xl:min-h-[68vh]
+      mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 2xl:mt-[4.5rem] 3xl:mt-[5.5rem] 4xl:mt-24
     ">
       <div className="
         flex items-center justify-center 
@@ -150,7 +150,7 @@ function HeroSection({
 }
 
 function HeroLogo() {
-  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[280px] 2xl:h-[280px] 3xl:w-[320px] 3xl:h-[320px] 4xl:w-[380px] 4xl:h-[380px]"
+  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[380px] 2xl:h-[380px] 3xl:w-[400px] 3xl:h-[400px] 4xl:w-[460px] 4xl:h-[460px]"
   
   return (
     <div className="select-none">
@@ -199,7 +199,7 @@ function HeroContent({
           <span className="
             font-thin text-foreground/80
             tracking-wide mr-2 max-sm:mb-[-4px]
-            text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[78px] 3xl:text-[90px] 4xl:text-[102px]
+            text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[100px] 3xl:text-[110px] 4xl:text-[122px]
             md:font-normal xl:font-normal
           ">
             We Are
@@ -256,7 +256,7 @@ function AnimatedWords({
             key={i}
             className={cn(
               "block font-medium leading-none whitespace-nowrap text-primary",
-              "text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[132px] 3xl:text-[150px] 4xl:text-[172px]"
+              "text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[160px] 3xl:text-[182px] 4xl:text-[192px]"
             )}
             style={{
               height: `${lineHeight}px`,
