@@ -202,24 +202,24 @@ export function Founders({ founders }: FoundersProps) {
             text-transform: uppercase;
           }
 
-          /* 2xl and up (≥1536px): about 12xl */
+          /* 2xl and up (≥1536px): larger ABOUT US */
           @media (min-width: 1536px) {
             .scroll-text-item {
-              font-size: 9rem;
+              font-size: 11rem;
             }
           }
 
-          /* 3xl and up (≥1920px): about 14xl */
+          /* 3xl and up (≥1920px): larger ABOUT US */
           @media (min-width: 1920px) {
             .scroll-text-item {
-              font-size: 10.5rem;
+              font-size: 13rem;
             }
           }
 
-          /* 4xl and up (≥2560px): about 16xl */
+          /* 4xl and up (≥2560px): largest ABOUT US */
           @media (min-width: 2560px) {
             .scroll-text-item {
-              font-size: 12rem;
+              font-size: 15rem;
             }
           }
 
@@ -261,7 +261,7 @@ export function Founders({ founders }: FoundersProps) {
 
           <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16 pt-0">
             <div className="w-full max-w-none animate-on-scroll visible">
-              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-muted-foreground leading-relaxed 2xl:leading-loose 3xl:leading-[1.8] 4xl:leading-[2] text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
+              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-muted-foreground leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6] text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
                 NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural design, interior
                 spaces, and high-end visualizations. We blend design with technology to create thoughtful, innovative, and
                 visually compelling environments. From concept to execution, our work reflects a commitment to clarity,
@@ -323,10 +323,10 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
             )}
           </div>
           <div className="px-1">
-            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl font-bold text-foreground mb-1.5">
+            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-[2.6rem] font-bold text-foreground mb-1.5">
               {founder.name}
             </h3>
-            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-xl font-medium text-muted-foreground">
+            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-2xl 3xl:text-3xl 4xl:text-[2.2rem] font-medium text-muted-foreground">
               {founder.title}
             </p>
           </div>
@@ -334,7 +334,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       </CometCard>
 
       <div className="space-y-2">
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-foreground leading-relaxed 2xl:leading-loose 3xl:leading-[1.8] 4xl:leading-[2]">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-foreground leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6]">
           {founder.description}
         </p>
 
@@ -352,7 +352,7 @@ function SocialLinks({ social }: { social: SocialLinks }) {
     <div className="pt-3 sm:pt-3 md:pt-4 lg:pt-4 xl:pt-4 2xl:pt-5">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-base 3xl:text-lg 4xl:text-lg font-medium text-muted-foreground mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4 hover:text-primary transition-colors duration-300 cursor-pointer flex items-center gap-2"
+        className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-xl 3xl:text-2xl 4xl:text-3xl font-medium text-muted-foreground mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4 hover:text-primary transition-colors duration-300 cursor-pointer flex items-center gap-2"
       >
         Follow Us
         <span className={cn(
@@ -364,7 +364,7 @@ function SocialLinks({ social }: { social: SocialLinks }) {
       </button>
       <div 
         className={cn(
-          "flex gap-3 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-4 2xl:gap-5 justify-start flex-wrap overflow-hidden transition-all duration-500 ease-in-out",
+          "flex gap-3 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 justify-start flex-wrap overflow-hidden transition-all duration-500 ease-in-out",
           isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
         )}
       >
@@ -410,7 +410,7 @@ function SocialLink({
       rel="noopener noreferrer"
       aria-label={label}
       className={cn(
-        "w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10 2xl:w-10 2xl:h-10",
+        "w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10 2xl:w-11 2xl:h-11 3xl:w-12 3xl:h-12 4xl:w-14 4xl:h-14",
         "rounded-full border border-border flex items-center justify-center",
         "text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary",
         "transition-all duration-300 hover:scale-110 active:scale-95",

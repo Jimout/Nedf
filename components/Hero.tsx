@@ -150,7 +150,7 @@ function HeroSection({
 }
 
 function HeroLogo() {
-  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[380px] 2xl:h-[380px] 3xl:w-[400px] 3xl:h-[400px] 4xl:w-[460px] 4xl:h-[460px]"
+  const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[420px] 2xl:h-[420px] 3xl:w-[460px] 3xl:h-[460px] 4xl:w-[520px] 4xl:h-[520px]"
   
   return (
     <div className="select-none">
@@ -199,7 +199,7 @@ function HeroContent({
           <span className="
             font-thin text-foreground/80
             tracking-wide mr-2 max-sm:mb-[-4px]
-            text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[100px] 3xl:text-[110px] 4xl:text-[122px]
+            text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[112px] 3xl:text-[122px] 4xl:text-[134px]
             md:font-normal xl:font-normal
           ">
             We Are
@@ -256,7 +256,7 @@ function AnimatedWords({
             key={i}
             className={cn(
               "block font-medium leading-none whitespace-nowrap text-primary",
-              "text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[160px] 3xl:text-[182px] 4xl:text-[192px]"
+              "text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] xl:text-[90px] 2xl:text-[176px] 3xl:text-[198px] 4xl:text-[210px]"
             )}
             style={{
               height: `${lineHeight}px`,

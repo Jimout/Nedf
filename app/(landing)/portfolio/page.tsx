@@ -288,6 +288,9 @@ export default function PortfolioPage() {
     <PageTransition>
       <div className="overflow-x-hidden">
         <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-white dark:bg-[#15171a]">
+          <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12">
+            PORTFOLIO
+          </h2>
           <SearchBar value={search} onChange={handleSearchChange} />
 
           <FilterTags tags={FILTER_TAGS} activeTag={activeTag} onTagChange={handleTagChange} />

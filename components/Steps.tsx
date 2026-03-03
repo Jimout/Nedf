@@ -302,7 +302,7 @@ export default function Steps() {
 
             {/* Description Text */}
             <div className="absolute top-[58%] sm:top-[55%] lg:top-[58%] xl:top-[60%] 2xl:top-[62%] left-1/2 transform -translate-x-1/2 w-full">
-              <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl 3xl:max-w-7xl 4xl:max-w-[90rem] mx-auto text-center px-4 sm:px-6 md:px-8">
+              <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-7xl 3xl:max-w-[80rem] 4xl:max-w-[96rem] mx-auto text-center px-4 sm:px-6 md:px-8">
                 <div
                   style={{
                     opacity: textOpacity,

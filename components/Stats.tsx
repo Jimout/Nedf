@@ -188,9 +188,9 @@ export default function Stats() {
 function StatCard({ value, label, isCounting }: { value: string; label: string; isCounting: boolean }) {
   return (
     <div className="
-      max-sm:bg-card max-sm:p-3 max-sm:rounded-md max-sm:shadow-md
-      dark:max-sm:border dark:max-sm:border-primary/20
-      dark:max-sm:shadow-primary/5
+      bg-card p-3 sm:p-4 md:p-5 rounded-lg border border-border shadow-lg ring-1 ring-border/30
+      dark:border-primary/20
+      lg:bg-transparent lg:border-none lg:shadow-none lg:ring-0 lg:p-0 lg:rounded-none
       transition-all duration-200
     ">
       <div className={`
