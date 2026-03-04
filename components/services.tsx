@@ -1,8 +1,14 @@
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Minimize2 } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type PortfolioFilter = "Architecture" | "Interior" | "Visualization" | "All";
 
@@ -62,13 +68,37 @@ const SERVICES = [
 export default function ServicesSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showSubServices, setShowSubServices] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const active = SERVICES[activeIndex];
 
+  // Overlap slogan only after "based in Addis Ababa, Ethiopia" has fully shown and faded
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const sloganSection = section.previousElementSibling;
+    if (!sloganSection) return;
+
+    const scrollDistance = () => window.innerHeight * 2;
+    const st = ScrollTrigger.create({
+      trigger: sloganSection,
+      start: "top top",
+      end: () => `+=${scrollDistance()}`,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        // Only move Services up after the slogan animation has fully finished (fade complete)
+        const y = self.progress >= 1 ? -window.innerHeight : 0;
+        gsap.set(section, { y });
+      },
+    });
+    return () => st.kill();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="services"
-      className="relative w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-32 3xl:pb-40 4xl:pb-48 font-montserrat 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="relative z-20 w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-32 3xl:pb-40 4xl:pb-48 font-montserrat 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
     >
       <div className="relative w-full">
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 2xl:mb-12 3xl:mb-14 4xl:mb-16 flex flex-col gap-3 sm:gap-4 md:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 sm:flex-row sm:items-center sm:justify-between">
