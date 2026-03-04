@@ -40,11 +40,11 @@ export function StudioNotesCard() {
           {/* Subtle overlay to keep text readable using system background color */}
           <div className="absolute inset-0 bg-background/40" aria-hidden />
 
-          {/* Foreground card */}
+          {/* Foreground card - narrower width, more height to hold content */}
           <div
             className={cn(
               "absolute flex items-center justify-center",
-              "inset-y-3 inset-x-3 sm:inset-y-4 sm:inset-x-4 md:inset-y-5 md:inset-x-5 lg:inset-y-6 lg:inset-x-6 xl:inset-y-8 xl:inset-x-8 2xl:inset-y-6 2xl:inset-x-6 3xl:inset-y-6 3xl:inset-x-6 4xl:inset-y-6 4xl:inset-x-6"
+              "inset-y-2 inset-x-4 sm:inset-y-3 sm:inset-x-6 md:inset-y-4 md:inset-x-8 lg:inset-y-5 lg:inset-x-10 xl:inset-y-6 xl:inset-x-12 2xl:inset-y-4 2xl:inset-x-16 3xl:inset-y-4 3xl:inset-x-20 4xl:inset-y-4 4xl:inset-x-24"
             )}
           >
             <Link

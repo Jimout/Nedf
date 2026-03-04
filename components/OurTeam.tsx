@@ -169,7 +169,7 @@ function SocialLinks({ socials }: { socials: SocialLinks }) {
   const platforms = Object.keys(socials) as SocialPlatform[]
 
   return (
-    <div className="flex gap-2 sm:gap-2 md:gap-3 lg:gap-3 xl:gap-3 2xl:gap-4 justify-center pt-1 sm:pt-1 md:pt-2 lg:pt-2 xl:pt-2 2xl:pt-3">
+    <div className="flex gap-3 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 justify-center flex-wrap pt-1 sm:pt-1 md:pt-2 lg:pt-2 xl:pt-2 2xl:pt-3 overflow-visible">
       {platforms.map((platform) => {
         const url = socials[platform]
         if (!url) return null
@@ -183,9 +183,14 @@ function SocialLinks({ socials }: { socials: SocialLinks }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={platform}
-            className="w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10 2xl:w-10 2xl:h-10 rounded-full border border-[#001F4B]/20 dark:border-white/20 flex items-center justify-center hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white dark:hover:text-white hover:border-transparent transition-all duration-300 text-[#001F4B]/20 dark:text-white active:scale-95"
+            className={cn(
+              "w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10 2xl:w-11 2xl:h-11 3xl:w-12 3xl:h-12 4xl:w-14 4xl:h-14",
+              "rounded-full border border-border flex items-center justify-center",
+              "text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary",
+              "transition-all duration-300 hover:scale-110 active:scale-95"
+            )}
           >
-            <Icon size={12} className="sm:w-3 sm:h-3 md:w-3 md:h-3 lg:w-4 lg:h-4 xl:w-4 xl:h-4 2xl:w-4 2xl:h-4" />
+            <Icon size={14} className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:w-5 2xl:h-5 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7" />
           </a>
         )
       })}

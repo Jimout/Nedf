@@ -159,8 +159,8 @@ export default function SlidingTestimonials() {
                 key={`${testimonial.id}-${index}`}
                 className="flex-shrink-0 w-80 sm:w-96 md:w-[500px] xl:w-[560px] 2xl:w-[820px] 3xl:w-[900px] 4xl:w-[1040px] rounded-lg border border-border bg-card p-6 sm:p-6 md:p-6 xl:p-7 2xl:p-12 3xl:p-14 4xl:p-16 shadow-lg ring-1 ring-border/30 mb-8 xl:mb-10 2xl:mb-16 3xl:mb-20 4xl:mb-24 transition-all duration-300 cursor-pointer hover:scale-[1.02] hover:shadow-xl hover:ring-primary/20"
               >
-                {/* Quotation Marks */}
-                <div className="text-6xl xl:text-7xl 2xl:text-[11rem] 3xl:text-[12rem] 4xl:text-[14rem] text-muted dark:text-primary font-bold mb-4 xl:mb-5 2xl:mb-10 3xl:mb-10 4xl:mb-12">
+                {/* Quotation Marks - visible in both themes */}
+                <div className="text-6xl xl:text-7xl 2xl:text-[11rem] 3xl:text-[12rem] 4xl:text-[14rem] text-primary font-bold mb-4 xl:mb-5 2xl:mb-10 3xl:mb-10 4xl:mb-12 leading-none select-none">
                   "
                 </div>
 
