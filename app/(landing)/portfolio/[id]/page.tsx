@@ -157,8 +157,8 @@ function isSpecialProject(title: string): boolean {
  */
 function ProjectTitle({ title }: { title: string }) {
   const titleClass = isSpecialProject(title)
-    ? "text-[#001F4B] dark:text-[#ec1e24]"
-    : "text-[#001F4B] dark:text-white"
+    ? "text-primary"
+    : "text-foreground"
 
   return (
     <h1
@@ -175,10 +175,10 @@ function ProjectTitle({ title }: { title: string }) {
 function ProjectYear({ year }: { year: string }) {
   return (
     <>
-      <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg text-[#001f4b]/70 dark:text-white/70 mb-3 sm:mb-3 md:mb-4 lg:mb-4 xl:mb-5 2xl:mb-6">
+      <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg text-muted-foreground mb-3 sm:mb-3 md:mb-4 lg:mb-4 xl:mb-5 2xl:mb-6">
         {year}
       </p>
-      <hr className="mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 border-b-1 border-[#001F4B]/20 dark:border-white/20" />
+      <hr className="mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 border-b-1 border-border" />
     </>
   )
 }
@@ -199,8 +199,8 @@ function ProjectInfo({ project }: { project: ProjectData }) {
   return (
     <div className="space-y-1.5 sm:space-y-2 md:space-y-2 lg:space-y-2 xl:space-y-2.5 2xl:space-y-3 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 leading-relaxed">
       {infoItems.map(({ label, value }) => (
-        <p key={label} className="font-medium text-[#333333] dark:text-white">
-          {label}: <span className="font-normal text-[#333333]/60 dark:text-white/70">{value}</span>
+        <p key={label} className="font-medium text-foreground">
+          {label}: <span className="font-normal text-muted-foreground">{value}</span>
         </p>
       ))}
     </div>
@@ -212,7 +212,7 @@ function ProjectInfo({ project }: { project: ProjectData }) {
  */
 function SectionHeader({ title }: { title: string }) {
   return (
-    <h2 className="text-lg sm:text-xl md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-medium text-[#333333] dark:text-white mb-4 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-6 2xl:mb-7">
+    <h2 className="text-lg sm:text-xl md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-medium text-foreground mb-4 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-6 2xl:mb-7">
       {title}
     </h2>
   )
@@ -223,7 +223,7 @@ function SectionHeader({ title }: { title: string }) {
  */
 function TextParagraph({ content }: { content: string }) {
   return (
-    <p className="text-[#333333] dark:text-white/70 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 text-justify">
+    <p className="text-foreground/90 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 text-justify">
       {content}
     </p>
   )
@@ -234,7 +234,7 @@ function TextParagraph({ content }: { content: string }) {
  */
 function ImageShowcase({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="w-full max-h-[280px] sm:max-h-[320px] md:max-h-[360px] lg:max-h-[280px] xl:max-h-[320px] 2xl:max-h-[360px] min-h-[220px] sm:min-h-[260px] md:min-h-[300px] lg:min-h-[240px] xl:min-h-[280px] 2xl:min-h-[300px] overflow-hidden flex items-center justify-center bg-gray-50 dark:bg-[#15171a]/50">
+    <div className="w-full max-h-[280px] sm:max-h-[320px] md:max-h-[360px] lg:max-h-[280px] xl:max-h-[320px] 2xl:max-h-[360px] min-h-[220px] sm:min-h-[260px] md:min-h-[300px] lg:min-h-[240px] xl:min-h-[280px] 2xl:min-h-[300px] overflow-hidden flex items-center justify-center bg-muted">
       <img src={src} alt={alt} className="w-full h-full object-contain" />
     </div>
   )
@@ -245,7 +245,7 @@ function ImageShowcase({ src, alt }: { src: string; alt: string }) {
  */
 function VideoEmbed({ src, title }: { src: string; title: string }) {
   return (
-    <div className="w-full h-[240px] sm:h-[280px] md:h-[320px] lg:h-[360px] xl:h-[400px] 2xl:h-[480px] overflow-hidden shadow-lg dark:shadow-[#ec1e24]/10">
+    <div className="w-full h-[240px] sm:h-[280px] md:h-[320px] lg:h-[360px] xl:h-[400px] 2xl:h-[480px] overflow-hidden shadow-lg">
       <iframe
         width="100%"
         height="100%"
@@ -295,10 +295,10 @@ function ColorPalette({ colors }: { colors: string[] }) {
       {colors.map((hex, index) => (
         <div key={index} className="text-center">
           <div
-            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-16 lg:h-16 xl:w-18 xl:h-18 2xl:w-20 2xl:h-20 border border-gray-300 dark:border-white/20"
+            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-16 lg:h-16 xl:w-18 xl:h-18 2xl:w-20 2xl:h-20 border border-border"
             style={{ backgroundColor: hex }}
           />
-          <p className="text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-base mt-1.5 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2.5 2xl:mt-3 text-[#333333] dark:text-white/70">
+          <p className="text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-base mt-1.5 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2.5 2xl:mt-3 text-muted-foreground">
             {hex}
           </p>
         </div>
@@ -318,7 +318,7 @@ function ProjectDetailContent() {
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500 dark:text-white/70 text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl">
+        <p className="text-muted-foreground text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl">
           Project not found
         </p>
       </div>
@@ -327,8 +327,8 @@ function ProjectDetailContent() {
 
   return (
     <div className="relative min-h-screen overflow-hidden scroll-smooth">
-      <div className="relative mx-auto w-full py-8 sm:py-9 md:py-10 lg:py-11 xl:py-12 2xl:py-14 bg-white dark:bg-[#15171a]">
-        <main className="text-gray-800 dark:text-white relative font-montserrat">
+      <div className="relative mx-auto w-full py-8 sm:py-9 md:py-10 lg:py-11 xl:py-12 2xl:py-14 bg-background">
+        <main className="text-foreground relative font-montserrat">
           <ProjectTitle title={project.title} />
           <ProjectYear year={project.year} />
           <ProjectInfo project={project} />
@@ -378,7 +378,7 @@ function ProjectDetailContent() {
                 title="360° Virtual Tour"
               />
             </div>
-            <p className="text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-base text-gray-500 dark:text-white/70 mt-2 sm:mt-2 md:mt-3 lg:mt-3 xl:mt-4 2xl:mt-4 text-center">
+            <p className="text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-base text-muted-foreground mt-2 sm:mt-2 md:mt-3 lg:mt-3 xl:mt-4 2xl:mt-4 text-center">
               Drag with mouse or finger to explore in all directions • Scroll to zoom • Click fullscreen for
               immersive view
             </p>
@@ -387,7 +387,7 @@ function ProjectDetailContent() {
           {/* Features Section */}
           <StaticSection>
             <SectionHeader title="FEATURES" />
-            <ul className="list-disc list-inside text-[#333333] dark:text-white/70 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 space-y-1 sm:space-y-1 md:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2">
+            <ul className="list-disc list-inside text-foreground/90 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 space-y-1 sm:space-y-1 md:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2">
               {project.features.map((feature, index) => (
                 <li key={index}>{feature}</li>
               ))}
@@ -397,7 +397,7 @@ function ProjectDetailContent() {
           {/* Materials Section */}
           <StaticSection>
             <SectionHeader title="MATERIALS" />
-            <ul className="list-disc list-inside text-[#333333] dark:text-white/70 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 space-y-1 sm:space-y-1 md:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2">
+            <ul className="list-disc list-inside text-foreground/90 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 space-y-1 sm:space-y-1 md:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2">
               {project.materials.map((material, index) => (
                 <li key={index}>{material}</li>
               ))}
@@ -444,7 +444,7 @@ export default function ProjectDetailPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <p className="text-gray-500 dark:text-white/70 text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl">
+          <p className="text-muted-foreground text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl">
             Loading...
           </p>
         </div>

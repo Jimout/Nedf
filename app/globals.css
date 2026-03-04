@@ -69,3 +69,110 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom cursor — system colors via .text-foreground / .text-muted-foreground */
+.custom-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.15s ease;
+}
+
+.custom-cursor__crosshair {
+  width: 24px;
+  height: 24px;
+}
+
+.custom-cursor__diamond {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+
+.custom-cursor__arm {
+  position: absolute;
+  background: currentColor;
+  opacity: 0.85;
+}
+
+.custom-cursor__arm--top {
+  left: 50%;
+  bottom: 50%;
+  width: 1px;
+  height: 8px;
+  margin-left: -0.5px;
+}
+
+.custom-cursor__arm--bottom {
+  left: 50%;
+  top: 50%;
+  width: 1px;
+  height: 8px;
+  margin-left: -0.5px;
+}
+
+.custom-cursor__arm--left {
+  right: 50%;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  margin-top: -0.5px;
+}
+
+.custom-cursor__arm--right {
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  margin-top: -0.5px;
+}
+
+.custom-cursor__tick {
+  position: absolute;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.custom-cursor__tick--t1 { left: 50%; bottom: 50%; height: 3px; width: 1px; margin-left: -0.5px; margin-bottom: -1px; }
+.custom-cursor__tick--t2 { left: 50%; bottom: 50%; height: 3px; width: 1px; margin-left: -0.5px; margin-bottom: -6px; }
+.custom-cursor__tick--b1 { left: 50%; top: 50%; height: 3px; width: 1px; margin-left: -0.5px; margin-top: -1px; }
+.custom-cursor__tick--b2 { left: 50%; top: 50%; height: 3px; width: 1px; margin-left: -0.5px; margin-top: -6px; }
+.custom-cursor__tick--l1 { top: 50%; right: 50%; width: 3px; height: 1px; margin-top: -0.5px; margin-right: -1px; }
+.custom-cursor__tick--l2 { top: 50%; right: 50%; width: 3px; height: 1px; margin-top: -0.5px; margin-right: -6px; }
+.custom-cursor__tick--r1 { top: 50%; left: 50%; width: 3px; height: 1px; margin-top: -0.5px; margin-left: -1px; }
+.custom-cursor__tick--r2 { top: 50%; left: 50%; width: 3px; height: 1px; margin-top: -0.5px; margin-left: -6px; }
+
+.custom-cursor__follower {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-cursor__ring-svg {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.custom-cursor__coords {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.custom-cursor__coords-sep {
+  margin: 0 2px;
+  opacity: 0.7;
+}

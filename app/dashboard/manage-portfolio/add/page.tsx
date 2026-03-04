@@ -242,7 +242,6 @@ export default function AddProjectPage() {
 
     localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
 
-    console.log("Project uploaded successfully:", newProject)
     setShowConfirmModal(false)
     router.push(`/dashboard/manage-portfolio/view/${newProject.id}`)
   }

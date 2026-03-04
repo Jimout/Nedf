@@ -164,9 +164,9 @@ function SearchBar({ value, onChange }: { value: string; onChange: (value: strin
           placeholder="Search articles..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-[#15171a] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#001F4B] dark:focus:ring-[#ec1e24] transition-all"
+          className="flex-1 px-4 py-2 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
         />
-        <button className="px-4 py-2 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#003366] dark:hover:bg-[#d11920] transition-colors whitespace-nowrap">
+        <button className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors whitespace-nowrap">
           Search
         </button>
       </div>
@@ -181,7 +181,7 @@ function BlogPostCard({ post, onReadMore }: { post: Post; onReadMore: (id: numbe
   const textLines = calculateTextLines(post.title, post.categories)
 
   return (
-    <article className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 border border-[rgba(0,31,75,0.1)] dark:border-transparent h-[400px]">
+    <article className="group bg-card text-card-foreground shadow-lg flex flex-col overflow-hidden transition-shadow hover:shadow-xl border border-border h-[400px]">
       <div className="relative w-full h-[170px]">
         <Image
           src={post.image || "/placeholder.svg"}
@@ -190,7 +190,6 @@ function BlogPostCard({ post, onReadMore }: { post: Post; onReadMore: (id: numbe
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 33vw"
         />
-        <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-all duration-300" />
       </div>
 
       <div className="relative p-4 flex flex-col flex-1">
@@ -205,13 +204,13 @@ function BlogPostCard({ post, onReadMore }: { post: Post; onReadMore: (id: numbe
           ))}
         </div>
 
-        <h2 className="text-[18px] text-[#333333] dark:text-white font-regular leading-6 mb-2">
+        <h2 className="text-[18px] text-foreground font-regular leading-6 mb-2">
           {post.title}
         </h2>
 
         <div className="flex-1 mb-3">
           <p
-            className="text-[#333333]/60 dark:text-white/60 text-[12px] leading-[18px]"
+            className="text-muted-foreground text-[12px] leading-[18px]"
             title={post.description}
             style={{
               display: "-webkit-box",
@@ -228,7 +227,7 @@ function BlogPostCard({ post, onReadMore }: { post: Post; onReadMore: (id: numbe
         <div className="flex justify-end">
           <Button
             onClick={() => onReadMore(post.id)}
-            className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#003366] dark:hover:bg-[#ec1e24]/80 text-white text-xs px-3 py-2"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs px-3 py-2"
           >
             Read More
           </Button>
@@ -288,13 +287,13 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-[#15171a]">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Header + Search */}
       <section className="w-full pt-12 pb-8 text-center">
-        <h1 className="text-3xl md:text-4xl font-semibold text-[#001F4B] dark:text-white mb-6">
+        <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
           Our Blog: Stories & Insights
         </h1>
-        <p className="text-lg text-gray-700 dark:text-gray-200 mb-8">
+        <p className="text-lg text-muted-foreground mb-8">
           Discover design thinking, project stories, and ideas shaping architecture & interior design.
         </p>
 
@@ -315,7 +314,7 @@ export default function BlogPage() {
         {/* Empty State */}
         {filteredPosts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-white/80 text-sm sm:text-base">
+            <p className="text-muted-foreground text-sm sm:text-base">
               No articles found matching your search.
             </p>
           </div>

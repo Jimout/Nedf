@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { DynamicBackground } from "@/components/dynamic-background"
 import SplashScreenWrapper from "@/components/SplashScreenWrapper"
-import CursorAnimation from "@/components/CursorAnimation"
+import CustomCursor from "@/components/CustomCursor"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -42,7 +42,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <CursorAnimation />
+          <CustomCursor />
           <main className="w-full relative z-10">
             {children}
           </main>

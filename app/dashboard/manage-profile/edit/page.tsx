@@ -108,11 +108,6 @@ export default function EditProfilePage() {
       setProfile(parsedProfile)
       setEditProfile(parsedProfile)
     }
-
-    const storedCredentials = localStorage.getItem("adminCredentials")
-    if (storedCredentials) {
-      setAdminCredentials(JSON.parse(storedCredentials))
-    }
   }, [])
 
   const handleCancel = () => {
@@ -225,9 +220,8 @@ export default function EditProfilePage() {
     }
 
     setAdminCredentials(newCredentials)
-    localStorage.setItem("adminCredentials", JSON.stringify(newCredentials))
     setIsEditingCredentials(false)
-    alert("Credentials updated successfully!")
+    alert("Credentials updated for this session. Remember to update them securely on the server if needed.")
   }
 
   const handleCancelCredentials = () => {

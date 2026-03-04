@@ -4,8 +4,6 @@ import { useEffect, useState } from "react"
 
 export function DynamicBackground() {
   const [isDark, setIsDark] = useState(false)
-  
-  console.log("DynamicBackground rendering, isDark:", isDark)
 
   useEffect(() => {
     const checkTheme = () => {

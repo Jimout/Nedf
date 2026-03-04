@@ -43,7 +43,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
   return (
     <section className="w-full py-6" ref={containerRef}>
       <div className="mb-8">
-        <h2 className="text-2xl font-montserrat font-regular tracking-wide text-[#001F4B] dark:text-[#ec1e24]">
+        <h2 className="text-2xl font-montserrat font-regular tracking-wide text-foreground">
           RECOMMENDED FOR YOU
         </h2>
       </div>
@@ -57,7 +57,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
             {visiblePosts.map((post) => (
               <article
                 key={post.id}
-                className="group bg-white dark:bg-[#15171a] shadow-lg shadow-[#001F4B]/10 dark:shadow-[#ec1e24]/20 flex flex-col overflow-hidden transition-shadow hover:shadow-xl hover:shadow-[#001F4B]/20 dark:hover:shadow-[#ec1e24]/30 h-[400px] border border-[rgba(0,31,75,0.1)] dark:border-transparent"
+                className="group bg-card text-card-foreground shadow-lg flex flex-col overflow-hidden transition-shadow hover:shadow-xl border border-border h-[400px]"
               >
                 <div className="relative w-full h-[170px]">
                   <Image
@@ -67,7 +67,6 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-all duration-300 group-hover:scale-105" />
                 </div>
 
                 <div className="relative p-4 flex flex-col h-[230px]">
@@ -82,12 +81,12 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                     ))}
                   </div>
 
-                  <h3 className="text-[18px] text-[#333333] dark:text-white font-regular leading-6 mb-2">
+                  <h3 className="text-[18px] text-foreground font-regular leading-6 mb-2">
                     {post.title}
                   </h3>
 
                   <div className="flex-1 mb-3">
-                    <p className="text-[#333333]/60 dark:text-white/60 text-[12px] leading-[18px] line-clamp-3">
+                    <p className="text-muted-foreground text-[12px] leading-[18px] line-clamp-3">
                       {post.description}
                     </p>
                   </div>
@@ -95,7 +94,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                   <div className="flex justify-end">
                     <button
                       onClick={() => (window.location.href = `/blog-detail?id=${post.id}`)}
-                      className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#003366] dark:hover:bg-[#ec1e24]/80 text-white text-xs px-3 py-2 transition hover:opacity-90"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs px-3 py-2 transition"
                     >
                       Read More
                     </button>

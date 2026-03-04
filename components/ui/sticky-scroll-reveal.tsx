@@ -26,7 +26,6 @@ export const StickyScroll = ({
     const normalizedProgress = Math.max(0, Math.min(1, latest))
     const cardIndex = Math.floor(normalizedProgress * cardLength)
     const newActiveCard = Math.min(cardIndex, cardLength - 1)
-    console.log('Scroll progress:', latest, 'Card index:', newActiveCard, 'Total cards:', cardLength)
     setActiveCard(newActiveCard)
   })
 

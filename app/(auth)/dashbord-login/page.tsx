@@ -14,9 +14,8 @@ export default function DashboardLogin() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const savedPass = localStorage.getItem("dashboardPassword") || DEFAULT_PASS;
 
-    if (username === DEFAULT_USER && password === savedPass) {
+    if (username === DEFAULT_USER && password === DEFAULT_PASS) {
       localStorage.setItem("dashboardAuth", "true"); // mark as logged in
       router.push("/dashboard/overview");           // redirect to dashboard
     } else {
@@ -25,11 +24,7 @@ export default function DashboardLogin() {
   };
 
   const handleForgotPassword = () => {
-    const newPassword = prompt("Enter a new password:");
-    if (newPassword) {
-      localStorage.setItem("dashboardPassword", newPassword);
-      alert("Password changed! Use the new one to log in.");
-    }
+    alert("For security, password resets must be handled by the site administrator.");
   };
 
   return (

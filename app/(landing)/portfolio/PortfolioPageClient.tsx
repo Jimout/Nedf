@@ -78,14 +78,14 @@ function paginateProjects(projects: Project[], currentPage: number): Project[] {
 function SearchBar({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   return (
     <div className="relative mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12" id="search">
-      <Search className="absolute left-3 sm:left-3 md:left-4 lg:left-4 xl:left-4 2xl:left-5 top-1/2 -translate-y-1/2 text-[#001F4B] dark:text-[#ec1e24] opacity-40 w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6" />
+      <Search className="absolute left-3 sm:left-3 md:left-4 lg:left-4 xl:left-4 2xl:left-5 top-1/2 -translate-y-1/2 text-primary opacity-40 w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6" />
       <input
         type="text"
         placeholder="Search projects..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full pl-10 sm:pl-10 md:pl-12 lg:pl-12 xl:pl-12 2xl:pl-14 pr-4 sm:pr-4 md:pr-5 lg:pr-5 xl:pr-6 2xl:pr-6 py-2.5 sm:py-2.5 md:py-3 lg:py-3 xl:py-3.5 2xl:py-4 text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg rounded-2xl sm:rounded-2xl md:rounded-3xl lg:rounded-3xl xl:rounded-3xl 2xl:rounded-3xl text-[#001F4B] dark:text-white/60 placeholder-[#001F4B]/40 dark:placeholder-white/60 bg-[#001F4B]/[0.03] dark:bg-white/5 transition-all duration-300 ease-in-out
-        focus:bg-white dark:focus:bg-white/10 focus:border focus:border-[#CBD5E1] dark:focus:border-[#ec1e24]/20 focus:text-[#001F4B] dark:focus:text-white/60 focus:placeholder-[#94A3B8] dark:focus:placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#001F4B]/10 dark:focus:ring-[#ec1e24]/20"
+        className="w-full pl-10 sm:pl-10 md:pl-12 lg:pl-12 xl:pl-12 2xl:pl-14 pr-4 sm:pr-4 md:pr-5 lg:pr-5 xl:pr-6 2xl:pr-6 py-2.5 sm:py-2.5 md:py-3 lg:py-3 xl:py-3.5 2xl:py-4 text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg rounded-2xl sm:rounded-2xl md:rounded-3xl lg:rounded-3xl xl:rounded-3xl 2xl:rounded-3xl text-foreground placeholder-muted-foreground/70 bg-muted/30 transition-all duration-300 ease-in-out
+        focus:bg-background focus:border focus:border-border focus:text-foreground focus:placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
       />
     </div>
   )
@@ -101,15 +101,15 @@ function FilterTags({
   onTagChange: (tag: FilterTag) => void
 }) {
   return (
-    <div id="portfolio-filter" className="flex gap-8 sm:gap-9 md:gap-10 lg:gap-11 xl:gap-12 2xl:gap-14 border-b border-gray-300 dark:border-white/20 mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 overflow-x-auto no-scrollbar">
+    <div id="portfolio-filter" className="flex gap-8 sm:gap-9 md:gap-10 lg:gap-11 xl:gap-12 2xl:gap-14 border-b border-border mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 overflow-x-auto no-scrollbar">
       {tags.map((tag) => (
         <button
           key={tag}
           onClick={() => onTagChange(tag)}
           className={`pb-1 sm:pb-1 md:pb-1.5 lg:pb-1.5 xl:pb-2 2xl:pb-2 text-xs sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base font-medium whitespace-nowrap transition-all duration-300 ${
             activeTag === tag
-              ? "text-[#001F4B] dark:text-[#ec1e24] border-b-2 border-[#001F4B] dark:border-[#ec1e24]/80"
-              : "text-gray-500 dark:text-white/80 hover:text-[#001F4B]/60 dark:hover:text-[#ec1e24]/60"
+              ? "text-primary border-b-2 border-primary"
+              : "text-muted-foreground hover:text-primary/80"
           }`}
         >
           {tag}
@@ -140,20 +140,20 @@ function ProjectCard({ project, index, isDesktop }: { project: Project; index: n
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
       )}
 
-      <div className="absolute inset-0 bg-[#15171a]/20 opacity-0 dark:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-primary/20 opacity-0 dark:opacity-100 transition-opacity duration-300" />
 
-      <div className="absolute inset-0 flex flex-col justify-end p-2 sm:p-2.5 md:p-3 lg:p-4 xl:p-5 2xl:p-6 text-white dark:text-white opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-2 sm:translate-y-2 md:translate-y-3 lg:translate-y-3 xl:translate-y-4 2xl:translate-y-4 group-hover:translate-y-0">
-        <div className="backdrop-blur-sm bg-white/10 dark:bg-white/10 p-2 sm:p-2 md:p-2.5 lg:p-3 xl:p-4 2xl:p-4 border border-white/20 dark:border-white/20">
+      <div className="absolute inset-0 flex flex-col justify-end p-2 sm:p-2.5 md:p-3 lg:p-4 xl:p-5 2xl:p-6 text-primary-foreground opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-2 sm:translate-y-2 md:translate-y-3 lg:translate-y-3 xl:translate-y-4 2xl:translate-y-4 group-hover:translate-y-0">
+        <div className="backdrop-blur-sm bg-primary-foreground/10 p-2 sm:p-2 md:p-2.5 lg:p-3 xl:p-4 2xl:p-4 border border-primary-foreground/20">
           <h3 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-bold mb-1 sm:mb-1 md:mb-1.5 lg:mb-2 xl:mb-2 2xl:mb-2 text-balance leading-tight">
             {project.title}
           </h3>
-          <span className="inline-block px-2 sm:px-2 md:px-2.5 lg:px-3 xl:px-3 2xl:px-4 py-0.5 sm:py-0.5 md:py-0.5 lg:py-1 xl:py-1 2xl:py-1 bg-white/20 dark:bg-white/20 rounded-full text-[10px] sm:text-xs md:text-xs lg:text-xs xl:text-sm 2xl:text-sm font-medium backdrop-blur-sm">
+          <span className="inline-block px-2 sm:px-2 md:px-2.5 lg:px-3 xl:px-3 2xl:px-4 py-0.5 sm:py-0.5 md:py-0.5 lg:py-1 xl:py-1 2xl:py-1 bg-primary-foreground/20 rounded-full text-[10px] sm:text-xs md:text-xs lg:text-xs xl:text-sm 2xl:text-sm font-medium backdrop-blur-sm">
             {project.category}
           </span>
         </div>
       </div>
 
-      <div className="absolute inset-0 border border-white/0 group-hover:border-white/20 dark:group-hover:border-white/20 transition-all duration-500 ease-out rounded-sm" />
+      <div className="absolute inset-0 border border-transparent group-hover:border-primary-foreground/20 transition-all duration-500 ease-out rounded-sm" />
     </Link>
   )
 }
@@ -188,7 +188,7 @@ function ProjectGrid({
 function EmptyState() {
   return (
     <div className="text-center py-12 sm:py-14 md:py-16 lg:py-18 xl:py-20 2xl:py-24">
-      <p className="text-gray-500 dark:text-white/80 text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg">
+      <p className="text-muted-foreground text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg">
         No projects found matching your search.
       </p>
     </div>
@@ -248,8 +248,8 @@ export default function PortfolioPageClient() {
   return (
     <PageTransition>
       <div className="overflow-x-hidden">
-        <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-white dark:bg-[#15171a]">
-          <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12">
+        <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-background">
+          <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight text-foreground mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12">
             PORTFOLIO
           </h2>
           <SearchBar value={search} onChange={handleSearchChange} />
