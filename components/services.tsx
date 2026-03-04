@@ -7,22 +7,23 @@ import { cn } from "@/lib/utils";
 import { ChevronRight, Minimize2 } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { LANDING_SERVICES_KEY } from "@/lib/constants";
 
 gsap.registerPlugin(ScrollTrigger);
 
 type PortfolioFilter = "Architecture" | "Interior" | "Visualization" | "All";
 
-function getPortfolioFilter(subServiceName: string, serviceId: string): PortfolioFilter {
-  if (serviceId === "visualization") return "Visualization";
-  if (serviceId === "management") return "All";
-  if (serviceId === "design") {
-    if (subServiceName === "Interior Design") return "Interior";
-    return "Architecture"; // Architectural, Landscape, Urban
-  }
-  return "All";
+interface LandingService {
+  id: string;
+  name: string;
+  category: string;
+  headline: string;
+  subServices: string[];
+  cta: string;
+  image: string;
 }
 
-const SERVICES = [
+const DEFAULT_SERVICES: LandingService[] = [
   {
     id: "design",
     name: "Design Service",
@@ -63,14 +64,51 @@ const SERVICES = [
     cta: "EXPLORE VISUALIZATION",
     image: "/visual1.jpg",
   },
-] as const;
+];
+
+function loadServices(): LandingService[] {
+  if (typeof window === "undefined") return DEFAULT_SERVICES;
+  try {
+    const raw = localStorage.getItem(LANDING_SERVICES_KEY);
+    if (!raw) return DEFAULT_SERVICES;
+    const parsed = JSON.parse(raw) as LandingService[];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_SERVICES;
+  } catch {
+    return DEFAULT_SERVICES;
+  }
+}
+
+function getPortfolioFilter(subServiceName: string, serviceId: string): PortfolioFilter {
+  if (serviceId === "visualization") return "Visualization";
+  if (serviceId === "management") return "All";
+  if (serviceId === "design") {
+    if (subServiceName === "Interior Design") return "Interior";
+    return "Architecture";
+  }
+  return "All";
+}
 
 export default function ServicesSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showSubServices, setShowSubServices] = useState(false);
+  const [services, setServices] = useState<LandingService[]>(DEFAULT_SERVICES);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const active = SERVICES[activeIndex];
+  useEffect(() => {
+    setServices(loadServices());
+  }, []);
+
+  useEffect(() => {
+    if (activeIndex >= services.length && services.length > 0) {
+      setActiveIndex(services.length - 1);
+    }
+  }, [services.length, activeIndex]);
+
+  const active = services[activeIndex];
+
+  if (!active) {
+    return null;
+  }
 
   // Overlap slogan only after it has fully finished; then smooth slide-up (no sudden jump)
   useEffect(() => {
@@ -114,7 +152,7 @@ export default function ServicesSection() {
       <div className="relative w-full">
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 2xl:mb-12 3xl:mb-14 4xl:mb-16 flex flex-col gap-3 sm:gap-4 md:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8">
-            {SERVICES.map((s, i) => (
+            {services.map((s, i) => (
               <button
                 key={s.id}
                 type="button"

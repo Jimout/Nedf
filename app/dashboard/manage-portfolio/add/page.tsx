@@ -402,7 +402,7 @@ export default function AddProjectPage() {
         </div>
 
         {validationError && (
-          <div className="mb-6 p-4 bg-[#ec1e24]/10 dark:bg-[#ec1e24]/20 border border-[#ec1e24]/20 dark:border-[#ec1e24]/80 rounded-lg">
+          <div className="mb-6 p-4 bg-[#ec1e24]/10 dark:bg-[#ec1e24]/20 border border-[#ec1e24]/20 dark:border-[#ec1e24]/80">
             <p className="text-[#ec1e24] dark:text-[#ec1e24]/80">{validationError}</p>
           </div>
         )}
@@ -439,7 +439,7 @@ export default function AddProjectPage() {
                   className={yearError ? "border-[#ec1e24] focus:border-[#ec1e24]" : ""}
                 />
                 {yearError && (
-                  <p className="text-[#ec1e24] text-sm mt-1 bg-[#ec1e24]/10 p-2 rounded">
+                  <p className="text-[#ec1e24] text-sm mt-1 bg-[#ec1e24]/10 p-2">
                     {yearError}
                   </p>
                 )}
@@ -539,13 +539,13 @@ export default function AddProjectPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm text-gray-700 dark:text-white/80 mb-2">Before Image</label>
-                <div className="border-2 border-dashed border-gray-300 dark:border-white/50 rounded-lg p-6 text-center">
+                <div className="border-2 border-dashed border-gray-300 dark:border-white/50 p-6 text-center">
                   {projectData.beforeImage ? (
                     <div className="relative">
                       <img
                         src={projectData.beforeImage || "/placeholder.svg"}
                         alt="Before"
-                        className="w-full h-48 object-cover rounded"
+                        className="w-full h-48 object-cover"
                       />
                       <Button
                         variant="outline"
@@ -570,13 +570,13 @@ export default function AddProjectPage() {
               </div>
               <div>
                 <label className="block text-sm text-gray-700 dark:text-white/80 mb-2">After Image</label>
-                <div className="border-2 border-dashed border-gray-300 dark:border-white/50 rounded-lg p-6 text-center">
+                <div className="border-2 border-dashed border-gray-300 dark:border-white/50 p-6 text-center">
                   {projectData.afterImage ? (
                     <div className="relative">
                       <img
                         src={projectData.afterImage || "/placeholder.svg"}
                         alt="After"
-                        className="w-full h-48 object-cover rounded"
+                        className="w-full h-48 object-cover"
                       />
                       <Button
                         variant="outline"
@@ -613,7 +613,7 @@ export default function AddProjectPage() {
           </CardHeader>
             <CardContent className="space-y-6">
               {projectData.contentSections.map((section) => (
-                <div key={section.id} className="border rounded-lg p-4 bg-gray-50 dark:bg-[#1a1d23] dark:border-gray-600">
+                <div key={section.id} className="border p-4 bg-gray-50 dark:bg-[#1a1d23] dark:border-gray-600">
                   <div className="flex items-start gap-2 mb-3">
                     <div className="flex-1">
                       <Input
@@ -656,7 +656,7 @@ export default function AddProjectPage() {
                                   : "/placeholder.svg"
                             }
                             alt="Content photo"
-                            className="w-full h-48 object-cover rounded"
+                            className="w-full h-48 object-cover"
                           />
                           <Button
                             variant="outline"
@@ -668,7 +668,7 @@ export default function AddProjectPage() {
                           </Button>
             </div>
                       ) : (
-                        <div className="border-2 border-dashed border-gray-300 dark:border-white/50 rounded-lg p-6 text-center">
+                        <div className="border-2 border-dashed border-gray-300 dark:border-white/50 p-6 text-center">
                           <div className="text-gray-400 mx-auto mb-2">
                             <UploadIcon />
                           </div>
@@ -716,7 +716,7 @@ export default function AddProjectPage() {
                                   : "/placeholder.svg"
                             }
                             controls
-                            className="w-full h-48 object-cover rounded"
+                            className="w-full h-48 object-cover"
                           />
               <Button
                 variant="outline"
@@ -728,7 +728,7 @@ export default function AddProjectPage() {
                     </Button>
                 </div>
                       ) : (
-                        <div className="border-2 border-dashed border-gray-300 dark:border-white/50 rounded-lg p-6 text-center">
+                        <div className="border-2 border-dashed border-gray-300 dark:border-white/50 p-6 text-center">
                           <div className="text-gray-400 mx-auto mb-2">
                             <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -836,7 +836,7 @@ export default function AddProjectPage() {
               {projectData.colorPalette.map((color, index) => (
                 <div key={index} className="relative">
                   <div
-                    className="w-16 h-16 rounded-lg border-2 border-gray-300 cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+                    className="w-16 h-16 border-2 border-gray-300 cursor-pointer shadow-sm hover:shadow-md transition-shadow"
                     style={{ backgroundColor: color }}
                     onClick={(e) => handleColorClick(index, e)}
                   />
@@ -879,7 +879,7 @@ export default function AddProjectPage() {
                     <img
                       src={image || "/placeholder.svg"}
                       alt={`Gallery ${index + 1}`}
-                      className="w-20 h-20 object-cover rounded-lg border-2 border-gray-200"
+                      className="w-20 h-20 object-cover border-2 border-gray-200"
                     />
                     <button
                       onClick={() => removeArrayItem("galleryImages", index)}
@@ -924,7 +924,7 @@ export default function AddProjectPage() {
               {projectData.companyMap && (
                 <div className="mt-4">
                   <label className="block text-sm text-gray-700 mb-2">Map Preview</label>
-                  <div className="border rounded-lg p-4 bg-gray-50">
+                  <div className="border p-4 bg-gray-50">
                     <p className="text-sm text-gray-600 mb-2">Map Preview (Google Maps with full interactivity):</p>
                     <a 
                       href={projectData.companyMap} 
@@ -943,7 +943,7 @@ export default function AddProjectPage() {
 
         {/* Validation Status */}
         {!isFormValid() && (
-          <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200">
             <p className="text-yellow-800 text-sm">
               ⚠️ Please complete all required fields:
             </p>
@@ -991,7 +991,7 @@ export default function AddProjectPage() {
       {/* Custom Category Modal */}
       {showCategoryModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl border-2 border-[#001F4B]/20 dark:border-red-500/20">
+          <div className="bg-white dark:bg-[#1a1d23] p-6 w-full max-w-md mx-4 shadow-2xl border-2 border-[#001F4B]/20 dark:border-red-500/20">
             <h3 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">
               Custom Category
             </h3>

@@ -195,7 +195,6 @@ export default function ManagePortfolioPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#15171a] p-4 sm:p-6 font-['Montserrat']">
-      <div className="w-full">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#ec1e24]">Manage Portfolio</h1>
           <Button onClick={handleAddProject} className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white w-full sm:w-auto">
@@ -208,7 +207,7 @@ export default function ManagePortfolioPage() {
 
       <div className="mt-6">
         {filteredProjects.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700 p-8 text-center">
+        <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 p-8 text-center">
           <p className="text-gray-500 dark:text-white font-montserrat">
             {searchTerm
               ? "No projects found matching your search."
@@ -216,7 +215,7 @@ export default function ManagePortfolioPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-[#1a1d23] rounded-lg border dark:border-gray-700 shadow-sm overflow-hidden">
+        <>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -231,10 +230,16 @@ export default function ManagePortfolioPage() {
                 {currentProjects.map((project) => (
                   <TableRow key={project.id} className="hover:bg-gray-50 dark:hover:bg-white/5 border-b dark:border-white/10">
                     <TableCell className="font-medium font-montserrat text-[#001F4B] dark:text-white">
-                      <div>
-                        <div className="text-sm sm:text-base">{project.name}</div>
-                        <div className="sm:hidden text-xs text-gray-500 dark:text-gray-300 mt-1">{project.client}</div>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleViewProject(project.id)}
+                        className="text-left hover:underline cursor-pointer focus:outline-none focus:underline"
+                      >
+                        <div>
+                          <div className="text-sm sm:text-base">{project.name}</div>
+                          <div className="sm:hidden text-xs text-gray-500 dark:text-gray-300 mt-1">{project.client}</div>
+                        </div>
+                      </button>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell font-montserrat text-gray-700 dark:text-white">{project.client}</TableCell>
                     <TableCell className="hidden md:table-cell">
@@ -273,7 +278,7 @@ export default function ManagePortfolioPage() {
               <Pagination page={currentPage} setPage={setCurrentPage} total={totalPages} />
             </div>
           )}
-        </div>
+        </>
         )}
       </div>
 
@@ -285,7 +290,6 @@ export default function ManagePortfolioPage() {
         message="Are you sure you want to delete this project? This action cannot be undone."
         type="delete"
       />
-      </div>
     </div>
   )
 }

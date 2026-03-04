@@ -54,3 +54,6 @@ export const SOCIAL_LINKS = [
   { name: "X", href: "#" },
   { name: "YouTube", href: "#" },
 ] as const
+
+/** localStorage key for landing page services (dashboard-managed) */
+export const LANDING_SERVICES_KEY = "landingServices"

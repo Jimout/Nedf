@@ -391,7 +391,7 @@ export default function ViewProjectPage() {
 
       <div className="p-6 space-y-8">
         {/* Project Information */}
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+        <div className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
           <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">PROJECT INFORMATION</h2>
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-6">
@@ -420,10 +420,10 @@ export default function ViewProjectPage() {
                       <Input
                         value={fieldValue || ""}
                         onChange={(e) => updateEditData(field, e.target.value)}
-                        className="border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                        className="border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                       />
                     ) : (
-                      <p className="font-medium text-gray-800 dark:text-white font-montserrat bg-gray-50 dark:bg-[#15171a] p-2 rounded-lg">
+                      <p className="font-medium text-gray-800 dark:text-white font-montserrat bg-gray-50 dark:bg-[#15171a] p-2">
                         {field === "category" && currentData?.category === "Other" && currentData?.customCategory 
                           ? currentData.customCategory 
                           : fieldValue || "Not specified"}
@@ -439,7 +439,7 @@ export default function ViewProjectPage() {
         {/* Before/After Images */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <div className="relative group">
-            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm z-10 font-medium">
+            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 text-sm z-10 font-medium">
               Before
             </div>
             {isEditing && (
@@ -466,12 +466,12 @@ export default function ViewProjectPage() {
               alt="Before renovation"
               width={400}
               height={300}
-              className="w-full h-64 object-cover rounded-xl shadow-lg transition-transform duration-200 group-hover:scale-[1.02]"
+              className="w-full h-64 object-cover shadow-lg transition-transform duration-200 group-hover:scale-[1.02]"
             />
           </div>
 
           <div className="relative group">
-            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm z-10 font-medium">
+            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 text-sm z-10 font-medium">
               After
             </div>
             {isEditing && (
@@ -498,7 +498,7 @@ export default function ViewProjectPage() {
               alt="After renovation"
               width={400}
               height={300}
-              className="w-full h-64 object-cover rounded-xl shadow-lg transition-transform duration-200 group-hover:scale-[1.02]"
+              className="w-full h-64 object-cover shadow-lg transition-transform duration-200 group-hover:scale-[1.02]"
             />
           </div>
         </div>
@@ -507,7 +507,7 @@ export default function ViewProjectPage() {
         {currentData.contentSections && currentData.contentSections.length > 0 && (
           <div className="space-y-6">
             {currentData.contentSections.map((section) => (
-              <div key={section.id} className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+              <div key={section.id} className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
                 {section.title && (
                   <h3 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">
                     {section.title}
@@ -515,7 +515,7 @@ export default function ViewProjectPage() {
                 )}
                 
                 {section.type === "description" && (
-                  <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
+                  <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4">
                     {section.content as string}
                   </p>
                 )}
@@ -533,7 +533,7 @@ export default function ViewProjectPage() {
                       alt="Content photo"
                       width={800}
                       height={600}
-                      className="w-full h-auto max-h-[600px] object-contain rounded-lg shadow-md"
+                      className="w-full h-auto max-h-[600px] object-contain shadow-md"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
                         target.src = "/placeholder.svg"
@@ -554,12 +554,12 @@ export default function ViewProjectPage() {
                       }
                       controls
                       preload="metadata"
-                      className="w-full h-auto max-h-[600px] object-contain rounded-lg shadow-md"
+                      className="w-full h-auto max-h-[600px] object-contain shadow-md"
                       onError={(e) => {
                         const target = e.target as HTMLVideoElement
                         target.style.display = "none"
                         const fallback = document.createElement("div")
-                        fallback.className = "w-full h-96 bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md flex items-center justify-center"
+                        fallback.className = "w-full h-96 bg-gray-200 dark:bg-gray-700 shadow-md flex items-center justify-center"
                         fallback.innerHTML = "<p class='text-gray-500 dark:text-gray-400'>Video not available</p>"
                         target.parentNode?.insertBefore(fallback, target)
                       }}
@@ -601,12 +601,12 @@ export default function ViewProjectPage() {
 
         {/* Color Palette Section */}
         {currentData.colorPalette && currentData.colorPalette.length > 0 && (
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm relative">
+        <div className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm relative">
           <div className="flex flex-wrap gap-4">
             {currentData.colorPalette?.map((color, index) => (
               <div key={index} className="relative">
                 <div
-                  className="w-16 h-16 rounded-xl border-2 border-gray-200 dark:border-white/60 cursor-pointer shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105 relative"
+                  className="w-16 h-16 border-2 border-gray-200 dark:border-white/60 cursor-pointer shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105 relative"
                   style={{ backgroundColor: color }}
                   onClick={(e) => handleColorClick(index, e)}
                 />
@@ -633,7 +633,7 @@ export default function ViewProjectPage() {
               <div className="flex items-center">
                 <Button
                   onClick={addColor}
-                  className="h-16 w-16 rounded-xl bg-transparent border-2 border-dashed border-gray-300 dark:border-white/60 hover:border-[#001F4B] dark:hover:border-red-500 hover:bg-[#001F4B]/5 dark:hover:bg-red-500/5 transition-all duration-200"
+                  className="h-16 w-16 bg-transparent border-2 border-dashed border-gray-300 dark:border-white/60 hover:border-[#001F4B] dark:hover:border-red-500 hover:bg-[#001F4B]/5 dark:hover:bg-red-500/5 transition-all duration-200"
                 >
                   <PlusIcon />
                 </Button>
@@ -645,7 +645,7 @@ export default function ViewProjectPage() {
 
         {/* Gallery Section */}
         {currentData.galleryImages && currentData.galleryImages.length > 0 && (
-          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
             {isEditing ? (
             <div className="space-y-4">
               <div className="flex flex-wrap gap-3">
@@ -656,7 +656,7 @@ export default function ViewProjectPage() {
                       alt={`Gallery image ${index + 1}`}
                       width={120}
                       height={120}
-                      className="w-24 h-24 object-cover rounded-lg shadow-md transition-transform duration-200 group-hover:scale-105"
+                      className="w-24 h-24 object-cover shadow-md transition-transform duration-200 group-hover:scale-105"
                     />
                     <Button
                       onClick={() => removeGalleryImage(index)}
@@ -692,7 +692,7 @@ export default function ViewProjectPage() {
                     alt={`Gallery image ${index + 1}`}
                     width={120}
                     height={120}
-                    className="w-24 h-24 object-cover rounded-lg shadow-md transition-transform duration-200 group-hover:scale-105"
+                    className="w-24 h-24 object-cover shadow-md transition-transform duration-200 group-hover:scale-105"
                   />
                 </div>
               )) || []}
@@ -703,7 +703,7 @@ export default function ViewProjectPage() {
 
         {/* Company Map */}
         {currentData.companyMap && (
-          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">COMPANY LOCATION</h2>
             <div className="space-y-4">
               {isEditing ? (
@@ -712,7 +712,7 @@ export default function ViewProjectPage() {
                     value={currentData.companyMap}
                     onChange={(e) => updateEditData("companyMap", e.target.value)}
                     placeholder="Enter Google Maps embed URL"
-                className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                className="w-full border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 font-montserrat">
                     Enter Google Maps embed URL for interactive map display
@@ -733,7 +733,7 @@ export default function ViewProjectPage() {
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-[500px] bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md flex items-center justify-center">
+                    <div className="w-full h-[500px] bg-gray-200 dark:bg-gray-700 shadow-md flex items-center justify-center">
                       <p className="text-gray-500 dark:text-gray-400">No map provided</p>
                     </div>
                   )}
@@ -745,17 +745,17 @@ export default function ViewProjectPage() {
 
         {/* Inspiration Section - only show if has content or editing */}
         {(isEditing || (currentData.inspiration && currentData.inspiration.trim() !== "")) && (
-        <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+        <div className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">INSPIRATION</h2>
           {isEditing ? (
             <Textarea
                 value={currentData.inspiration || ""}
                 onChange={(e) => updateEditData("inspiration", e.target.value)}
-              className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+              className="w-full border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                 rows={2}
             />
           ) : (
-            <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
+            <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4">
                 {currentData.inspiration}
             </p>
           )}
@@ -765,7 +765,7 @@ export default function ViewProjectPage() {
 
         {/* Features Section - only show if has features or editing */}
         {(isEditing || (currentData.features && currentData.features.some(f => f && f.trim() !== ""))) && (
-          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">FEATURES</h2>
             <ul className="space-y-3">
               {currentData.features?.map((feature, index) => (
@@ -776,7 +776,7 @@ export default function ViewProjectPage() {
                       <Input
                         value={feature}
                         onChange={(e) => updateArrayField("features", index, e.target.value)}
-                        className="flex-1 border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                        className="flex-1 border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                       />
                       <Button
                         onClick={() => removeArrayItem("features", index)}
@@ -813,7 +813,7 @@ export default function ViewProjectPage() {
 
         {/* Materials Section - only show if has materials or editing */}
         {(isEditing || (currentData.materials && currentData.materials.some(m => m && m.trim() !== ""))) && (
-          <div className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat">MATERIALS</h2>
             <ul className="space-y-3">
               {currentData.materials?.map((material, index) => (
@@ -824,7 +824,7 @@ export default function ViewProjectPage() {
                       <Input
                         value={material}
                         onChange={(e) => updateArrayField("materials", index, e.target.value)}
-                        className="flex-1 border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                        className="flex-1 border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                       />
                       <Button
                         onClick={() => removeArrayItem("materials", index)}
@@ -866,13 +866,13 @@ export default function ViewProjectPage() {
         {currentData.customFields && currentData.customFields.length > 0 && (
           <div className="space-y-4">
             {currentData.customFields.map((field) => (
-              <div key={field.id} className="bg-white dark:bg-[#1a1d23] rounded-xl p-6 shadow-sm">
+              <div key={field.id} className="bg-white dark:bg-[#1a1d23] p-6 shadow-sm">
                 <h2 className="text-xl font-semibold mb-4 text-[#001F4B] dark:text-red-500 font-montserrat uppercase">
                   {isEditing ? (
                     <Input
                       value={field.label}
                       onChange={(e) => updateCustomField(field.id, { label: e.target.value })}
-                      className="text-xl font-semibold border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                      className="text-xl font-semibold border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                     />
                   ) : (
                     field.label
@@ -884,11 +884,11 @@ export default function ViewProjectPage() {
                     <Textarea
                       value={field.value as string}
                       onChange={(e) => updateCustomField(field.id, { value: e.target.value })}
-                      className="w-full border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                      className="w-full border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                       rows={3}
                     />
                   ) : (
-                    <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4 rounded-lg">
+                    <p className="text-gray-600 dark:text-gray-300 font-montserrat leading-relaxed bg-gray-50 dark:bg-[#15171a] p-4">
                       {field.value as string}
                     </p>
                   )
@@ -902,7 +902,7 @@ export default function ViewProjectPage() {
                             <Input
                               value={item}
                               onChange={(e) => updateCustomListItem(field.id, index, e.target.value)}
-                              className="flex-1 border-gray-200 dark:border-white/60 rounded-lg focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
+                              className="flex-1 border-gray-200 dark:border-white/60 focus:border-[#001F4B] dark:focus:border-red-500 focus:ring-[#001F4B] dark:focus:ring-red-500"
                             />
                             {(field.value as string[]).length > 1 && (
                               <Button
@@ -944,7 +944,7 @@ export default function ViewProjectPage() {
       {/* Color Picker Modal */}
       {isEditing && colorPickerIndex !== null && colorPickerPosition && (
         <div
-          className="fixed z-[99999] bg-white dark:bg-[#1a1d23] p-4 rounded-xl shadow-2xl border-2 border-[#001F4B]/20 dark:border-red-500/20"
+          className="fixed z-[99999] bg-white dark:bg-[#1a1d23] p-4 shadow-2xl border-2 border-[#001F4B]/20 dark:border-red-500/20"
           style={{
             top: `${colorPickerPosition.top}px`,
             left: `${colorPickerPosition.left}px`,
@@ -964,7 +964,7 @@ export default function ViewProjectPage() {
               onChange={(e) => {
                 updateColorPalette(colorPickerIndex, e.target.value)
               }}
-              className="w-20 h-20 rounded-lg border-2 border-gray-200 dark:border-white/60 cursor-pointer hover:border-[#001F4B] dark:hover:border-red-500 transition-colors"
+              className="w-20 h-20 border-2 border-gray-200 dark:border-white/60 cursor-pointer hover:border-[#001F4B] dark:hover:border-red-500 transition-colors"
             />
             <div className="text-sm font-mono font-bold text-[#001F4B] dark:text-red-500">
               {currentData.colorPalette[colorPickerIndex]?.toUpperCase()}
