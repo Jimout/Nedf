@@ -57,3 +57,12 @@ export const SOCIAL_LINKS = [
 
 /** localStorage key for landing page services (dashboard-managed) */
 export const LANDING_SERVICES_KEY = "landingServices"
+
+/** localStorage key for landing page steps (How NEDF Works) */
+export const LANDING_STEPS_KEY = "landingSteps"
+
+/** localStorage key for hero slogan (dashboard-managed) */
+export const LANDING_SLOGAN_KEY = "landingSlogan"
+
+/** localStorage key for The Crew / founders (dashboard-managed) */
+export const LANDING_CREW_KEY = "landingCrew"

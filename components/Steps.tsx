@@ -1,16 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { loadSteps, type StepItem } from "@/lib/landing-steps"
 
 // ==================== TYPES ====================
-
-interface Step {
-  id: number
-  quote: string
-  name: string
-  role: string
-  avatar: string
-}
 
 interface ArcPosition {
   x: number
@@ -28,49 +21,6 @@ interface TextAnimation {
 }
 
 // ==================== CONSTANTS ====================
-
-const STEPS_DATA: Step[] = [
-  {
-    id: 1,
-    quote:
-      "We start with imagination. Every idea begins with sketches, visuals, and creative concepts that bring your vision to life. Here, we shape the look and feel the story your brand or project will tell.",
-    name: "Design",
-    role: "Step 1",
-    avatar: "Design",
-  },
-  {
-    id: 2,
-    quote:
-      "We analyze every angle. Strategy meets creativity as we define purpose, functionality, and impact. It's where design decisions are guided by logic, research, and user needs not just aesthetics.",
-    name: "Think",
-    role: "Step 2",
-    avatar: "Think",
-  },
-  {
-    id: 3,
-    quote:
-      "Ideas become real. Our team transforms concepts into tangible experiences from detailed visuals and prototypes to complete digital and physical solutions.",
-    name: "Make",
-    role: "Step 3",
-    avatar: "Make",
-  },
-  {
-    id: 4,
-    quote:
-      "We test everything. We look for weaknesses, challenge assumptions, and refine what doesn't work. Because improvement only happens when you're brave enough to break your own work.",
-    name: "Break",
-    role: "Step 4",
-    avatar: "Break",
-  },
-  {
-    id: 5,
-    quote:
-      "Excellence is a cycle. We evolve, refine, and repeat until every detail aligns with our vision for quality and innovation. Every project makes the next one better.",
-    name: "Repeat",
-    role: "Step 5",
-    avatar: "Repeat",
-  },
-]
 
 const BREAKPOINTS = {
   MOBILE: 640,
@@ -138,10 +88,15 @@ function calculateScrollProgress(element: HTMLDivElement): number {
 
 export default function Steps() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const [stepsData, setStepsData] = useState<StepItem[]>(() => loadSteps())
   const [scrollProgress, setScrollProgress] = useState(0)
   const [activeIndex, setActiveIndex] = useState(0)
   const [viewportWidth, setViewportWidth] = useState(0)
   const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    setStepsData(loadSteps())
+  }, [])
 
   // Track dark mode changes
   useEffect(() => {
@@ -173,24 +128,24 @@ export default function Steps() {
   // Track scroll progress
   useEffect(() => {
     const handleScroll = () => {
-      if (!sectionRef.current) return
+      if (!sectionRef.current || stepsData.length === 0) return
 
       const progress = calculateScrollProgress(sectionRef.current)
       setScrollProgress(progress)
 
       const activeIdx = Math.min(
-        Math.floor(progress * STEPS_DATA.length), 
-        STEPS_DATA.length - 1
+        Math.floor(progress * stepsData.length),
+        stepsData.length - 1
       )
       setActiveIndex(activeIdx)
     }
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [stepsData.length])
 
   const getActiveAvatarPosition = (): ArcPosition => {
-    const totalProgress = scrollProgress * STEPS_DATA.length
+    const totalProgress = scrollProgress * stepsData.length
     const localProgress = Math.min(totalProgress - Math.floor(totalProgress), 1)
     const progress = Math.max(0, Math.min(1, localProgress))
 
@@ -223,7 +178,7 @@ export default function Steps() {
   }
 
   const getTextAnimation = (): TextAnimation => {
-    const totalProgress = scrollProgress * STEPS_DATA.length
+    const totalProgress = scrollProgress * stepsData.length
     const localProgress = Math.min(totalProgress - Math.floor(totalProgress), 1)
     const progress = Math.max(0, Math.min(1, localProgress))
 
@@ -246,7 +201,10 @@ export default function Steps() {
     return { opacity, scale }
   }
 
-  const activeStep = STEPS_DATA[activeIndex] || STEPS_DATA[0]
+  const activeStep = stepsData[activeIndex] || stepsData[0]
+  if (!activeStep) {
+    return null
+  }
   const { x, y, opacity, scale, rotation, vw, vh } = getActiveAvatarPosition()
   const { opacity: textOpacity, scale: textScale } = getTextAnimation()
 
@@ -326,7 +284,7 @@ export default function Steps() {
         </div>
 
         {/* Spacer divs for scroll */}
-        {Array.from({ length: STEPS_DATA.length }).map((_, i) => (
+        {Array.from({ length: stepsData.length }).map((_, i) => (
           <div key={i} className="h-screen" />
         ))}
       </div>

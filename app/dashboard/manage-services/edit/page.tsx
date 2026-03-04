@@ -31,6 +31,7 @@ export default function ManageServicesEditPage() {
     | { type: "save" }
     | { type: "cancel" }
     | { type: "delete"; serviceIndex: number; subIndex: number }
+    | { type: "deleteService"; serviceIndex: number }
   >(null)
 
   const toggleExpanded = (index: number) => {
@@ -76,6 +77,28 @@ export default function ManageServicesEditPage() {
     setSaved(false)
   }
 
+  const addService = () => {
+    const nextId = `service-${Date.now()}`
+    setServices((prev) => [
+      ...prev,
+      {
+        id: nextId,
+        name: "",
+        category: "",
+        headline: "",
+        subServices: [],
+        cta: "",
+        image: "",
+      },
+    ])
+    setSaved(false)
+  }
+
+  const removeService = (serviceIndex: number) => {
+    setServices((prev) => prev.filter((_, i) => i !== serviceIndex))
+    setSaved(false)
+  }
+
   const removeSubService = (serviceIndex: number, subIndex: number) => {
     setServices((prev) =>
       prev.map((s, i) =>
@@ -106,6 +129,10 @@ export default function ManageServicesEditPage() {
   const handleDeleteConfirm = () => {
     if (confirmState?.type === "delete") {
       removeSubService(confirmState.serviceIndex, confirmState.subIndex)
+      setConfirmState(null)
+    }
+    if (confirmState?.type === "deleteService") {
+      removeService(confirmState.serviceIndex)
       setConfirmState(null)
     }
   }
@@ -163,6 +190,7 @@ export default function ManageServicesEditPage() {
                 {confirmState?.type === "save" && "Save changes?"}
                 {confirmState?.type === "cancel" && "Discard changes?"}
                 {confirmState?.type === "delete" && "Remove sub-service?"}
+                {confirmState?.type === "deleteService" && "Remove this service?"}
               </DialogTitle>
               <DialogDescription>
                 {confirmState?.type === "save" &&
@@ -171,6 +199,8 @@ export default function ManageServicesEditPage() {
                   "All unsaved changes will be lost. Continue?"}
                 {confirmState?.type === "delete" &&
                   "This sub-service will be removed. You can add it again later."}
+                {confirmState?.type === "deleteService" &&
+                  "This entire service will be removed. You can add a new service later."}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="gap-2 sm:gap-0">
@@ -204,9 +234,32 @@ export default function ManageServicesEditPage() {
                   Yes, remove
                 </Button>
               )}
+              {confirmState?.type === "deleteService" && (
+                <Button
+                  variant="destructive"
+                  onClick={handleDeleteConfirm}
+                  className="bg-destructive text-destructive-foreground"
+                >
+                  Yes, remove service
+                </Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">Services</p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addService}
+            className="rounded-none border-border text-foreground hover:bg-muted"
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add service
+          </Button>
+        </div>
 
         {/* Service cards */}
         <div className="space-y-6">
@@ -222,13 +275,28 @@ export default function ManageServicesEditPage() {
                     <CardTitle className="text-lg font-semibold text-foreground">
                       Service {index + 1}: {service.name || "Untitled"}
                     </CardTitle>
-                    <span className="text-muted-foreground shrink-0" aria-hidden>
-                      {isExpanded ? (
-                        <ChevronUp className="h-5 w-5" />
-                      ) : (
-                        <ChevronDown className="h-5 w-5" />
-                      )}
-                    </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setConfirmState({ type: "deleteService", serviceIndex: index })
+                        }}
+                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 [&_svg]:shrink-0"
+                        aria-label="Remove service"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                      <span className="text-muted-foreground" aria-hidden>
+                        {isExpanded ? (
+                          <ChevronUp className="h-5 w-5" />
+                        ) : (
+                          <ChevronDown className="h-5 w-5" />
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </CardHeader>
                 {isExpanded && (

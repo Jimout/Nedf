@@ -8,18 +8,11 @@ import { FaTiktok } from "react-icons/fa6"
 import { FaXTwitter } from "react-icons/fa6"
 import { CometCard } from "@/components/ui/comet-card"
 import { cn } from "@/lib/utils"
+import { loadCrewSection, type CrewMember } from "@/lib/landing-crew"
 
 // ==================== TYPES ====================
 
-interface Founder {
-  id: string
-  name: string
-  title: string
-  description: string
-  image: string
-  hoverImage?: string
-  social: SocialLinks
-}
+type Founder = CrewMember
 
 interface SocialLinks {
   instagram?: string
@@ -33,6 +26,7 @@ interface SocialLinks {
 
 interface FoundersProps {
   founders: Founder[]
+  aboutDescription: string
 }
 
 type SocialPlatform = keyof SocialLinks
@@ -55,45 +49,6 @@ const SOCIAL_ICONS: Record<SocialPlatform, React.ComponentType<{ size?: number }
   x: FaXTwitter,
   youtube: FaYoutube,
 }
-
-const FOUNDERS_DATA: Founder[] = [
-  {
-    id: "1",
-    name: "Founder 2",
-    title: "Co-founder",
-    description:
-      "Blender is his second home, and pixel fear his perfection. If it's not beautifully rendered, he's not done yet.",
-    image: "/mus.jpg",
-    hoverImage: "/mus2.jpg",
-    social: {
-      instagram: "https://instagram.com/mussiegs",
-      tiktok: "https://tiktok.com/@mussiegs",
-      linkedin: "https://linkedin.com/in/mussiegs",
-      pinterest: "https://pinterest.com/mussiegs",
-      behance: "https://behance.net/mussiegs",
-      x: "https://x.com/mussiegs",
-      youtube: "https://youtube.com/@mussiegs",
-    },
-  },
-  {
-    id: "2",
-    name: "Founder 1",
-    title: "Co-founder",
-    description:
-      "He can spot a misaligned pixel from space. Brands trust him, but perfectionism keeps him up at night.",
-    image: "/nat.jpg",
-    hoverImage: "/nat2.jpg",
-    social: {
-      instagram: "https://instagram.com/natnaeltibebe",
-      tiktok: "https://tiktok.com/@natnaeltibebe",
-      linkedin: "https://linkedin.com/in/natnaeltibebe",
-      pinterest: "https://pinterest.com/natnaeltibebe",
-      behance: "https://behance.net/natnaeltibebe",
-      x: "https://x.com/natnaeltibebe",
-      youtube: "https://youtube.com/@natnaeltibebe",
-    },
-  },
-]
 
 // ==================== HOOKS ====================
 
@@ -129,12 +84,21 @@ function useScrollAnimation(ref: React.RefObject<HTMLDivElement | null>, delay =
 // ==================== MAIN COMPONENT ====================
 
 export function TheCrew() {
-  return <Founders founders={FOUNDERS_DATA} />
+  const [section, setSection] = useState(() => loadCrewSection())
+  useEffect(() => {
+    setSection(loadCrewSection())
+  }, [])
+  return (
+    <Founders
+      founders={section.crew}
+      aboutDescription={section.aboutDescription}
+    />
+  )
 }
 
 // ==================== FOUNDERS COMPONENT ====================
 
-export function Founders({ founders }: FoundersProps) {
+export function Founders({ founders, aboutDescription }: FoundersProps) {
   const descriptionRef = useRef<HTMLDivElement>(null)
   const meetFoundersRef = useRef<HTMLDivElement>(null)
   const foundersContainerRef = useRef<HTMLDivElement>(null)
@@ -262,10 +226,7 @@ export function Founders({ founders }: FoundersProps) {
           <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16 pt-0">
             <div className="w-full max-w-none animate-on-scroll visible">
               <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-muted-foreground leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6] text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
-                NEDF is a creative studio based in Addis Ababa, Ethiopia, specializing in architectural design, interior
-                spaces, and high-end visualizations. We blend design with technology to create thoughtful, innovative, and
-                visually compelling environments. From concept to execution, our work reflects a commitment to clarity,
-                craft, and bold creative expression.
+                {aboutDescription}
               </p>
             </div>
           </div>
@@ -297,36 +258,45 @@ export function Founders({ founders }: FoundersProps) {
 // ==================== SUB-COMPONENTS ====================
 
 function FounderCard({ founder, index }: { founder: Founder; index: number }) {
+  const darkImg = founder.imageDark || founder.image
   return (
     <div
       className={cn(
         "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8",
-        "w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[780px] 3xl:max-w-[820px] 4xl:max-w-[960px]",
+        "w-full max-w-[200px] sm:max-w-[220px] md:max-w-[240px] lg:max-w-[280px] xl:max-w-[320px] 2xl:max-w-[420px] 3xl:max-w-[460px] 4xl:max-w-[520px]",
         "mx-auto founder-card visible",
         index === 0 ? "md:order-1" : "md:order-2"
       )}
     >
       <CometCard>
-        <div className="relative w-full bg-card p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-10 3xl:p-12 4xl:p-14 border border-border flex flex-col">
+        <div className="relative w-full bg-card p-2.5 sm:p-3 md:p-3 lg:p-4 xl:p-5 2xl:p-8 3xl:p-10 4xl:p-12 border border-border flex flex-col">
           <div className="relative aspect-[3/4] w-full overflow-hidden mb-2 sm:mb-2 md:mb-2.5 lg:mb-3 xl:mb-3 2xl:mb-4 group border border-border">
+            {/* Light mode */}
             <img
               src={founder.image || "/placeholder.svg"}
               alt={founder.name}
-              className="w-full h-full object-cover group-hover:opacity-0 transition-all duration-300"
+              className="absolute inset-0 w-full h-full object-cover dark:opacity-0 group-hover:opacity-0 transition-all duration-300"
             />
+            {/* Dark mode */}
+            <img
+              src={darkImg || founder.image || "/placeholder.svg"}
+              alt={founder.name}
+              className="absolute inset-0 w-full h-full object-cover opacity-0 dark:opacity-100 group-hover:opacity-0 transition-all duration-300"
+            />
+            {/* Hover (overlays both) */}
             {founder.hoverImage && (
               <img
                 src={founder.hoverImage}
                 alt={founder.name}
-                className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-300"
+                className="absolute inset-0 z-10 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
               />
             )}
           </div>
           <div className="px-1">
-            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-[2.6rem] font-bold text-foreground mb-1.5">
+            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-[2rem] font-bold text-foreground mb-1.5">
               {founder.name}
             </h3>
-            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-2xl 3xl:text-3xl 4xl:text-[2.2rem] font-medium text-muted-foreground">
+            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-[1.4rem] font-medium text-muted-foreground">
               {founder.title}
             </p>
           </div>

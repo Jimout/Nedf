@@ -1,7 +1,10 @@
-import { useEffect, useRef } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
+import { loadSlogan } from "@/lib/landing-slogan";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,6 +31,11 @@ export default function HeroTextFadeScroll() {
   const firstLine1Ref = useRef<HTMLDivElement>(null);
   const firstLine2Ref = useRef<HTMLDivElement>(null);
   const secondRef = useRef<HTMLDivElement>(null);
+  const [slogan, setSlogan] = useState(() => loadSlogan());
+
+  useEffect(() => {
+    setSlogan(loadSlogan());
+  }, []);
 
   useEffect(() => {
     if (
@@ -162,7 +170,7 @@ export default function HeroTextFadeScroll() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [slogan.line1, slogan.line2, slogan.line3]);
 
   return (
     <section
@@ -175,14 +183,14 @@ export default function HeroTextFadeScroll() {
           className={`${TEXT_CLASS} !pb-0`}
           style={{ visibility: "hidden", position: "relative" }}
         >
-          We are a fully
+          {slogan.line1}
         </div>
         <div
           ref={firstLine2Ref}
           className={`${TEXT_CLASS} !pt-0 -mt-1 sm:-mt-2`}
           style={{ visibility: "hidden", position: "relative" }}
         >
-          integrated design firm
+          {slogan.line2}
         </div>
       </div>
 
@@ -191,7 +199,7 @@ export default function HeroTextFadeScroll() {
         className={TEXT_CLASS}
         style={{ visibility: "hidden" }}
       >
-        based in Addis Ababa, Ethiopia
+        {slogan.line3}
       </div>
     </section>
   );
