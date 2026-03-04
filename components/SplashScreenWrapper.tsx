@@ -6,11 +6,11 @@ import SplashScreen from "./SplashScreen";
 const STORAGE_KEY = "nedf-splash-shown";
 
 function getShouldShowSplash(): boolean {
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined") return true;
   try {
     return !sessionStorage.getItem(STORAGE_KEY);
   } catch {
-    return false;
+    return true;
   }
 }
 
@@ -23,7 +23,8 @@ function setSplashShown(): void {
 }
 
 export default function SplashScreenWrapper() {
-  const [showSplash, setShowSplash] = useState(false);
+  // Default to true so splash is the first thing rendered (server + first paint)
+  const [showSplash, setShowSplash] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function SplashScreenWrapper() {
 
   useEffect(() => {
     if (!mounted) return;
+    // After hydration: hide splash only if user already saw it this session
     setShowSplash(getShouldShowSplash());
   }, [mounted]);
 
@@ -40,7 +42,7 @@ export default function SplashScreenWrapper() {
     setShowSplash(false);
   };
 
-  if (!mounted || !showSplash) return null;
+  if (!showSplash) return null;
 
   return <SplashScreen onComplete={handleSplashComplete} />;
 }

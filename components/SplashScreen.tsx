@@ -6,7 +6,8 @@ import Image from "next/image";
 
 const SPLASH_CONFIG = {
   logo: {
-    src: "/LOADING PAGE LOGO OPTION.png",
+    light: "/LOADING PAGE LOGO OPTION.png",
+    dark: "/LOGO FOR THE WEBISTE-05.png",
     alt: "NEDF Studio",
   },
   durationMs: 3000,
@@ -17,13 +18,13 @@ const SPLASH_CONFIG = {
 
 const ANIMATION = {
   container: {
-    exit: { opacity: 0, scale: 1.02 },
+    exit: { opacity: 0 },
     transition: { duration: 0.5, ease: "easeInOut" as const },
   },
   logo: {
-    initial: { scale: 0.96, opacity: 0 },
-    animate: { scale: 1, opacity: 1 },
-    exit: { scale: 0.96, opacity: 0 },
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
     transition: { duration: 0.4, ease: "easeOut" as const },
   },
   footer: {
@@ -37,16 +38,30 @@ const ANIMATION = {
   },
 } as const;
 
+const LOGO_SIZES =
+  "w-[85vw] max-w-[min(85vw,20rem)] min-w-40 sm:w-[75vw] sm:max-w-[min(75vw,24rem)] md:w-[70vw] md:max-w-[28rem] lg:w-[65vw] lg:max-w-[32rem] xl:w-[60vw] xl:max-w-[36rem] 2xl:w-[55vw] 2xl:max-w-[42rem] 3xl:max-w-[48rem] 4xl:max-w-[56rem]";
+
 function SplashLogo() {
   return (
-    <div className="relative w-[85vw] max-w-64 min-w-40 aspect-[5/2] sm:max-w-96 sm:w-[75vw] md:max-w-32 md:w-[70vw] lg:max-w-32 lg:w-[65vw] xl:max-w-36 xl:w-[60vw] 2xl:max-w-40 2xl:w-[55vw] 3xl:max-w-44 4xl:max-w-48">
+    <div
+      className={`relative aspect-[5/2] overflow-hidden ${LOGO_SIZES}`}
+      aria-hidden
+    >
       <Image
-        src={SPLASH_CONFIG.logo.src}
+        src={SPLASH_CONFIG.logo.light}
         alt={SPLASH_CONFIG.logo.alt}
         fill
         priority
-        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 70vw, (max-width: 1920px) 60vw, 50vw"
-        className="object-contain object-center"
+        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 75vw, (max-width: 1920px) 65vw, 55vw"
+        className="object-contain object-center dark:hidden"
+      />
+      <Image
+        src={SPLASH_CONFIG.logo.dark}
+        alt={SPLASH_CONFIG.logo.alt}
+        fill
+        priority
+        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 75vw, (max-width: 1920px) 65vw, 55vw"
+        className="object-contain object-center hidden dark:block"
       />
     </div>
   );
@@ -55,19 +70,19 @@ function SplashLogo() {
 function SplashFooter() {
   return (
     <motion.div
-      className="absolute bottom-6 sm:bottom-8 md:bottom-10 lg:bottom-12 xl:bottom-14 2xl:bottom-16 3xl:bottom-20 4xl:bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 sm:gap-4"
+      className="absolute bottom-6 left-1/2 -translate-x-1/2 sm:bottom-8 md:bottom-10 lg:bottom-12 flex flex-col items-center gap-1.5 sm:gap-2"
       initial={ANIMATION.footer.initial}
       animate={ANIMATION.footer.animate}
       transition={ANIMATION.footer.transition}
     >
-      <p className="text-center text-xs sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl text-muted-foreground tracking-wider font-light">
+      <p className="text-center text-[10px] sm:text-xs md:text-sm text-foreground dark:text-primary tracking-wider font-light">
         {SPLASH_CONFIG.tagline}
       </p>
-      <div className="flex gap-1.5 sm:gap-2 justify-center">
+      <div className="flex gap-1 justify-center">
         {Array.from({ length: SPLASH_CONFIG.loadingDotsCount }).map((_, i) => (
           <motion.span
             key={i}
-            className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-2.5 md:h-2.5 rounded-full bg-primary"
+            className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-foreground dark:bg-primary"
             animate={ANIMATION.dot.animate}
             transition={{
               ...ANIMATION.dot.transition,

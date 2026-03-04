@@ -65,15 +65,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <DataProvider>
-      <div className="flex min-h-screen bg-white dark:bg-[#15171a]">
+      <div className="flex min-h-screen bg-background">
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-[#001F4B] dark:bg-[#15171a] text-white rounded-lg shadow-lg"
+          className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-primary text-primary-foreground rounded-lg shadow-md"
           aria-label="Toggle menu"
         >
-          <div className="absolute inset-0 bg-white/10 rounded-lg"></div>
-          <svg className="w-6 h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {mobileMenuOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
@@ -91,7 +90,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
 
         <aside
-          className={`fixed top-0 left-0 h-screen bg-[#001F4B] dark:bg-[#15171a] text-white z-40 shadow-[0_0_50px_rgba(0,0,0,0.3)] dark:shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-500 ${
+          className={`fixed top-0 left-0 h-screen bg-primary text-primary-foreground z-40 border-r border-primary-foreground/20 overflow-hidden transition-all duration-500 ${
             sidebarCollapsed ? "w-20" : "w-64"
           } ${
             mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
@@ -102,7 +101,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           }}
         >
           <div className="flex flex-col h-full">
-            <div className="flex items-center justify-between py-4 px-4 border-b-2 border-white/10 dark:border-white/20 h-20 flex-shrink-0">
+            <div className="flex items-center justify-between py-4 px-4 border-b border-primary-foreground/20 h-20 flex-shrink-0">
               <div className="flex items-center gap-3 overflow-hidden">
                 {!sidebarCollapsed && (
                   <Image
@@ -119,14 +118,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {!sidebarCollapsed && <ThemeToggle />}
                 <button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  className="p-2 hover:bg-white/20 rounded-lg flex-shrink-0"
-                  style={{ transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)" }}
+                  className="p-2 hover:bg-primary-foreground/20 rounded-lg flex-shrink-0 transition-colors"
                   title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                   {sidebarCollapsed ? (
-                    <ChevronRight className="w-5 h-5 text-white" />
+                    <ChevronRight className="w-5 h-5" />
                   ) : (
-                    <ChevronLeft className="w-5 h-5 text-white" />
+                    <ChevronLeft className="w-5 h-5" />
                   )}
                 </button>
               </div>
@@ -142,31 +140,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`relative flex items-center justify-center group overflow-hidden ${
+                      className={`relative flex items-center justify-center group overflow-hidden transition-colors ${
                         sidebarCollapsed ? "w-12 h-12 rounded-lg" : "w-full px-3 py-3.5 rounded-lg justify-start"
                       } ${
                         isActive
-                          ? sidebarCollapsed
-                            ? "bg-gradient-to-br from-white/20 to-white/5 shadow-lg dark:bg-[#ec1e24] dark:shadow-none"
-                            : "bg-gradient-to-r from-white/20 to-white/5 border-l-4 border-white shadow-lg dark:bg-[#ec1e24] dark:border-l-0 dark:shadow-none"
-                          : "hover:bg-white/10 dark:hover:bg-[#ec1e24]/20"
+                          ? "bg-primary-foreground/20"
+                          : "hover:bg-primary-foreground/10"
                       }`}
-                      style={{
-                        transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-                      }}
                       title={sidebarCollapsed ? item.label : ""}
                     >
                       <div className="flex items-center gap-1">
-                        <Icon
-                          className={`w-5 h-5 ${
-                            isActive
-                              ? "text-white dark:text-white dark:drop-shadow-none"
-                              : "text-white/70 group-hover:text-white dark:text-white dark:group-hover:text-white"
-                          }`}
-                          style={{
-                            transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-                          }}
-                        />
+                        <Icon className="w-5 h-5 shrink-0" />
                       </div>
 
                       {!sidebarCollapsed && (
@@ -180,23 +164,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                               : "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 200ms, width 300ms cubic-bezier(0.4, 0, 0.2, 1) 200ms",
                           }}
                         >
-                          <span
-                            className={`font-medium text-sm whitespace-nowrap ${
-                              isActive ? "text-white font-semibold dark:text-white dark:drop-shadow-none" : "text-white/70 group-hover:text-white dark:text-white dark:group-hover:text-white"
-                            }`}
-                          >
+                          <span className={`font-medium text-sm whitespace-nowrap ${isActive ? "font-semibold" : ""}`}>
                             {item.label}
                           </span>
                         </div>
                       )}
 
                       {sidebarCollapsed && (
-                        <div
-                          className="absolute left-full ml-6 px-3 py-2 bg-gray-900 dark:bg-[#ec1e24] text-white text-sm rounded-lg shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50"
-                          style={{
-                            transition: "opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
-                          }}
-                        >
+                        <div className="absolute left-full ml-6 px-3 py-2 bg-foreground text-background text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity">
                           {item.label}
                         </div>
                       )}
@@ -206,26 +181,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               })}
             </nav>
 
-            {/* Logout: exact same structure as menu items so icon + label align perfectly */}
-            <div className="border-t-2 border-white/10 dark:border-white/20 py-4 flex-shrink-0">
+            {/* Logout */}
+            <div className="border-t border-primary-foreground/20 py-4 flex-shrink-0">
               <div className={`relative flex ${sidebarCollapsed ? "justify-center" : "px-3"} my-1`}>
                 <button
                   onClick={handleLogout}
-                  className={`relative flex items-center justify-center group overflow-hidden ${
+                  className={`relative flex items-center justify-center group overflow-hidden transition-colors ${
                     sidebarCollapsed ? "w-12 h-12 rounded-lg" : "w-full px-3 py-3.5 rounded-lg justify-start"
-                  } hover:bg-[#ec1e24]/20 dark:hover:bg-[#ec1e24]/40 dark:hover:shadow-lg dark:hover:shadow-[#ec1e24]/30 dark:hover:scale-[1.02]`}
-                  style={{
-                    transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-                  }}
+                  } hover:bg-primary-foreground/10`}
                   title={sidebarCollapsed ? "Logout" : ""}
                 >
                   <div className="flex items-center gap-1">
-                    <LogOut
-                      className="w-5 h-5 text-white/80 group-hover:text-red-400 dark:group-hover:text-white dark:group-hover:drop-shadow-lg dark:group-hover:scale-110"
-                      style={{
-                        transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-                      }}
-                    />
+                    <LogOut className="w-5 h-5 shrink-0 opacity-90 group-hover:opacity-100" />
                   </div>
 
                   {!sidebarCollapsed && (
@@ -239,19 +206,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           : "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 200ms, width 300ms cubic-bezier(0.4, 0, 0.2, 1) 200ms",
                       }}
                     >
-                      <span className="font-medium text-sm whitespace-nowrap text-white/80 group-hover:text-red-400 dark:group-hover:text-white dark:group-hover:font-bold dark:group-hover:drop-shadow-lg">
+                      <span className="font-medium text-sm whitespace-nowrap opacity-90 group-hover:opacity-100">
                         Logout
                       </span>
                     </div>
                   )}
 
                   {sidebarCollapsed && (
-                    <div
-                      className="absolute left-full ml-6 px-3 py-2 bg-[#ec1e24] text-white text-sm rounded-lg shadow-2xl ring-2 ring-white/30 opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 font-bold"
-                      style={{
-                        transition: "opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 100ms",
-                      }}
-                    >
+                    <div className="absolute left-full ml-6 px-3 py-2 bg-foreground text-background text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 font-medium transition-opacity">
                       Logout
                     </div>
                   )}
@@ -266,7 +228,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
           }`}
         >
-          <div className="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-6">{children}</div>
+          <div className="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-6 bg-background">{children}</div>
         </main>
       </div>
     </DataProvider>
