@@ -3,6 +3,8 @@
 import { Suspense, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
+import Link from "next/link"
+import { ChevronLeft } from "lucide-react"
 import BeforeAfterSlider from "@/components/BeforeAfterSlider"
 import ImageSlider from "@/components/ImageSlider"
 import PanoramaViewer from "@/components/PanoramaViewer"
@@ -329,6 +331,15 @@ function ProjectDetailContent() {
     <div className="relative min-h-screen overflow-hidden scroll-smooth">
       <div className="relative mx-auto w-full py-8 sm:py-9 md:py-10 lg:py-11 xl:py-12 2xl:py-14 bg-background">
         <main className="text-foreground relative font-montserrat">
+          {/* Back: big arrow only */}
+          <Link
+            href="/portfolio"
+            className="inline-flex items-center justify-center text-foreground hover:text-primary transition-colors mb-6"
+            aria-label="Back to portfolio"
+          >
+            <ChevronLeft className="w-10 h-10 sm:w-12 sm:h-12" strokeWidth={0.75} />
+          </Link>
+
           <ProjectTitle title={project.title} />
           <ProjectYear year={project.year} />
           <ProjectInfo project={project} />

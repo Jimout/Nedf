@@ -140,8 +140,6 @@ function ProjectCard({ project, index, isDesktop }: { project: Project; index: n
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
       )}
 
-      <div className="absolute inset-0 bg-primary/20 opacity-0 dark:opacity-100 transition-opacity duration-300" />
-
       <div className="absolute inset-0 flex flex-col justify-end p-2 sm:p-2.5 md:p-3 lg:p-4 xl:p-5 2xl:p-6 text-primary-foreground opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-2 sm:translate-y-2 md:translate-y-3 lg:translate-y-3 xl:translate-y-4 2xl:translate-y-4 group-hover:translate-y-0">
         <div className="backdrop-blur-sm bg-primary-foreground/10 p-2 sm:p-2 md:p-2.5 lg:p-3 xl:p-4 2xl:p-4 border border-primary-foreground/20">
           <h3 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-bold mb-1 sm:mb-1 md:mb-1.5 lg:mb-2 xl:mb-2 2xl:mb-2 text-balance leading-tight">
@@ -249,9 +247,6 @@ export default function PortfolioPageClient() {
     <PageTransition>
       <div className="overflow-x-hidden">
         <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-background">
-          <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight text-foreground mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12">
-            PORTFOLIO
-          </h2>
           <SearchBar value={search} onChange={handleSearchChange} />
 
           <FilterTags tags={FILTER_TAGS} activeTag={activeTag} onTagChange={handleTagChange} />

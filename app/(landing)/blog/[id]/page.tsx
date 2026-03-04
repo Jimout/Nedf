@@ -3,7 +3,7 @@
 import type React from "react"
 
 import RelatedBlogs from "@/components/Related-blogs"
-import { Menu } from "lucide-react"
+import { Menu, ChevronLeft } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -83,12 +83,6 @@ const allPosts = [
   },
 ]
 
-const ArrowLeftIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-  </svg>
-)
-
 export default function BlogDetailPage() {
   const [activeId, setActiveId] = useState("intro")
   const [showMobileTOC, setShowMobileTOC] = useState(false)
@@ -158,17 +152,18 @@ export default function BlogDetailPage() {
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 py-8 bg-background">
         <main className="flex-1 flex flex-col gap-8 relative px-4 md:px-12 2xl:px-32">
-          {/* Back link above TOC and content, identical arrow styling to portfolio detail */}
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
-          >
-            <ArrowLeftIcon />
-            <span>Back to blog</span>
-          </Link>
-
           <div className="flex flex-col lg:flex-row gap-10">
-            <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
+            <div className="flex flex-col gap-4 lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
+              {/* Back arrow right above TOC */}
+              <Link
+                href="/blog"
+                className="inline-flex items-center justify-center text-foreground hover:text-primary transition-colors lg:justify-start"
+                aria-label="Back to blog"
+              >
+                <ChevronLeft className="w-10 h-10 sm:w-12 sm:h-12" strokeWidth={0.75} />
+              </Link>
+
+              <aside className="hidden lg:block">
               <div className="bg-card border border-border overflow-hidden">
                 <div className="border-b border-border px-6 py-5 bg-muted">
                   <h2 className="text-sm font-bold text-foreground uppercase tracking-wide">Table of Contents</h2>
@@ -207,9 +202,10 @@ export default function BlogDetailPage() {
                 </nav>
               </div>
             </aside>
+            </div>
 
-            {/* Blog Content */}
-            <article className="flex-1 relative">
+            {/* Blog Content - top padding on lg so content aligns with TOC */}
+            <article className="flex-1 relative lg:pt-14">
               {showMobileTOC && (
               <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
                 <button

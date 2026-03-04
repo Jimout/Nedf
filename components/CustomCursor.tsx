@@ -90,7 +90,7 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Crosshair — follows pointer exactly */}
+      {/* Crosshair — dark in light mode, white in dark mode (system foreground) */}
       <div
         ref={cursorRef}
         className="custom-cursor custom-cursor__crosshair text-foreground"
@@ -112,7 +112,7 @@ export default function CustomCursor() {
         <div className="custom-cursor__tick custom-cursor__tick--r2" />
       </div>
 
-      {/* Lagging measurement ring — uses theme foreground */}
+      {/* Lagging ring — dark in light mode, white in dark mode (system foreground) */}
       <div
         ref={followerRef}
         className="custom-cursor custom-cursor__follower text-foreground"
@@ -159,7 +159,7 @@ export default function CustomCursor() {
           <text x="3" y="41.5" fontSize="3.5" fill="currentColor" opacity="0.5" fontFamily="monospace">270°</text>
           <text x="65" y="41.5" fontSize="3.5" fill="currentColor" opacity="0.5" fontFamily="monospace">90°</text>
         </svg>
-        <div className="custom-cursor__coords text-muted-foreground">
+        <div className="custom-cursor__coords text-foreground/80">
           <span>{String(coords.x).padStart(4, "0")}</span>
           <span className="custom-cursor__coords-sep">×</span>
           <span>{String(coords.y).padStart(4, "0")}</span>
