@@ -20,8 +20,8 @@ const NAV_ITEMS = [
 
 const CONTACT_ITEM = { 
   name: "Contact", 
-  href: "/#footer", 
-  sectionId: "footer" 
+  href: "/contact", 
+  sectionId: "" 
 } as const
 
 const NAVIGATION_DELAY_MS = 100

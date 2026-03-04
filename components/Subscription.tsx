@@ -26,7 +26,7 @@ const quickLinks = [
   { label: "About", href: "/#TheCrew" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/#footer" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const connectSocialLinks = [
