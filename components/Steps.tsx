@@ -251,7 +251,7 @@ export default function Steps() {
   const { opacity: textOpacity, scale: textScale } = getTextAnimation()
 
   return (
-    <div className="w-full max-w-none">
+    <div className="w-full max-w-none pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28">
       <div id="steps" ref={sectionRef} className="relative min-h-screen z-30">
         {/* Sticky Arc Container */}
         <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none z-30">

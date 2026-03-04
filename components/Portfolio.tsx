@@ -93,7 +93,7 @@ export default function Portfolio() {
       {/* Full-width Section - negative margin pulls up to sit right after Services (no gap from slogan pin) */}
       <section
         id="portfolio"
-        className="relative z-10 -mt-[100vh] pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 font-montserrat overflow-hidden w-full 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24 bg-background"
+        className="relative z-10 -mt-[100vh] pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24 bg-background"
       >
         <div className="w-full">
         <div

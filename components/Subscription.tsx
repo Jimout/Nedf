@@ -46,7 +46,7 @@ export default function Footer() {
   return (
     <footer
       id="footer"
-      className="bg-footer text-footer-foreground border-t-2 border-footer-border 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="bg-footer text-footer-foreground border-t-2 border-footer-border 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24"
     >
       {/* Main content - single horizontal padding to align with other sections */}
       <div className="w-full py-12 sm:py-14 md:py-16 lg:py-16 xl:py-20 2xl:py-20 3xl:py-24 4xl:py-28">

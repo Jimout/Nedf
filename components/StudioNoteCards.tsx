@@ -14,8 +14,8 @@ export function StudioNotesCard() {
       id="studio-notes"
       className={cn(
         "scroll-mt-20 font-montserrat",
-        "pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32",
-        "pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-[112px] 3xl:pb-32 4xl:pb-36",
+        "pt-0",
+        "pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28",
         "2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw]",
         "2xl:px-16 3xl:px-20 4xl:px-24"
       )}

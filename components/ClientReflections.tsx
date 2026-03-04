@@ -126,7 +126,7 @@ export default function SlidingTestimonials() {
   return (
     <div
       id="testimonials"
-      className="relative py-12 sm:py-16 md:py-20 xl:py-24 2xl:py-[120px] 3xl:py-36 4xl:py-40 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="relative pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
     >
       {/* Title - same size as MEET THE FOUNDERS */}
       <div className="w-full pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
