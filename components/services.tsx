@@ -72,22 +72,33 @@ export default function ServicesSection() {
 
   const active = SERVICES[activeIndex];
 
-  // Overlap slogan only after "based in Addis Ababa, Ethiopia" has fully shown and faded
+  // Overlap slogan only after it has fully finished; then smooth slide-up (no sudden jump)
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
     const sloganSection = section.previousElementSibling;
     if (!sloganSection) return;
 
-    const scrollDistance = () => window.innerHeight * 2;
+    const sloganScroll = () => window.innerHeight * 2;
+    const coverScroll = () => window.innerHeight * 0.5; // extra scroll for smooth cover
+    const totalScroll = () => sloganScroll() + coverScroll();
+
     const st = ScrollTrigger.create({
       trigger: sloganSection,
       start: "top top",
-      end: () => `+=${scrollDistance()}`,
+      end: () => `+=${totalScroll()}`,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
-        // Only move Services up after the slogan animation has fully finished (fade complete)
-        const y = self.progress >= 1 ? -window.innerHeight : 0;
+        const p = self.progress;
+        const sloganDone = sloganScroll() / totalScroll(); // progress when slogan just finished
+        let y: number;
+        if (p <= sloganDone) {
+          y = 0; // slogan still running: Services not overlapping
+        } else {
+          // After slogan finished: smooth cover over the extra scroll range
+          const coverProgress = (p - sloganDone) / (1 - sloganDone);
+          y = -coverProgress * window.innerHeight;
+        }
         gsap.set(section, { y });
       },
     });

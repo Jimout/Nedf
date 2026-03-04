@@ -6,7 +6,22 @@ import SplitType from "split-type";
 gsap.registerPlugin(ScrollTrigger);
 
 const TEXT_CLASS =
-  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[90px] 3xl:text-[120px] 4xl:text-[150px] 2xl:max-w-[60rem] 3xl:max-w-[68rem] 4xl:max-w-[76rem] 2xl:left-1/2 2xl:-translate-x-1/2 3xl:left-1/2 3xl:-translate-x-1/2 4xl:left-1/2 4xl:-translate-x-1/2";
+  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[90px] 3xl:text-[120px] 4xl:text-[150px] 2xl:max-w-[60rem] 3xl:max-w-[68rem] 4xl:max-w-[76rem] 2xl:left-1/2 2xl:-translate-x-1/2 3xl:left-1/2 3xl:-translate-x-1/2 4xl:left-1/2 4xl:-translate-x-1/2 [font-kerning:none]";
+
+/** Fisher-Yates shuffle; returns new array with random order */
+function shuffle<T>(arr: T[]): T[] {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** Get char elements per word (word's children are chars when using types: "words, chars") */
+function getCharsPerWord(words: HTMLSpanElement[]): HTMLSpanElement[][] {
+  return words.map((word) => Array.from(word.children) as HTMLSpanElement[]);
+}
 
 export default function HeroTextFadeScroll() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -25,15 +40,15 @@ export default function HeroTextFadeScroll() {
 
     const ctx = gsap.context(() => {
       const split1a = new SplitType(firstLine1Ref.current!, {
-        types: "words",
+        types: "words, chars",
         tagName: "span",
       });
       const split1b = new SplitType(firstLine2Ref.current!, {
-        types: "words",
+        types: "words, chars",
         tagName: "span",
       });
       const split2 = new SplitType(secondRef.current!, {
-        types: "words",
+        types: "words, chars",
         tagName: "span",
       });
 
@@ -42,14 +57,22 @@ export default function HeroTextFadeScroll() {
       const w2 = split2.words || [];
       if (!w1a.length || !w1b.length || !w2.length) return;
 
-      const clipReveal = (p: number) =>
-        `polygon(${100 - p}% 0%, 100% 0%, 100% 100%, ${100 - p}% 100%)`;
-      const clipHide = (p: number) =>
-        `polygon(${p}% 0%, 100% 0%, 100% 100%, ${p}% 100%)`;
+      const chars1a = getCharsPerWord(w1a);
+      const chars1b = getCharsPerWord(w1b);
+      const chars2 = getCharsPerWord(w2);
 
-      [w1a, w1b, w2].forEach((words) =>
-        words.forEach((w) =>
-          gsap.set(w, { clipPath: clipReveal(0), willChange: "clip-path" })
+      // Shuffled order per word for reveal and hide (re-shuffle for hide for variety)
+      const revealOrder1a = chars1a.map((chars) => shuffle(chars));
+      const revealOrder1b = chars1b.map((chars) => shuffle(chars));
+      const revealOrder2 = chars2.map((chars) => shuffle(chars));
+      const hideOrder1a = chars1a.map((chars) => shuffle(chars));
+      const hideOrder1b = chars1b.map((chars) => shuffle(chars));
+      const hideOrder2 = chars2.map((chars) => shuffle(chars));
+
+      // All chars start hidden for reveal
+      [chars1a, chars1b, chars2].forEach((wordChars) =>
+        wordChars.forEach((chars) =>
+          chars.forEach((c) => gsap.set(c, { opacity: 0, willChange: "opacity" }))
         )
       );
       gsap.set(
@@ -61,18 +84,8 @@ export default function HeroTextFadeScroll() {
         { visibility: "visible" }
       );
 
-      const dur = 0.15;
-      const stag = 0.08;
-
-      // Same page: line 1 then line 2 reveal (both visible), then hide both, then line 3
-      const t1aRevealEnd = (w1a.length - 1) * stag + dur;
-      const t1bStart = t1aRevealEnd + 0.15; // reveal line 2 while line 1 stays visible
-      const t1bRevealEnd = t1bStart + (w1b.length - 1) * stag + dur;
-      const t1HideStart = t1bRevealEnd + 0.3; // then hide both lines
-      const t1aHideEnd = t1HideStart + (w1a.length - 1) * stag + dur;
-      const t1bHideStart = t1HideStart; // hide line 1 and line 2 in parallel
-      const t2Start = t1aHideEnd + 0.15; // after first block hidden, reveal "based in..."
-      const t2HideStart = t2Start + (w2.length - 1) * stag + dur + 0.3;
+      const durChar = 0.08;
+      const stagChar = 0.05;
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -86,54 +99,59 @@ export default function HeroTextFadeScroll() {
         },
       });
 
-      // Phase 1: Reveal "We are a fully" word by word
-      w1a.forEach((w, i) =>
-        tl.to(
-          w,
-          { clipPath: clipReveal(100), ease: "none", duration: dur },
-          i * stag
-        )
-      );
-      // Phase 2: Reveal "integrated design firm" (both lines now on same page)
-      w1b.forEach((w, i) =>
-        tl.to(
-          w,
-          { clipPath: clipReveal(100), ease: "none", duration: dur },
-          t1bStart + i * stag
-        )
-      );
-      // Phase 3: Hide first line
-      w1a.forEach((w, i) =>
-        tl.to(
-          w,
-          { clipPath: clipHide(100), ease: "none", duration: dur },
-          t1HideStart + i * stag
-        )
-      );
-      // Phase 4: Hide second line
-      w1b.forEach((w, i) =>
-        tl.to(
-          w,
-          { clipPath: clipHide(100), ease: "none", duration: dur },
-          t1bHideStart + i * stag
-        )
-      );
-      // Phase 5: Reveal "based in Addis Ababa, Ethiopia" word by word
-      w2.forEach((w, i) =>
-        tl.to(
-          w,
-          { clipPath: clipReveal(100), ease: "none", duration: dur },
-          t2Start + i * stag
-        )
-      );
-      // Phase 6: Hide third line
-      w2.forEach((w, i) =>
-        tl.to(
-          w,
-          { clipPath: clipHide(100), ease: "none", duration: dur },
-          t2HideStart + i * stag
-        )
-      );
+      let t = 0;
+
+      /** Reveal: from every word at the same time, one random letter per word per round */
+      const addRevealParallel = (
+        order: HTMLSpanElement[][],
+        startTime: number
+      ) => {
+        const maxRounds = Math.max(...order.map((chars) => chars.length), 0);
+        for (let round = 0; round < maxRounds; round++) {
+          const pos = startTime + round * stagChar;
+          order.forEach((shuffledChars) => {
+            if (shuffledChars[round]) {
+              tl.to(shuffledChars[round], { opacity: 1, duration: durChar, ease: "none" }, pos);
+            }
+          });
+        }
+        return startTime + maxRounds * stagChar;
+      };
+
+      /** Hide: from every word at the same time, one random letter per word per round */
+      const addHideParallel = (
+        order: HTMLSpanElement[][],
+        startTime: number
+      ) => {
+        const maxRounds = Math.max(...order.map((chars) => chars.length), 0);
+        for (let round = 0; round < maxRounds; round++) {
+          const pos = startTime + round * stagChar;
+          order.forEach((shuffledChars) => {
+            if (shuffledChars[round]) {
+              tl.to(shuffledChars[round], { opacity: 0, duration: durChar, ease: "none" }, pos);
+            }
+          });
+        }
+        return startTime + maxRounds * stagChar;
+      };
+
+      // Phase 1: Reveal line 1 "We are a fully" (all words at once, random letter per word per round)
+      t = addRevealParallel(revealOrder1a, t);
+      t += 0.15;
+      // Phase 2: Reveal line 2 "integrated design firm"
+      t = addRevealParallel(revealOrder1b, t);
+      t += 0.3;
+      // Phase 3 & 4: Hide line 1 and line 2 in parallel
+      const tHideStart = t;
+      const end1a = addHideParallel(hideOrder1a, tHideStart);
+      const end1b = addHideParallel(hideOrder1b, tHideStart);
+      t = Math.max(end1a, end1b);
+      t += 0.15;
+      // Phase 5: Reveal line 3 "based in Addis Ababa, Ethiopia"
+      t = addRevealParallel(revealOrder2, t);
+      t += 0.3;
+      // Phase 6: Hide line 3
+      addHideParallel(hideOrder2, t);
 
       return () => {
         split1a.revert();
