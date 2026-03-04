@@ -364,8 +364,8 @@ function SocialLinks({ social }: { social: SocialLinks }) {
       </button>
       <div 
         className={cn(
-          "flex gap-3 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 justify-start flex-wrap overflow-hidden transition-all duration-500 ease-in-out",
-          isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+          "flex gap-3 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 justify-start flex-wrap py-1 transition-all duration-500 ease-in-out",
+          isOpen ? "max-h-40 opacity-100 overflow-visible" : "max-h-0 opacity-0 overflow-hidden"
         )}
       >
         {platforms.map((platform, index) => {

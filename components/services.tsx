@@ -109,7 +109,7 @@ export default function ServicesSection() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative z-20 w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-16 sm:pb-20 md:pb-20 lg:pb-24 xl:pb-24 2xl:pb-32 3xl:pb-40 4xl:pb-48 font-montserrat 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="relative z-20 w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
     >
       <div className="relative w-full">
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 2xl:mb-12 3xl:mb-14 4xl:mb-16 flex flex-col gap-3 sm:gap-4 md:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 sm:flex-row sm:items-center sm:justify-between">

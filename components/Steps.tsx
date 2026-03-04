@@ -300,8 +300,8 @@ export default function Steps() {
               </div>
             </div>
 
-            {/* Description Text */}
-            <div className="absolute top-[58%] sm:top-[55%] lg:top-[58%] xl:top-[60%] 2xl:top-[62%] left-1/2 transform -translate-x-1/2 w-full">
+            {/* Description Text - gap from circle only on sm/md/lg */}
+            <div className="absolute top-[58%] sm:top-[55%] lg:top-[58%] xl:top-[60%] 2xl:top-[62%] left-1/2 transform -translate-x-1/2 w-full mt-10 sm:mt-14 md:mt-20 lg:mt-24 xl:mt-0">
               <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-7xl 3xl:max-w-[80rem] 4xl:max-w-[96rem] mx-auto text-center px-4 sm:px-6 md:px-8">
                 <div
                   style={{

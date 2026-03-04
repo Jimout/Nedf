@@ -90,10 +90,10 @@ export default function Portfolio() {
         )}
       </AnimatePresence>
 
-      {/* Full-width Section */}
+      {/* Full-width Section - negative margin pulls up to sit right after Services (no gap from slogan pin) */}
       <section
         id="portfolio"
-        className="pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-24 3xl:pt-[112px] 4xl:pt-32 font-montserrat relative overflow-hidden w-full 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+        className="relative z-10 -mt-[100vh] pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 font-montserrat overflow-hidden w-full 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24 bg-background"
       >
         <div className="w-full">
         <div
@@ -285,15 +285,15 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* Pagination Dots */}
+        {/* Pagination Dots - blue (light) / red (dark) via system primary */}
         <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 3xl:mt-10 4xl:mt-12 gap-2 sm:gap-2.5 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4 3xl:gap-4 4xl:gap-5">
           {slides.map((_, index) => (
             <div
               key={index}
               className={`transition-all duration-500 cursor-pointer hover:scale-125 ${
                 index === currentIndex
-                  ? "bg-gradient-to-r from-muted-foreground to-muted dark:from-primary dark:to-primary/80 w-6 sm:w-7 md:w-8 lg:w-9 xl:w-10 2xl:w-11 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5 shadow-md"
-                  : "bg-muted hover:bg-muted-foreground/50 dark:bg-primary/30 dark:hover:bg-primary/50 w-1.5 sm:w-1.5 md:w-2 lg:w-2 xl:w-2.5 2xl:w-2.5 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5"
+                  ? "bg-gradient-to-r from-primary to-primary/80 w-6 sm:w-7 md:w-8 lg:w-9 xl:w-10 2xl:w-11 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5 shadow-md"
+                  : "bg-primary/20 hover:bg-primary/40 dark:bg-primary/30 dark:hover:bg-primary/50 w-1.5 sm:w-1.5 md:w-2 lg:w-2 xl:w-2.5 2xl:w-2.5 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5"
               }`}
               style={{
                 transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
