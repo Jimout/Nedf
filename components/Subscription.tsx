@@ -1,5 +1,6 @@
 import { Send, Linkedin, Instagram, Youtube } from "lucide-react";
-import bakeryLogo from "@/assets/bakery-logo.png";
+import Image from "next/image";
+import Link from "next/link";
 
 /** TikTok logo as inline SVG (not in lucide) */
 function TiktokIcon({ className }: { className?: string }) {
@@ -45,29 +46,33 @@ export default function Footer() {
   return (
     <footer
       id="footer"
-      className="bg-footer text-footer-foreground border-t-2 border-footer-border 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="bg-footer text-footer-foreground border-t-2 border-footer-border 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24"
     >
-      {/* Main content */}
-      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-12 sm:py-14 md:py-16 lg:py-16 xl:py-20 2xl:py-20 3xl:py-24 4xl:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-16 2xl:gap-20 3xl:gap-24 4xl:gap-28">
-          {/* Left column */}
-          <div className="space-y-6 sm:space-y-8 md:space-y-8 2xl:space-y-10 3xl:space-y-10 4xl:space-y-12">
-            {/* Logo */}
-           
-
-            {/* Headline */}
-            <div>
-              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold leading-tight text-footer-foreground">
-                WHERE EVERY
-                <br />
-                IDEA BECOMES
-                <br />
-                A BUILT REALITY
-              </h2>
-            </div>
+      {/* Main content - single horizontal padding to align with other sections */}
+      <div className="w-full py-12 sm:py-14 md:py-16 lg:py-16 xl:py-20 2xl:py-20 3xl:py-24 4xl:py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 md:gap-14 lg:gap-16 xl:gap-16 2xl:gap-20 3xl:gap-24 4xl:gap-28 items-start">
+          {/* Left column - logo, slogan, subscription aligned left */}
+          <div className="space-y-6 sm:space-y-8 md:space-y-8 2xl:space-y-10 3xl:space-y-10 4xl:space-y-12 text-left">
+            {/* Logo (same as nav, larger in footer) */}
+            <Link href="/" className="inline-block">
+              <Image
+                src="/NEDF TEXT BASED LOGO-14.png"
+                alt="NEDF Studio"
+                width={280}
+                height={90}
+                className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[240px] 3xl:w-[260px] 4xl:w-[280px] dark:hidden"
+              />
+              <Image
+                src="/NEDF TEXT BASED LOGO-13.png"
+                alt="NEDF Studio"
+                width={280}
+                height={90}
+                className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[240px] 3xl:w-[260px] 4xl:w-[280px] hidden dark:block"
+              />
+            </Link>
 
             {/* Newsletter form */}
-            <div className="space-y-3 sm:space-y-4 max-w-md w-full">
+            <div className="space-y-3 sm:space-y-4 max-w-md w-full text-left">
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
                 <input
                   type="email"
@@ -80,7 +85,7 @@ export default function Footer() {
                 </button>
               </div>
               <p className="text-xs sm:text-sm 2xl:text-sm 3xl:text-base 4xl:text-base text-footer-muted">
-                We won't flood your inbox, just sweet updates and offers!
+                We’ll only send updates worth your inbox. Projects, insights, and studio news.
               </p>
             </div>
           </div>
@@ -138,7 +143,7 @@ export default function Footer() {
                     key={name}
                     href={href}
                     aria-label={name}
-                    className="text-primary hover:opacity-80 transition-opacity flex items-center justify-center min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] 2xl:min-w-[44px] 2xl:min-h-[44px] 4xl:min-w-[48px] 4xl:min-h-[48px]"
+                    className="flex items-center justify-center min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] 2xl:min-w-[44px] 2xl:min-h-[44px] 4xl:min-w-[48px] 4xl:min-h-[48px] rounded-full border border-footer-border text-primary hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 hover:scale-110"
                   >
                     <Icon className="w-5 h-5 2xl:w-5 2xl:h-5 4xl:w-6 4xl:h-6" />
                   </a>
@@ -153,7 +158,7 @@ export default function Footer() {
       <div className="border-t border-footer-border" />
 
       {/* Bottom bar */}
-      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-5 sm:py-6 md:py-6 lg:py-7 2xl:py-8 3xl:py-10 4xl:py-12">
+      <div className="w-full py-5 sm:py-6 md:py-6 lg:py-7 2xl:py-8 3xl:py-10 4xl:py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-xs 2xl:text-sm 3xl:text-sm 4xl:text-base text-footer-muted">
           {/* Policy links */}
           <div className="flex flex-wrap gap-3">
