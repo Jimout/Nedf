@@ -13,8 +13,8 @@ import { ThemeToggle } from "@/components/theme-toggle"
 const NAV_ITEMS = [
   { name: "Home", href: "/", sectionId: "" },
   { name: "Service", href: "/#services", sectionId: "services" },
-  { name: "Portfolio", href: "/portfolio", sectionId: "" },
   { name: "About", href: "/#TheCrew", sectionId: "TheCrew" },
+  { name: "Portfolio", href: "/portfolio", sectionId: "" },
   { name: "Blog", href: "/blog", sectionId: "" },
 ] as const
 

@@ -22,8 +22,8 @@ function XIcon({ className }: { className?: string }) {
 const quickLinks = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/#services" },
-  { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/#TheCrew" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#footer" },
 ];

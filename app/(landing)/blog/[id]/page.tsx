@@ -151,7 +151,7 @@ export default function BlogDetailPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 py-8 bg-background">
-        <main className="flex-1 flex flex-col gap-8 relative px-4 md:px-12 2xl:px-32">
+        <main className="flex-1 flex flex-col gap-8 relative w-full">
           <div className="flex flex-col lg:flex-row gap-10">
             <div className="flex flex-col gap-4 lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
               {/* Back arrow right above TOC */}
@@ -334,7 +334,7 @@ export default function BlogDetailPage() {
 
       {relatedPosts.length > 0 && (
         <>
-          <div className="px-10 md:px-[122px] py-4 bg-background">
+          <div className="py-4 bg-background">
             <hr
               className="border-primary opacity-30 dark:opacity-50"
               style={{
@@ -344,7 +344,7 @@ export default function BlogDetailPage() {
             />
           </div>
 
-          <section className="bg-background py-6 px-4 md:px-12 2xl:px-32">
+          <section className="bg-background py-6 w-full">
             <RelatedBlogs posts={relatedPosts} />
           </section>
         </>
