@@ -20,6 +20,7 @@ import {
   ListOrdered,
   LayoutGrid,
   Quote,
+  Lock,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -76,8 +77,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     {
       label: "People",
       items: [
-        { id: "profile", label: "Profile", icon: Building2, href: "/dashboard/manage-profile" },
-        { id: "thecrew", label: "The Crew", icon: Crown, href: "/dashboard/manage-founders" },
+        { id: "login", label: "Login page", icon: Lock, href: "/dashboard/manage-login" },
+        { id: "thecrew", label: "About", icon: Building2, href: "/dashboard/manage-founders" },
         { id: "team", label: "Team", icon: UsersRound, href: "/dashboard/manage-team" },
       ],
     },
@@ -85,7 +86,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       label: "Engagement",
       items: [
         { id: "testimonial", label: "Reviews", icon: Star, href: "/dashboard/manage-review" },
-        { id: "subscribers", label: "Subscription", icon: Mail, href: "/dashboard/manage-subscribers" },
+        { id: "subscribers", label: "Footer", icon: LayoutDashboard, href: "/dashboard/manage-subscribers" },
       ],
     },
   ]

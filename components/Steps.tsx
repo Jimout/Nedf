@@ -249,7 +249,7 @@ export default function Steps() {
                   className="w-full h-full rounded-full flex items-center justify-center bg-foreground dark:bg-primary-foreground"
                 >
                   <span 
-                    className="text-[4px] sm:text-[5px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 transition-opacity duration-300 text-primary-foreground dark:text-background"
+                    className="text-[3px] sm:text-[4px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 transition-opacity duration-300 text-primary-foreground dark:text-background"
                     style={{ opacity: opacity > 0.9 ? 1 : 0 }}
                   >
                     {activeStep.name}

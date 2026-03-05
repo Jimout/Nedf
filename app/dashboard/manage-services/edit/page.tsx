@@ -141,7 +141,7 @@ export default function ManageServicesEditPage() {
 
   return (
     <div className="min-h-screen bg-background font-montserrat">
-      <div className="w-full p-4 sm:p-6 max-w-4xl mx-auto space-y-6">
+      <div className="w-full p-4 sm:p-6 mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-3">

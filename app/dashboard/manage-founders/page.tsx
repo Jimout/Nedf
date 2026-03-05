@@ -19,7 +19,7 @@ export default function CrewViewPage() {
 
   return (
     <div className="min-h-screen bg-background font-montserrat">
-      <div className="w-full p-4 sm:p-6 max-w-4xl mx-auto space-y-6">
+      <div className="w-full p-4 sm:p-6 mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground uppercase tracking-wide">

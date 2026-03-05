@@ -186,7 +186,7 @@ export default function DashboardOverview() {
             return (
               <Card
                 key={index}
-                className="border border-border bg-card rounded-lg hover:bg-muted/30 transition-colors"
+                className="border border-border bg-card rounded-none hover:bg-muted/30 transition-colors"
               >
                 <CardContent className="pt-5 pb-5 px-5">
                   <div className="flex items-start justify-between gap-2">
@@ -204,7 +204,7 @@ export default function DashboardOverview() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <Card className="border border-border bg-card rounded-lg">
+            <Card className="border border-border bg-card rounded-none">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-bold text-foreground">Recent Activity</CardTitle>
                 <CardDescription className="text-muted-foreground">
@@ -250,7 +250,7 @@ export default function DashboardOverview() {
           </div>
 
           <div className="lg:col-span-1">
-            <Card className="border border-border bg-card rounded-lg">
+            <Card className="border border-border bg-card rounded-none">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-bold text-foreground">Quick Actions</CardTitle>
                 <CardDescription className="text-muted-foreground">Create new content</CardDescription>

@@ -1,107 +1,106 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import Image from "next/image"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { loadDashboardLoginConfig, type DashboardLoginConfig } from "@/lib/dashboard-login-config"
 
 export default function DashboardLogin() {
-  const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const DEFAULT_USER = "nedfteam";
-  const DEFAULT_PASS = "nedf123";
+  const router = useRouter()
+  const [config, setConfig] = useState<DashboardLoginConfig | null>(null)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
 
   useEffect(() => {
+    if (typeof window === "undefined") return
     if (localStorage.getItem("dashboardAuth")) {
-      router.push("/dashboard");
+      router.push("/dashboard")
     }
-  }, [router]);
+    const loaded = loadDashboardLoginConfig()
+    setConfig(loaded)
+    setUsername(loaded.username)
+  }, [router])
 
   const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (username === DEFAULT_USER && password === DEFAULT_PASS) {
-      localStorage.setItem("dashboardAuth", "true");
-      router.push("/dashboard");
+    if (!config) return
+
+    if (username === config.username && password === config.password) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("dashboardAuth", "true")
+      }
+      router.push("/dashboard")
     } else {
-      setError("Invalid username or password");
+      setError("Invalid username or password")
     }
-  };
+  }
 
   const handleForgotPassword = () => {
-    alert("For security, password resets must be handled by the site administrator.");
-  };
+    alert("For security, password resets must be handled by the site administrator.")
+  }
 
   return (
-    <div className="min-h-screen flex relative overflow-hidden bg-white">
-      {/* Left Content (Login Form) */}
-      <div className="flex-1 flex flex-col justify-center px-12 md:px-24 lg:px-32 z-10">
-        {/* Logo */}
-        <img src="/logo.png" alt="NEDF Logo" className="h-16 object-contain mb-10" />
-
-        {/* Heading */}
-        <h1 className="text-5xl font-bold text-[#001F4B] mb-3">Welcome to NEDF</h1>
-        <p className="text-lg text-gray-500 mb-10">Please log in to continue</p>
-
-        {/* Error */}
-        {error && <p className="text-red-500 text-sm mb-6">{error}</p>}
-
-        {/* Form */}
-        <form onSubmit={handleLogin} className="flex flex-col gap-6 max-w-lg w-full">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-4 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#001F4B]"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-4 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#001F4B]"
-          />
-          <button
+    <Card className="rounded-none border border-border bg-card font-montserrat">
+      <CardHeader className="space-y-4">
+        <div className="flex justify-center">
+          <Image src="/logo.png" alt="NEDF Logo" width={120} height={40} className="h-10 w-auto" />
+        </div>
+        <div className="text-center space-y-1">
+          <CardTitle className="text-2xl font-bold text-foreground">Dashboard login</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            Sign in to manage your NEDF content.
+          </CardDescription>
+        </div>
+        {error && <p className="text-sm text-destructive text-center">{error}</p>}
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-foreground">Username</label>
+            <Input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
+              className="rounded-none bg-background border-border text-foreground placeholder:text-muted-foreground"
+              required
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-foreground">Password</label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className="rounded-none bg-background border-border text-foreground placeholder:text-muted-foreground"
+              required
+            />
+          </div>
+          <Button
             type="submit"
-            className="w-full py-4 bg-[#001F4B] text-white text-lg font-medium rounded-lg hover:bg-[#002966] transition"
+            className="w-full rounded-none bg-primary text-primary-foreground hover:bg-primary/90"
           >
             Login
-          </button>
+          </Button>
         </form>
-
-        {/* Forgot password */}
+      </CardContent>
+      <CardFooter className="flex justify-between items-center text-xs text-muted-foreground">
         <button
+          type="button"
           onClick={handleForgotPassword}
-          className="mt-6 text-[#001F4B] text-sm hover:underline"
+          className="text-primary hover:underline"
         >
-          Forgot Password?
+          Forgot password?
         </button>
-      </div>
-
-      {/* Right Decorative Image with Wave */}
-      <div className="absolute inset-y-0 right-0 w-1/2 hidden md:block">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/room1.jpg')" }}
-        >
-          <div className="w-full h-full bg-[#001F4B]/40" />
-        </div>
-
-        {/* Wave Shape */}
-        <svg
-          className="absolute left-0 top-0 h-full w-64 text-white"
-          preserveAspectRatio="none"
-          viewBox="0 0 100 1000"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M100 0 C20 300, 20 700, 100 1000 L0 1000 L0 0 Z"
-            fill="currentColor"
-          />
-        </svg>
-      </div>
-    </div>
-  );
+        <span>Default: nedfteam / nedf123</span>
+      </CardFooter>
+    </Card>
+  )
 }
+

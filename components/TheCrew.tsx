@@ -108,7 +108,7 @@ export function Founders({ founders, aboutDescription }: FoundersProps) {
   const foundersVisible = useScrollAnimation(foundersContainerRef, ANIMATION_CONFIG.FOUNDERS_CONTAINER_DELAY)
 
   return (
-    <div className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28">
+    <div className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-4 sm:pb-6 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28">
       <section
         id="TheCrew"
         className="w-full 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
