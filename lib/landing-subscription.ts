@@ -1,4 +1,4 @@
-import { LANDING_SUBSCRIPTION_KEY } from "@/lib/constants"
+import { LANDING_SUBSCRIPTION_KEY, ROUTES } from "@/lib/constants"
 
 export interface SubscriptionQuickLink {
   label: string
@@ -71,8 +71,8 @@ export const DEFAULT_SUBSCRIPTION: SubscriptionData = {
       "We’ll only send updates worth your inbox. Projects, insights, and studio news.",
   },
   policyLinks: [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms and Conditions", href: "#" },
+    { label: "Privacy Policy", href: ROUTES.PRIVACY_POLICY },
+    { label: "Terms and Conditions", href: ROUTES.TERMS_AND_CONDITIONS },
   ],
   copyright: "© 2026 Nedf Studio. All rights reserved.",
 }
@@ -84,15 +84,28 @@ export function loadSubscription(): SubscriptionData {
     if (!raw) return DEFAULT_SUBSCRIPTION
     const parsed = JSON.parse(raw) as SubscriptionData
     if (!parsed || typeof parsed !== "object") return DEFAULT_SUBSCRIPTION
+
+    const defaultPolicyLinks = DEFAULT_SUBSCRIPTION.policyLinks
+    const storedPolicyLinks = Array.isArray(parsed.policyLinks) && parsed.policyLinks.length > 0
+      ? parsed.policyLinks
+      : defaultPolicyLinks
+
+    // Normalize policy links: replace "#" or empty href with default routes so links always work
+    const policyLinks = storedPolicyLinks.map((link) => {
+      if (link.href === "#" || link.href === "" || !link.href) {
+        const defaultLink = defaultPolicyLinks.find((d) => d.label === link.label)
+        return defaultLink ?? link
+      }
+      return link
+    })
+
     return {
       ...DEFAULT_SUBSCRIPTION,
       ...parsed,
       quickLinks: Array.isArray(parsed.quickLinks) && parsed.quickLinks.length > 0
         ? parsed.quickLinks
         : DEFAULT_SUBSCRIPTION.quickLinks,
-      policyLinks: Array.isArray(parsed.policyLinks) && parsed.policyLinks.length > 0
-        ? parsed.policyLinks
-        : DEFAULT_SUBSCRIPTION.policyLinks,
+      policyLinks,
     }
   } catch {
     return DEFAULT_SUBSCRIPTION

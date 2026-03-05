@@ -1,8 +1,4 @@
-"use client"
-
-import type React from "react"
 import { useState, useRef, useCallback, useEffect } from "react"
-import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface BeforeAfterSliderProps {
@@ -31,7 +27,7 @@ export default function BeforeAfterSlider({
   afterImage,
   beforeAlt = "Before",
   afterAlt = "After",
-  width = "100%", // full width by default
+  width = "100%",
   height = 600,
   className = "",
 }: BeforeAfterSliderProps) {
@@ -69,7 +65,6 @@ export default function BeforeAfterSlider({
   )
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    e.preventDefault()
     e.stopPropagation()
     setIsDragging(true)
   }, [])
@@ -87,90 +82,69 @@ export default function BeforeAfterSlider({
     setIsDragging(false)
   }, [])
 
-  // Allow click/tap anywhere to move slider
+  // Desktop only: click anywhere on container to move slider
   const handleContainerClick = useCallback((e: React.MouseEvent) => {
     if (!isDragging) {
       updatePosition(e.clientX)
     }
   }, [isDragging, updatePosition])
 
-  const handleContainerTouch = useCallback((e: React.TouchEvent) => {
-    if (!isDragging && e.touches[0]) {
-      updatePosition(e.touches[0].clientX)
-    }
-  }, [isDragging, updatePosition])
-
-  // Add global event listeners for smooth dragging
   useEffect(() => {
     if (isDragging) {
-      const handleGlobalMouseMove = (e: MouseEvent) => handleMouseMove(e)
-      const handleGlobalMouseUp = () => handleMouseUp()
-      const handleGlobalTouchMove = (e: TouchEvent) => handleTouchMove(e)
-      const handleGlobalTouchEnd = () => handleTouchEnd()
+      const onMove = (e: MouseEvent) => handleMouseMove(e)
+      const onUp = () => handleMouseUp()
+      const onTouchMove = (e: TouchEvent) => handleTouchMove(e)
+      const onTouchEnd = () => handleTouchEnd()
 
-      document.addEventListener('mousemove', handleGlobalMouseMove)
-      document.addEventListener('mouseup', handleGlobalMouseUp)
-      document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false })
-      document.addEventListener('touchend', handleGlobalTouchEnd)
+      document.addEventListener('mousemove', onMove)
+      document.addEventListener('mouseup', onUp)
+      document.addEventListener('touchmove', onTouchMove, { passive: false })
+      document.addEventListener('touchend', onTouchEnd)
 
       return () => {
-        document.removeEventListener('mousemove', handleGlobalMouseMove)
-        document.removeEventListener('mouseup', handleGlobalMouseUp)
-        document.removeEventListener('touchmove', handleGlobalTouchMove)
-        document.removeEventListener('touchend', handleGlobalTouchEnd)
+        document.removeEventListener('mousemove', onMove)
+        document.removeEventListener('mouseup', onUp)
+        document.removeEventListener('touchmove', onTouchMove)
+        document.removeEventListener('touchend', onTouchEnd)
       }
     }
   }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd])
 
-  // Determine label visibility
   const showAfter = sliderPosition < 80
   const showBefore = sliderPosition > 20
 
-  // Generate 4 star sparkles at the right bottom corner when after image is 80%+ visible
   useEffect(() => {
     if (sliderPosition <= 20) {
-      // Create 4 sparkles with staggered appearance
       const sparkleSizes = [24, 30, 36, 28]
-      
       const createSparkle = (index: number) => {
         setTimeout(() => {
-          // Position sparkles in a spread pattern
           const positions = [
-            { x: 88, y: 85 },   // Top-left of corner
-            { x: 92, y: 88 },   // Middle area
-            { x: 86, y: 91 },   // Bottom-left
-            { x: 90, y: 93 },   // Bottom-right
+            { x: 88, y: 85 },
+            { x: 92, y: 88 },
+            { x: 86, y: 91 },
+            { x: 90, y: 93 },
           ]
-          
           const pos = positions[index]
-          
           const newSparkle: Sparkle = {
             id: sparkleIdRef.current++,
-            x: pos.x + Math.random() * 2, // Small random offset
+            x: pos.x + Math.random() * 2,
             y: pos.y + Math.random() * 2,
             size: sparkleSizes[index],
             delay: 0,
             type: 'star',
             color: '#FFFFFF',
-            duration: 7, // 7 seconds - very slow
+            duration: 7,
           }
-          
           setSparkles((prev) => {
             if (prev.length >= 4) return prev
             return [...prev, newSparkle]
           })
-          
-          // Remove after animation completes
           setTimeout(() => {
             setSparkles((prev) => prev.filter((s) => s.id !== newSparkle.id))
-          }, 8000) // Wait 8 seconds before removing
-        }, index * 1500) // Spawn each sparkle with 1.5 second delay
+          }, 8000)
+        }, index * 1500)
       }
-
-      // Create all 4 sparkles with delays
-      for (let i = 0; i < 4; i++) {
-        createSparkle(i)
-      }
+      for (let i = 0; i < 4; i++) createSparkle(i)
     } else {
       setSparkles([])
     }
@@ -179,25 +153,22 @@ export default function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden cursor-ew-resize select-none touch-none bg-white dark:bg-[#15171a] ${className}`}
-      style={{ width, height, touchAction: 'none', WebkitTouchCallout: 'none' }}
+      className={`relative overflow-hidden select-none bg-background ${className}`}
+      style={{ width, height }}
       onClick={handleContainerClick}
-      onTouchStart={handleContainerTouch}
     >
       {/* After Image (Background) */}
-      <Image
+      <img
         src={afterImage || "/placeholder.svg"}
         alt={afterAlt}
-        width={width === "100%" ? 1200 : (width as number)}
-        height={height}
         className="absolute inset-0 w-full h-full object-cover"
-        priority
+        draggable={false}
       />
 
-      {/* Elegant White Star Sparkles in Right Bottom Corner */}
+      {/* Sparkles */}
       <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
         <AnimatePresence>
-          {sparkles.map((sparkle, index) => (
+          {sparkles.map((sparkle) => (
             <motion.div
               key={sparkle.id}
               className="absolute"
@@ -206,39 +177,22 @@ export default function BeforeAfterSlider({
                 top: `${sparkle.y}%`,
                 width: `${sparkle.size}px`,
                 height: `${sparkle.size}px`,
-                filter: "drop-shadow(0 0 10px rgba(255, 255, 255, 1)) drop-shadow(0 0 20px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4))",
+                filter: "drop-shadow(0 0 10px rgba(255,255,255,1)) drop-shadow(0 0 20px rgba(255,255,255,0.7))",
               }}
-              initial={{ 
-                scale: 0, 
-                opacity: 0, 
-                rotate: 0,
-              }}
+              initial={{ scale: 0, opacity: 0, rotate: 0 }}
               animate={{
                 scale: [0, 0.2, 0.4, 0.7, 1, 1, 1, 1, 1, 0.7, 0.4, 0.2, 0],
                 opacity: [0, 0.15, 0.3, 0.5, 0.7, 0.9, 1, 1, 0.9, 0.7, 0.4, 0.2, 0],
                 rotate: [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360],
               }}
-              exit={{ 
-                scale: 0, 
-                opacity: 0,
-                transition: { duration: 2.5, ease: "easeOut" }
-              }}
-              transition={{
-                duration: sparkle.duration,
-                delay: sparkle.delay,
-                ease: [0.45, 0.05, 0.55, 0.95], // Very slow and smooth
-              }}
+              exit={{ scale: 0, opacity: 0, transition: { duration: 2.5, ease: "easeOut" } }}
+              transition={{ duration: sparkle.duration, delay: sparkle.delay, ease: [0.45, 0.05, 0.55, 0.95] }}
             >
-              {/* Clean White Star Sparkle */}
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 <defs>
                   <filter id={`glow-${sparkle.id}`}>
                     <feGaussianBlur stdDeviation="4" result="blur"/>
-                    <feMerge>
-                      <feMergeNode in="blur"/>
-                      <feMergeNode in="blur"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                   </filter>
                   <radialGradient id={`grad-${sparkle.id}`}>
                     <stop offset="0%" stopColor="#FFFFFF" />
@@ -246,25 +200,9 @@ export default function BeforeAfterSlider({
                     <stop offset="100%" stopColor="rgba(255,255,255,0)" />
                   </radialGradient>
                 </defs>
-                
-                {/* Soft outer glow */}
                 <circle cx="50" cy="50" r="45" fill={`url(#grad-${sparkle.id})`} opacity="0.4" />
-                
-                {/* Main star shape */}
-                <path
-                  d="M50 5 L57 42 L95 50 L57 58 L50 95 L43 58 L5 50 L43 42 Z"
-                  fill="white"
-                  filter={`url(#glow-${sparkle.id})`}
-                />
-                
-                {/* Inner star for depth */}
-                <path
-                  d="M50 30 L54 47 L70 50 L54 53 L50 70 L46 53 L30 50 L46 47 Z"
-                  fill="white"
-                  opacity="0.9"
-                />
-                
-                {/* Bright center */}
+                <path d="M50 5 L57 42 L95 50 L57 58 L50 95 L43 58 L5 50 L43 42 Z" fill="white" filter={`url(#glow-${sparkle.id})`} />
+                <path d="M50 30 L54 47 L70 50 L54 53 L50 70 L46 53 L30 50 L46 47 Z" fill="white" opacity="0.9" />
                 <circle cx="50" cy="50" r="10" fill="white" />
                 <circle cx="50" cy="50" r="6" fill="white" opacity="0.95" />
               </svg>
@@ -278,70 +216,53 @@ export default function BeforeAfterSlider({
         className="absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
-        <Image
+        <img
           src={beforeImage || "/placeholder.svg"}
           alt={beforeAlt}
-          width={width === "100%" ? 1200 : (width as number)}
-          height={height}
           className="w-full h-full object-cover"
-          priority
+          draggable={false}
         />
       </div>
 
-      {/* Slider Line and Handle - Positioned Together */}
+      {/* Slider Line and Handle */}
       <div
         className="absolute top-0 bottom-0 z-20"
-        style={{ 
-          left: `${sliderPosition}%`,
-          transform: 'translateX(-50%)'
-        }}
+        style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
-        {/* Slider Line */}
         <div
-          className="absolute top-0 bottom-0 w-[3px] bg-white dark:bg-[#15171a] shadow-lg left-1/2 pointer-events-none"
-          style={{ 
-            transform: 'translateX(-50%)',
-            boxShadow: '0 0 10px rgba(0,0,0,0.3), inset 0 0 5px rgba(255,255,255,0.5)'
-          }}
+          className="absolute top-0 bottom-0 w-[3px] bg-white dark:bg-foreground shadow-lg left-1/2 pointer-events-none"
+          style={{ transform: 'translateX(-50%)', boxShadow: '0 0 10px rgba(0,0,0,0.3)' }}
         />
 
-        {/* Slider Handle */}
+        {/* Handle - ONLY this is touch-interactive on mobile */}
         <div
-          className={`absolute top-1/2 w-12 h-12 bg-white dark:bg-[#15171a] shadow-xl border-3 border-gray-300 dark:border-[#ec1e24] rounded-full flex items-center justify-center transition-all duration-200 touch-none ${
+          className={`absolute top-1/2 w-12 h-12 bg-white dark:bg-background shadow-xl border-2 border-muted-foreground/30 dark:border-primary rounded-full flex items-center justify-center transition-all duration-200 ${
             isDragging ? 'cursor-grabbing scale-110 shadow-2xl' : 'cursor-grab hover:scale-105'
           }`}
-          style={{ 
+          style={{
             left: '50%',
             transform: 'translate(-50%, -50%)',
             touchAction: 'none',
-            userSelect: 'none'
+            userSelect: 'none',
           }}
-          onMouseDown={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            handleMouseDown(e)
-          }}
-          onTouchStart={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            handleTouchStart(e)
-          }}
+          onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); handleMouseDown(e) }}
+          onTouchStart={(e) => { e.stopPropagation(); handleTouchStart(e) }}
         >
           <div className="flex gap-1 pointer-events-none">
-            <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
-            <div className="w-[2px] h-5 bg-gray-500 dark:bg-[#ec1e24] rounded-full" />
+            <div className="w-[2px] h-5 bg-muted-foreground dark:bg-primary rounded-full" />
+            <div className="w-[2px] h-5 bg-muted-foreground dark:bg-primary rounded-full" />
           </div>
         </div>
       </div>
 
       {/* Labels */}
       {showBefore && (
-        <div className="absolute top-4 left-4 bg-white dark:bg-[#15171a]/60 text-[#001F4B] dark:text-white/40 px-2 py-1 rounded text-sm font-medium">
+        <div className="absolute top-4 left-4 bg-background/80 text-foreground px-2 py-1 rounded text-sm font-medium">
           Before
         </div>
       )}
       {showAfter && (
-        <div className="absolute top-4 right-4 bg-white dark:bg-[#15171a]/60 text-[#001F4B] dark:text-white/40 px-2 py-1 rounded text-sm font-medium">
+        <div className="absolute top-4 right-4 bg-background/80 text-foreground px-2 py-1 rounded text-sm font-medium">
           After
         </div>
       )}

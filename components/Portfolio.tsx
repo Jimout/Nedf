@@ -90,10 +90,10 @@ export default function Portfolio() {
         )}
       </AnimatePresence>
 
-      {/* Full-width Section - negative margin pulls up to sit right after Services (no gap from slogan pin) */}
+      {/* Full-width Section - flows after Services on all screens */}
       <section
         id="portfolio"
-        className="relative z-10 -mt-[100vh] pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24 bg-background"
+        className="relative z-10 pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24 bg-background"
       >
         <div className="w-full">
         <div
@@ -109,7 +109,7 @@ export default function Portfolio() {
             2024
           </span>
           <h1
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-foreground/80 dark:text-primary ${
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-foreground/80 dark:text-primary ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >

@@ -115,7 +115,7 @@ function TeamMemberCard({ image, name, role, bio, socials, idx }: TeamMemberCard
     <div 
       className={cn(
         "flex flex-col items-center text-center w-full",
-        "max-w-[260px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-[320px] xl:max-w-[360px] 2xl:max-w-[400px] 3xl:max-w-[420px] 4xl:max-w-[460px]",
+        "max-w-[260px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-[320px] xl:max-w-[360px] 2xl:max-w-[640px] 3xl:max-w-[760px] 4xl:max-w-[880px]",
         "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-5",
         idx === 0 ? "lg:mr-auto" : idx === 2 ? "lg:ml-auto" : "lg:mx-auto"
       )}
@@ -132,9 +132,9 @@ function MemberAvatar({ image, name }: { image: string; name: string }) {
       <Image
         src={image}
         alt={name}
-        width={160}
-        height={160}
-        className="rounded-full object-cover shadow-lg w-20 h-20 sm:w-24 sm:h-24 md:w-[112px] md:h-[112px] lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40 3xl:w-44 3xl:h-44 4xl:w-48 4xl:h-48"
+        width={320}
+        height={320}
+        className="rounded-full object-cover shadow-lg w-20 h-20 sm:w-24 sm:h-24 md:w-[112px] md:h-[112px] lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-64 2xl:h-64 3xl:w-72 3xl:h-72 4xl:w-80 4xl:h-80"
       />
       <div className="absolute inset-0 rounded-full bg-[#15171a] opacity-10" />
     </div>
@@ -145,10 +145,10 @@ function MemberInfo({ name, role, bio, socials }: Omit<TeamMemberCardProps, 'ima
   return (
     <div className="space-y-2 sm:space-y-2 md:space-y-3 lg:space-y-3 xl:space-y-3 2xl:space-y-3 w-full">
       <div>
-        <h3 className="text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl font-medium text-[#001F4B] dark:text-[#ec1e24] font-montserrat">
+        <h3 className="text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-3xl 3xl:text-4xl 4xl:text-[2rem] font-medium text-[#001F4B] dark:text-[#ec1e24] font-montserrat">
           {name}
         </h3>
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base text-[#333333]/40 dark:text-white/60 font-montserrat">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-[1.4rem] text-[#333333]/40 dark:text-white/60 font-montserrat">
           {role}
         </p>
       </div>
@@ -156,7 +156,7 @@ function MemberInfo({ name, role, bio, socials }: Omit<TeamMemberCardProps, 'ima
       {/* Responsive divider width (fix non-standard `w-18`) */}
       <div className="border-t border-gray-300 dark:border-white/20 w-12 sm:w-14 md:w-16 lg:w-16 xl:w-[4.5rem] 2xl:w-20 3xl:w-24 4xl:w-[112px] mx-auto" />
 
-      <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg text-[#333333]/80 dark:text-white/70 leading-relaxed px-2 sm:px-3 md:px-4 lg:px-4 xl:px-4 2xl:px-6 font-montserrat">
+      <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base text-[#333333]/80 dark:text-white/70 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 2xl:text-muted-foreground 3xl:text-muted-foreground 4xl:text-muted-foreground font-normal leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6] px-2 sm:px-3 md:px-4 lg:px-4 xl:px-4 2xl:px-6 font-montserrat">
         {bio}
       </p>
 
@@ -267,7 +267,7 @@ export function OurTeam() {
       className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 w-full relative z-10 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
     >
       <div className="w-full">
-        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-bold font-montserrat tracking-tight mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 text-[#333333]/80 dark:text-[#ec1e24]">
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 text-foreground/80 dark:text-primary">
           OUR TEAM
         </h2>
 
@@ -323,7 +323,7 @@ function TeamSlider({
       >
         {Array.from({ length: totalPages }, (_, pageIndex) => (
           <div key={pageIndex} className="w-full flex-shrink-0">
-            <div className="flex flex-col md:flex-row gap-6 sm:gap-7 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 3xl:gap-20 4xl:gap-24 w-full justify-center lg:justify-end items-center">
+            <div className="flex flex-col md:flex-row gap-6 sm:gap-7 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 3xl:gap-20 4xl:gap-24 w-full max-w-6xl 2xl:max-w-[180rem] 3xl:max-w-[180rem] 4xl:max-w-[180rem] 2xl:mx-auto 3xl:mx-auto 4xl:mx-auto justify-center lg:justify-center items-center">
               {TEAM_DATA.slice(
                 pageIndex * itemsPerPage,
                 (pageIndex + 1) * itemsPerPage

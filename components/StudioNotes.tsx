@@ -78,8 +78,6 @@ const ITEMS_PER_PAGE = {
 
 const SWIPE_THRESHOLD = 50
 
-// ==================== HELPER FUNCTIONS ====================
-
 function getItemsPerPage(isMobile: boolean): number {
   return isMobile ? ITEMS_PER_PAGE.MOBILE : ITEMS_PER_PAGE.DESKTOP
 }
@@ -87,8 +85,6 @@ function getItemsPerPage(isMobile: boolean): number {
 function getBlogSlug(postId: number): string {
   return postId === 0 ? "blog-1" : `blog-${postId + 1}`
 }
-
-// ==================== MAIN COMPONENT ====================
 
 export default function StudioNotes() {
   const [isMobile, setIsMobile] = useState(false)
@@ -100,7 +96,6 @@ export default function StudioNotes() {
   const itemsPerPage = getItemsPerPage(isMobile)
   const totalPages = Math.ceil(BLOG_POSTS.length / itemsPerPage)
 
-  // Track mobile state
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640)
@@ -111,7 +106,6 @@ export default function StudioNotes() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Reset page when items per page changes
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1)
@@ -137,11 +131,11 @@ export default function StudioNotes() {
     if (isLeftSwipe && currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1)
     }
+
     if (isRightSwipe && currentPage > 1) {
       setCurrentPage((prev) => prev - 1)
     }
 
-    // Reset touch values
     setTouchStart(0)
     setTouchEnd(0)
   }
@@ -153,6 +147,7 @@ export default function StudioNotes() {
   return (
     <section className="w-full">
       <div className="flex flex-col">
+
         <BlogPostsSlider
           totalPages={totalPages}
           currentPage={currentPage}
@@ -171,12 +166,11 @@ export default function StudioNotes() {
             onPageChange={setCurrentPage}
           />
         )}
+
       </div>
     </section>
   )
 }
-
-// ==================== SUB-COMPONENTS ====================
 
 function BlogPostsSlider({
   totalPages,
@@ -187,16 +181,8 @@ function BlogPostsSlider({
   onTouchMove,
   onTouchEnd,
   onReadMore,
-}: {
-  totalPages: number
-  currentPage: number
-  itemsPerPage: number
-  isMobile: boolean
-  onTouchStart: (e: React.TouchEvent) => void
-  onTouchMove: (e: React.TouchEvent) => void
-  onTouchEnd: () => void
-  onReadMore: (postId: number) => void
-}) {
+}: any) {
+
   return (
     <div
       className="relative overflow-hidden"
@@ -204,30 +190,42 @@ function BlogPostsSlider({
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
+
       <motion.div
         className="flex transition-transform duration-1000 ease-in-out"
         style={{
           transform: `translateX(-${(currentPage - 1) * 100}%)`,
         }}
       >
+
         {Array.from({ length: totalPages }, (_, pageIndex) => (
+
           <div key={pageIndex} className="w-full flex-shrink-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-7 xl:gap-8 2xl:gap-10 mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+
               {BLOG_POSTS.slice(
                 pageIndex * itemsPerPage,
                 (pageIndex + 1) * itemsPerPage
               ).map((post) => (
+
                 <BlogPostCard
                   key={`${pageIndex}-${post.id}`}
                   post={post}
                   isMobile={isMobile}
                   onReadMore={onReadMore}
                 />
+
               ))}
+
             </div>
+
           </div>
+
         ))}
+
       </motion.div>
+
     </div>
   )
 }
@@ -236,14 +234,16 @@ function BlogPostCard({
   post,
   isMobile,
   onReadMore,
-}: {
-  post: BlogPost
-  isMobile: boolean
-  onReadMore: (postId: number) => void
-}) {
+}: any) {
+
   return (
-    <article className="group bg-white dark:bg-[#15171a] border border-gray-300 dark:border-white/10 flex flex-col overflow-hidden transition-shadow h-[380px] sm:h-[400px] md:h-[420px] lg:h-[440px] xl:h-[460px] 2xl:h-[480px]">
+
+    <article className="group bg-white dark:bg-[#15171a] border border-gray-300 dark:border-white/10 flex flex-col overflow-hidden transition-shadow 
+    w-full max-w-[280px] mx-auto
+    h-[520px] sm:h-[540px] md:h-[560px] lg:h-[580px] xl:h-[600px]">
+
       <PostImage image={post.image} title={post.title} isMobile={isMobile} />
+
       <PostContent
         categories={post.categories}
         title={post.title}
@@ -251,29 +251,27 @@ function BlogPostCard({
         postId={post.id}
         onReadMore={onReadMore}
       />
+
     </article>
   )
 }
 
-function PostImage({
-  image,
-  title,
-  isMobile,
-}: {
-  image: string
-  title: string
-  isMobile: boolean
-}) {
+function PostImage({ image, title, isMobile }: any) {
+
   return (
-    <div className="relative w-full h-[150px] sm:h-[160px] md:h-[170px] lg:h-[180px] xl:h-[190px] 2xl:h-[200px]">
+
+    <div className="relative w-full h-[220px]">
+
       <Image
-        src={image || "/placeholder.svg"}
+        src={image}
         alt={title}
         fill
         className="object-cover transition-transform duration-300 group-hover:scale-105"
         sizes={isMobile ? "260px" : "300px"}
       />
+
       <div className="absolute inset-0 bg-[#15171a] opacity-0 dark:opacity-30 transition-all duration-300 group-hover:scale-105" />
+
     </div>
   )
 }
@@ -284,50 +282,58 @@ function PostContent({
   description,
   postId,
   onReadMore,
-}: {
-  categories: string[]
-  title: string
-  description: string
-  postId: number
-  onReadMore: (postId: number) => void
-}) {
+}: any) {
+
   return (
-    <div className="relative p-3 sm:p-4 md:p-4 lg:p-5 xl:p-5 2xl:p-6 flex flex-col flex-1">
+
+    <div className="relative p-6 flex flex-col flex-1">
+
       <CategoryTags categories={categories} />
 
-      <h2 className="text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl text-[#333333] dark:text-white font-regular leading-6 mb-2 sm:mb-2 md:mb-2 lg:mb-3 xl:mb-3 2xl:mb-3">
+      <h2 className="text-xl text-[#333333] dark:text-white leading-6 mb-3">
         {title}
       </h2>
 
-      <div className="flex-1 mb-3">
-        <p className="text-[#333333]/60 dark:text-white/60 text-xs sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base line-clamp-3">
+      <div className="flex-1 mb-4">
+
+        <p className="text-[#333333]/60 dark:text-white/60 text-sm line-clamp-4">
           {description}
         </p>
+
       </div>
 
       <div className="flex justify-end">
+
         <Button
           onClick={() => onReadMore(postId)}
-          className="bg-[#002e47] dark:bg-[#ec1e24] text-white hover:bg-[#001f35] dark:hover:bg-[#ec1e24]/90 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg px-3 sm:px-4 md:px-4 lg:px-5 xl:px-5 2xl:px-6 py-2 sm:py-2 md:py-2 lg:py-2.5 xl:py-2.5 2xl:py-3"
+          className="bg-[#002e47] dark:bg-[#ec1e24] text-white hover:bg-[#001f35] dark:hover:bg-[#ec1e24]/90"
         >
           Read More
         </Button>
+
       </div>
+
     </div>
   )
 }
 
-function CategoryTags({ categories }: { categories: string[] }) {
+function CategoryTags({ categories }: any) {
+
   return (
-    <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-2 lg:gap-2 xl:gap-2 2xl:gap-2.5 mb-2" style={{ minHeight: "24px" }}>
-      {categories.map((cat, idx) => (
+
+    <div className="flex flex-wrap gap-2 mb-3">
+
+      {categories.map((cat: string, idx: number) => (
+
         <span
           key={idx}
-          className="text-[10px] sm:text-xs md:text-xs lg:text-xs xl:text-sm 2xl:text-sm font-medium px-2 sm:px-3 md:px-3 lg:px-3 xl:px-3 2xl:px-4 py-0.5 sm:py-1 md:py-1 lg:py-1 xl:py-1 2xl:py-1 bg-secondary text-secondary-foreground/70 rounded-full"
+          className="text-xs font-medium px-3 py-1 bg-secondary text-secondary-foreground/70 rounded-full"
         >
           {cat}
         </span>
+
       ))}
+
     </div>
   )
 }
@@ -336,16 +342,16 @@ function NavigationControls({
   currentPage,
   totalPages,
   onPageChange,
-}: {
-  currentPage: number
-  totalPages: number
-  onPageChange: (page: number) => void
-}) {
+}: any) {
+
   return (
+
     <>
-      {/* Mobile - Dot Indicators */}
-      <div className="flex justify-center gap-1.5 sm:gap-2 md:hidden mt-4 sm:mt-5">
+
+      <div className="flex justify-center gap-2 md:hidden mt-5">
+
         {Array.from({ length: totalPages }, (_, index) => (
+
           <button
             key={index}
             onClick={() => onPageChange(index + 1)}
@@ -353,21 +359,26 @@ function NavigationControls({
               "w-2 h-2 rounded-full transition-all duration-300",
               currentPage === index + 1
                 ? "bg-[#001F4B] dark:bg-[#ec1e24] scale-125"
-                : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
+                : "bg-gray-300 dark:bg-gray-600"
             )}
-            aria-label={`Go to page ${index + 1}`}
           />
+
         ))}
+
       </div>
 
-      {/* Desktop - Pagination */}
-      <div className="hidden md:flex justify-center mt-6 lg:mt-7 xl:mt-8 2xl:mt-10">
-        <Pagination 
-          page={currentPage} 
-          setPage={(page) => onPageChange(typeof page === 'function' ? page(currentPage) : page)} 
-          total={totalPages} 
+      <div className="hidden md:flex justify-center mt-8">
+
+        <Pagination
+          page={currentPage}
+          setPage={(page: any) =>
+            onPageChange(typeof page === "function" ? page(currentPage) : page)
+          }
+          total={totalPages}
         />
+
       </div>
+
     </>
   )
 }

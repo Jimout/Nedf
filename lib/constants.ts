@@ -10,6 +10,8 @@ export const ROUTES = {
   HOME: "/",
   ABOUT: "/about",
   CONTACT: "/contact",
+  PRIVACY_POLICY: "/privacy-policy",
+  TERMS_AND_CONDITIONS: "/terms-and-conditions",
 } as const
 
 export const API_ENDPOINTS = {

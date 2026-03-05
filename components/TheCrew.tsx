@@ -263,7 +263,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
     <div
       className={cn(
         "space-y-3 sm:space-y-3 md:space-y-4 lg:space-y-4 xl:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8",
-        "w-full max-w-[200px] sm:max-w-[220px] md:max-w-[240px] lg:max-w-[280px] xl:max-w-[320px] 2xl:max-w-[420px] 3xl:max-w-[460px] 4xl:max-w-[520px]",
+        "w-full max-w-[200px] sm:max-w-[220px] md:max-w-[240px] lg:max-w-[280px] xl:max-w-[320px] 2xl:max-w-[720px] 3xl:max-w-[880px] 4xl:max-w-[1000px]",
         "mx-auto founder-card visible",
         index === 0 ? "md:order-1" : "md:order-2"
       )}
@@ -304,7 +304,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       </CometCard>
 
       <div className="space-y-2">
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-foreground leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6]">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 2xl:text-muted-foreground 3xl:text-muted-foreground 4xl:text-muted-foreground font-normal leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6]">
           {founder.description}
         </p>
 

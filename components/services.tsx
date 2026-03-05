@@ -5,11 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Minimize2 } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { LANDING_SERVICES_KEY } from "@/lib/constants";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type PortfolioFilter = "Architecture" | "Interior" | "Visualization" | "All";
 
@@ -110,44 +106,11 @@ export default function ServicesSection() {
     return null;
   }
 
-  // Overlap slogan only after it has fully finished; then smooth slide-up (no sudden jump)
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const sloganSection = section.previousElementSibling;
-    if (!sloganSection) return;
-
-    const sloganScroll = () => window.innerHeight * 2;
-    const coverScroll = () => window.innerHeight * 0.5; // extra scroll for smooth cover
-    const totalScroll = () => sloganScroll() + coverScroll();
-
-    const st = ScrollTrigger.create({
-      trigger: sloganSection,
-      start: "top top",
-      end: () => `+=${totalScroll()}`,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        const p = self.progress;
-        const sloganDone = sloganScroll() / totalScroll(); // progress when slogan just finished
-        let y: number;
-        if (p <= sloganDone) {
-          y = 0; // slogan still running: Services not overlapping
-        } else {
-          // After slogan finished: smooth cover over the extra scroll range
-          const coverProgress = (p - sloganDone) / (1 - sloganDone);
-          y = -coverProgress * window.innerHeight;
-        }
-        gsap.set(section, { y });
-      },
-    });
-    return () => st.kill();
-  }, []);
-
   return (
     <section
       ref={sectionRef}
       id="services"
-      className="relative z-20 w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="relative z-10 w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
     >
       <div className="relative w-full">
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 2xl:mb-12 3xl:mb-14 4xl:mb-16 flex flex-col gap-3 sm:gap-4 md:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 sm:flex-row sm:items-center sm:justify-between">
