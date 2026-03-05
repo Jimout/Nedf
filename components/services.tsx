@@ -276,7 +276,7 @@ export default function ServicesSection() {
                     <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-10 3xl:mb-12 4xl:mb-14 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-7xl 3xl:text-8xl 4xl:text-9xl font-bold leading-tight text-card-foreground">
                       {active.headline}
                     </h2>
-                    <div className="flex items-center gap-3 sm:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 flex-wrap">
+                    <div className="flex items-center gap-3 sm:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 flex-wrap mb-12 sm:mb-0">
                       <a
                         href="/#portfolio"
                         className={cn(
