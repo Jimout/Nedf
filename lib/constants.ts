@@ -66,3 +66,9 @@ export const LANDING_SLOGAN_KEY = "landingSlogan"
 
 /** localStorage key for The Crew / founders (dashboard-managed) */
 export const LANDING_CREW_KEY = "landingCrew"
+
+/** localStorage key for footer subscription block (dashboard-managed) */
+export const LANDING_SUBSCRIPTION_KEY = "landingSubscription"
+
+/** localStorage key for contact page content (dashboard-managed) */
+export const LANDING_CONTACT_KEY = "landingContact"

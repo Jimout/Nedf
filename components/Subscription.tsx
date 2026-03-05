@@ -1,6 +1,13 @@
+ "use client";
+
+import { useEffect, useState } from "react";
 import { Send, Linkedin, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  loadSubscription,
+  type SubscriptionData,
+} from "@/lib/landing-subscription";
 
 /** TikTok logo as inline SVG (not in lucide) */
 function TiktokIcon({ className }: { className?: string }) {
@@ -20,29 +27,15 @@ function XIcon({ className }: { className?: string }) {
   );
 }
 
-const quickLinks = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/#services" },
-  { label: "About", href: "/#TheCrew" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-];
-
-const connectSocialLinks = [
-  { name: "LinkedIn", href: "#", Icon: Linkedin },
-  { name: "Instagram", href: "#", Icon: Instagram },
-  { name: "TikTok", href: "#", Icon: TiktokIcon },
-  { name: "X", href: "#", Icon: XIcon },
-  { name: "YouTube", href: "#", Icon: Youtube },
-];
-
-const policyLinks = [
-  "Privacy Policy",
-  "Terms and Conditions",
-];
-
 export default function Footer() {
+  const [data, setData] = useState<SubscriptionData | null>(null);
+
+  useEffect(() => {
+    setData(loadSubscription());
+  }, []);
+
+  if (!data) return null;
+
   return (
     <footer
       id="footer"
@@ -56,14 +49,14 @@ export default function Footer() {
             {/* Logo (same as nav, larger in footer) */}
             <Link href="/" className="inline-block">
               <Image
-                src="/NEDF TEXT BASED LOGO-14.png"
+                src={data.logoLight}
                 alt="NEDF Studio"
                 width={280}
                 height={90}
                 className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[240px] 3xl:w-[260px] 4xl:w-[280px] dark:hidden"
               />
               <Image
-                src="/NEDF TEXT BASED LOGO-13.png"
+                src={data.logoDark}
                 alt="NEDF Studio"
                 width={280}
                 height={90}
@@ -76,16 +69,16 @@ export default function Footer() {
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={data.newsletter.placeholder}
                   className="flex-1 min-w-0 px-3 py-2.5 sm:px-4 sm:py-3 2xl:px-4 2xl:py-3 3xl:px-5 3xl:py-3.5 4xl:px-5 4xl:py-4 text-sm sm:text-base 2xl:text-base 3xl:text-base 4xl:text-lg bg-footer-input text-footer-foreground placeholder:text-footer-muted border border-footer-border focus:outline-none focus:ring-1 focus:ring-footer-accent"
                 />
                 <button className="px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-6 2xl:py-3 3xl:px-7 3xl:py-3.5 4xl:px-8 4xl:py-4 bg-primary text-primary-foreground text-sm sm:text-base 2xl:text-base 3xl:text-base 4xl:text-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shrink-0">
                   <Send className="w-4 h-4 sm:w-4 sm:h-4 4xl:w-5 4xl:h-5" />
-                  Subscribe
+                  {data.newsletter.buttonLabel}
                 </button>
               </div>
               <p className="text-xs sm:text-sm 2xl:text-sm 3xl:text-base 4xl:text-base text-footer-muted">
-                We’ll only send updates worth your inbox. Projects, insights, and studio news.
+                {data.newsletter.description}
               </p>
             </div>
           </div>
@@ -99,9 +92,12 @@ export default function Footer() {
                   Quick Links
                 </h3>
                 <ul className="space-y-2">
-                  {quickLinks.map((link) => (
+                  {data.quickLinks.map((link) => (
                     <li key={link.href}>
-                      <a href={link.href} className="text-footer-muted hover:text-footer-foreground transition-colors text-sm 2xl:text-sm 3xl:text-base 4xl:text-base">
+                      <a
+                        href={link.href}
+                        className="text-footer-muted hover:text-footer-foreground transition-colors text-sm 2xl:text-sm 3xl:text-base 4xl:text-base"
+                      >
                         {link.label}
                       </a>
                     </li>
@@ -114,18 +110,27 @@ export default function Footer() {
                 </h3>
                 <ul className="space-y-2 text-sm 2xl:text-sm 3xl:text-base 4xl:text-base text-footer-muted">
                   <li>
-                    <a href="mailto:Nedf123@gmail.com" className="hover:text-footer-foreground transition-colors">
-                      Nedf123@gmail.com
+                    <a
+                      href={`mailto:${data.contact.email}`}
+                      className="hover:text-footer-foreground transition-colors"
+                    >
+                      {data.contact.email}
                     </a>
                   </li>
                   <li>
-                    <a href="tel:+251945289012" className="hover:text-footer-foreground transition-colors">
-                      +251 945 289 012
+                    <a
+                      href={`tel:${data.contact.phonePrimary}`}
+                      className="hover:text-footer-foreground transition-colors"
+                    >
+                      {data.contact.phonePrimary}
                     </a>
                   </li>
                   <li>
-                    <a href="tel:+251900672518" className="hover:text-footer-foreground transition-colors">
-                      +251 900 672 518
+                    <a
+                      href={`tel:${data.contact.phoneSecondary}`}
+                      className="hover:text-footer-foreground transition-colors"
+                    >
+                      {data.contact.phoneSecondary}
                     </a>
                   </li>
                 </ul>
@@ -138,10 +143,18 @@ export default function Footer() {
                 Connect With Us Online
               </h3>
               <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 2xl:gap-4 3xl:gap-5 4xl:gap-5">
-                {connectSocialLinks.map(({ name, href, Icon }) => (
+                {[
+                  { name: "LinkedIn", href: data.social.linkedin, Icon: Linkedin },
+                  { name: "Instagram", href: data.social.instagram, Icon: Instagram },
+                  { name: "TikTok", href: data.social.tiktok, Icon: TiktokIcon },
+                  { name: "X", href: data.social.x, Icon: XIcon },
+                  { name: "YouTube", href: data.social.youtube, Icon: Youtube },
+                ]
+                  .filter((item) => item.href)
+                  .map(({ name, href, Icon }) => (
                   <a
                     key={name}
-                    href={href}
+                    href={href!}
                     aria-label={name}
                     className="flex items-center justify-center min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] 2xl:min-w-[44px] 2xl:min-h-[44px] 4xl:min-w-[48px] 4xl:min-h-[48px] rounded-full border border-footer-border text-primary hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 hover:scale-110"
                   >
@@ -162,15 +175,19 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-xs 2xl:text-sm 3xl:text-sm 4xl:text-base text-footer-muted">
           {/* Policy links */}
           <div className="flex flex-wrap gap-3">
-            {policyLinks.map((link) => (
-              <a key={link} href="#" className="hover:text-footer-foreground transition-colors">
-                {link}
+            {data.policyLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="hover:text-footer-foreground transition-colors"
+              >
+                {link.label}
               </a>
             ))}
           </div>
 
           {/* Copyright */}
-          <p>© 2026 Nedf Studio. All rights reserved.</p>
+          <p>{data.copyright}</p>
         </div>
       </div>
     </footer>

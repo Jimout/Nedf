@@ -1,19 +1,14 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import { ChevronLeft, MapPin, Mail, Phone, Clock } from "lucide-react";
-import { FaLinkedin, FaInstagram, FaYoutube } from "react-icons/fa";
-import { FaTiktok, FaXTwitter } from "react-icons/fa6";
-import {
-  CONTACT_INFO,
-  CONTACT_PAGE,
-  CONTACT_FORM_LABELS,
-  SOCIAL_LINKS,
-  ROUTES,
-} from "@/lib/constants";
-import Subscription from "@/components/Subscription";
-import { cn } from "@/lib/utils";
+import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
+import { ChevronLeft, MapPin, Mail, Phone, Clock } from "lucide-react"
+import { FaLinkedin, FaInstagram, FaYoutube } from "react-icons/fa"
+import { FaTiktok, FaXTwitter } from "react-icons/fa6"
+import { ROUTES } from "@/lib/constants"
+import { loadContact, type ContactData } from "@/lib/landing-contact"
+import Subscription from "@/components/Subscription"
+import { cn } from "@/lib/utils"
 
 const SOCIAL_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   LinkedIn: FaLinkedin,
@@ -21,49 +16,61 @@ const SOCIAL_ICONS: Record<string, React.ComponentType<{ className?: string }>> 
   TikTok: FaTiktok,
   X: FaXTwitter,
   YouTube: FaYoutube,
-};
-
-const CONTACT_CARDS = [
-  {
-    key: "address",
-    label: "Address",
-    value: CONTACT_INFO.address,
-    icon: MapPin,
-    href: null,
-  },
-  {
-    key: "email",
-    label: "Email",
-    value: CONTACT_INFO.email,
-    icon: Mail,
-    href: `mailto:${CONTACT_INFO.email}`,
-  },
-  {
-    key: "phone",
-    label: "Phone",
-    value: CONTACT_INFO.phone,
-    icon: Phone,
-    href: `tel:${CONTACT_INFO.phone.replace(/\s/g, "")}`,
-  },
-  {
-    key: "availability",
-    label: "Availability",
-    value: CONTACT_INFO.availability,
-    icon: Clock,
-    href: null,
-  },
-] as const;
+}
 
 export default function ContactPage() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const [contactData, setContactData] = useState<ContactData | null>(null)
+  const [fullName, setFullName] = useState("")
+  const [email, setEmail] = useState("")
+  const [subject, setSubject] = useState("")
+  const [message, setMessage] = useState("")
+
+  useEffect(() => {
+    setContactData(loadContact())
+  }, [])
+
+  const contactCards = useMemo(() => {
+    if (!contactData) return []
+    return [
+      {
+        key: "address",
+        label: "Address",
+        value: contactData.info.address,
+        icon: MapPin,
+        href: null as string | null,
+      },
+      {
+        key: "email",
+        label: "Email",
+        value: contactData.info.email,
+        icon: Mail,
+        href: `mailto:${contactData.info.email}`,
+      },
+      {
+        key: "phone",
+        label: "Phone",
+        value: contactData.info.phone,
+        icon: Phone,
+        href: `tel:${contactData.info.phone.replace(/\s/g, "")}`,
+      },
+      {
+        key: "availability",
+        label: "Availability",
+        value: contactData.info.availability,
+        icon: Clock,
+        href: null as string | null,
+      },
+    ] as const
+  }, [contactData])
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // Form submission can be wired to an API or action later
-  };
+  }
+
+  if (!contactData) {
+    return null
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -78,10 +85,10 @@ export default function ContactPage() {
           </Link>
           <header className="min-w-0 text-center">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
-              {CONTACT_PAGE.title}
+              {contactData.page.title}
             </h1>
             <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mt-3 mx-auto">
-              {CONTACT_PAGE.subtitle}
+              {contactData.page.subtitle}
             </p>
           </header>
           <div />
@@ -93,64 +100,61 @@ export default function ContactPage() {
             className="bg-muted border border-border p-6 sm:p-8"
             aria-labelledby="contact-form-heading"
           >
-            <h2
-              id="contact-form-heading"
-              className="text-lg font-bold text-foreground mb-6"
-            >
-              {CONTACT_PAGE.formTitle}
+            <h2 id="contact-form-heading" className="text-lg font-bold text-foreground mb-6">
+              {contactData.page.formTitle}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="block">
                   <span className="block text-sm font-medium text-foreground mb-1">
-                    {CONTACT_FORM_LABELS.fullName} *
+                    {contactData.formLabels.fullName} *
                   </span>
                   <input
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder={CONTACT_FORM_LABELS.fullName}
+                    placeholder={contactData.formLabels.fullName}
                     className="w-full px-3 py-2.5 bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                 </label>
                 <label className="block">
                   <span className="block text-sm font-medium text-foreground mb-1">
-                    {CONTACT_FORM_LABELS.email} *
+                    {contactData.formLabels.email} *
                   </span>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder={CONTACT_FORM_LABELS.email}
+                    placeholder={contactData.formLabels.email}
                     className="w-full px-3 py-2.5 bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                 </label>
               </div>
               <label className="block">
                 <span className="block text-sm font-medium text-foreground mb-1">
-                  {CONTACT_FORM_LABELS.subject} *
+                  {contactData.formLabels.subject} *
                 </span>
                 <input
                   type="text"
                   required
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder={CONTACT_FORM_LABELS.subject}
+                  placeholder={contactData.formLabels.subject}
                   className="w-full px-3 py-2.5 bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </label>
               <label className="block">
                 <span className="block text-sm font-medium text-foreground mb-1">
-                  {CONTACT_FORM_LABELS.message} *
+                  {contactData.formLabels.message} *
                 </span>
                 <textarea
                   rows={4}
                   required
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder={CONTACT_FORM_LABELS.message}
+                  placeholder={contactData.formLabels.message}
                   className="w-full px-3 py-2.5 bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-y min-h-[100px]"
                 />
               </label>
@@ -158,25 +162,19 @@ export default function ContactPage() {
                 type="submit"
                 className="px-5 py-2.5 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
               >
-                {CONTACT_PAGE.sendButtonLabel}
+                {contactData.page.sendButtonLabel}
               </button>
             </form>
           </section>
 
           {/* Nedf's Contact Information */}
           <section aria-labelledby="company-info-heading">
-            <h2
-              id="company-info-heading"
-              className="text-lg font-bold text-foreground mb-6"
-            >
-              {CONTACT_PAGE.companyInfoTitle}
+            <h2 id="company-info-heading" className="text-lg font-bold text-foreground mb-6">
+              {contactData.page.companyInfoTitle}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              {CONTACT_CARDS.map(({ key, label, value, icon: Icon, href }) => (
-                <div
-                  key={key}
-                  className="border border-border bg-card p-4 flex gap-3"
-                >
+              {contactCards.map(({ key, label, value, icon: Icon, href }) => (
+                <div key={key} className="border border-border bg-card p-4 flex gap-3">
                   <div className="shrink-0 w-10 h-10 flex items-center justify-center bg-primary text-primary-foreground">
                     <Icon className="w-5 h-5" />
                   </div>
@@ -197,13 +195,11 @@ export default function ContactPage() {
               ))}
             </div>
             <div>
-              <p className="text-sm font-bold text-foreground mb-3">
-                {CONTACT_PAGE.socialLabel}
-              </p>
+              <p className="text-sm font-bold text-foreground mb-3">{contactData.page.socialLabel}</p>
               <div className="flex gap-3 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-4 justify-start flex-wrap">
-                {SOCIAL_LINKS.map(({ name, href }) => {
-                  const Icon = SOCIAL_ICONS[name];
-                  if (!Icon) return null;
+                {contactData.socialLinks.map(({ name, href }) => {
+                  const Icon = SOCIAL_ICONS[name]
+                  if (!Icon) return null
                   return (
                     <a
                       key={name}
@@ -215,12 +211,15 @@ export default function ContactPage() {
                         "w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10",
                         "rounded-full border border-border flex items-center justify-center",
                         "text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary",
-                        "transition-all duration-300 hover:scale-110 active:scale-95"
+                        "transition-all duration-300 hover:scale-110 active:scale-95",
                       )}
                     >
-                      <Icon size={14} className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 xl:w-5 xl:h-5" />
+                      <Icon
+                        size={14}
+                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 xl:w-5 xl:h-5"
+                      />
                     </a>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -230,5 +229,5 @@ export default function ContactPage() {
 
       <Subscription />
     </div>
-  );
+  )
 }

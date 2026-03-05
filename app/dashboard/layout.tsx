@@ -70,6 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { id: "services", label: "Services", icon: LayoutGrid, href: "/dashboard/manage-services" },
         { id: "steps", label: "Steps", icon: ListOrdered, href: "/dashboard/manage-steps" },
         { id: "slogan", label: "Slogan", icon: Quote, href: "/dashboard/manage-slogan" },
+        { id: "contact", label: "Contact page", icon: Mail, href: "/dashboard/manage-contact" },
       ],
     },
     {
@@ -121,7 +122,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
 
         <aside
-          className={`fixed top-0 left-0 h-screen bg-primary text-primary-foreground z-40 border-r border-primary-foreground/20 overflow-hidden transition-all duration-500 ${
+          className={`fixed top-0 left-0 h-screen bg-primary text-primary-foreground z-40 border-r border-primary-foreground/20 transition-all duration-500 ${
             sidebarCollapsed ? "w-20" : "w-64"
           } ${
             mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
@@ -151,7 +152,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
                 <button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  className="p-2 hover:bg-primary-foreground/20 rounded-lg flex-shrink-0 transition-colors"
+                  className="p-2 rounded-full flex-shrink-0 transition-colors text-primary-foreground bg-[#001F4B] hover:bg-[#001F4B]/90 dark:bg-[#ec1e24] dark:hover:bg-[#ec1e24]/90"
                   title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                   {sidebarCollapsed ? (
