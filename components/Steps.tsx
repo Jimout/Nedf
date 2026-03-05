@@ -86,10 +86,17 @@ function calculateScrollProgress(element: HTMLDivElement): number {
 
 // ==================== MAIN COMPONENT ====================
 
+const DISPLAY_PROGRESS_LERP = 0.12
+
 export default function Steps() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const rafIdRef = useRef<number | null>(null)
+  const scrollProgressRef = useRef(0)
+  const viewportWidthRef = useRef(0)
+
   const [stepsData, setStepsData] = useState<StepItem[]>(() => loadSteps())
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [displayProgress, setDisplayProgress] = useState(0)
   const [activeIndex, setActiveIndex] = useState(0)
   const [viewportWidth, setViewportWidth] = useState(0)
   const [isDark, setIsDark] = useState(false)
@@ -117,37 +124,77 @@ export default function Steps() {
 
   // Track viewport width
   useEffect(() => {
-    setViewportWidth(window.innerWidth)
-    
-    const handleResize = () => setViewportWidth(window.innerWidth)
+    const w = window.innerWidth
+    viewportWidthRef.current = w
+    setViewportWidth(w)
+    const handleResize = () => {
+      const ww = window.innerWidth
+      viewportWidthRef.current = ww
+      setViewportWidth(ww)
+    }
     window.addEventListener("resize", handleResize)
-    
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Track scroll progress
+  // Track scroll progress: RAF-throttled, passive listener, initial run
   useEffect(() => {
-    const handleScroll = () => {
+    const runUpdate = () => {
       if (!sectionRef.current || stepsData.length === 0) return
-
       const progress = calculateScrollProgress(sectionRef.current)
+      scrollProgressRef.current = progress
       setScrollProgress(progress)
-
       const activeIdx = Math.min(
         Math.floor(progress * stepsData.length),
         stepsData.length - 1
       )
       setActiveIndex(activeIdx)
+      if (viewportWidthRef.current >= BREAKPOINTS.TABLET) {
+        setDisplayProgress(progress)
+      }
+      rafIdRef.current = null
     }
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    const handleScroll = () => {
+      if (!sectionRef.current || stepsData.length === 0) return
+      if (rafIdRef.current == null) {
+        rafIdRef.current = requestAnimationFrame(runUpdate)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    requestAnimationFrame(() => {
+      runUpdate()
+    })
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current)
+    }
   }, [stepsData.length])
 
-  const getActiveAvatarPosition = (): ArcPosition => {
-    const totalProgress = scrollProgress * stepsData.length
+  // Smooth display progress on small viewports only
+  useEffect(() => {
+    if (viewportWidth >= BREAKPOINTS.TABLET) {
+      setDisplayProgress(scrollProgress)
+      return
+    }
+    setDisplayProgress(scrollProgressRef.current)
+    let rafId: number
+    const tick = () => {
+      setDisplayProgress((prev) => {
+        const target = scrollProgressRef.current
+        const next = prev + (target - prev) * DISPLAY_PROGRESS_LERP
+        return next
+      })
+      rafId = requestAnimationFrame(tick)
+    }
+    rafId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId)
+  }, [viewportWidth])
+
+  const getActiveAvatarPosition = (progress: number): ArcPosition => {
+    const totalProgress = progress * stepsData.length
     const localProgress = Math.min(totalProgress - Math.floor(totalProgress), 1)
-    const progress = Math.max(0, Math.min(1, localProgress))
+    const p = Math.max(0, Math.min(1, localProgress))
 
     // Guard against `window` during server render. On the server we don't
     // have a real viewport, so we fall back to 0 and let the client-side
@@ -162,9 +209,9 @@ export default function Steps() {
     const p1: [number, number] = [vw * 0.5, vh * arcConfig.peakY]
     const p2: [number, number] = [vw, vh * arcConfig.endY]
 
-    const [arcX, arcY] = getPointOnBezier(progress, p0, p1, p2)
-    const rotation = getRotationAngle(progress, p0, p1, p2)
-    const opacity = Math.abs(Math.cos((progress - 0.5) * Math.PI)) * 0.5 + 0.5
+    const [arcX, arcY] = getPointOnBezier(p, p0, p1, p2)
+    const rotation = getRotationAngle(p, p0, p1, p2)
+    const opacity = Math.abs(Math.cos((p - 0.5) * Math.PI)) * 0.5 + 0.5
 
     return { 
       x: arcX, 
@@ -177,12 +224,12 @@ export default function Steps() {
     }
   }
 
-  const getTextAnimation = (): TextAnimation => {
-    const totalProgress = scrollProgress * stepsData.length
+  const getTextAnimation = (progress: number): TextAnimation => {
+    const totalProgress = progress * stepsData.length
     const localProgress = Math.min(totalProgress - Math.floor(totalProgress), 1)
-    const progress = Math.max(0, Math.min(1, localProgress))
+    const progressVal = Math.max(0, Math.min(1, localProgress))
 
-    const distanceFromCenter = Math.abs(progress - 0.5) * 2
+    const distanceFromCenter = Math.abs(progressVal - 0.5) * 2
 
     let opacity: number
     if (distanceFromCenter > 0.8) {
@@ -195,18 +242,24 @@ export default function Steps() {
     }
 
     opacity = Math.max(0, Math.min(1, opacity))
-    const scale = ANIMATION_CONFIG.TEXT_BASE_SCALE + 
+    const scale = ANIMATION_CONFIG.TEXT_BASE_SCALE +
       (opacity * ANIMATION_CONFIG.TEXT_SCALE_RANGE)
 
     return { opacity, scale }
   }
 
-  const activeStep = stepsData[activeIndex] || stepsData[0]
+  const isSmallViewport = viewportWidth > 0 && viewportWidth < BREAKPOINTS.TABLET
+  const progressForRender = isSmallViewport ? displayProgress : scrollProgress
+  const activeIndexForRender = isSmallViewport
+    ? Math.min(Math.floor(displayProgress * stepsData.length), stepsData.length - 1)
+    : activeIndex
+
+  const activeStep = stepsData[activeIndexForRender] || stepsData[0]
   if (!activeStep) {
     return null
   }
-  const { x, y, opacity, scale, rotation, vw, vh } = getActiveAvatarPosition()
-  const { opacity: textOpacity, scale: textScale } = getTextAnimation()
+  const { x, y, opacity, scale, rotation, vw, vh } = getActiveAvatarPosition(progressForRender)
+  const { opacity: textOpacity, scale: textScale } = getTextAnimation(progressForRender)
 
   return (
     <div className="w-full max-w-none pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28">
@@ -242,6 +295,7 @@ export default function Steps() {
                 top: `${(y / vh) * 100}%`,
                 transform: `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`,
                 opacity,
+                ...(isSmallViewport ? { willChange: "transform" as const } : {}),
               }}
             >
               <div className="w-[16px] h-[16px] sm:w-[20px] sm:h-[20px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] xl:w-[60px] xl:h-[60px] 2xl:w-[110px] 2xl:h-[110px] 3xl:w-[130px] 3xl:h-[130px] 4xl:w-[150px] 4xl:h-[150px] relative">
@@ -249,7 +303,7 @@ export default function Steps() {
                   className="w-full h-full rounded-full flex items-center justify-center bg-foreground dark:bg-primary-foreground"
                 >
                   <span 
-                    className="text-[3px] sm:text-[4px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 transition-opacity duration-300 text-primary-foreground dark:text-background"
+                    className="text-[2px] sm:text-[3px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 transition-opacity duration-300 text-primary-foreground dark:text-background"
                     style={{ opacity: opacity > 0.9 ? 1 : 0 }}
                   >
                     {activeStep.name}
