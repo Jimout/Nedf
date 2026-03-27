@@ -108,7 +108,7 @@ export function Founders({ founders, aboutDescription }: FoundersProps) {
   const foundersVisible = useScrollAnimation(foundersContainerRef, ANIMATION_CONFIG.FOUNDERS_CONTAINER_DELAY)
 
   return (
-    <div className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-4 sm:pb-6 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28">
+    <div className="pt-0 pb-4 sm:pb-6 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28">
       <section
         id="TheCrew"
         className="w-full 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
@@ -225,7 +225,7 @@ export function Founders({ founders, aboutDescription }: FoundersProps) {
 
           <div ref={descriptionRef} className="relative z-20 pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16 pt-0">
             <div className="w-full max-w-none animate-on-scroll visible">
-              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-muted-foreground leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6] text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
+              <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-base 3xl:text-lg 4xl:text-lg text-muted-foreground leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6] text-center font-normal px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 3xl:px-24 4xl:px-32">
                 {aboutDescription}
               </p>
             </div>

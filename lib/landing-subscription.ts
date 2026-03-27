@@ -47,7 +47,7 @@ export const DEFAULT_SUBSCRIPTION: SubscriptionData = {
   quickLinks: [
     { label: "Home", href: "/" },
     { label: "Services", href: "/#services" },
-    { label: "About", href: "/#TheCrew" },
+    { label: "About", href: ROUTES.ABOUT },
     { label: "Portfolio", href: "/portfolio" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
@@ -99,12 +99,22 @@ export function loadSubscription(): SubscriptionData {
       return link
     })
 
+    const defaultQuickLinks = DEFAULT_SUBSCRIPTION.quickLinks
+    const storedQuickLinks = Array.isArray(parsed.quickLinks) && parsed.quickLinks.length > 0
+      ? parsed.quickLinks
+      : defaultQuickLinks
+
+    const quickLinks = storedQuickLinks.map((link) => {
+      if (link.label === "About" && (link.href === "/#TheCrew" || link.href === "#")) {
+        return { ...link, href: ROUTES.ABOUT }
+      }
+      return link
+    })
+
     return {
       ...DEFAULT_SUBSCRIPTION,
       ...parsed,
-      quickLinks: Array.isArray(parsed.quickLinks) && parsed.quickLinks.length > 0
-        ? parsed.quickLinks
-        : DEFAULT_SUBSCRIPTION.quickLinks,
+      quickLinks,
       policyLinks,
     }
   } catch {

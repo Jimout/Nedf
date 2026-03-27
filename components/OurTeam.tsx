@@ -374,7 +374,15 @@ function NavigationControls({
 
       {/* Desktop - Pagination */}
       <div className="hidden lg:flex justify-center mt-10 lg:mt-11 xl:mt-12 2xl:mt-14 3xl:mt-16 4xl:mt-20">
-        <Pagination page={currentIndex + 1} setPage={onPageChange} total={totalPages} />
+        <Pagination
+          page={currentIndex + 1}
+          setPage={(value) => {
+            const next =
+              typeof value === "function" ? value(currentIndex + 1) : value
+            onPageChange(next)
+          }}
+          total={totalPages}
+        />
       </div>
     </>
   )

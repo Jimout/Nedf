@@ -1,6 +1,7 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
+import type React from "react"
+import { Suspense } from "react"
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 import Link from "next/link"
@@ -8,6 +9,7 @@ import { ChevronLeft } from "lucide-react"
 import BeforeAfterSlider from "@/components/BeforeAfterSlider"
 import ImageSlider from "@/components/ImageSlider"
 import PanoramaViewer from "@/components/PanoramaViewer"
+import Subscription from "@/components/Subscription"
 
 // ============================================================================
 // TYPES
@@ -99,6 +101,22 @@ const VIEWPORT_CONFIG = {
   margin: "-100px",
 } as const
 
+/** Matches `app/(landing)/blog/[id]/page.tsx` title, headings, and body */
+const BLOG_DETAIL_TITLE_STYLE: React.CSSProperties = {
+  fontFamily: "Montserrat",
+  fontWeight: 500,
+  fontSize: "36px",
+}
+
+const BLOG_DETAIL_SECTION_H2_CLASS = "text-2xl font-medium mb-4 text-foreground"
+const BLOG_DETAIL_SECTION_H2_STYLE: React.CSSProperties = { fontFamily: "Montserrat" }
+
+const BLOG_DETAIL_BODY_CLASS = "text-foreground/80 text-sm mb-4 leading-7 text-justify"
+const BLOG_DETAIL_BODY_STYLE: React.CSSProperties = {
+  fontFamily: "Montserrat",
+  fontWeight: 400,
+}
+
 const CONTENT_SECTIONS = [
   {
     type: "text" as const,
@@ -158,14 +176,10 @@ function isSpecialProject(title: string): boolean {
  * Project title with responsive sizing
  */
 function ProjectTitle({ title }: { title: string }) {
-  const titleClass = isSpecialProject(title)
-    ? "text-primary"
-    : "text-foreground"
+  const titleClass = isSpecialProject(title) ? "text-primary" : "text-foreground"
 
   return (
-    <h1
-      className={`text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-4xl 2xl:text-5xl font-normal tracking-wide mb-2 sm:mb-2 md:mb-2 lg:mb-3 xl:mb-3 2xl:mb-4 ${titleClass}`}
-    >
+    <h1 className={`mb-6 ${titleClass}`} style={BLOG_DETAIL_TITLE_STYLE}>
       {title}
     </h1>
   )
@@ -177,10 +191,13 @@ function ProjectTitle({ title }: { title: string }) {
 function ProjectYear({ year }: { year: string }) {
   return (
     <>
-      <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg text-muted-foreground mb-3 sm:mb-3 md:mb-4 lg:mb-4 xl:mb-5 2xl:mb-6">
+      <p
+        className="text-sm text-muted-foreground mb-3"
+        style={{ fontFamily: "Montserrat", fontWeight: 400 }}
+      >
         {year}
       </p>
-      <hr className="mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 border-b-1 border-border" />
+      <hr className="mb-8 border-b border-border" />
     </>
   )
 }
@@ -199,10 +216,14 @@ function ProjectInfo({ project }: { project: ProjectData }) {
   ]
 
   return (
-    <div className="space-y-1.5 sm:space-y-2 md:space-y-2 lg:space-y-2 xl:space-y-2.5 2xl:space-y-3 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 leading-relaxed">
+    <div
+      className="space-y-1.5 mb-6 text-sm leading-7"
+      style={{ fontFamily: "Montserrat", fontWeight: 400 }}
+    >
       {infoItems.map(({ label, value }) => (
-        <p key={label} className="font-medium text-foreground">
-          {label}: <span className="font-normal text-muted-foreground">{value}</span>
+        <p key={label} className="text-foreground">
+          <span className="font-medium">{label}: </span>
+          <span className="text-muted-foreground font-normal">{value}</span>
         </p>
       ))}
     </div>
@@ -214,7 +235,7 @@ function ProjectInfo({ project }: { project: ProjectData }) {
  */
 function SectionHeader({ title }: { title: string }) {
   return (
-    <h2 className="text-lg sm:text-xl md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-medium text-foreground mb-4 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-6 2xl:mb-7">
+    <h2 className={BLOG_DETAIL_SECTION_H2_CLASS} style={BLOG_DETAIL_SECTION_H2_STYLE}>
       {title}
     </h2>
   )
@@ -225,7 +246,7 @@ function SectionHeader({ title }: { title: string }) {
  */
 function TextParagraph({ content }: { content: string }) {
   return (
-    <p className="text-foreground/90 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 text-justify">
+    <p className={BLOG_DETAIL_BODY_CLASS} style={BLOG_DETAIL_BODY_STYLE}>
       {content}
     </p>
   )
@@ -300,7 +321,10 @@ function ColorPalette({ colors }: { colors: string[] }) {
             className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-16 lg:h-16 xl:w-18 xl:h-18 2xl:w-20 2xl:h-20 border border-border"
             style={{ backgroundColor: hex }}
           />
-          <p className="text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-base mt-1.5 sm:mt-2 md:mt-2 lg:mt-2 xl:mt-2.5 2xl:mt-3 text-muted-foreground">
+          <p
+            className="text-sm mt-2 text-muted-foreground"
+            style={{ fontFamily: "Montserrat", fontWeight: 400 }}
+          >
             {hex}
           </p>
         </div>
@@ -320,7 +344,7 @@ function ProjectDetailContent() {
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl">
+        <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
           Project not found
         </p>
       </div>
@@ -398,9 +422,14 @@ function ProjectDetailContent() {
           {/* Features Section */}
           <StaticSection>
             <SectionHeader title="FEATURES" />
-            <ul className="list-disc list-inside text-foreground/90 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 space-y-1 sm:space-y-1 md:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2">
+            <ul
+              className="list-disc list-inside text-foreground/80 text-sm leading-7 text-justify"
+              style={BLOG_DETAIL_BODY_STYLE}
+            >
               {project.features.map((feature, index) => (
-                <li key={index}>{feature}</li>
+                <li key={index} className="mb-4 last:mb-0">
+                  {feature}
+                </li>
               ))}
             </ul>
           </StaticSection>
@@ -408,9 +437,14 @@ function ProjectDetailContent() {
           {/* Materials Section */}
           <StaticSection>
             <SectionHeader title="MATERIALS" />
-            <ul className="list-disc list-inside text-foreground/90 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-lg font-normal leading-6 sm:leading-6 md:leading-7 lg:leading-7 xl:leading-8 2xl:leading-8 space-y-1 sm:space-y-1 md:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2">
+            <ul
+              className="list-disc list-inside text-foreground/80 text-sm leading-7 text-justify"
+              style={BLOG_DETAIL_BODY_STYLE}
+            >
               {project.materials.map((material, index) => (
-                <li key={index}>{material}</li>
+                <li key={index} className="mb-4 last:mb-0">
+                  {material}
+                </li>
               ))}
             </ul>
           </StaticSection>
@@ -439,6 +473,7 @@ function ProjectDetailContent() {
           </AnimatedSection>
         </main>
       </div>
+      <Subscription />
     </div>
   )
 }
@@ -455,7 +490,7 @@ export default function ProjectDetailPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <p className="text-muted-foreground text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl">
+          <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
             Loading...
           </p>
         </div>

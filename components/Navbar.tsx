@@ -13,7 +13,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 const NAV_ITEMS = [
   { name: "Home", href: "/", sectionId: "" },
   { name: "Service", href: "/#services", sectionId: "services" },
-  { name: "About", href: "/#TheCrew", sectionId: "TheCrew" },
+  { name: "About", href: "/about", sectionId: "" },
   { name: "Portfolio", href: "/portfolio", sectionId: "" },
   { name: "Blog", href: "/blog", sectionId: "" },
 ] as const
@@ -244,7 +244,8 @@ function NavLink({
         "transition-all duration-300 ease-out font-medium font-montserrat whitespace-nowrap",
         // Tap targets (desktop): keep visual style, ensure >=44px click height.
         "px-2 py-2",
-        "text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-[22px] 3xl:text-[24px] 4xl:text-[26px]",
+        // Match Subscription footer quick links: text-sm → 2xl:base → 3xl/4xl:lg
+        "text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg",
         "hover:scale-110",
         isActive 
           ? "text-primary" 
@@ -419,7 +420,7 @@ function MobileNavLink({
       onClick={onClick}
       className="
         py-3 px-3 rounded-none font-medium
-        text-sm sm:text-base
+        text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg
         text-foreground
         hover:bg-muted
         hover:pl-4 hover:text-primary

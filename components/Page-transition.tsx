@@ -8,30 +8,22 @@ interface PageTransitionProps {
   children: ReactNode
 }
 
+/**
+ * Opacity-only: `transform` / `filter` on an ancestor breaks GSAP ScrollTrigger `pin`
+ * (and slogan text visibility) by creating a new containing block for `position: fixed`.
+ */
 export function PageTransition({ children }: PageTransitionProps) {
   const pathname = usePathname()
 
   return (
     <motion.div
       key={pathname}
-      initial={{
-        scale: 0.98,
-        filter: "blur(4px)",
-      }}
-      animate={{
-        scale: 1,
-        filter: "blur(0px)",
-      }}
-      exit={{
-        scale: 0.98,
-        filter: "blur(4px)",
-      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{
-        duration: 0.5,
-        ease: [0.25, 0.46, 0.45, 0.94], // Premium easing curve
-      }}
-      style={{
-        willChange: "transform, filter",
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
       {children}

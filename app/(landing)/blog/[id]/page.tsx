@@ -3,10 +3,48 @@
 import type React from "react"
 
 import RelatedBlogs from "@/components/Related-blogs"
+import Subscription from "@/components/Subscription"
+import { motion } from "framer-motion"
 import { Menu, ChevronLeft } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+
+/** Same scroll-in animation as `app/(landing)/portfolio/[id]/page.tsx` */
+const ANIMATION_CONFIG = {
+  fadeUp: {
+    hidden: { y: 30 },
+    visible: { y: 0, transition: { duration: 0.6 } },
+  },
+} as const
+
+const VIEWPORT_CONFIG = {
+  once: true,
+  margin: "-100px",
+} as const
+
+function AnimatedSection({
+  id,
+  className,
+  children,
+}: {
+  id?: string
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <motion.section
+      id={id}
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT_CONFIG}
+      variants={ANIMATION_CONFIG.fadeUp}
+    >
+      {children}
+    </motion.section>
+  )
+}
 
 interface TocItem {
   id: string
@@ -149,7 +187,7 @@ export default function BlogDetailPage() {
     .slice(0, 3)
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="relative min-h-screen flex flex-col overflow-hidden scroll-smooth">
       <div className="flex-1 py-8 bg-background">
         <main className="flex-1 flex flex-col gap-8 relative w-full">
           <div className="flex flex-col lg:flex-row gap-10">
@@ -265,45 +303,51 @@ export default function BlogDetailPage() {
               </div>
             )}
 
-              <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
-              <Image
-                src="/room1.jpg"
-                alt="From Concept To Concrete"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+              <AnimatedSection className="mb-6">
+                <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
+                  <Image
+                    src="/room1.jpg"
+                    alt="From Concept To Concrete"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
 
-              <h1
-              className="mb-6 text-foreground"
-              style={{
-                fontFamily: "Montserrat",
-                fontWeight: 500,
-                fontSize: "36px",
-              }}
-            >
-              From Concept To Concrete
-            </h1>
-
-            <div className="flex gap-2 mb-8">
-              {currentBlogTags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 text-sm border border-border rounded-full font-normal text-foreground"
-                  style={{ fontFamily: "Montserrat" }}
+                <h1
+                  className="mb-6 text-foreground"
+                  style={{
+                    fontFamily: "Montserrat",
+                    fontWeight: 500,
+                    fontSize: "36px",
+                  }}
                 >
-                  {tag}
-                </span>
-              ))}
-            </div>
+                  From Concept To Concrete
+                </h1>
+
+                <div className="flex gap-2 mb-8">
+                  {currentBlogTags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 text-sm border border-border rounded-full font-normal text-foreground"
+                      style={{ fontFamily: "Montserrat" }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </AnimatedSection>
 
             {toc.map((item) => {
               const headingSize = item.level === 1 ? "text-2xl" : item.level === 2 ? "text-xl" : "text-lg"
               const marginTop = item.level === 1 ? "mt-10" : item.level === 2 ? "mt-6" : "mt-4"
 
               return (
-                <section key={item.id} id={item.id} className={`scroll-mt-24 mb-6 ${marginTop}`}>
+                <AnimatedSection
+                  key={item.id}
+                  id={item.id}
+                  className={`scroll-mt-24 mb-6 ${marginTop}`}
+                >
                   <h2 className={`${headingSize} font-medium mb-4 text-foreground`} style={{ fontFamily: "Montserrat" }}>
                     <span className="font-semibold mr-2">{item.number}</span>
                     {item.label}
@@ -323,7 +367,7 @@ export default function BlogDetailPage() {
                       {getSectionContent(item.id)}
                     </p>
                   ))}
-                </section>
+                </AnimatedSection>
               )
             })}
 
@@ -344,11 +388,13 @@ export default function BlogDetailPage() {
             />
           </div>
 
-          <section className="bg-background py-6 w-full">
+          <AnimatedSection className="bg-background py-6 w-full">
             <RelatedBlogs posts={relatedPosts} />
-          </section>
+          </AnimatedSection>
         </>
       )}
+
+      <Subscription />
     </div>
   )
 }

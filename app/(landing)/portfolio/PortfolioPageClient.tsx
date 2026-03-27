@@ -7,7 +7,7 @@ import { Search } from "lucide-react"
 import Pagination from "@/components/Pagination"
 import { AnimatePresence, motion } from "framer-motion"
 import Link from "next/link"
-import { PageTransition } from "@/components/Page-transition"
+import Subscription from "@/components/Subscription"
 
 type ProjectCategory = "Architecture" | "Interior" | "Visualization"
 
@@ -244,7 +244,7 @@ export default function PortfolioPageClient() {
   const animationKey = `${page}-${activeTag}-${search}`
 
   return (
-    <PageTransition>
+    <>
       <div className="overflow-x-hidden">
         <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-background">
           <SearchBar value={search} onChange={handleSearchChange} />
@@ -262,7 +262,8 @@ export default function PortfolioPageClient() {
           {filteredProjects.length === 0 && <EmptyState />}
         </div>
       </div>
-    </PageTransition>
+      <Subscription />
+    </>
   )
 }
 

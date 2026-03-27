@@ -9,7 +9,7 @@ import { loadSlogan } from "@/lib/landing-slogan";
 gsap.registerPlugin(ScrollTrigger);
 
 const TEXT_CLASS =
-  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] 2xl:max-w-[95vw] 3xl:max-w-[95vw] 4xl:max-w-[95vw] 2xl:left-1/2 2xl:-translate-x-1/2 3xl:left-1/2 3xl:-translate-x-1/2 4xl:left-1/2 4xl:-translate-x-1/2 [font-kerning:none]";
+  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl left-0 right-0 mx-auto w-full max-w-[95vw] [font-kerning:none]";
 
 /** Fisher-Yates shuffle; returns new array with random order */
 function shuffle<T>(arr: T[]): T[] {
@@ -63,7 +63,16 @@ export default function HeroTextFadeScroll() {
       const w1a = split1a.words || [];
       const w1b = split1b.words || [];
       const w2 = split2.words || [];
-      if (!w1a.length || !w1b.length || !w2.length) return;
+      if (!w1a.length || !w1b.length || !w2.length) {
+        split1a.revert();
+        split1b.revert();
+        split2.revert();
+        gsap.set(
+          [firstLine1Ref.current!, firstLine2Ref.current!, secondRef.current!],
+          { visibility: "visible", opacity: 1 }
+        );
+        return;
+      }
 
       const chars1a = getCharsPerWord(w1a);
       const chars1b = getCharsPerWord(w1b);
@@ -169,25 +178,33 @@ export default function HeroTextFadeScroll() {
       };
     }, sectionRef);
 
-    return () => ctx.revert();
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh()
+    })
+    const refreshLater = window.setTimeout(() => ScrollTrigger.refresh(), 100)
+
+    return () => {
+      window.clearTimeout(refreshLater)
+      ctx.revert()
+    }
   }, [slogan.line1, slogan.line2, slogan.line3]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-12 sm:pb-16 transform-gpu will-change-transform [backface-visibility:hidden]"
+      className="relative z-30 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-12 sm:pb-16"
     >
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-0">
         <div
           ref={firstLine1Ref}
-          className={`${TEXT_CLASS} !pb-0 2xl:whitespace-nowrap 2xl:w-full 2xl:left-0 2xl:translate-x-0`}
+          className={`${TEXT_CLASS} !pb-0 2xl:whitespace-nowrap`}
           style={{ visibility: "hidden", position: "relative" }}
         >
           {slogan.line1}
         </div>
         <div
           ref={firstLine2Ref}
-          className={`${TEXT_CLASS} !pt-0 -mt-1 sm:-mt-2 2xl:whitespace-nowrap 3xl:whitespace-nowrap 4xl:whitespace-nowrap 2xl:w-full 2xl:left-0 2xl:translate-x-0`}
+          className={`${TEXT_CLASS} !pt-0 -mt-1 sm:-mt-2 2xl:whitespace-nowrap 3xl:whitespace-nowrap 4xl:whitespace-nowrap`}
           style={{ visibility: "hidden", position: "relative" }}
         >
           {slogan.line2}

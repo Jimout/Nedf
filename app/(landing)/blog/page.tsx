@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
 import Pagination from "@/components/Pagination"
 import { Button } from "@/components/ui/button"
+import Subscription from "@/components/Subscription"
 
 // ============================================================================
 // TYPES
@@ -92,12 +93,13 @@ const BLOG_POSTS: Post[] = [
 
 const POSTS_PER_PAGE = 6
 
+/** Same grid enter/exit as `PortfolioPageClient` (subtle vertical motion, no horizontal slide) */
 const ANIMATION_CONFIG = {
   grid: {
-    initial: { x: 50 },
-    animate: { x: 0 },
-    exit: { x: -50 },
-    transition: { duration: 0.3 },
+    initial: { y: 20 },
+    animate: { y: 0 },
+    exit: { y: -20 },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
 } as const
 
@@ -320,6 +322,8 @@ export default function BlogPage() {
           </div>
         )}
       </section>
+
+      <Subscription />
     </div>
   )
 }
