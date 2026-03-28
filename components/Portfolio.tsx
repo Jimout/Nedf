@@ -109,7 +109,7 @@ export default function Portfolio() {
             2024
           </span>
           <h1
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-foreground/80 dark:text-primary ${
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-foreground/80 dark:text-primary ${
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >

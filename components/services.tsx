@@ -124,7 +124,7 @@ export default function ServicesSection() {
                   setShowSubServices(false);
                 }}
                 className={cn(
-                  "rounded-full px-4 py-2 sm:px-5 sm:py-2.5 md:px-5 md:py-2.5 lg:px-6 lg:py-3 2xl:px-10 2xl:py-5 3xl:px-11 3xl:py-5 4xl:px-12 4xl:py-6 text-xs sm:text-sm md:text-base lg:text-base 2xl:text-xl 3xl:text-2xl 4xl:text-2xl font-medium transition-colors",
+                  "rounded-full px-4 py-2 sm:px-5 sm:py-2.5 md:px-5 md:py-2.5 lg:px-6 lg:py-3 2xl:px-10 2xl:py-5 3xl:px-11 3xl:py-5 4xl:px-12 4xl:py-6 text-xs sm:text-sm md:text-base lg:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl font-medium transition-colors",
                   i === activeIndex
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary text-muted-foreground hover:bg-muted"
@@ -166,7 +166,7 @@ export default function ServicesSection() {
               onClick={() => setShowSubServices((v) => !v)}
               className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 xl:bottom-10 xl:right-10 2xl:bottom-20 2xl:right-20 3xl:bottom-24 3xl:right-24 4xl:bottom-28 4xl:right-28 z-20 inline-flex items-center overflow-hidden rounded-full bg-muted text-foreground shadow-md transition-opacity hover:opacity-90"
             >
-              <span className="px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-9 2xl:py-5 3xl:px-10 3xl:py-5 4xl:px-11 4xl:py-6 text-xs sm:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold uppercase tracking-wider">
+              <span className="px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-9 2xl:py-5 3xl:px-10 3xl:py-5 4xl:px-11 4xl:py-6 text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg font-semibold uppercase tracking-wider">
                 SUB SERVICES
               </span>
               <span className="flex h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 2xl:h-14 2xl:w-14 3xl:h-16 3xl:w-16 4xl:h-[4.5rem] 4xl:w-[4.5rem] items-center justify-center rounded-full bg-card text-card-foreground">
@@ -182,7 +182,7 @@ export default function ServicesSection() {
               )}
             >
               <div className="flex items-center justify-between border-b border-border bg-primary px-4 py-3 2xl:px-8 2xl:py-6 3xl:px-10 3xl:py-7 4xl:px-12 4xl:py-8">
-                <span className="text-sm 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl font-semibold uppercase tracking-wider text-primary-foreground">
+                <span className="text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-3xl font-semibold uppercase tracking-wider text-primary-foreground">
                   SELECT TO EXPLORE
                 </span>
                 <button
@@ -201,7 +201,7 @@ export default function ServicesSection() {
                     type="button"
                     className="group relative flex min-h-[72px] sm:min-h-[80px] 2xl:min-h-[160px] 3xl:min-h-[200px] 4xl:min-h-[240px] flex-col items-start justify-end rounded-xl 2xl:rounded-2xl 3xl:rounded-2xl 4xl:rounded-[1rem] bg-muted p-3 2xl:p-6 3xl:p-8 4xl:p-10 text-left transition-colors hover:bg-muted/80 dark:bg-muted dark:hover:bg-muted/80"
                   >
-<span className="text-xs font-medium leading-tight text-card-foreground sm:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-3xl">
+<span className="text-xs font-medium leading-tight text-card-foreground sm:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-2xl">
                                       {sub}
                                     </span>
                     <Link
@@ -229,21 +229,21 @@ export default function ServicesSection() {
                 >
                   <div className="flex flex-col justify-center order-2 md:order-1">
                     <div className="mb-2 sm:mb-2.5 md:mb-3 lg:mb-4 2xl:mb-6 3xl:mb-8 4xl:mb-8 flex items-center gap-2 sm:gap-3 md:gap-3 lg:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8">
-                      <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 2xl:h-16 2xl:w-16 3xl:h-[4.5rem] 3xl:w-[4.5rem] 4xl:h-20 4xl:w-20 items-center justify-center rounded-full bg-card-foreground/15 text-xs sm:text-sm md:text-base lg:text-lg 2xl:text-3xl 3xl:text-[2rem] 4xl:text-4xl font-semibold text-card-foreground">
+                      <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 2xl:h-16 2xl:w-16 3xl:h-[4.5rem] 3xl:w-[4.5rem] 4xl:h-20 4xl:w-20 items-center justify-center rounded-full bg-card-foreground/15 text-xs sm:text-sm md:text-base lg:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl font-semibold text-card-foreground">
                         {String(activeIndex + 1).padStart(2, "0")}
                       </span>
-                      <span className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl font-medium uppercase tracking-wider text-card-foreground/80">
+                      <span className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-2xl font-medium uppercase tracking-wider text-card-foreground/80">
                         {active.category}
                       </span>
                     </div>
-                    <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-10 3xl:mb-12 4xl:mb-14 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-7xl 3xl:text-8xl 4xl:text-9xl font-bold leading-tight text-card-foreground">
+                    <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-10 3xl:mb-12 4xl:mb-14 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold leading-tight text-card-foreground">
                       {active.headline}
                     </h2>
                     <div className="flex items-center gap-3 sm:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 flex-wrap mb-12 sm:mb-0">
                       <a
                         href="/#portfolio"
                         className={cn(
-                          "inline-flex w-fit items-center rounded-full px-3 py-2 sm:px-4 sm:py-2.5 2xl:px-10 2xl:py-5 3xl:px-12 3xl:py-5 4xl:px-14 4xl:py-6 text-xs sm:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-3xl font-semibold transition-opacity hover:opacity-90",
+                          "inline-flex w-fit items-center rounded-full px-3 py-2 sm:px-4 sm:py-2.5 2xl:px-10 2xl:py-5 3xl:px-12 3xl:py-5 4xl:px-14 4xl:py-6 text-xs sm:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-2xl font-semibold transition-opacity hover:opacity-90",
                           "bg-primary text-primary-foreground"
                         )}
                       >

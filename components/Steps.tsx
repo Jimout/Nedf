@@ -268,7 +268,7 @@ export default function Steps() {
         <div className="sticky top-0 h-screen flex items-center justify-center pointer-events-none z-30">
           {/* Title */}
           <div className="absolute top-[30%] sm:top-[6%] lg:top-[3%] xl:top-[2%] 2xl:top-[1%] 3xl:top-[1%] 4xl:top-[1%] left-1/2 transform -translate-x-1/2 w-full z-30 px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 3xl:text-9xl 4xl:text-[7.5rem] font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary">
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary">
               HOW NEDF WORKS
             </h2>
           </div>
