@@ -195,6 +195,7 @@ export default function ManagePortfolioPage() {
 
   return (
     <div className="min-h-screen bg-background p-4 sm:p-6 font-montserrat">
+      <div className="w-full">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Manage Portfolio</h1>
           <Button onClick={handleAddProject} className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
@@ -203,93 +204,92 @@ export default function ManagePortfolioPage() {
           </Button>
         </div>
 
-      <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search projects..." />
+        <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search projects..." />
 
-      <div className="mt-6">
-        {filteredProjects.length === 0 ? (
-        <div className="bg-card border border-border rounded-lg p-8 text-center">
-          <p className="text-muted-foreground font-montserrat">
-            {searchTerm
-              ? "No projects found matching your search."
-              : "No projects found. Add your first project to get started!"}
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted border-b border-border">
-                  <TableHead className="font-montserrat font-semibold text-foreground">Title</TableHead>
-                  <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-foreground">Client</TableHead>
-                  <TableHead className="hidden md:table-cell font-montserrat font-semibold text-foreground">Status</TableHead>
-                  <TableHead className="font-montserrat font-semibold text-foreground text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentProjects.map((project) => (
-                  <TableRow key={project.id} className="hover:bg-muted/50 border-b border-border">
-                    <TableCell className="font-medium font-montserrat text-foreground">
-                      <button
-                        type="button"
-                        onClick={() => handleViewProject(project.id)}
-                        className="text-left hover:underline cursor-pointer focus:outline-none focus:underline"
-                      >
-                        <div>
-                          <div className="text-sm sm:text-base">{project.name}</div>
+        <div className="mt-6">
+          {filteredProjects.length === 0 ? (
+            <div className="bg-card rounded-lg border border-border p-8 text-center">
+              <p className="text-muted-foreground font-montserrat">
+                {searchTerm
+                  ? "No projects found matching your search."
+                  : "No projects found. Add your first project to get started!"}
+              </p>
+            </div>
+          ) : (
+            <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-muted border-b border-border">
+                      <TableHead className="font-montserrat font-semibold text-foreground">Title</TableHead>
+                      <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-foreground">Client</TableHead>
+                      <TableHead className="hidden md:table-cell font-montserrat font-semibold text-foreground">Status</TableHead>
+                      <TableHead className="font-montserrat font-semibold text-foreground text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentProjects.map((project) => (
+                      <TableRow key={project.id} className="hover:bg-muted/50 border-b border-border">
+                        <TableCell className="font-medium font-montserrat text-foreground">
+                          <button
+                            type="button"
+                            onClick={() => handleViewProject(project.id)}
+                            className="text-left hover:underline cursor-pointer focus:outline-none focus:underline"
+                          >
+                            <div className="text-sm sm:text-base">{project.name}</div>
+                          </button>
                           <div className="sm:hidden text-xs text-muted-foreground mt-1">{project.client}</div>
-                        </div>
-                      </button>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell font-montserrat text-muted-foreground">{project.client}</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
-                        {project.status}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex gap-1 sm:gap-2 justify-end">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleViewProject(project.id)}
-                          className="hover:bg-muted text-muted-foreground hover:text-foreground"
-                        >
-                          <EyeIcon />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteProject(project.id)}
-                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        >
-                          <TrashIcon />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell font-montserrat text-muted-foreground">{project.client}</TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
+                            {project.status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex gap-1 sm:gap-2 justify-end">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleViewProject(project.id)}
+                              className="hover:bg-muted text-muted-foreground hover:text-foreground"
+                            >
+                              <EyeIcon />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteProject(project.id)}
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                            >
+                              <TrashIcon />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
 
-          {totalPages > 1 && (
-            <div className="p-4 border-t">
-              <Pagination page={currentPage} setPage={setCurrentPage} total={totalPages} />
+              {totalPages > 1 && (
+                <div className="p-4 border-t border-border">
+                  <Pagination page={currentPage} setPage={setCurrentPage} total={totalPages} />
+                </div>
+              )}
             </div>
           )}
-        </>
-        )}
-      </div>
+        </div>
 
-      <ConfirmationModal
-        isOpen={deleteModal.isOpen}
-        onClose={() => setDeleteModal({ isOpen: false, projectId: null })}
-        onConfirm={confirmDelete}
-        title="Delete Project"
-        message="Are you sure you want to delete this project? This action cannot be undone."
-        type="delete"
-      />
+        <ConfirmationModal
+          isOpen={deleteModal.isOpen}
+          onClose={() => setDeleteModal({ isOpen: false, projectId: null })}
+          onConfirm={confirmDelete}
+          title="Delete Project"
+          message="Are you sure you want to delete this project? This action cannot be undone."
+          type="delete"
+        />
+      </div>
     </div>
   )
 }
