@@ -53,7 +53,7 @@ function SplashLogo() {
         fill
         priority
         sizes="(max-width: 640px) 85vw, (max-width: 1024px) 75vw, (max-width: 1920px) 65vw, 55vw"
-        className="object-contain object-center dark:hidden"
+        className="object-contain object-center transition-opacity duration-300 dark:opacity-0"
       />
       <Image
         src={SPLASH_CONFIG.logo.dark}
@@ -61,7 +61,7 @@ function SplashLogo() {
         fill
         priority
         sizes="(max-width: 640px) 85vw, (max-width: 1024px) 75vw, (max-width: 1920px) 65vw, 55vw"
-        className="object-contain object-center hidden dark:block"
+        className="object-contain object-center transition-opacity duration-300 opacity-0 dark:opacity-100"
       />
     </div>
   );

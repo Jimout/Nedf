@@ -1,12 +1,15 @@
 "use client"
 
 import { useEffect, useRef, useState, useCallback } from "react"
+import { usePathname } from "next/navigation"
 
 const FOLLOW_SPEED = 0.08
 const ROTATION_SPEED = 0.3
 const HOVER_SELECTOR = "a, button, [data-cursor-hover]"
 
 export default function CustomCursor() {
+  const pathname = usePathname()
+  const isDashboard = pathname.startsWith("/dashboard")
   const cursorRef = useRef<HTMLDivElement>(null)
   const followerRef = useRef<HTMLDivElement>(null)
   const posRef = useRef({ x: 0, y: 0 })
@@ -66,7 +69,7 @@ export default function CustomCursor() {
     rafRef.current = requestAnimationFrame(animate)
 
     const hasFinePointer = window.matchMedia("(pointer: fine)").matches
-    if (hasFinePointer) document.body.style.cursor = "none"
+    if (hasFinePointer && !isDashboard) document.body.style.cursor = "none"
 
     return () => {
       window.removeEventListener("mousemove", onMove)
@@ -77,12 +80,14 @@ export default function CustomCursor() {
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       document.body.style.cursor = ""
     }
-  }, [animate, setCursorPosition, checkHover])
+  }, [animate, setCursorPosition, checkHover, isDashboard])
 
   const [mounted, setMounted] = useState(false)
   useEffect(() => {
     setMounted(window.matchMedia("(pointer: fine)").matches)
   }, [])
+
+  if (isDashboard) return null
 
   if (!mounted) return null
 

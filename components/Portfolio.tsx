@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
 
 const slides = [
   {
@@ -43,7 +42,6 @@ export default function Portfolio() {
   const [transitioning, setTransitioning] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
-  const [isNavigating, setIsNavigating] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -68,32 +66,17 @@ export default function Portfolio() {
 
   const handleExploreClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    setIsNavigating(true)
-    setTimeout(() => {
-      router.push("/portfolio")
-    }, 600)
+    router.push("/portfolio")
   }
 
   const slide = slides[currentIndex]
 
   return (
     <>
-      <AnimatePresence>
-        {isNavigating && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
-            className="fixed inset-0 z-50 pointer-events-none bg-background"
-          />
-        )}
-      </AnimatePresence>
-
       {/* Full-width Section - flows after Services on all screens */}
       <section
         id="portfolio"
-        className="relative z-10 pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full 2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24 bg-background"
+        className="relative z-10 pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full bg-background"
       >
         <div className="w-full">
         <div
@@ -131,7 +114,7 @@ export default function Portfolio() {
               {/* Left column */}
               <div className="flex flex-col w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] items-start">
                 <div
-                  className={`relative w-full h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[760px] 3xl:h-[820px] 4xl:h-[1080px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
+                  className={`relative w-full h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[440px] 3xl:h-[500px] 4xl:h-[600px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -188,7 +171,7 @@ export default function Portfolio() {
 
               {/* Middle Image */}
               <div
-                className={`relative min-w-0 w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[760px] 3xl:h-[820px] 4xl:h-[1080px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
+                className={`relative min-w-0 w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[440px] 3xl:h-[500px] 4xl:h-[600px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
                   transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
                 }`}
                 style={{
@@ -207,7 +190,7 @@ export default function Portfolio() {
 
               {/* Right column */}
               <div
-                className={`relative w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] h-[320px] md:h-[360px] lg:h-[400px] xl:h-[460px] 2xl:h-[760px] 3xl:h-[820px] 4xl:h-[1080px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
+                className={`relative w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[440px] 3xl:h-[500px] 4xl:h-[600px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
                   transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
                 }`}
                 style={{

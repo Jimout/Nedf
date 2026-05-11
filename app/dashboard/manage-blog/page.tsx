@@ -365,11 +365,11 @@ export default function ManageBlogPage() {
   }, [searchTerm])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#15171a] p-4 sm:p-6 font-['Montserrat']">
+    <div className="min-h-screen bg-background p-4 sm:p-6 font-montserrat">
       <div className="w-full">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#ec1e24]">Manage Blog</h1>
-          <Button onClick={handleAddBlog} className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white w-full sm:w-auto">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Manage Blog</h1>
+          <Button onClick={handleAddBlog} className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
           <PlusIcon />
           <span className="ml-2">Add New Blog</span>
         </Button>
@@ -379,59 +379,63 @@ export default function ManageBlogPage() {
 
         <div className="mt-6">
           {filteredBlogs.length === 0 ? (
-            <div className="bg-white dark:bg-[#1a1d23] rounded-lg border dark:border-gray-700 p-8 text-center">
-              <p className="text-gray-500 dark:text-white/60">
+            <div className="bg-card rounded-lg border border-border p-8 text-center">
+              <p className="text-muted-foreground">
                 {searchTerm
                   ? "No blogs found matching your search."
                   : "No blogs found. Add your first blog to get started!"}
               </p>
             </div>
           ) : (
-            <div className="bg-white dark:bg-[#1a1d23] rounded-lg border dark:border-gray-700 shadow-sm overflow-hidden">
+            <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-gray-50 dark:bg-[#ec1e24]/10">
-                      <TableHead className="font-medium dark:text-white">Title</TableHead>
-                      <TableHead className="hidden sm:table-cell font-medium dark:text-white">Tags</TableHead>
-                      <TableHead className="hidden md:table-cell font-medium dark:text-white">Created Date</TableHead>
-                      <TableHead className="font-medium dark:text-white text-right">Actions</TableHead>
+                    <TableRow className="bg-muted border-b border-border">
+                      <TableHead className="font-montserrat font-semibold text-foreground">Title</TableHead>
+                      <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-foreground">Tags</TableHead>
+                      <TableHead className="hidden md:table-cell font-montserrat font-semibold text-foreground">Created Date</TableHead>
+                      <TableHead className="font-montserrat font-semibold text-foreground text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {currentBlogs.map((blog) => (
-                      <TableRow key={blog.id} className="hover:bg-gray-50 dark:hover:bg-[#2a2d35]/50">
-                        <TableCell className="font-medium text-gray-900 dark:text-white">
-                          <div>
+                      <TableRow key={blog.id} className="hover:bg-muted/50 border-b border-border">
+                        <TableCell className="font-medium text-foreground">
+                          <button
+                            type="button"
+                            onClick={() => handleViewBlog(blog.id)}
+                            className="text-left hover:underline cursor-pointer focus:outline-none focus:underline"
+                          >
                             <div className="text-sm sm:text-base">{blog.title}</div>
-                            <div className="sm:hidden mt-1 flex flex-wrap gap-1">
+                          </button>
+                          <div className="sm:hidden mt-1 flex flex-wrap gap-1">
                               {blog.tags.slice(0, 2).map((tag, index) => (
-                                <span key={index} className="bg-gray-100 dark:bg-[#2a2d35] text-gray-700 dark:text-white/80 px-2 py-0.5 rounded text-xs">
+                                <span key={index} className="bg-muted text-muted-foreground px-2 py-0.5 rounded text-xs">
                                   {tag}
                                 </span>
                               ))}
-                              {blog.tags.length > 2 && <span className="text-gray-500 dark:text-white/60 text-xs">+{blog.tags.length - 2}</span>}
-                            </div>
+                              {blog.tags.length > 2 && <span className="text-muted-foreground text-xs">+{blog.tags.length - 2}</span>}
                           </div>
                         </TableCell>
-                        <TableCell className="hidden sm:table-cell text-gray-700 dark:text-white/80">
+                        <TableCell className="hidden sm:table-cell text-muted-foreground">
                           <div className="flex flex-wrap gap-1">
                             {blog.tags.slice(0, 2).map((tag, index) => (
-                              <span key={index} className="bg-gray-100 dark:bg-[#2a2d35] text-gray-700 dark:text-white/80 px-2 py-0.5 rounded text-xs">
+                              <span key={index} className="bg-muted text-muted-foreground px-2 py-0.5 rounded text-xs">
                                 {tag}
                               </span>
                             ))}
-                            {blog.tags.length > 2 && <span className="text-gray-500 dark:text-white/60 text-xs">+{blog.tags.length - 2}</span>}
+                            {blog.tags.length > 2 && <span className="text-muted-foreground text-xs">+{blog.tags.length - 2}</span>}
                           </div>
                         </TableCell>
-                        <TableCell className="hidden md:table-cell text-gray-700 dark:text-white/80 text-sm">{blog.createdAt}</TableCell>
+                        <TableCell className="hidden md:table-cell text-muted-foreground text-sm">{blog.createdAt}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex gap-1 sm:gap-2 justify-end">
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => handleViewBlog(blog.id)}
-                              className="hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                              className="hover:bg-muted text-muted-foreground hover:text-foreground"
                             >
                               <Eye className="w-4 h-4" />
                             </Button>
@@ -439,7 +443,7 @@ export default function ManageBlogPage() {
                               variant="ghost"
                               size="sm"
                               onClick={() => handleDeleteBlog(blog.id)}
-                              className="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300"
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
@@ -452,7 +456,7 @@ export default function ManageBlogPage() {
               </div>
 
               {totalPages > 1 && (
-                <div className="p-4 border-t dark:border-gray-700">
+                <div className="p-4 border-t border-border">
                   <Pagination page={currentPage} setPage={setCurrentPage} total={totalPages} />
                 </div>
               )}

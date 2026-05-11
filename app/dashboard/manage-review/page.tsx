@@ -83,12 +83,12 @@ export default function ManageReviewsPage() {
   }, [searchTerm])
 
   return (
-    <div className="space-y-6 dark:bg-[#15171a] min-h-screen p-6">
+    <div className="space-y-6 bg-background min-h-screen p-6 font-montserrat">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#ec1e24]">Manage Reviews</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Manage Reviews</h1>
         <Link href="/dashboard/manage-review/add" className="w-full sm:w-auto">
-          <Button className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white w-full sm:w-auto">
+          <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
             <Plus className="w-4 h-4 mr-2" />
             Add Review
           </Button>
@@ -99,20 +99,20 @@ export default function ManageReviewsPage() {
 
       {/* Reviews Table */}
       {filteredReviews.length === 0 ? (
-        <Card className="dark:bg-[#1a1d23] dark:border-gray-700">
+        <Card className="bg-card border border-border">
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <MessageSquare className="w-12 h-12 text-gray-400 dark:text-white/60 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <MessageSquare className="w-12 h-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">
               {searchTerm ? "No reviews found" : "No reviews yet"}
             </h3>
-            <p className="text-gray-500 dark:text-white/60 text-center mb-4">
+            <p className="text-muted-foreground text-center mb-4">
               {searchTerm
                 ? "Try adjusting your search terms."
                 : "Get started by adding your first review."}
             </p>
             {!searchTerm && (
               <Link href="/dashboard/manage-review/add">
-                <Button className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white">
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Review
                 </Button>
@@ -122,23 +122,23 @@ export default function ManageReviewsPage() {
         </Card>
       ) : (
         <>
-          <div className="bg-white dark:bg-[#1a1d23] rounded-lg border dark:border-gray-700 shadow-sm overflow-hidden">
+          <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-gray-50 dark:bg-[#ec1e24]/10">
-                    <TableHead className="font-medium text-[#001F4B] dark:text-white">Name</TableHead>
-                    <TableHead className="hidden sm:table-cell font-medium text-[#001F4B] dark:text-white">Position</TableHead>
-                    <TableHead className="hidden lg:table-cell font-medium text-[#001F4B] dark:text-white">Testimonial</TableHead>
-                    <TableHead className="font-medium text-[#001F4B] dark:text-white text-right">Actions</TableHead>
+                  <TableRow className="bg-muted border-b border-border">
+                    <TableHead className="font-montserrat font-semibold text-foreground">Name</TableHead>
+                    <TableHead className="hidden sm:table-cell font-montserrat font-semibold text-foreground">Position</TableHead>
+                    <TableHead className="hidden lg:table-cell font-montserrat font-semibold text-foreground">Testimonial</TableHead>
+                    <TableHead className="font-montserrat font-semibold text-foreground text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {currentReviews.map((review) => (
-                    <TableRow key={review.id} className="hover:bg-gray-50 dark:hover:bg-[#2a2d35]/50">
-                      <TableCell className="font-medium text-[#001F4B] dark:text-white">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-[#001F4B] dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                    <TableRow key={review.id} className="hover:bg-muted/50 border-b border-border">
+                      <TableCell className="font-medium text-foreground">
+                        <Link href={`/dashboard/manage-review/view/${review.id}`} className="flex items-center gap-3 hover:underline cursor-pointer">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-primary flex items-center justify-center flex-shrink-0">
                             {review.profilePicture ? (
                               <img
                                 src={review.profilePicture || "/placeholder.svg"}
@@ -156,13 +156,13 @@ export default function ManageReviewsPage() {
                             )}
                           </div>
                           <div>
-                            <div className="text-sm sm:text-base dark:text-white">{review.name}</div>
-                            <div className="sm:hidden text-xs text-gray-500 dark:text-white/60 mt-1">{review.position}</div>
+                            <div className="text-sm sm:text-base text-foreground">{review.name}</div>
+                            <div className="sm:hidden text-xs text-muted-foreground mt-1">{review.position}</div>
                           </div>
-                        </div>
+                        </Link>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell text-gray-700 dark:text-white/80 text-sm">{review.position}</TableCell>
-                      <TableCell className="hidden lg:table-cell text-gray-600 dark:text-white/60 max-w-md">
+                      <TableCell className="hidden sm:table-cell text-muted-foreground text-sm">{review.position}</TableCell>
+                      <TableCell className="hidden lg:table-cell text-muted-foreground max-w-md">
                         <p className="line-clamp-2 text-sm">{review.testimonial}</p>
                       </TableCell>
                       <TableCell className="text-right">
@@ -176,7 +176,7 @@ export default function ManageReviewsPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleDeleteReview(review.id)}
-                            className="p-2 hover:bg-red-100 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                            className="p-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

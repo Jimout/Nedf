@@ -1,11 +1,9 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import Link from "next/link"
-import { ChevronLeft, MapPin, Mail, Phone, Clock } from "lucide-react"
+import { MapPin, Mail, Phone, Clock } from "lucide-react"
 import { FaLinkedin, FaInstagram, FaYoutube } from "react-icons/fa"
 import { FaTiktok, FaXTwitter } from "react-icons/fa6"
-import { ROUTES } from "@/lib/constants"
 import { loadContact, type ContactData } from "@/lib/landing-contact"
 import Subscription from "@/components/Subscription"
 import { cn } from "@/lib/utils"
@@ -75,23 +73,15 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <div className="w-full py-8 sm:py-10 md:py-12">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-6 mb-10 sm:mb-12 md:mb-14">
-          <Link
-            href={ROUTES.HOME}
-            className="inline-flex items-center justify-center text-foreground hover:text-primary transition-colors justify-self-start"
-            aria-label="Back to home"
-          >
-            <ChevronLeft className="w-10 h-10 sm:w-12 sm:h-12" strokeWidth={0.75} />
-          </Link>
-          <header className="min-w-0 text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
+        <div className="mb-10 sm:mb-12 md:mb-14">
+          <header className="text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary">
               {contactData.page.title}
             </h1>
-            <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mt-3 mx-auto">
+            <p className="text-muted-foreground text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg max-w-2xl mt-3 mx-auto">
               {contactData.page.subtitle}
             </p>
           </header>
-          <div />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12 xl:gap-14 items-start">

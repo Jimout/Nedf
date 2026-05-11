@@ -11,7 +11,6 @@ import { ThemeToggle } from "@/components/theme-toggle"
 // ==================== CONSTANTS ====================
 
 const NAV_ITEMS = [
-  { name: "Home", href: "/", sectionId: "" },
   { name: "Service", href: "/#services", sectionId: "services" },
   { name: "About", href: "/about", sectionId: "" },
   { name: "Portfolio", href: "/portfolio", sectionId: "" },
@@ -186,7 +185,7 @@ function NavLogo() {
         width={100} 
         height={32} 
         priority 
-        className={cn(logoClasses, "dark:hidden")}
+        className={cn(logoClasses, "dark:opacity-0")}
       />
       <Image 
         src="/NEDF TEXT BASED LOGO-13.png" 
@@ -194,7 +193,7 @@ function NavLogo() {
         width={100} 
         height={32} 
         priority 
-        className={cn(logoClasses, "hidden dark:block")}
+        className={cn(logoClasses, "absolute inset-0 opacity-0 dark:opacity-100")}
       />
     </Link>
   )
@@ -379,13 +378,13 @@ function MobileMenu({
         overflow-hidden
       "
       style={{
-        maxHeight: isOpen ? '70vh' : 0,
+        maxHeight: isOpen ? '100vh' : 0,
         opacity: isOpen ? 1 : 0,
         pointerEvents: isOpen ? 'auto' : 'none',
         transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-in-out'
       }}
     >
-      <div className="px-4 py-4 flex flex-col gap-1 max-h-[70vh] overflow-auto">
+      <div className="px-4 py-4 flex flex-col gap-1">
         {NAV_ITEMS.map((item) => (
           <MobileNavLink
             key={item.name}

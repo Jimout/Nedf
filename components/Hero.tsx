@@ -154,13 +154,13 @@ function HeroLogo() {
   const logoClasses = "object-contain w-[80px] h-[130px] sm:w-[90px] sm:h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] xl:w-[180px] xl:h-[180px] 2xl:w-[260px] 2xl:h-[260px] 3xl:w-[280px] 3xl:h-[280px] 4xl:w-[300px] 4xl:h-[300px]"
   
   return (
-    <div className="select-none">
+    <div className="select-none relative">
       <Image
         src="/NAVIGATION BAR LOGO OPTION 1.png"
         alt="NEDF Logo"
         width={300}
         height={300}
-        className={cn(logoClasses, "dark:hidden")}
+        className={cn(logoClasses, "transition-opacity duration-300 dark:opacity-0")}
         priority
       />
       <Image
@@ -168,7 +168,7 @@ function HeroLogo() {
         alt="NEDF Logo Dark"
         width={300}
         height={300}
-        className={cn(logoClasses, "hidden dark:block")}
+        className={cn(logoClasses, "absolute inset-0 transition-opacity duration-300 opacity-0 dark:opacity-100")}
         priority
       />
     </div>

@@ -70,6 +70,7 @@ body {
   }
 }
 
+
 /* Custom cursor — system colors via .text-foreground / .text-muted-foreground */
 .custom-cursor {
   position: fixed;

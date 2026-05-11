@@ -145,10 +145,10 @@ function MemberInfo({ name, role, bio, socials }: Omit<TeamMemberCardProps, 'ima
   return (
     <div className="space-y-2 sm:space-y-2 md:space-y-3 lg:space-y-3 xl:space-y-3 2xl:space-y-3 w-full">
       <div>
-        <h3 className="text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-3xl 3xl:text-4xl 4xl:text-[2rem] font-medium text-[#001F4B] dark:text-[#ec1e24] font-montserrat">
+        <h3 className="text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl 2xl:text-xl 3xl:text-2xl 4xl:text-2xl font-medium text-primary font-montserrat">
           {name}
         </h3>
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-[1.4rem] text-[#333333]/40 dark:text-white/60 font-montserrat">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-muted-foreground font-montserrat">
           {role}
         </p>
       </div>
@@ -156,7 +156,7 @@ function MemberInfo({ name, role, bio, socials }: Omit<TeamMemberCardProps, 'ima
       {/* Responsive divider width (fix non-standard `w-18`) */}
       <div className="border-t border-gray-300 dark:border-white/20 w-12 sm:w-14 md:w-16 lg:w-16 xl:w-[4.5rem] 2xl:w-20 3xl:w-24 4xl:w-[112px] mx-auto" />
 
-      <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base text-[#333333]/80 dark:text-white/70 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 2xl:text-muted-foreground 3xl:text-muted-foreground 4xl:text-muted-foreground font-normal leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6] px-2 sm:px-3 md:px-4 lg:px-4 xl:px-4 2xl:px-6 font-montserrat">
+      <p className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-base 3xl:text-lg 4xl:text-lg text-muted-foreground font-normal leading-relaxed px-2 sm:px-3 md:px-4 lg:px-4 xl:px-4 2xl:px-6 font-montserrat">
         {bio}
       </p>
 
@@ -264,7 +264,7 @@ export function OurTeam() {
   return (
     <section
       id="OurTeam"
-      className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 w-full relative z-10 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 w-full relative z-10"
     >
       <div className="w-full">
         <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat tracking-tight mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 text-foreground/80 dark:text-primary">

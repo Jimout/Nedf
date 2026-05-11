@@ -11,9 +11,9 @@ const STATS_DATA = [
   { value: "99%", label: "On-Time Project Completion" },
 ] as const
 
-const ANIMATION_DURATION_MS = 3000 // Longer animation to see the counting
+const ANIMATION_DURATION_MS = 1800
 const INTERSECTION_THRESHOLD = 0.3
-const SHUFFLE_INTERVAL_MS = 80 // Slower shuffling - more visible
+const SHUFFLE_INTERVAL_MS = 60
 
 // ==================== TYPES ====================
 
@@ -129,11 +129,10 @@ export default function Stats() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated) {
-          // Wait 1.5 seconds of visible shuffling before animating
           setTimeout(() => {
             animateNumbers()
             setHasAnimated(true)
-          }, 1500)
+          }, 800)
         }
       },
       { threshold: INTERSECTION_THRESHOLD }
@@ -159,8 +158,6 @@ export default function Stats() {
         w-full relative z-10 
         mt-6 sm:mt-8 md:mt-10
         py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 2xl:py-8
-        2xl:w-screen 2xl:left-1/2 2xl:-ml-[50vw]
-        2xl:px-16 3xl:px-20 4xl:px-24
       "
     >
       <div className="
@@ -206,7 +203,7 @@ function StatCard({ value, label, isCounting }: { value: string; label: string; 
       <div
         className="
         font-medium font-montserrat text-muted-foreground
-        text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg
+        text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg
         mt-0.5 sm:mt-1
       "
       >

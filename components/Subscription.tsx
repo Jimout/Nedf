@@ -40,7 +40,7 @@ export default function Footer() {
   return (
     <footer
       id="footer"
-      className="bg-footer text-footer-foreground border-t-2 border-footer-border 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24"
+      className="bg-footer text-footer-foreground border-t-2 border-footer-border"
     >
       {/* Main content - single horizontal padding to align with other sections */}
       <div className="w-full py-12 sm:py-14 md:py-16 lg:py-16 xl:py-20 2xl:py-28 3xl:py-32 4xl:py-36">
@@ -48,20 +48,20 @@ export default function Footer() {
           {/* Left column - logo, slogan, subscription aligned left */}
           <div className="space-y-6 sm:space-y-8 md:space-y-8 2xl:space-y-12 3xl:space-y-14 4xl:space-y-16 text-left">
             {/* Logo (same as nav, larger in footer) */}
-            <Link href="/" className="inline-block">
+            <Link href="/" className="inline-block relative">
               <Image
                 src={data.logoLight}
                 alt="NEDF Studio"
                 width={280}
                 height={90}
-                className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] dark:hidden"
+                className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] transition-opacity duration-300 dark:opacity-0"
               />
               <Image
                 src={data.logoDark}
                 alt="NEDF Studio"
                 width={280}
                 height={90}
-                className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] hidden dark:block"
+                className="absolute inset-0 w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] transition-opacity duration-300 opacity-0 dark:opacity-100"
               />
             </Link>
 

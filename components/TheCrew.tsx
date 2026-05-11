@@ -111,7 +111,7 @@ export function Founders({ founders, aboutDescription }: FoundersProps) {
     <div className="pt-0 pb-4 sm:pb-6 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28">
       <section
         id="TheCrew"
-        className="w-full 2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw] 2xl:px-16 3xl:px-20 4xl:px-24"
+        className="w-full"
       >
         <div className="w-full">
         <style>{`
@@ -293,10 +293,10 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
             )}
           </div>
           <div className="px-1">
-            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-[2rem] font-bold text-foreground mb-1.5">
+            <h3 className="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-2xl font-bold text-foreground mb-1.5">
               {founder.name}
             </h3>
-            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-[1.4rem] font-medium text-muted-foreground">
+            <p className="text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg font-medium text-muted-foreground">
               {founder.title}
             </p>
           </div>
@@ -304,7 +304,7 @@ function FounderCard({ founder, index }: { founder: Founder; index: number }) {
       </CometCard>
 
       <div className="space-y-2">
-        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 2xl:text-muted-foreground 3xl:text-muted-foreground 4xl:text-muted-foreground font-normal leading-relaxed 2xl:leading-relaxed 3xl:leading-[1.6] 4xl:leading-[1.6]">
+        <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-muted-foreground font-normal leading-relaxed">
           {founder.description}
         </p>
 

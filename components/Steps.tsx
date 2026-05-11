@@ -324,10 +324,10 @@ export default function Steps() {
                   }}
                 >
                   <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5 xl:space-y-6 2xl:space-y-8 3xl:space-y-10 4xl:space-y-12">
-                    <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-4xl 3xl:text-5xl 4xl:text-6xl text-primary font-medium">
+                    <p className="text-xs sm:text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-primary font-medium">
                       {activeStep.role}
                     </p>
-                    <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl text-foreground leading-relaxed 2xl:leading-loose 3xl:leading-loose 4xl:leading-[1.8] font-light">
+                    <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-lg 3xl:text-xl 4xl:text-xl text-foreground leading-relaxed font-light">
                       "{activeStep.quote}"
                     </p>
                   </div>

@@ -15,9 +15,7 @@ export function StudioNotesCard() {
       className={cn(
         "scroll-mt-20 font-montserrat",
         "pt-0",
-        "pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28",
-        "2xl:w-screen 2xl:relative 2xl:left-1/2 2xl:-ml-[50vw]",
-        "2xl:px-16 3xl:px-20 4xl:px-24"
+        "pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28"
       )}
       aria-labelledby="studio-notes-heading"
     >
@@ -59,11 +57,11 @@ export function StudioNotesCard() {
               <div className="min-w-0 flex-1">
                 <h2
                   id="studio-notes-heading"
-                  className="mb-3 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-10 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-7xl 3xl:text-8xl 4xl:text-9xl font-bold leading-tight tracking-tight"
+                  className="mb-3 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-10 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold leading-tight tracking-tight"
                 >
                   {STUDIO_NOTES_HEADING}
                 </h2>
-                <p className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl text-muted-foreground">
+                <p className="text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-muted-foreground">
                   {SITE.studioNotesTagline}
                 </p>
               </div>
@@ -71,13 +69,13 @@ export function StudioNotesCard() {
               <div className="mt-2 flex shrink-0 items-center justify-end sm:mt-0">
                 <span
                   className={cn(
-                    "flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-11 lg:w-11 xl:h-12 xl:w-12 2xl:h-24 2xl:w-24 3xl:h-28 3xl:w-28 4xl:h-32 4xl:w-32 items-center justify-center rounded-full",
+                    "flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-11 lg:w-11 xl:h-12 xl:w-12 2xl:h-14 2xl:w-14 3xl:h-16 3xl:w-16 4xl:h-16 4xl:w-16 items-center justify-center rounded-full",
                     "bg-primary text-primary-foreground",
                     "transition-transform hover:scale-110"
                   )}
                   aria-hidden
                 >
-                  <ArrowRight className="h-5 w-5 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-6 lg:w-6 xl:h-7 xl:w-7 2xl:h-10 2xl:w-10 3xl:h-12 3xl:w-12 4xl:h-14 4xl:w-14" strokeWidth={2.5} />
+                  <ArrowRight className="h-5 w-5 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-6 lg:w-6 xl:h-7 xl:w-7 2xl:h-7 2xl:w-7 3xl:h-8 3xl:w-8 4xl:h-8 4xl:w-8" strokeWidth={2.5} />
                 </span>
               </div>
             </Link>

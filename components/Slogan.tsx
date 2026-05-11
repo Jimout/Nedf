@@ -192,7 +192,7 @@ export default function HeroTextFadeScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-30 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-12 sm:pb-16"
+      className="relative z-30 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-12 sm:pb-16 2xl:pb-0 3xl:pb-0 4xl:pb-0"
     >
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-0">
         <div
@@ -211,12 +211,14 @@ export default function HeroTextFadeScroll() {
         </div>
       </div>
 
-      <div
-        ref={secondRef}
-        className={`${TEXT_CLASS} 2xl:whitespace-nowrap 3xl:whitespace-nowrap 4xl:whitespace-nowrap`}
-        style={{ visibility: "hidden" }}
-      >
-        {slogan.line3}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <div
+          ref={secondRef}
+          className={`${TEXT_CLASS} 2xl:whitespace-nowrap 3xl:whitespace-nowrap 4xl:whitespace-nowrap`}
+          style={{ visibility: "hidden", position: "relative" }}
+        >
+          {slogan.line3}
+        </div>
       </div>
     </section>
   );

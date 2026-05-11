@@ -153,7 +153,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
                 <button
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  className="p-2 rounded-full flex-shrink-0 transition-colors text-primary-foreground bg-[#001F4B] hover:bg-[#001F4B]/90 dark:bg-[#ec1e24] dark:hover:bg-[#ec1e24]/90"
+                  className="p-2 rounded-full flex-shrink-0 transition-colors text-primary-foreground bg-primary-foreground/20 hover:bg-primary-foreground/30"
                   title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                   {sidebarCollapsed ? (
