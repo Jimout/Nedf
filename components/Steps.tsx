@@ -298,12 +298,12 @@ export default function Steps() {
                 ...(isSmallViewport ? { willChange: "transform" as const } : {}),
               }}
             >
-              <div className="w-[16px] h-[16px] sm:w-[20px] sm:h-[20px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] xl:w-[60px] xl:h-[60px] 2xl:w-[110px] 2xl:h-[110px] 3xl:w-[130px] 3xl:h-[130px] 4xl:w-[150px] 4xl:h-[150px] relative">
+              <div className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] xl:w-[60px] xl:h-[60px] 2xl:w-[110px] 2xl:h-[110px] 3xl:w-[130px] 3xl:h-[130px] 4xl:w-[150px] 4xl:h-[150px] relative">
                 <div 
                   className="w-full h-full rounded-full flex items-center justify-center bg-foreground dark:bg-primary-foreground"
                 >
                   <span 
-                    className="text-[2px] sm:text-[3px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 transition-opacity duration-300 text-primary-foreground dark:text-background"
+                    className="text-[5px] sm:text-[6px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 leading-tight transition-opacity duration-300 text-primary-foreground dark:text-background"
                     style={{ opacity: opacity > 0.9 ? 1 : 0 }}
                   >
                     {activeStep.name}
