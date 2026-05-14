@@ -7,6 +7,7 @@ interface BeforeAfterSliderProps {
   beforeAlt?: string
   afterAlt?: string
   width?: number | string
+  /** Fixed pixel height; omit for responsive height (recommended on portfolio) */
   height?: number
   className?: string
 }
@@ -28,7 +29,7 @@ export default function BeforeAfterSlider({
   beforeAlt = "Before",
   afterAlt = "After",
   width = "100%",
-  height = 600,
+  height,
   className = "",
 }: BeforeAfterSliderProps) {
   const [sliderPosition, setSliderPosition] = useState(50)
@@ -153,8 +154,15 @@ export default function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden select-none bg-background ${className}`}
-      style={{ width, height }}
+      className={`relative overflow-hidden select-none bg-background ${
+        height == null
+          ? "w-full min-h-[240px] max-h-[min(92svh,96rem)] h-[min(52vw,420px)] sm:h-[min(50vw,480px)] md:h-[min(48vw,560px)] lg:h-[min(46vw,640px)] xl:h-[min(44vw,720px)] 2xl:h-[min(42vw,800px)] 3xl:h-[min(40vw,900px)] 4xl:h-[min(38vw,1000px)] "
+          : ""
+      } ${className}`}
+      style={{
+        width: typeof width === "number" ? `${width}px` : width,
+        ...(height != null ? { height: typeof height === "number" ? `${height}px` : height } : {}),
+      }}
       onClick={handleContainerClick}
     >
       {/* After Image (Background) */}

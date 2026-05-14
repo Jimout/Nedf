@@ -86,18 +86,21 @@ function calculateScrollProgress(element: HTMLDivElement): number {
 
 // ==================== MAIN COMPONENT ====================
 
-const DISPLAY_PROGRESS_LERP = 0.12
+/** Lerp factor: higher = snappier (trackpad / wheel), still smooth for touch momentum */
+const DISPLAY_PROGRESS_LERP = 0.22
+/** Stop RAF chain when smoothed value has nearly caught raw scroll progress */
+const PROGRESS_EPSILON = 0.0012
+/** Skip React re-render when progress barely changed (wheel / trackpad micro-deltas) */
+const RENDER_EPSILON = 0.00035
 
 export default function Steps() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const rafIdRef = useRef<number | null>(null)
-  const scrollProgressRef = useRef(0)
+  const displayProgressRef = useRef(0)
   const viewportWidthRef = useRef(0)
 
   const [stepsData, setStepsData] = useState<StepItem[]>(() => loadSteps())
-  const [scrollProgress, setScrollProgress] = useState(0)
   const [displayProgress, setDisplayProgress] = useState(0)
-  const [activeIndex, setActiveIndex] = useState(0)
   const [viewportWidth, setViewportWidth] = useState(0)
   const [isDark, setIsDark] = useState(false)
 
@@ -136,60 +139,69 @@ export default function Steps() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Track scroll progress: RAF-throttled, passive listener, initial run
+  // Scroll-linked progress: one RAF chain, lerp toward raw progress, stops when idle
+  // (fixes infinite mobile RAF + evens out wheel / trackpad / touch momentum)
   useEffect(() => {
-    const runUpdate = () => {
-      if (!sectionRef.current || stepsData.length === 0) return
-      const progress = calculateScrollProgress(sectionRef.current)
-      scrollProgressRef.current = progress
-      setScrollProgress(progress)
-      const activeIdx = Math.min(
-        Math.floor(progress * stepsData.length),
-        stepsData.length - 1
+    if (stepsData.length === 0) return
+
+    const scheduleTick = () => {
+      if (rafIdRef.current != null) return
+      rafIdRef.current = requestAnimationFrame(tick)
+    }
+
+    const tick = () => {
+      const el = sectionRef.current
+      if (!el || stepsData.length === 0) {
+        rafIdRef.current = null
+        return
+      }
+
+      const raw = calculateScrollProgress(el)
+      const prev = displayProgressRef.current
+      const next = prev + (raw - prev) * DISPLAY_PROGRESS_LERP
+      displayProgressRef.current = next
+
+      setDisplayProgress((p) =>
+        Math.abs(p - next) < RENDER_EPSILON ? p : next
       )
-      setActiveIndex(activeIdx)
-      if (viewportWidthRef.current >= BREAKPOINTS.TABLET) {
-        setDisplayProgress(progress)
+
+      const converged = Math.abs(raw - next) < PROGRESS_EPSILON
+      if (converged) {
+        if (displayProgressRef.current !== raw) {
+          displayProgressRef.current = raw
+          setDisplayProgress(raw)
+        }
+        rafIdRef.current = null
+        return
       }
-      rafIdRef.current = null
+
+      rafIdRef.current = requestAnimationFrame(tick)
     }
 
-    const handleScroll = () => {
-      if (!sectionRef.current || stepsData.length === 0) return
-      if (rafIdRef.current == null) {
-        rafIdRef.current = requestAnimationFrame(runUpdate)
-      }
+    const handleScrollOrResize = () => {
+      scheduleTick()
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    requestAnimationFrame(() => {
-      runUpdate()
-    })
+    if (sectionRef.current) {
+      const initial = calculateScrollProgress(sectionRef.current)
+      displayProgressRef.current = initial
+      setDisplayProgress(initial)
+    }
+
+    window.addEventListener("scroll", handleScrollOrResize, { passive: true })
+    window.addEventListener("resize", handleScrollOrResize)
+
+    scheduleTick()
+
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-      if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current)
+      window.removeEventListener("scroll", handleScrollOrResize)
+      window.removeEventListener("resize", handleScrollOrResize)
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current)
+        rafIdRef.current = null
+      }
     }
   }, [stepsData.length])
-
-  // Smooth display progress on small viewports only
-  useEffect(() => {
-    if (viewportWidth >= BREAKPOINTS.TABLET) {
-      setDisplayProgress(scrollProgress)
-      return
-    }
-    setDisplayProgress(scrollProgressRef.current)
-    let rafId: number
-    const tick = () => {
-      setDisplayProgress((prev) => {
-        const target = scrollProgressRef.current
-        const next = prev + (target - prev) * DISPLAY_PROGRESS_LERP
-        return next
-      })
-      rafId = requestAnimationFrame(tick)
-    }
-    rafId = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(rafId)
-  }, [viewportWidth])
 
   const getActiveAvatarPosition = (progress: number): ArcPosition => {
     const totalProgress = progress * stepsData.length
@@ -248,11 +260,11 @@ export default function Steps() {
     return { opacity, scale }
   }
 
-  const isSmallViewport = viewportWidth > 0 && viewportWidth < BREAKPOINTS.TABLET
-  const progressForRender = isSmallViewport ? displayProgress : scrollProgress
-  const activeIndexForRender = isSmallViewport
-    ? Math.min(Math.floor(displayProgress * stepsData.length), stepsData.length - 1)
-    : activeIndex
+  const progressForRender = displayProgress
+  const activeIndexForRender = Math.min(
+    Math.floor(displayProgress * stepsData.length),
+    stepsData.length - 1
+  )
 
   const activeStep = stepsData[activeIndexForRender] || stepsData[0]
   if (!activeStep) {
@@ -293,9 +305,9 @@ export default function Steps() {
               style={{
                 left: `${(x / vw) * 100}%`,
                 top: `${(y / vh) * 100}%`,
-                transform: `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`,
+                transform: `translate3d(-50%, -50%, 0) scale(${scale}) rotate(${rotation}deg)`,
                 opacity,
-                ...(isSmallViewport ? { willChange: "transform" as const } : {}),
+                willChange: "transform, opacity",
               }}
             >
               <div className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] xl:w-[60px] xl:h-[60px] 2xl:w-[110px] 2xl:h-[110px] 3xl:w-[130px] 3xl:h-[130px] 4xl:w-[150px] 4xl:h-[150px] relative">
@@ -303,7 +315,7 @@ export default function Steps() {
                   className="w-full h-full rounded-full flex items-center justify-center bg-foreground dark:bg-primary-foreground"
                 >
                   <span 
-                    className="text-[5px] sm:text-[6px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 leading-tight transition-opacity duration-300 text-primary-foreground dark:text-background"
+                    className="text-[5px] sm:text-[6px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 leading-tight text-primary-foreground dark:text-background"
                     style={{ opacity: opacity > 0.9 ? 1 : 0 }}
                   >
                     {activeStep.name}
@@ -319,7 +331,6 @@ export default function Steps() {
                   style={{
                     opacity: textOpacity,
                     transform: `scale(${textScale})`,
-                    transition: "opacity 0.3s ease-out, transform 0.3s ease-out",
                     pointerEvents: textOpacity > 0.1 ? "auto" : "none",
                   }}
                 >

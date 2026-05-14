@@ -125,6 +125,7 @@ const CONTENT_SECTIONS = [
     type: "image" as const,
     src: "/interior3.jpg",
     alt: "Project showcase 2",
+    fit: "contain" as const,
   },
   {
     type: "text" as const,
@@ -155,6 +156,7 @@ const CONTENT_SECTIONS = [
     type: "image" as const,
     src: "/visual1.jpg",
     alt: "Project showcase 3",
+    fit: "contain" as const,
   },
 ]
 
@@ -251,12 +253,33 @@ function TextParagraph({ content }: { content: string }) {
 }
 
 /**
- * Image showcase with responsive sizing
+ * Image showcase — `cover` fills the frame; `contain` shows the full image with muted bands when aspect ratios differ.
  */
-function ImageShowcase({ src, alt }: { src: string; alt: string }) {
+function ImageShowcase({
+  src,
+  alt,
+  fit = "cover",
+}: {
+  src: string
+  alt: string
+  fit?: "cover" | "contain"
+}) {
+  const frameClass =
+    "h-[340px] w-full max-h-[90svh] sm:h-[400px] md:h-[480px] lg:h-[580px] xl:h-[680px] 2xl:h-[900px] 3xl:h-[1050px] 4xl:h-[1200px]"
+
+  if (fit === "contain") {
+    return (
+      <div
+        className={`flex w-full items-center justify-center overflow-hidden bg-muted ${frameClass}`}
+      >
+        <img src={src} alt={alt} className="max-h-full max-w-full object-contain" />
+      </div>
+    )
+  }
+
   return (
-    <div className="w-full max-h-[280px] sm:max-h-[320px] md:max-h-[360px] lg:max-h-[280px] xl:max-h-[320px] 2xl:max-h-[360px] min-h-[220px] sm:min-h-[260px] md:min-h-[300px] lg:min-h-[240px] xl:min-h-[280px] 2xl:min-h-[300px] overflow-hidden flex items-center justify-center bg-muted">
-      <img src={src} alt={alt} className="w-full h-full object-contain" />
+    <div className="relative w-full overflow-hidden">
+      <img src={src} alt={alt} className={`${frameClass} object-cover`} />
     </div>
   )
 }
@@ -266,7 +289,13 @@ function ImageShowcase({ src, alt }: { src: string; alt: string }) {
  */
 function VideoEmbed({ src, title }: { src: string; title: string }) {
   return (
-    <div className="w-full h-[240px] sm:h-[280px] md:h-[320px] lg:h-[360px] xl:h-[400px] 2xl:h-[480px] overflow-hidden shadow-lg">
+    <div
+      className={
+        "relative w-full overflow-hidden shadow-lg " +
+        "aspect-video min-h-[220px] max-h-[min(92svh,90rem)] " +
+        "sm:min-h-[240px] md:min-h-[260px] lg:min-h-[300px] xl:min-h-[360px] 2xl:min-h-[420px] 3xl:min-h-[480px] 4xl:min-h-[540px]"
+      }
+    >
       <iframe
         width="100%"
         height="100%"
@@ -388,7 +417,9 @@ function ProjectDetailContent() {
           {CONTENT_SECTIONS.map((section, index) => (
             <AnimatedSection key={index}>
               {section.type === "text" && <TextParagraph content={section.content} />}
-              {section.type === "image" && <ImageShowcase src={section.src} alt={section.alt} />}
+              {section.type === "image" && (
+                <ImageShowcase src={section.src} alt={section.alt} fit={section.fit} />
+              )}
               {section.type === "video" && <VideoEmbed src={section.src} title={section.title} />}
             </AnimatedSection>
           ))}
@@ -396,7 +427,7 @@ function ProjectDetailContent() {
           {/* 360° Virtual Tour */}
           <AnimatedSection>
             <SectionHeader title="360° VIRTUAL TOUR" />
-            <div className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px] 2xl:h-[600px] mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12">
+            <div className="mb-6 h-[300px] w-full max-h-[min(92svh,90rem)] sm:mb-7 sm:h-[360px] md:mb-8 md:h-[420px] lg:mb-9 lg:h-[520px] xl:mb-10 xl:h-[600px] 2xl:mb-12 2xl:h-[700px] 3xl:h-[800px] 4xl:h-[900px]">
               <PanoramaViewer
                 iframeUrl="https://nedf-studios.github.io/Lula_Beauty_Salon_360/"
                 title="360° Virtual Tour"

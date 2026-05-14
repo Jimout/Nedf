@@ -42,9 +42,6 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {images.map((img, idx) => {
-          const isMainImage = idx === currentSlide
-          const isSecondaryImage = idx === currentSlide + 1
-
           return (
             <div
               key={idx}
@@ -54,24 +51,24 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
                 gap: `${gap}px`,
               }}
             >
-              <div className="flex-shrink-0" style={{ width: "75%" }}>
+              <div className="relative flex-shrink-0 overflow-hidden" style={{ width: "75%" }}>
                 <Image
                   src={img || "/placeholder.svg"}
                   alt={alts[idx]}
                   width={700}
                   height={400}
-                  className="w-full h-[400px] xl:h-[600px] 2xl:h-[800px] object-cover"
+                  className="h-[340px] w-full max-h-[90svh] object-cover sm:h-[400px] md:h-[480px] lg:h-[580px] xl:h-[680px] 2xl:h-[900px] 3xl:h-[1050px] 4xl:h-[1200px]"
                 />
               </div>
 
               {idx < images.length - 1 && (
-                <div className="flex-shrink-0" style={{ width: "25%" }}>
+                <div className="relative flex-shrink-0 overflow-hidden" style={{ width: "25%" }}>
                   <Image
                     src={images[idx + 1] || "/placeholder.svg"}
                     alt={alts[idx + 1]}
                     width={300}
                     height={400}
-                    className="w-full h-[400px] xl:h-[600px] 2xl:h-[800px] object-cover opacity-30"
+                    className="h-[340px] w-full max-h-[90svh] object-cover opacity-30 sm:h-[400px] md:h-[480px] lg:h-[580px] xl:h-[680px] 2xl:h-[900px] 3xl:h-[1050px] 4xl:h-[1200px]"
                   />
                 </div>
               )}

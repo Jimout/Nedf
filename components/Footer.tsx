@@ -11,11 +11,16 @@ const socialIcons = [
 ];
 
 const navLinks = [
-  { label: "Home", href: "#" },
+  { label: "Home", href: "/" },
   { label: "Services", href: "#" },
   { label: "Portfolio", href: "#" },
-  { label: "About", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+const legalLinks = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
 ];
 
 const Footer = () => {
@@ -82,11 +87,25 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom copyright */}
+      {/* Bottom copyright + legal links */}
       <div className="max-w-6xl mx-auto mt-10 pt-6 border-t border-primary-foreground/10">
-        <p className="text-xs text-center text-primary-foreground/35" style={{ fontFamily: "var(--font-body)" }}>
-          © 2025 NEDF. All rights reserved.
-        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+          <p className="text-xs text-primary-foreground/35" style={{ fontFamily: "var(--font-body)" }}>
+            © 2025 NEDF. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4 sm:gap-6">
+            {legalLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-xs text-primary-foreground/35 hover:text-primary-foreground/60 transition-colors duration-200"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </footer>
   );

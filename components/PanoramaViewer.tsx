@@ -160,8 +160,7 @@ export default function PanoramaViewer({ imageUrl, iframeUrl, title = "360° Vir
       )}
       <div 
         ref={viewerRef} 
-        className="w-full h-full rounded-lg overflow-hidden" 
-        style={{ minHeight: "600px" }}
+        className="h-full min-h-0 w-full rounded-lg overflow-hidden" 
         id={`panorama-viewer-${Math.random().toString(36).substr(2, 9)}`}
       />
     </div>
