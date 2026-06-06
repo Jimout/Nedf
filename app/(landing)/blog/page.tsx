@@ -206,7 +206,7 @@ function BlogPostCard({ post, onReadMore }: { post: Post; onReadMore: (id: numbe
           ))}
         </div>
 
-        <h2 className="text-[18px] text-foreground font-regular leading-6 mb-2">
+        <h2 className="text-[18px] text-foreground font-normal leading-6 mb-2">
           {post.title}
         </h2>
 

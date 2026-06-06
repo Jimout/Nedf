@@ -43,7 +43,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
   return (
     <section className="w-full py-6" ref={containerRef}>
       <div className="mb-8">
-        <h2 className="text-2xl font-montserrat font-regular tracking-wide text-foreground">
+        <h2 className="text-2xl font-montserrat font-bold tracking-tight text-foreground">
           RECOMMENDED FOR YOU
         </h2>
       </div>
@@ -81,7 +81,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                     ))}
                   </div>
 
-                  <h3 className="text-[18px] text-foreground font-regular leading-6 mb-2">
+                  <h3 className="text-[18px] text-foreground font-normal leading-6 mb-2">
                     {post.title}
                   </h3>
 

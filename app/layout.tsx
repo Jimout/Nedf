@@ -7,12 +7,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { DynamicBackground } from "@/components/dynamic-background"
 import SplashScreenWrapper from "@/components/SplashScreenWrapper"
-import CustomCursor from "@/components/CustomCursor"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["200", "300", "400", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
+  variable: "--font-montserrat",
 })
 
 export const metadata: Metadata = {
@@ -32,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${montserrat.className} font-montserrat bg-background`}>
+    <html lang="en" suppressHydrationWarning className={montserrat.variable}>
+      <body className={`${montserrat.className} font-sans antialiased bg-background`}>
         <SplashScreenWrapper />
         <DynamicBackground />
         <ThemeProvider 
@@ -42,10 +42,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <CustomCursor />
-          <main className="w-full relative z-10">
-            {children}
-          </main>
+          {children}
           <Toaster />
         </ThemeProvider>
         <Analytics />

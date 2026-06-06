@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
 import { gsap } from "gsap"
+import { useClientPathname } from "@/lib/use-client-pathname"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 // ==================== CONSTANTS ====================
@@ -36,8 +36,7 @@ interface NavItem {
 // ==================== MAIN COMPONENT ====================
 
 export function Navbar() {
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = useClientPathname()
   const navRef = useRef<HTMLDivElement>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -84,8 +83,7 @@ export function Navbar() {
     if (pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" })
     } else {
-      router.push("/")
-      setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), NAVIGATION_DELAY_MS)
+      window.location.href = "/"
     }
   }
 
@@ -93,8 +91,7 @@ export function Navbar() {
     if (pathname === "/") {
       scrollToElement(sectionId)
     } else {
-      router.push("/")
-      setTimeout(() => scrollToElement(sectionId), NAVIGATION_DELAY_MS)
+      window.location.href = `/#${sectionId}`
     }
   }
 

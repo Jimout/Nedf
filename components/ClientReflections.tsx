@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
+import { cn } from "@/lib/utils"
+import { SECTION_TITLE_SCALE, TYPE } from "@/lib/typography"
 
 interface Testimonial {
   id: number
@@ -130,7 +132,7 @@ export default function SlidingTestimonials() {
     >
 
       <div className="w-full pb-6 sm:pb-7 md:pb-8 lg:pb-9 xl:pb-10 2xl:pb-12 3xl:pb-14 4xl:pb-16">
-        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary">
+        <h2 className={cn("text-center", TYPE.sectionTitle, SECTION_TITLE_SCALE)}>
           CLIENT REFLECTION
         </h2>
       </div>

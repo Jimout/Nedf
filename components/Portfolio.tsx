@@ -5,7 +5,8 @@ import type React from "react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { SECTION_TITLE_SCALE, TYPE } from "@/lib/typography"
 
 const slides = [
   {
@@ -42,7 +43,6 @@ export default function Portfolio() {
   const [transitioning, setTransitioning] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     setIsLoaded(true)
@@ -66,7 +66,7 @@ export default function Portfolio() {
 
   const handleExploreClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    router.push("/portfolio")
+    window.location.href = "/portfolio"
   }
 
   const slide = slides[currentIndex]
@@ -92,9 +92,12 @@ export default function Portfolio() {
             2024
           </span>
           <h1
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat text-center whitespace-nowrap tracking-tight transition-all duration-100 delay-100 text-foreground/80 dark:text-primary ${
+            className={cn(
+              "text-center whitespace-nowrap transition-all duration-100 delay-100",
+              TYPE.sectionTitle,
+              SECTION_TITLE_SCALE,
               isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
+            )}
           >
             PORTFOLIO
           </h1>

@@ -64,7 +64,7 @@ export function LegalPage({ title, lastUpdated, sections, backHref }: LegalPageP
         <main className="flex-1 flex flex-col gap-6 sm:gap-8 lg:gap-10 2xl:gap-12 3xl:gap-14 4xl:gap-16">
           <Link
             href={backHref}
-            className="inline-flex items-center gap-1 text-foreground hover:text-primary transition-colors text-sm sm:text-base lg:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-3xl"
+            className="inline-flex items-center gap-1 text-foreground hover:text-primary transition-colors text-sm sm:text-base 2xl:text-base 3xl:text-lg 4xl:text-lg"
             aria-label={LEGAL_PAGE_BACK_LABEL}
           >
             <ChevronLeft className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 3xl:w-16 3xl:h-16 4xl:w-20 4xl:h-20" strokeWidth={0.75} />
@@ -75,7 +75,7 @@ export function LegalPage({ title, lastUpdated, sections, backHref }: LegalPageP
             {/* Desktop TOC */}
             <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
               <div className="bg-primary/5 rounded">
-                <div className="bg-primary text-primary-foreground text-center py-3 font-medium rounded-t text-sm sm:text-base lg:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-3xl">
+                <div className="bg-primary text-primary-foreground text-center py-3 font-bold rounded-t text-sm sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg">
                   Table Of Content
                 </div>
                 <ul className="divide-y divide-primary/20">
@@ -85,9 +85,9 @@ export function LegalPage({ title, lastUpdated, sections, backHref }: LegalPageP
                     return (
                       <li
                         key={item.id}
-                        className={`py-3 text-sm sm:text-base lg:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-3xl cursor-pointer transition-all duration-300 ease-in-out px-4 ${
+                        className={`py-3 text-sm sm:text-base 2xl:text-base 3xl:text-lg 4xl:text-lg cursor-pointer transition-all duration-300 ease-in-out px-4 ${
                           isActive
-                            ? "bg-primary/15 border-l-[3px] border-primary font-medium"
+                            ? "bg-primary/15 border-l-[3px] border-primary font-bold"
                             : "hover:bg-primary/10"
                         }`}
                       >
@@ -100,7 +100,7 @@ export function LegalPage({ title, lastUpdated, sections, backHref }: LegalPageP
                             setActiveId(item.id)
                           }}
                         >
-                          <span className="font-semibold mr-2">{item.number}</span>
+                          <span className="font-bold mr-2">{item.number}</span>
                           {item.label}
                         </a>
                       </li>
@@ -164,10 +164,10 @@ export function LegalPage({ title, lastUpdated, sections, backHref }: LegalPageP
               )}
 
               <div className="max-w-3xl w-full lg:max-w-4xl 2xl:max-w-5xl 3xl:max-w-6xl 4xl:max-w-7xl">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-medium text-foreground mb-2 lg:mb-3 2xl:mb-4 3xl:mb-5 4xl:mb-6">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat tracking-tight text-foreground/80 dark:text-primary mb-2 lg:mb-3 2xl:mb-4 3xl:mb-5 4xl:mb-6">
                   {title}
                 </h1>
-                <p className="text-muted-foreground text-sm sm:text-base lg:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-3xl mb-8 sm:mb-10 lg:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20">
+                <p className="text-muted-foreground text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg mb-8 sm:mb-10 lg:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20">
                   Last updated: {lastUpdated}
                 </p>
 
@@ -178,14 +178,14 @@ export function LegalPage({ title, lastUpdated, sections, backHref }: LegalPageP
                       id={section.id}
                       className="scroll-mt-24 lg:scroll-mt-32 2xl:scroll-mt-40 3xl:scroll-mt-48 4xl:scroll-mt-56"
                     >
-                      <h2 className="text-lg sm:text-xl lg:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl font-medium text-foreground mb-3 sm:mb-4 lg:mb-5 2xl:mb-6 3xl:mb-8 4xl:mb-10">
+                      <h2 className="text-lg font-bold text-foreground mb-3 sm:mb-4 lg:mb-5 2xl:mb-6 3xl:mb-8 4xl:mb-10">
                         {section.title}
                       </h2>
                       <div className="space-y-3 sm:space-y-4 lg:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8">
                         {section.paragraphs.map((para, i) => (
                           <p
                             key={i}
-                            className="text-muted-foreground text-sm sm:text-base lg:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-3xl leading-relaxed lg:leading-relaxed 2xl:leading-relaxed 3xl:leading-relaxed 4xl:leading-relaxed"
+                            className="text-muted-foreground text-sm sm:text-base 2xl:text-base 3xl:text-lg 4xl:text-lg leading-relaxed"
                           >
                             {para}
                           </p>

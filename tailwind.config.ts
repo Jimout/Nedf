@@ -99,8 +99,9 @@ const config: Config = {
         huge: "100px",
       },
       fontFamily: {
-        sans: ["Montserrat", "sans-serif"],
-        montserrat: ["Montserrat", "sans-serif"],
+        sans: ["var(--font-montserrat)", "sans-serif"],
+        montserrat: ["var(--font-montserrat)", "sans-serif"],
+        display: ["var(--font-montserrat)", "sans-serif"],
       },
       fontWeight: {
         extralight: "50",

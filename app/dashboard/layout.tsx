@@ -43,6 +43,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   useEffect(() => {
+    if (!pathname) return
     const isAuth = localStorage.getItem("dashboardAuth")
     if (!isAuth && pathname !== "/dashboard-login") {
       router.push("/dashboard-login")
@@ -192,8 +193,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             {group.items.map((item) => {
                               const Icon = item.icon
                               const isActive =
-                                pathname === item.href ||
-                                (item.href !== "/dashboard" && pathname.startsWith(item.href))
+                                pathname != null &&
+                                (pathname === item.href ||
+                                  (item.href !== "/dashboard" && pathname.startsWith(item.href)))
                               return (
                                 <div key={item.id} className="relative flex px-3 my-1">
                                   <Link
@@ -234,8 +236,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         {group.items.map((item) => {
                           const Icon = item.icon
                           const isActive =
-                            pathname === item.href ||
-                            (item.href !== "/dashboard" && pathname.startsWith(item.href))
+                            pathname != null &&
+                            (pathname === item.href ||
+                              (item.href !== "/dashboard" && pathname.startsWith(item.href)))
                           return (
                             <div key={item.id} className="relative flex justify-center my-1">
                               <Link

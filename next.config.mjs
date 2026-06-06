@@ -1,3 +1,7 @@
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
+
 const securityHeaders = [
   {
     key: "X-Frame-Options",
@@ -17,8 +21,25 @@ const securityHeaders = [
   },
 ]
 
+const projectDir = fs.realpathSync.native(
+  path.dirname(fileURLToPath(import.meta.url))
+)
+const nextDir = path.join(projectDir, "node_modules", "next")
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack: (config) => {
+    // Windows: one Next.js copy — mixed Nedf/nedf paths break the App Router
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      next: nextDir,
+    }
+    config.resolve.modules = [
+      path.join(projectDir, "node_modules"),
+      ...(config.resolve.modules ?? ["node_modules"]),
+    ]
+    return config
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

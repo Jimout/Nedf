@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Minimize2 } from "lucide-react";
 import { LANDING_SERVICES_KEY } from "@/lib/constants";
+import { TYPE } from "@/lib/typography";
 
 type PortfolioFilter = "Architecture" | "Interior" | "Visualization" | "All";
 
@@ -232,18 +233,19 @@ export default function ServicesSection() {
                       <span className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 xl:h-11 xl:w-11 2xl:h-16 2xl:w-16 3xl:h-[4.5rem] 3xl:w-[4.5rem] 4xl:h-20 4xl:w-20 items-center justify-center rounded-full bg-card-foreground/15 text-xs sm:text-sm md:text-base lg:text-lg 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl font-semibold text-card-foreground">
                         {String(activeIndex + 1).padStart(2, "0")}
                       </span>
-                      <span className="text-xs sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-2xl font-medium uppercase tracking-wider text-card-foreground/80">
+                      <span className={cn("text-xs sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-2xl text-card-foreground/80", TYPE.eyebrow)}>
                         {active.category}
                       </span>
                     </div>
-                    <h2 className="mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-10 3xl:mb-12 4xl:mb-14 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl font-bold leading-tight text-card-foreground">
+                    <h2 className={cn("mb-3 sm:mb-4 md:mb-4 lg:mb-5 xl:mb-6 2xl:mb-10 3xl:mb-12 4xl:mb-14 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl", TYPE.cardHeadline)}>
                       {active.headline}
                     </h2>
                     <div className="flex items-center gap-3 sm:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 flex-wrap mb-12 sm:mb-0">
                       <a
                         href="/#portfolio"
                         className={cn(
-                          "inline-flex w-fit items-center rounded-full px-3 py-2 sm:px-4 sm:py-2.5 2xl:px-10 2xl:py-5 3xl:px-12 3xl:py-5 4xl:px-14 4xl:py-6 text-xs sm:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-2xl font-semibold transition-opacity hover:opacity-90",
+                          "inline-flex w-fit items-center rounded-full px-3 py-2 sm:px-4 sm:py-2.5 2xl:px-10 2xl:py-5 3xl:px-12 3xl:py-5 4xl:px-14 4xl:py-6 text-xs sm:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-2xl transition-opacity hover:opacity-90",
+                          TYPE.cta,
                           "bg-primary text-primary-foreground"
                         )}
                       >

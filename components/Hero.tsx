@@ -198,7 +198,7 @@ function HeroContent({
           style={{ height: `${lineHeight}px` }}
         >
           <span className="
-            font-thin text-foreground/80
+            font-light text-foreground/80
             tracking-wide mr-2 max-sm:mb-[-4px]
             text-[20px] sm:text-[26px] md:text-[32px] lg:text-[38px] xl:text-[52px] 2xl:text-[72px] 3xl:text-[80px] 4xl:text-[88px]
             md:font-normal xl:font-normal

@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/Navbar"
+import CustomCursor from "@/components/CustomCursor"
 import type React from "react"
 
 export default function Layout({
@@ -14,6 +15,7 @@ export default function Layout({
       <div className="mx-auto w-full px-4 sm:px-6 lg:px-12 xl:px-12 2xl:px-24 3xl:px-28 4xl:px-32">
         {children}
       </div>
+      <CustomCursor />
     </div>
   )
 }
