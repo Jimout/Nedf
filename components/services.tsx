@@ -85,7 +85,25 @@ function getPortfolioFilter(subServiceName: string, serviceId: string): Portfoli
   return "All";
 }
 
-export default function ServicesSection() {
+interface ServicesSectionProps {
+  stacked?: boolean;
+  stickyTopClass?: string;
+  viewportPanelClass?: string;
+  panelShadowClass?: string;
+}
+
+const STACKED_PADDING =
+  "pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28";
+
+const DEFAULT_PADDING =
+  "pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28";
+
+export default function ServicesSection({
+  stacked = false,
+  stickyTopClass = "top-14",
+  viewportPanelClass = "min-h-screen",
+  panelShadowClass = "",
+}: ServicesSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showSubServices, setShowSubServices] = useState(false);
   const [services, setServices] = useState<LandingService[]>(DEFAULT_SERVICES);
@@ -107,13 +125,13 @@ export default function ServicesSection() {
     return null;
   }
 
-  return (
-    <section
-      ref={sectionRef}
-      id="services"
-      className="relative z-10 w-full overflow-visible bg-background pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat"
-    >
-      <div className="relative w-full">
+  const sectionClassName = cn(
+    "w-full overflow-visible bg-background font-montserrat",
+    stacked ? STACKED_PADDING : cn("relative", DEFAULT_PADDING)
+  );
+
+  const inner = (
+    <div className="relative w-full">
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 2xl:mb-12 3xl:mb-14 4xl:mb-16 flex flex-col gap-3 sm:gap-4 md:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8">
             {services.map((s, i) => (
@@ -267,6 +285,30 @@ export default function ServicesSection() {
           </div>
         </div>
       </div>
+  );
+
+  if (stacked) {
+    return (
+      <div
+        className={cn(
+          "sticky z-30 w-full bg-background",
+          /* Pull up into slogan scroll so this layer rises over it, not after it */
+          "-mt-[50vh]",
+          stickyTopClass,
+          viewportPanelClass
+        )}
+        aria-label="Services"
+      >
+        <section ref={sectionRef} id="services" className={sectionClassName}>
+          {inner}
+        </section>
+      </div>
+    );
+  }
+
+  return (
+    <section ref={sectionRef} id="services" className={sectionClassName}>
+      {inner}
     </section>
   );
 }

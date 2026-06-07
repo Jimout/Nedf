@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import HeroWithStats from "@/components/Hero";
-import HeroTextFadeScroll from "@/components/Slogan";
-import ServicesSection from "@/components/services";
+import { LandingStack } from "@/components/LandingStack";
 import Portfolio from "@/components/Portfolio";
 import { StudioNotesCard } from "@/components/StudioNoteCards";
 import SlidingTestimonials from "@/components/ClientReflections";
@@ -18,13 +16,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Main: responsive top padding for fixed nav (mobile→4K) */}
       <main className="pt-14 sm:pt-14 md:pt-14 lg:pt-14 xl:pt-16 2xl:pt-16 3xl:pt-20 4xl:pt-24">
-        <HeroWithStats />
-        <HeroTextFadeScroll />
-        <ServicesSection />
+        <LandingStack />
         <Portfolio />
-        {/* Studio notes section: stack on mobile, responsive heading */}
         <div id="studio-notes" className="scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-20 lg:scroll-mt-24">
           <p
             className={cn(

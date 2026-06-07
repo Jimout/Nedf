@@ -11,7 +11,6 @@ gsap.registerPlugin(ScrollTrigger);
 const TEXT_CLASS =
   "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl left-0 right-0 mx-auto w-full max-w-[95vw] [font-kerning:none]";
 
-/** Fisher-Yates shuffle; returns new array with random order */
 function shuffle<T>(arr: T[]): T[] {
   const out = [...arr];
   for (let i = out.length - 1; i > 0; i--) {
@@ -21,7 +20,6 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
-/** Get char elements per word (word's children are chars when using types: "words,chars") */
 function getCharsPerWord(words: HTMLSpanElement[]): HTMLSpanElement[][] {
   return words.map((word) => Array.from(word.children) as HTMLSpanElement[]);
 }
@@ -78,7 +76,6 @@ export default function HeroTextFadeScroll() {
       const chars1b = getCharsPerWord(w1b);
       const chars2 = getCharsPerWord(w2);
 
-      // Shuffled order per word for reveal and hide (re-shuffle for hide for variety)
       const revealOrder1a = chars1a.map((chars) => shuffle(chars));
       const revealOrder1b = chars1b.map((chars) => shuffle(chars));
       const revealOrder2 = chars2.map((chars) => shuffle(chars));
@@ -86,18 +83,13 @@ export default function HeroTextFadeScroll() {
       const hideOrder1b = chars1b.map((chars) => shuffle(chars));
       const hideOrder2 = chars2.map((chars) => shuffle(chars));
 
-      // All chars start hidden for reveal
       [chars1a, chars1b, chars2].forEach((wordChars) =>
         wordChars.forEach((chars) =>
           chars.forEach((c) => gsap.set(c, { opacity: 0, willChange: "opacity" }))
         )
       );
       gsap.set(
-        [
-          firstLine1Ref.current!,
-          firstLine2Ref.current!,
-          secondRef.current!,
-        ],
+        [firstLine1Ref.current!, firstLine2Ref.current!, secondRef.current!],
         { visibility: "visible" }
       );
 
@@ -118,7 +110,6 @@ export default function HeroTextFadeScroll() {
 
       let t = 0;
 
-      /** Reveal: from every word at the same time, one random letter per word per round */
       const addRevealParallel = (
         order: HTMLSpanElement[][],
         startTime: number
@@ -135,7 +126,6 @@ export default function HeroTextFadeScroll() {
         return startTime + maxRounds * stagChar;
       };
 
-      /** Hide: from every word at the same time, one random letter per word per round */
       const addHideParallel = (
         order: HTMLSpanElement[][],
         startTime: number
@@ -152,47 +142,39 @@ export default function HeroTextFadeScroll() {
         return startTime + maxRounds * stagChar;
       };
 
-      // Phase 1: Reveal line 1 "We are a fully" (all words at once, random letter per word per round)
       t = addRevealParallel(revealOrder1a, t);
       t += 0.15;
-      // Phase 2: Reveal line 2 "integrated design firm"
       t = addRevealParallel(revealOrder1b, t);
       t += 0.3;
-      // Phase 3 & 4: Hide line 1 and line 2 in parallel
       const tHideStart = t;
       const end1a = addHideParallel(hideOrder1a, tHideStart);
       const end1b = addHideParallel(hideOrder1b, tHideStart);
       t = Math.max(end1a, end1b);
       t += 0.15;
-      // Phase 5: Reveal line 3 "based in Addis Ababa, Ethiopia"
       t = addRevealParallel(revealOrder2, t);
       t += 0.3;
-      // Phase 6: Hide line 3
       addHideParallel(hideOrder2, t);
 
       return () => {
         split1a.revert();
         split1b.revert();
         split2.revert();
-        ScrollTrigger.getAll().forEach((t) => t.kill());
       };
     }, sectionRef);
 
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh()
-    })
-    const refreshLater = window.setTimeout(() => ScrollTrigger.refresh(), 100)
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+    const refreshLater = window.setTimeout(() => ScrollTrigger.refresh(), 100);
 
     return () => {
-      window.clearTimeout(refreshLater)
-      ctx.revert()
-    }
+      window.clearTimeout(refreshLater);
+      ctx.revert();
+    };
   }, [slogan.line1, slogan.line2, slogan.line3]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative z-30 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-12 sm:pb-16 2xl:pb-0 3xl:pb-0 4xl:pb-0"
+      className="relative z-20 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-12 sm:pb-16 2xl:pb-0 3xl:pb-0 4xl:pb-0"
     >
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-0">
         <div

@@ -76,7 +76,7 @@ export default function Portfolio() {
       {/* Full-width Section - flows after Services on all screens */}
       <section
         id="portfolio"
-        className="relative z-10 pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full bg-background"
+        className="relative z-40 pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full bg-background"
       >
         <div className="w-full">
         <div

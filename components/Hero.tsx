@@ -134,8 +134,8 @@ function HeroSection({
 }) {
   return (
     <section className="
-      relative w-full z-10 
-      flex items-center justify-center 
+      relative w-full z-10
+      flex items-center justify-center
       font-montserrat overflow-hidden
       min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh] lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[40vh] 3xl:min-h-[44vh] 4xl:min-h-[48vh]
       mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 2xl:mt-12 3xl:mt-14 4xl:mt-16
