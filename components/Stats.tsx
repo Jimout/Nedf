@@ -152,21 +152,16 @@ export default function Stats() {
   // ==================== RENDER ====================
 
   return (
-    <section 
-      ref={ref} 
+    <section
+      ref={ref}
       className="
-        w-full relative z-10 
-        mt-6 sm:mt-8 md:mt-10
-        py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 2xl:py-8
+        w-full relative z-10 flex-shrink-0
+        mt-auto pt-4 pb-8 sm:pb-10 md:pb-12
+        lg:mt-6 lg:py-6 xl:py-7 2xl:py-8
+        px-5 sm:px-7 md:px-9 lg:px-0
       "
     >
-      <div className="
-        w-full text-center
-        grid grid-cols-2 
-        sm:flex sm:flex-row sm:justify-between sm:items-center
-        gap-y-5 gap-x-4 
-        sm:gap-y-0 sm:gap-x-0
-      ">
+      <div className="grid w-full grid-cols-2 gap-3 sm:gap-4 lg:flex lg:flex-row lg:justify-between lg:items-end lg:gap-0">
         {STATS_DATA.map((stat, index) => (
           <StatCard
             key={stat.label}
@@ -184,30 +179,41 @@ export default function Stats() {
 
 function StatCard({ value, label, isCounting }: { value: string; label: string; isCounting: boolean }) {
   return (
-    <div className="
-      bg-card p-3 sm:p-4 md:p-5 rounded-lg border border-border shadow-lg ring-1 ring-border/30
-      dark:border-primary/20
-      lg:bg-transparent lg:border-none lg:shadow-none lg:ring-0 lg:p-0 lg:rounded-none
-      transition-all duration-200
-    ">
-      <div
-        className={`
-        font-bold font-mono text-primary
-        text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl
-        transition-all duration-200 ease-out
-        ${isCounting ? "scale-110" : "scale-100"}
-      `}
-      >
-        {value}
-      </div>
-      <div
-        className="
-        font-medium font-montserrat text-muted-foreground
-        text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg
-        mt-0.5 sm:mt-1
+    <div
+      className="
+        flex items-start gap-2.5 sm:gap-3
+        rounded-md bg-muted/45 px-3 py-3.5 sm:px-4 sm:py-4
+        dark:bg-muted/25
+        lg:flex-1 lg:flex-col lg:items-center lg:rounded-none lg:bg-transparent lg:dark:bg-transparent lg:px-0 lg:py-0 lg:text-center
       "
-      >
-        {label}
+    >
+      <span
+        className="mt-1 h-8 w-px shrink-0 bg-primary/70 lg:hidden"
+        aria-hidden
+      />
+      <div className="min-w-0 flex-1 lg:flex lg:flex-col lg:items-center w-full">
+        <span
+          className={`
+            block font-mono font-semibold text-foreground leading-none tabular-nums
+            text-2xl sm:text-[1.75rem] md:text-3xl
+            lg:font-bold lg:text-primary
+            lg:text-xl xl:text-2xl 2xl:text-2xl 3xl:text-3xl 4xl:text-3xl
+            transition-transform duration-200 ease-out
+            ${isCounting ? "scale-105" : "scale-100"}
+          `}
+        >
+          {value}
+        </span>
+        <span
+          className="
+            mt-1.5 block font-montserrat text-muted-foreground leading-snug
+            text-[10px] sm:text-[11px] md:text-xs break-words
+            lg:mt-1
+            2xl:text-base 3xl:text-lg 4xl:text-lg
+          "
+        >
+          {label}
+        </span>
       </div>
     </div>
   )

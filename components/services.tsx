@@ -291,7 +291,7 @@ export default function ServicesSection({
     return (
       <div
         className={cn(
-          "sticky z-30 w-full bg-background",
+          "sticky z-50 w-full bg-background",
           /* Pull up into slogan scroll so this layer rises over it, not after it */
           "-mt-[50vh]",
           stickyTopClass,

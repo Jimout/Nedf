@@ -22,10 +22,10 @@ const ANIMATION = {
     transition: { duration: 0.5, ease: "easeInOut" as const },
   },
   logo: {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
     exit: { opacity: 0 },
-    transition: { duration: 0.4, ease: "easeOut" as const },
+    transition: { duration: 0.45, ease: "easeOut" as const },
   },
   footer: {
     initial: { opacity: 0, y: 8 },
@@ -39,7 +39,7 @@ const ANIMATION = {
 } as const;
 
 const LOGO_SIZES =
-  "w-[85vw] max-w-[min(85vw,20rem)] min-w-40 sm:w-[75vw] sm:max-w-[min(75vw,24rem)] md:w-[70vw] md:max-w-[28rem] lg:w-[65vw] lg:max-w-[32rem] xl:w-[60vw] xl:max-w-[36rem] 2xl:w-[55vw] 2xl:max-w-[42rem] 3xl:max-w-[48rem] 4xl:max-w-[56rem]";
+  "w-[70vw] max-w-[min(70vw,18rem)] min-w-36 sm:w-[60vw] sm:max-w-[min(60vw,22rem)] md:max-w-[26rem] lg:max-w-[30rem] xl:max-w-[34rem] 2xl:max-w-[38rem]";
 
 function SplashLogo() {
   return (
@@ -52,7 +52,7 @@ function SplashLogo() {
         alt={SPLASH_CONFIG.logo.alt}
         fill
         priority
-        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 75vw, (max-width: 1920px) 65vw, 55vw"
+        sizes="(max-width: 640px) 70vw, (max-width: 1024px) 60vw, 34rem"
         className="object-contain object-center transition-opacity duration-300 dark:opacity-0"
       />
       <Image
@@ -60,38 +60,28 @@ function SplashLogo() {
         alt={SPLASH_CONFIG.logo.alt}
         fill
         priority
-        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 75vw, (max-width: 1920px) 65vw, 55vw"
+        sizes="(max-width: 640px) 70vw, (max-width: 1024px) 60vw, 34rem"
         className="object-contain object-center transition-opacity duration-300 opacity-0 dark:opacity-100"
       />
     </div>
   );
 }
 
-function SplashFooter() {
+function LoadingDots() {
   return (
-    <motion.div
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 sm:bottom-8 md:bottom-10 lg:bottom-12 flex flex-col items-center gap-1.5 sm:gap-2"
-      initial={ANIMATION.footer.initial}
-      animate={ANIMATION.footer.animate}
-      transition={ANIMATION.footer.transition}
-    >
-      <p className="text-center text-[10px] sm:text-xs md:text-sm text-foreground dark:text-primary tracking-wider font-light">
-        {SPLASH_CONFIG.tagline}
-      </p>
-      <div className="flex gap-1 justify-center">
-        {Array.from({ length: SPLASH_CONFIG.loadingDotsCount }).map((_, i) => (
-          <motion.span
-            key={i}
-            className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-foreground dark:bg-primary"
-            animate={ANIMATION.dot.animate}
-            transition={{
-              ...ANIMATION.dot.transition,
-              delay: i * (SPLASH_CONFIG.dotDelayMs / 1000),
-            }}
-          />
-        ))}
-      </div>
-    </motion.div>
+    <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+      {Array.from({ length: SPLASH_CONFIG.loadingDotsCount }).map((_, i) => (
+        <motion.span
+          key={i}
+          className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-foreground dark:bg-primary"
+          animate={ANIMATION.dot.animate}
+          transition={{
+            ...ANIMATION.dot.transition,
+            delay: i * (SPLASH_CONFIG.dotDelayMs / 1000),
+          }}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -110,22 +100,34 @@ export default function SplashScreen({ onComplete }: { onComplete?: () => void }
     <AnimatePresence mode="wait">
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-background"
+          className="fixed inset-0 z-[999] flex flex-col bg-background"
           exit={ANIMATION.container.exit}
           transition={ANIMATION.container.transition}
           style={{ pointerEvents: "auto" }}
           aria-hidden={!visible}
         >
+          <div className="flex flex-1 items-center justify-center px-4 sm:px-6">
+            <motion.div
+              initial={ANIMATION.logo.initial}
+              animate={ANIMATION.logo.animate}
+              exit={ANIMATION.logo.exit}
+              transition={ANIMATION.logo.transition}
+            >
+              <SplashLogo />
+            </motion.div>
+          </div>
+
           <motion.div
-            initial={ANIMATION.logo.initial}
-            animate={ANIMATION.logo.animate}
-            exit={ANIMATION.logo.exit}
-            transition={ANIMATION.logo.transition}
-            className="flex items-center justify-center px-4 sm:px-6 md:px-8"
+            className="flex flex-col items-center justify-center gap-2 sm:gap-2.5 pb-8 sm:pb-10 md:pb-12"
+            initial={ANIMATION.footer.initial}
+            animate={ANIMATION.footer.animate}
+            transition={ANIMATION.footer.transition}
           >
-            <SplashLogo />
+            <p className="text-center text-xs sm:text-sm md:text-base text-foreground dark:text-primary tracking-wider font-light">
+              {SPLASH_CONFIG.tagline}
+            </p>
+            <LoadingDots />
           </motion.div>
-          <SplashFooter />
         </motion.div>
       )}
     </AnimatePresence>

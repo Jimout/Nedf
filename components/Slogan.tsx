@@ -9,7 +9,7 @@ import { loadSlogan } from "@/lib/landing-slogan";
 gsap.registerPlugin(ScrollTrigger);
 
 const TEXT_CLASS =
-  "absolute text-center font-montserrat font-bold text-foreground leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl left-0 right-0 mx-auto w-full max-w-[95vw] [font-kerning:none]";
+  "absolute text-center font-montserrat font-bold text-foreground leading-[1.25] lg:leading-[1.35] tracking-tight px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 py-4 sm:py-5 md:py-6 text-4xl sm:text-5xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl left-0 right-0 mx-auto w-full max-w-[95vw] [font-kerning:none]";
 
 function shuffle<T>(arr: T[]): T[] {
   const out = [...arr];

@@ -106,7 +106,13 @@ export default function HeroWithStats() {
   const duplicatedWords = [...ANIMATED_WORDS, ...ANIMATED_WORDS]
 
   return (
-    <>
+    <div
+      className="
+        flex w-full flex-col
+        min-h-[calc(100dvh-3.5rem)] sm:min-h-[calc(100dvh-3.5rem)] md:min-h-[calc(100dvh-3.5rem)]
+        lg:min-h-0
+      "
+    >
       <HeroSection lineHeight={lineHeight}>
         <HeroContent
           lineHeight={lineHeight}
@@ -119,7 +125,7 @@ export default function HeroWithStats() {
 
       <Spacer />
       <Stats />
-    </>
+    </div>
   )
 }
 
@@ -135,10 +141,12 @@ function HeroSection({
   return (
     <section className="
       relative w-full z-10
-      flex items-center justify-center
+      flex flex-1 flex-col items-center justify-center
       font-montserrat overflow-hidden
-      min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh] lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[40vh] 3xl:min-h-[44vh] 4xl:min-h-[48vh]
-      mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 2xl:mt-12 3xl:mt-14 4xl:mt-16
+      min-h-0
+      lg:flex-none
+      lg:min-h-[34vh] xl:min-h-[36vh] 2xl:min-h-[40vh] 3xl:min-h-[44vh] 4xl:min-h-[48vh]
+      mt-0 lg:mt-8 xl:mt-10 2xl:mt-12 3xl:mt-14 4xl:mt-16
     ">
       <div className="
         flex items-center justify-center 
@@ -147,6 +155,12 @@ function HeroSection({
         {children}
       </div>
     </section>
+  )
+}
+
+function Spacer() {
+  return (
+    <div className="hidden lg:block h-5 xl:h-6 2xl:h-6 3xl:h-7 4xl:h-8" />
   )
 }
 
@@ -279,6 +293,3 @@ function AnimatedWords({
   )
 }
 
-function Spacer() {
-  return <div className="h-2 sm:h-3 md:h-4 lg:h-5 xl:h-6 2xl:h-6 3xl:h-7 4xl:h-8" />
-}
