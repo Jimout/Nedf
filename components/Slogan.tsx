@@ -174,7 +174,7 @@ export default function HeroTextFadeScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-12 sm:pb-16 2xl:pb-0 3xl:pb-0 4xl:pb-0"
+      className="relative z-20 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28"
     >
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-0">
         <div

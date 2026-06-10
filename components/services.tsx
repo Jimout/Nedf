@@ -289,20 +289,9 @@ export default function ServicesSection({
 
   if (stacked) {
     return (
-      <div
-        className={cn(
-          "sticky z-50 w-full bg-background",
-          /* Pull up into slogan scroll so this layer rises over it, not after it */
-          "-mt-[50vh]",
-          stickyTopClass,
-          viewportPanelClass
-        )}
-        aria-label="Services"
-      >
-        <section ref={sectionRef} id="services" className={sectionClassName}>
-          {inner}
-        </section>
-      </div>
+      <section ref={sectionRef} id="services" className={cn(sectionClassName, "relative z-30")}>
+        {inner}
+      </section>
     );
   }
 
