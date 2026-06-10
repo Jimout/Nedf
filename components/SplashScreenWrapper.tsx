@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import SplashScreen from "./SplashScreen";
 
 const STORAGE_KEY = "nedf-splash-shown";
 
 function getShouldShowSplash(): boolean {
-  if (typeof window === "undefined") return true;
+  if (typeof window === "undefined") return false;
   try {
     return !sessionStorage.getItem(STORAGE_KEY);
   } catch {
-    return true;
+    return false;
   }
 }
 
@@ -23,8 +24,9 @@ function setSplashShown(): void {
 }
 
 export default function SplashScreenWrapper() {
-  // Default to true so splash is the first thing rendered (server + first paint)
-  const [showSplash, setShowSplash] = useState(true);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const [showSplash, setShowSplash] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -33,16 +35,21 @@ export default function SplashScreenWrapper() {
 
   useEffect(() => {
     if (!mounted) return;
-    // After hydration: hide splash only if user already saw it this session
+
+    if (!isHome) {
+      setShowSplash(false);
+      return;
+    }
+
     setShowSplash(getShouldShowSplash());
-  }, [mounted]);
+  }, [mounted, isHome]);
 
   const handleSplashComplete = () => {
     setSplashShown();
     setShowSplash(false);
   };
 
-  if (!showSplash) return null;
+  if (!isHome || !showSplash) return null;
 
   return <SplashScreen onComplete={handleSplashComplete} />;
 }

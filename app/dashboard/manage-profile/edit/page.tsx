@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Eye, EyeOff, Check, X } from "lucide-react"
+import { Eye, EyeOff, Check, X, Pencil } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { 
   FaInstagram, 
@@ -388,6 +388,7 @@ export default function EditProfilePage() {
                   onClick={handleEditCredentials} 
                   className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white"
                 >
+                  <Pencil className="h-4 w-4 mr-2" />
                   Edit Credentials
                 </Button>
               )}

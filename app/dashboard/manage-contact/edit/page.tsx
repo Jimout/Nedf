@@ -71,7 +71,7 @@ export default function ManageContactEditPage() {
                 Manage contact page
               </h1>
               <p className="text-sm text-muted-foreground mt-0.5">
-                Edit the contact page text, form labels, contact info, and social links.
+                Edit the contact page text, contact info, and social links.
               </p>
             </div>
           </div>
@@ -153,54 +153,6 @@ export default function ManageContactEditPage() {
                 value={data.page.subtitle}
                 onChange={(e) => update({ page: { ...data.page, subtitle: e.target.value } })}
                 className="rounded-none bg-background border-border min-h-[80px]"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-none border border-border bg-card">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base text-foreground">Form labels</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-foreground">Full name</label>
-              <Input
-                value={data.formLabels.fullName}
-                onChange={(e) =>
-                  update({ formLabels: { ...data.formLabels, fullName: e.target.value } })
-                }
-                className="rounded-none bg-background border-border"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-foreground">Email</label>
-              <Input
-                value={data.formLabels.email}
-                onChange={(e) =>
-                  update({ formLabels: { ...data.formLabels, email: e.target.value } })
-                }
-                className="rounded-none bg-background border-border"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-foreground">Subject</label>
-              <Input
-                value={data.formLabels.subject}
-                onChange={(e) =>
-                  update({ formLabels: { ...data.formLabels, subject: e.target.value } })
-                }
-                className="rounded-none bg-background border-border"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-foreground">Message</label>
-              <Input
-                value={data.formLabels.message}
-                onChange={(e) =>
-                  update({ formLabels: { ...data.formLabels, message: e.target.value } })
-                }
-                className="rounded-none bg-background border-border"
               />
             </div>
           </CardContent>

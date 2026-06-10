@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { Menu } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useParams } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 
 /** Same scroll-in animation as `app/(landing)/portfolio/[id]/page.tsx` */
@@ -70,6 +71,149 @@ const toc: TocItem[] = [
 
 const currentBlogTags = ["Case File", "Architecture"]
 
+interface CmsBlogSection {
+  id: string
+  title: string
+  content: string
+  level: number
+  number: string
+  images?: string[]
+}
+
+interface CmsBlog {
+  id: string
+  title: string
+  heroImage: string
+  tags: string[]
+  sections: CmsBlogSection[]
+}
+
+function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
+  const [activeId, setActiveId] = useState(blog.sections[0]?.id ?? "")
+
+  const scrollToSection = (sectionId: string) => {
+    setActiveId(sectionId)
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
+
+  return (
+    <div className="relative min-h-screen flex flex-col scroll-smooth">
+      <div className="flex-1 py-8 bg-background">
+        <main className="flex-1 flex flex-col gap-8 relative w-full">
+          <div className="flex flex-col lg:flex-row gap-10">
+            <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
+              <div className="bg-card border border-border overflow-hidden">
+                <div className="border-b border-border px-6 py-5 bg-muted">
+                  <h2 className="text-sm font-bold text-foreground uppercase tracking-wide">Table of Contents</h2>
+                </div>
+                <nav className="p-3">
+                  <ul className="space-y-1">
+                    {blog.sections.map((section) => {
+                      const isActive = activeId === section.id
+                      const paddingLeft = section.level === 1 ? "12px" : section.level === 2 ? "28px" : "44px"
+                      return (
+                        <li key={section.id}>
+                          <button
+                            type="button"
+                            onClick={() => scrollToSection(section.id)}
+                            className={`flex w-full items-start gap-3 py-2 px-3 text-sm text-left transition-all duration-300 ${
+                              isActive
+                                ? "bg-primary text-primary-foreground"
+                                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                            }`}
+                            style={{ paddingLeft }}
+                          >
+                            <span className="text-xs font-medium mt-0.5 min-w-[32px]">{section.number}</span>
+                            <span className="flex-1 leading-relaxed">{section.title}</span>
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </nav>
+              </div>
+            </aside>
+
+            <article className="flex-1 relative lg:pt-14">
+              <AnimatedSection className="mb-6">
+                <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
+                  <Image
+                    src={blog.heroImage || "/placeholder.svg"}
+                    alt={blog.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <h1
+                  className="mb-6 text-foreground"
+                  style={{ fontFamily: "Montserrat", fontWeight: 500, fontSize: "36px" }}
+                >
+                  {blog.title}
+                </h1>
+                {blog.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {blog.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 text-sm border border-border rounded-full font-normal text-foreground"
+                        style={{ fontFamily: "Montserrat" }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </AnimatedSection>
+
+              {blog.sections.map((section) => {
+                const headingSize = section.level === 1 ? "text-2xl" : section.level === 2 ? "text-xl" : "text-lg"
+                const marginTop = section.level === 1 ? "mt-10" : section.level === 2 ? "mt-6" : "mt-4"
+                return (
+                  <AnimatedSection
+                    key={section.id}
+                    id={section.id}
+                    className={`scroll-mt-24 mb-6 ${marginTop}`}
+                  >
+                    <h2 className={`${headingSize} font-medium mb-4 text-foreground`} style={{ fontFamily: "Montserrat" }}>
+                      <span className="font-semibold mr-2">{section.number}</span>
+                      {section.title}
+                    </h2>
+                    <p
+                      className="text-foreground/80 text-sm mb-4 leading-7 text-justify"
+                      style={{ fontFamily: "Montserrat", fontWeight: 400 }}
+                    >
+                      {section.content}
+                    </p>
+                    {section.images && section.images.length > 0 && (
+                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {section.images.map((image, index) => (
+                          <div key={index} className="relative h-48 w-full">
+                            <Image
+                              src={image}
+                              alt={`${section.title} ${index + 1}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </AnimatedSection>
+                )
+              })}
+            </article>
+          </div>
+        </main>
+      </div>
+      <Subscription />
+    </div>
+  )
+}
+
 const allPosts = [
   {
     id: 0,
@@ -121,7 +265,7 @@ const allPosts = [
   },
 ]
 
-export default function BlogDetailPage() {
+function StaticBlogDetailPage() {
   const [activeId, setActiveId] = useState("intro")
   const [showMobileTOC, setShowMobileTOC] = useState(false)
   const [tocExpanded, setTocExpanded] = useState(false)
@@ -388,6 +532,46 @@ export default function BlogDetailPage() {
       <Subscription />
     </div>
   )
+}
+
+export default function BlogDetailPage() {
+  const params = useParams()
+  const blogId = params?.id as string | undefined
+  const [cmsBlog, setCmsBlog] = useState<CmsBlog | null>(null)
+  const [cmsLoaded, setCmsLoaded] = useState(false)
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("blogs")
+      if (saved && blogId) {
+        const blogs: CmsBlog[] = JSON.parse(saved)
+        const found = blogs.find((b) => String(b.id) === String(blogId))
+        if (found) {
+          setCmsBlog(found)
+        }
+      }
+    } catch {
+      // ignore parse errors
+    } finally {
+      setCmsLoaded(true)
+    }
+  }, [blogId])
+
+  if (!cmsLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat" }}>
+          Loading...
+        </p>
+      </div>
+    )
+  }
+
+  if (cmsBlog) {
+    return <CmsBlogDetail blog={cmsBlog} />
+  }
+
+  return <StaticBlogDetailPage />
 }
 
 function getSectionContent(id: string) {

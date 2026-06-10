@@ -22,10 +22,10 @@ export default function SubscriptionViewPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground uppercase tracking-wide">
-              Subscription
+              Footer
             </h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              View the footer subscription and contact block shown on the landing page.
+              View footer content shown on the landing page.
             </p>
           </div>
           <Button
@@ -54,30 +54,14 @@ export default function SubscriptionViewPage() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Card className="rounded-none border border-border bg-card">
-            <CardContent className="p-4 space-y-3">
-              <p className="text-xs font-medium uppercase text-muted-foreground">Quick links</p>
-              <ul className="space-y-1 text-sm text-foreground">
-                {data.quickLinks.map((link) => (
-                  <li key={link.href}>
-                    <span className="font-semibold">{link.label}</span>{" "}
-                    <span className="text-muted-foreground">({link.href})</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-none border border-border bg-card">
-            <CardContent className="p-4 space-y-3">
-              <p className="text-xs font-medium uppercase text-muted-foreground">Contact</p>
-              <p className="text-sm text-foreground">{data.contact.email}</p>
-              <p className="text-sm text-foreground">{data.contact.phonePrimary}</p>
-              <p className="text-sm text-foreground">{data.contact.phoneSecondary}</p>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="rounded-none border border-border bg-card">
+          <CardContent className="p-4 space-y-3">
+            <p className="text-xs font-medium uppercase text-muted-foreground">Contact</p>
+            <p className="text-sm text-foreground">{data.contact.email}</p>
+            <p className="text-sm text-foreground">{data.contact.phonePrimary}</p>
+            <p className="text-sm text-foreground">{data.contact.phoneSecondary}</p>
+          </CardContent>
+        </Card>
 
         <Card className="rounded-none border border-border bg-card">
           <CardContent className="p-4 space-y-3">
@@ -98,16 +82,8 @@ export default function SubscriptionViewPage() {
 
         <Card className="rounded-none border border-border bg-card">
           <CardContent className="p-4 space-y-3">
-            <p className="text-xs font-medium uppercase text-muted-foreground">Policies & copyright</p>
-            <ul className="space-y-1 text-sm text-foreground">
-              {data.policyLinks.map((link) => (
-                <li key={link.label}>
-                  <span className="font-semibold">{link.label}</span>{" "}
-                  <span className="text-muted-foreground">({link.href})</span>
-                </li>
-              ))}
-            </ul>
-            <p className="text-xs text-muted-foreground">{data.copyright}</p>
+            <p className="text-xs font-medium uppercase text-muted-foreground">Copyright</p>
+            <p className="text-sm text-foreground">{data.copyright}</p>
           </CardContent>
         </Card>
       </div>

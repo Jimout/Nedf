@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
+import { Pencil } from "lucide-react"
 import { 
   FaInstagram, 
   FaTiktok, 
@@ -91,6 +92,7 @@ export default function ManageProfilePage() {
                 onClick={() => router.push('/dashboard/manage-profile/edit')} 
                 className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white"
                 >
+                  <Pencil className="h-4 w-4 mr-2" />
                   Edit Profile
                 </Button>
             </div>

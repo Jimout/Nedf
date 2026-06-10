@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
   Building2,
-  Eye,
+  Pencil,
   Plus,
   ArrowUpRight,
   Layers,
@@ -145,25 +145,25 @@ export default function DashboardOverview() {
         type: "Portfolio",
         title: p.name,
         date: p.year ?? "—",
-        link: `/dashboard/manage-portfolio/view/${p.id}`,
+        link: `/dashboard/manage-portfolio/edit/${p.id}`,
       })),
       ...blogs.map((b) => ({
         type: "Blog",
         title: b.title,
         date: b.createdAt ?? "—",
-        link: `/dashboard/manage-blog/view/${b.id}`,
+        link: `/dashboard/manage-blog/edit/${b.id}`,
       })),
       ...teamMembers.map((m) => ({
         type: "Team",
         title: m.name,
         date: "—",
-        link: `/dashboard/manage-team/view/${m.id}`,
+        link: `/dashboard/manage-team/edit/${m.id}`,
       })),
       ...reviews.map((r) => ({
         type: "Review",
         title: r.name,
         date: "—",
-        link: `/dashboard/manage-review/view/${r.id}`,
+        link: `/dashboard/manage-review/edit/${r.id}`,
       })),
     ]
     items.sort((a, b) => activitySortKey(b.date).localeCompare(activitySortKey(a.date)))
@@ -237,8 +237,8 @@ export default function DashboardOverview() {
                         </div>
                         <Link href={action.link} className="shrink-0">
                           <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/10">
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit
                           </Button>
                         </Link>
                       </div>

@@ -124,7 +124,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
     }
 
     setShowConfirmModal(false)
-    router.push(`/dashboard/manage-portfolio/view/${project.id}`)
+    router.push("/dashboard/manage-portfolio")
   }
 
   const handleYearChange = (value: string) => {

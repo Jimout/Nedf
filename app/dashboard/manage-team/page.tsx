@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, Eye, Plus, Users } from "lucide-react"
+import { Trash2, Pencil, Plus, Users } from "lucide-react"
 import Link from "next/link"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import { useData } from "@/lib/data-context"
@@ -139,9 +139,9 @@ export default function TeamPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex gap-2 justify-end">
-                          <Link href={`/dashboard/manage-team/view/${member.id}`}>
+                          <Link href={`/dashboard/manage-team/edit/${member.id}`}>
                             <Button variant="ghost" size="sm" className="p-2 hover:bg-muted text-muted-foreground hover:text-foreground">
-                              <Eye className="w-4 h-4" />
+                              <Pencil className="h-4 w-4" />
                             </Button>
                           </Link>
                           <Button
@@ -150,7 +150,7 @@ export default function TeamPage() {
                             onClick={() => handleDeleteMember(member.id)}
                             className="p-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </TableCell>

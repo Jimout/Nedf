@@ -2,38 +2,17 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import Pagination from "@/components/Pagination"
 import SearchBar from "@/components/Search-bar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Pencil, Trash2 } from "lucide-react"
 
 const PlusIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-  </svg>
-)
-
-const EyeIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-    />
-  </svg>
-)
-
-const TrashIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-    />
   </svg>
 )
 
@@ -143,8 +122,8 @@ export default function ManagePortfolioPage() {
     router.push("/dashboard/manage-portfolio/add")
   }
 
-  const handleViewProject = (id: number) => {
-    router.push(`/dashboard/manage-portfolio/view/${id}`)
+  const handleEditProject = (id: number) => {
+    router.push(`/dashboard/manage-portfolio/edit/${id}`)
   }
 
   const handleDeleteProject = (id: number) => {
@@ -231,13 +210,14 @@ export default function ManagePortfolioPage() {
                     {currentProjects.map((project) => (
                       <TableRow key={project.id} className="hover:bg-muted/50 border-b border-border">
                         <TableCell className="font-medium font-montserrat text-foreground">
-                          <button
-                            type="button"
-                            onClick={() => handleViewProject(project.id)}
+                          <Link
+                            href={`/portfolio/${project.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="text-left hover:underline cursor-pointer focus:outline-none focus:underline"
                           >
                             <div className="text-sm sm:text-base">{project.name}</div>
-                          </button>
+                          </Link>
                           <div className="sm:hidden text-xs text-muted-foreground mt-1">{project.client}</div>
                         </TableCell>
                         <TableCell className="hidden sm:table-cell font-montserrat text-muted-foreground">{project.client}</TableCell>
@@ -251,18 +231,18 @@ export default function ManagePortfolioPage() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleViewProject(project.id)}
-                              className="hover:bg-muted text-muted-foreground hover:text-foreground"
+                              onClick={() => handleEditProject(project.id)}
+                              className="p-2 hover:bg-muted text-muted-foreground hover:text-foreground"
                             >
-                              <EyeIcon />
+                              <Pencil className="h-4 w-4" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => handleDeleteProject(project.id)}
-                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                              className="p-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
                             >
-                              <TrashIcon />
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>

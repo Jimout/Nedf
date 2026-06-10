@@ -243,7 +243,7 @@ export default function AddProjectPage() {
     localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
 
     setShowConfirmModal(false)
-    router.push(`/dashboard/manage-portfolio/view/${newProject.id}`)
+    router.push("/dashboard/manage-portfolio")
   }
 
   const handleCancel = () => {

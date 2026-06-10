@@ -182,7 +182,7 @@ export default function EditBlogPage() {
       localStorage.setItem("blogs", JSON.stringify(updatedBlogs))
 
       setShowSaveModal(false)
-      router.push(`/dashboard/manage-blog/view/${blogId}`)
+      router.push("/dashboard/manage-blog")
     }
   }
 
@@ -226,7 +226,7 @@ export default function EditBlogPage() {
               variant="ghost"
               size="sm"
               className="p-2 text-gray-600 dark:text-[#ec1e24] hover:text-gray-800 dark:hover:text-white"
-              onClick={() => router.push(`/dashboard/manage-blog/view/${blogId}`)}
+              onClick={() => router.push("/dashboard/manage-blog")}
             >
               <ArrowLeftIcon />
             </Button>
@@ -235,7 +235,7 @@ export default function EditBlogPage() {
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
-              onClick={() => router.push(`/dashboard/manage-blog/view/${blogId}`)}
+              onClick={() => router.push("/dashboard/manage-blog")}
               className="border-[#001F4B] dark:border-[#ec1e24] text-[#001F4B] dark:text-[#ec1e24] hover:bg-[#001F4B] dark:hover:bg-[#ec1e24] hover:text-white dark:hover:text-white bg-transparent"
             >
               <X className="w-4 h-4" />

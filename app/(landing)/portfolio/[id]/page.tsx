@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 import BeforeAfterSlider from "@/components/BeforeAfterSlider"
@@ -363,10 +363,83 @@ function ColorPalette({ colors }: { colors: string[] }) {
 /**
  * Main project detail content
  */
+interface StoredPortfolioProject {
+  id: number | string
+  name: string
+  year?: string
+  client?: string
+  location?: string
+  area?: string
+  topology?: string
+  role?: string
+  status?: string
+  inspiration?: string
+  description?: string
+  features?: string[]
+  materials?: string[]
+  colorPalette?: string[]
+  beforeImage?: string
+  afterImage?: string
+  galleryImages?: string[]
+}
+
+function mapStoredProject(raw: StoredPortfolioProject): ProjectData {
+  const galleryImages = raw.galleryImages ?? []
+  return {
+    id: String(raw.id),
+    title: raw.name,
+    year: raw.year ?? "",
+    client: raw.client ?? "",
+    location: raw.location ?? "",
+    area: raw.area ?? "",
+    topology: raw.topology ?? "",
+    role: raw.role ?? "",
+    status: raw.status ?? "",
+    inspiration: raw.inspiration ?? "",
+    description: raw.description ?? "",
+    features: raw.features ?? [],
+    materials: raw.materials ?? [],
+    colorPalette: raw.colorPalette ?? [],
+    beforeAfterImages: [raw.beforeImage || "/placeholder.svg", raw.afterImage || "/placeholder.svg"],
+    galleryImages,
+    galleryAlts: galleryImages.map((_, index) => `Gallery ${index + 1}`),
+  }
+}
+
 function ProjectDetailContent() {
   const params = useParams()
   const id = params?.id
-  const project = PROJECTS_DATA.find((p) => p.id === id)
+  const [storedProject, setStoredProject] = useState<ProjectData | null>(null)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("portfolioProjects")
+      if (saved && id != null) {
+        const projects: StoredPortfolioProject[] = JSON.parse(saved)
+        const raw = projects.find((p) => String(p.id) === String(id))
+        if (raw) {
+          setStoredProject(mapStoredProject(raw))
+        }
+      }
+    } catch {
+      // ignore parse errors
+    } finally {
+      setLoaded(true)
+    }
+  }, [id])
+
+  const project = storedProject ?? PROJECTS_DATA.find((p) => p.id === id)
+
+  if (!loaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
+          Loading...
+        </p>
+      </div>
+    )
+  }
 
   if (!project) {
     return (

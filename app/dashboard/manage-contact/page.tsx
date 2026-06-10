@@ -47,18 +47,6 @@ export default function ContactViewPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-none border border-border bg-card">
-          <CardContent className="p-4 space-y-3">
-            <p className="text-xs font-medium uppercase text-muted-foreground">Form labels</p>
-            <ul className="space-y-1 text-sm text-foreground">
-              <li>Full name: {data.formLabels.fullName}</li>
-              <li>Email: {data.formLabels.email}</li>
-              <li>Subject: {data.formLabels.subject}</li>
-              <li>Message: {data.formLabels.message}</li>
-            </ul>
-          </CardContent>
-        </Card>
-
         <div className="grid gap-4 sm:grid-cols-2">
           <Card className="rounded-none border border-border bg-card">
             <CardContent className="p-4 space-y-3">

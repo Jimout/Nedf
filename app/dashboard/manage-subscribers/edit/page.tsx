@@ -70,10 +70,10 @@ export default function ManageSubscriptionEditPage() {
             </Button>
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground uppercase tracking-wide">
-                Manage Subscription
+                Manage Footer
               </h1>
               <p className="text-sm text-muted-foreground mt-0.5">
-                Edit the footer subscription and contact block. Changes apply to the landing page.
+                Edit newsletter, contact, social links, and copyright for the site footer.
               </p>
             </div>
           </div>
@@ -105,7 +105,7 @@ export default function ManageSubscriptionEditPage() {
               </DialogTitle>
               <DialogDescription>
                 {confirmState?.type === "save" &&
-                  "This will update the subscription section on the landing page. Continue?"}
+                  "This will update the site footer on the landing page. Continue?"}
                 {confirmState?.type === "cancel" &&
                   "All unsaved changes will be lost. Continue?"}
               </DialogDescription>
@@ -174,77 +174,43 @@ export default function ManageSubscriptionEditPage() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Card className="rounded-none border border-border bg-card">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base text-foreground">Quick links</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {data.quickLinks.map((link, index) => (
-                <div key={index} className="space-y-1">
-                  <Input
-                    value={link.label}
-                    onChange={(e) => {
-                      const next = [...data.quickLinks]
-                      next[index] = { ...next[index], label: e.target.value }
-                      update({ quickLinks: next })
-                    }}
-                    placeholder="Label"
-                    className="rounded-none bg-background border-border mb-1"
-                  />
-                  <Input
-                    value={link.href}
-                    onChange={(e) => {
-                      const next = [...data.quickLinks]
-                      next[index] = { ...next[index], href: e.target.value }
-                      update({ quickLinks: next })
-                    }}
-                    placeholder="Href"
-                    className="rounded-none bg-background border-border"
-                  />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-none border border-border bg-card">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base text-foreground">Contact</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-foreground">Email</label>
-                <Input
-                  value={data.contact.email}
-                  onChange={(e) =>
-                    update({ contact: { ...data.contact, email: e.target.value } })
-                  }
-                  className="rounded-none bg-background border-border"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-foreground">Phone 1</label>
-                <Input
-                  value={data.contact.phonePrimary}
-                  onChange={(e) =>
-                    update({ contact: { ...data.contact, phonePrimary: e.target.value } })
-                  }
-                  className="rounded-none bg-background border-border"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-foreground">Phone 2</label>
-                <Input
-                  value={data.contact.phoneSecondary}
-                  onChange={(e) =>
-                    update({ contact: { ...data.contact, phoneSecondary: e.target.value } })
-                  }
-                  className="rounded-none bg-background border-border"
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="rounded-none border border-border bg-card">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base text-foreground">Contact</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-foreground">Email</label>
+              <Input
+                value={data.contact.email}
+                onChange={(e) =>
+                  update({ contact: { ...data.contact, email: e.target.value } })
+                }
+                className="rounded-none bg-background border-border"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-foreground">Phone 1</label>
+              <Input
+                value={data.contact.phonePrimary}
+                onChange={(e) =>
+                  update({ contact: { ...data.contact, phonePrimary: e.target.value } })
+                }
+                className="rounded-none bg-background border-border"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-foreground">Phone 2</label>
+              <Input
+                value={data.contact.phoneSecondary}
+                onChange={(e) =>
+                  update({ contact: { ...data.contact, phoneSecondary: e.target.value } })
+                }
+                className="rounded-none bg-background border-border"
+              />
+            </div>
+          </CardContent>
+        </Card>
 
         <Card className="rounded-none border border-border bg-card">
           <CardHeader className="pb-3">
@@ -271,35 +237,11 @@ export default function ManageSubscriptionEditPage() {
 
         <Card className="rounded-none border border-border bg-card">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base text-foreground">Policies & copyright</CardTitle>
+            <CardTitle className="text-base text-foreground">Copyright</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {data.policyLinks.map((link, index) => (
-              <div key={index} className="space-y-1">
-                <Input
-                  value={link.label}
-                  onChange={(e) => {
-                    const next = [...data.policyLinks]
-                    next[index] = { ...next[index], label: e.target.value }
-                    update({ policyLinks: next })
-                  }}
-                  placeholder="Label"
-                  className="rounded-none bg-background border-border mb-1"
-                />
-                <Input
-                  value={link.href}
-                  onChange={(e) => {
-                    const next = [...data.policyLinks]
-                    next[index] = { ...next[index], href: e.target.value }
-                    update({ policyLinks: next })
-                  }}
-                  placeholder="Href"
-                  className="rounded-none bg-background border-border"
-                />
-              </div>
-            ))}
+          <CardContent>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-foreground">Copyright</label>
+              <label className="text-sm font-medium text-foreground">Copyright text</label>
               <Input
                 value={data.copyright}
                 onChange={(e) => update({ copyright: e.target.value })}

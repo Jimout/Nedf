@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import Pagination from "@/components/Pagination"
 import SearchBar from "@/components/Search-bar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Eye, Trash2 } from "lucide-react"
+import { Pencil, Trash2 } from "lucide-react"
 
 const PlusIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -332,8 +333,8 @@ export default function ManageBlogPage() {
     router.push("/dashboard/manage-blog/add")
   }
 
-  const handleViewBlog = (blogId: string) => {
-    router.push(`/dashboard/manage-blog/view/${blogId}`)
+  const handleEditBlog = (blogId: string) => {
+    router.push(`/dashboard/manage-blog/edit/${blogId}`)
   }
 
   const handleDeleteBlog = (blogId: string) => {
@@ -402,13 +403,14 @@ export default function ManageBlogPage() {
                     {currentBlogs.map((blog) => (
                       <TableRow key={blog.id} className="hover:bg-muted/50 border-b border-border">
                         <TableCell className="font-medium text-foreground">
-                          <button
-                            type="button"
-                            onClick={() => handleViewBlog(blog.id)}
+                          <Link
+                            href={`/blog/${blog.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="text-left hover:underline cursor-pointer focus:outline-none focus:underline"
                           >
                             <div className="text-sm sm:text-base">{blog.title}</div>
-                          </button>
+                          </Link>
                           <div className="sm:hidden mt-1 flex flex-wrap gap-1">
                               {blog.tags.slice(0, 2).map((tag, index) => (
                                 <span key={index} className="bg-muted text-muted-foreground px-2 py-0.5 rounded text-xs">
@@ -434,18 +436,18 @@ export default function ManageBlogPage() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleViewBlog(blog.id)}
-                              className="hover:bg-muted text-muted-foreground hover:text-foreground"
+                              onClick={() => handleEditBlog(blog.id)}
+                              className="p-2 hover:bg-muted text-muted-foreground hover:text-foreground"
                             >
-                              <Eye className="w-4 h-4" />
+                              <Pencil className="h-4 w-4" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => handleDeleteBlog(blog.id)}
-                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                              className="p-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>

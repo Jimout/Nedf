@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Eye, Trash2, Plus, MessageSquare } from "lucide-react"
+import { Pencil, Trash2, Plus, MessageSquare } from "lucide-react"
 import Link from "next/link"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import Pagination from "@/components/Pagination"
@@ -167,9 +167,9 @@ export default function ManageReviewsPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex gap-2 justify-end">
-                          <Link href={`/dashboard/manage-review/view/${review.id}`}>
-                            <Button variant="ghost" size="sm" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white">
-                              <Eye className="w-4 h-4" />
+                          <Link href={`/dashboard/manage-review/edit/${review.id}`}>
+                            <Button variant="ghost" size="sm" className="p-2 hover:bg-muted text-muted-foreground hover:text-foreground">
+                              <Pencil className="h-4 w-4" />
                             </Button>
                           </Link>
                           <Button
@@ -178,7 +178,7 @@ export default function ManageReviewsPage() {
                             onClick={() => handleDeleteReview(review.id)}
                             className="p-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </TableCell>

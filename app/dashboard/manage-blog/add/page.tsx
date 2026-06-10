@@ -182,7 +182,7 @@ export default function AddBlogPage() {
     localStorage.setItem("blogs", JSON.stringify(blogs))
 
     setShowCreateModal(false)
-    router.push(`/dashboard/manage-blog/view/${newBlog.id}`)
+    router.push("/dashboard/manage-blog")
   }
 
   return (

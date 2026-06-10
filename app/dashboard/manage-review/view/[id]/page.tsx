@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Edit } from "lucide-react";
+import { Pencil } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -59,7 +59,7 @@ export default function ViewReviewPage() {
             </div>
             <Link href={`/dashboard/manage-review/edit/${review.id}`}>
               <Button className="bg-[#001F4B] dark:bg-[#ec1e24] hover:bg-[#001F4B]/90 dark:hover:bg-[#ec1e24]/90 text-white">
-                <Edit className="w-4 h-4 mr-2" />
+                <Pencil className="h-4 w-4 mr-2" />
                 Edit Review
               </Button>
             </Link>
