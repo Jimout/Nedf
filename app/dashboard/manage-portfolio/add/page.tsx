@@ -2,13 +2,16 @@
 
 import type React from "react"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
+import { cmsApi } from "@/lib/cms/client"
+import type { CmsPortfolioCategory } from "@/lib/cms/types"
+import { getRichTextPlain } from "@/lib/rich-text"
 import { RichTextEditor } from "@/components/rich-text-editor"
 
 const ArrowLeftIcon = () => (
@@ -76,6 +79,26 @@ export default function AddProjectPage() {
   const [validationError, setValidationError] = useState("")
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showCategoryModal, setShowCategoryModal] = useState(false)
+  const [portfolioCategories, setPortfolioCategories] = useState<CmsPortfolioCategory[]>([])
+
+  useEffect(() => {
+    cmsApi.getPortfolioCategories(true).then(setPortfolioCategories).catch(() => setPortfolioCategories([]))
+  }, [])
+
+  const resolveCategoryId = (): string => {
+    const label =
+      projectData.category === "Other" && projectData.customCategory
+        ? projectData.customCategory
+        : projectData.category
+    const match = portfolioCategories.find((c) => c.label.toLowerCase() === label.toLowerCase())
+    if (match) return match.id
+    const fallback: Record<string, string> = {
+      "Architectural Design": "architecture",
+      "Interior Design": "interior",
+      Visualization: "visualization",
+    }
+    return fallback[projectData.category] ?? portfolioCategories[0]?.id ?? "architecture"
+  }
 
   const [projectData, setProjectData] = useState<ProjectData>({
     name: "",
@@ -219,28 +242,35 @@ export default function AddProjectPage() {
     setShowConfirmModal(true)
   }
 
-  const handleConfirmedUpload = () => {
-    const existingProjects = JSON.parse(localStorage.getItem("portfolioProjects") || "[]")
+  const handleConfirmedUpload = async () => {
+    const descriptionSection = projectData.contentSections.find((s) => s.type === "description")
+    const description =
+      typeof descriptionSection?.content === "string"
+        ? descriptionSection.content
+        : projectData.name
 
-    // Convert File objects to URLs before saving
-    const processedContentSections = projectData.contentSections.map(section => ({
-      ...section,
-      content: typeof section.content === "string" 
-        ? section.content 
-        : section.content instanceof File 
-          ? URL.createObjectURL(section.content)
-          : section.content
-    }))
-
-    const newProject = {
-      ...projectData,
-      contentSections: processedContentSections,
-      id: Date.now(),
-    }
-
-    const updatedProjects = [...existingProjects, newProject]
-
-    localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
+    await cmsApi.createPortfolioProject({
+      id: `p-${Date.now()}`,
+      title: projectData.name,
+      categoryId: resolveCategoryId(),
+      year: projectData.year,
+      client: projectData.client,
+      location: projectData.location,
+      area: projectData.area,
+      topology: projectData.topology,
+      role: projectData.role,
+      status: projectData.status,
+      inspiration: projectData.name,
+      description: getRichTextPlain(description) || projectData.name,
+      features: [],
+      materials: [],
+      colorPalette: projectData.colorPalette,
+      beforeImage: projectData.beforeImage,
+      afterImage: projectData.afterImage,
+      galleryImages: projectData.galleryImages,
+      published: true,
+      updatedAt: new Date().toISOString().slice(0, 10),
+    })
 
     setShowConfirmModal(false)
     router.push("/dashboard/manage-portfolio")

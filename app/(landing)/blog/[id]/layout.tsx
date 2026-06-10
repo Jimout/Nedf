@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { JsonLd } from "@/components/JsonLd"
-import { getBlogPostById } from "@/lib/landing-blog-posts"
+import { getBlogById } from "@/lib/cms/store"
 import {
   createArticleMetadata,
   createPageMetadata,
@@ -15,9 +15,9 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
-  const post = getBlogPostById(id)
+  const post = await getBlogById(id)
 
-  if (!post) {
+  if (!post || !post.published) {
     return createPageMetadata({
       title: "Studio Note",
       description: "Studio note from NEDF Studio.",
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: post.title,
     description: post.description,
     path: `/blog/${post.id}`,
-    image: post.image,
+    image: post.heroImage,
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,
   })
@@ -38,18 +38,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogDetailLayout({ children, params }: Props) {
   const { id } = await params
-  const post = getBlogPostById(id)
+  const post = await getBlogById(id)
 
   return (
     <>
-      {post ? (
+      {post && post.published ? (
         <>
           <JsonLd
             data={getArticleJsonLd({
               title: post.title,
               description: post.description,
               path: `/blog/${post.id}`,
-              image: post.image,
+              image: post.heroImage,
               publishedAt: post.publishedAt,
               updatedAt: post.updatedAt,
             })}

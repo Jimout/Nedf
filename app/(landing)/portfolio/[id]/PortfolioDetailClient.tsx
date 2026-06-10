@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Suspense, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import BeforeAfterSlider from "@/components/BeforeAfterSlider"
 import ImageSlider from "@/components/ImageSlider"
@@ -12,10 +12,7 @@ import {
   LANDING_LIST_BOTTOM_PADDING,
   LANDING_LIST_TOP_PADDING,
 } from "@/lib/constants"
-import {
-  getPortfolioProjectById,
-  type PortfolioProject,
-} from "@/lib/landing-portfolio-projects"
+import type { PortfolioProject } from "@/lib/landing-portfolio-projects"
 import { cn } from "@/lib/utils"
 
 // ============================================================================
@@ -350,44 +347,12 @@ function mapStoredProject(raw: StoredPortfolioProject): ProjectData {
 }
 
 function ProjectDetailContent({
-  projectId,
   initialProject,
 }: {
   projectId: string
   initialProject: ProjectData | null
 }) {
-  const [storedProject, setStoredProject] = useState<ProjectData | null>(null)
-  const [cmsChecked, setCmsChecked] = useState(false)
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("portfolioProjects")
-      if (saved && projectId) {
-        const projects: StoredPortfolioProject[] = JSON.parse(saved)
-        const raw = projects.find((p) => String(p.id) === String(projectId))
-        if (raw) {
-          setStoredProject(mapStoredProject(raw))
-        }
-      }
-    } catch {
-      // ignore parse errors
-    } finally {
-      setCmsChecked(true)
-    }
-  }, [projectId])
-
-  const project =
-    storedProject ?? initialProject ?? getPortfolioProjectById(projectId) ?? null
-
-  if (!project && !cmsChecked && !initialProject) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
-          Loading...
-        </p>
-      </div>
-    )
-  }
+  const project = initialProject
 
   if (!project) {
     return (
@@ -539,21 +504,5 @@ export default function PortfolioDetailClient({
   projectId: string
   initialProject: ProjectData | null
 }) {
-  return (
-    <Suspense
-      fallback={
-        initialProject ? (
-          <ProjectDetailContent projectId={projectId} initialProject={initialProject} />
-        ) : (
-          <div className="min-h-screen flex items-center justify-center">
-            <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
-              Loading...
-            </p>
-          </div>
-        )
-      }
-    >
-      <ProjectDetailContent projectId={projectId} initialProject={initialProject} />
-    </Suspense>
-  )
+  return <ProjectDetailContent projectId={projectId} initialProject={initialProject} />
 }

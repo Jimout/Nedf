@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { JsonLd } from "@/components/JsonLd"
-import { getPortfolioSeoById } from "@/lib/landing-portfolio-seo"
+import { cmsProjectToSeo } from "@/lib/cms/mappers"
+import { getPortfolioById } from "@/lib/cms/store"
 import {
   createArticleMetadata,
   createPageMetadata,
@@ -15,9 +16,9 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
-  const project = getPortfolioSeoById(id)
+  const project = await getPortfolioById(id)
 
-  if (!project) {
+  if (!project || !project.published) {
     return createPageMetadata({
       title: "Project",
       description: "Architecture and design project by NEDF Studio.",
@@ -26,39 +27,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     })
   }
 
+  const seo = cmsProjectToSeo(project)
   return createArticleMetadata({
-    title: project.title,
-    description: project.description,
-    path: `/portfolio/${project.id}`,
-    image: project.image,
+    title: seo.title,
+    description: seo.description,
+    path: `/portfolio/${seo.id}`,
+    image: seo.image,
   })
 }
 
 export default async function PortfolioDetailLayout({ children, params }: Props) {
   const { id } = await params
-  const project = getPortfolioSeoById(id)
+  const project = await getPortfolioById(id)
+
+  if (!project || !project.published) {
+    return children
+  }
+
+  const seo = cmsProjectToSeo(project)
 
   return (
     <>
-      {project ? (
-        <>
-          <JsonLd
-            data={getCreativeWorkJsonLd({
-              title: project.title,
-              description: project.description,
-              path: `/portfolio/${project.id}`,
-              image: project.image,
-            })}
-          />
-          <JsonLd
-            data={getBreadcrumbJsonLd([
-              { name: "Home", path: "/" },
-              { name: "Portfolio", path: "/portfolio" },
-              { name: project.title, path: `/portfolio/${project.id}` },
-            ])}
-          />
-        </>
-      ) : null}
+      <JsonLd
+        data={getCreativeWorkJsonLd({
+          title: seo.title,
+          description: seo.description,
+          path: `/portfolio/${seo.id}`,
+          image: seo.image,
+        })}
+      />
+      <JsonLd
+        data={getBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Portfolio", path: "/portfolio" },
+          { name: seo.title, path: `/portfolio/${seo.id}` },
+        ])}
+      />
       {children}
     </>
   )

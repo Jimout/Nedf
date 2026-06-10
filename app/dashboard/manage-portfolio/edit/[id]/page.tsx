@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import { RichTextEditor } from "@/components/rich-text-editor"
 import { getRichTextPlain } from "@/lib/rich-text"
+import { cmsApi } from "@/lib/cms/client"
+import type { CmsPortfolioProject } from "@/lib/cms/types"
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,8 +50,9 @@ interface CustomField {
 }
 
 interface Project {
-  id: number
+  id: string
   name: string
+  categoryId: string
   year: string
   client: string
   location: string
@@ -68,6 +71,30 @@ interface Project {
   customFields: CustomField[]
 }
 
+function mapCmsToEditProject(cms: CmsPortfolioProject): Project {
+  return {
+    id: cms.id,
+    name: cms.title,
+    categoryId: cms.categoryId,
+    year: cms.year,
+    client: cms.client,
+    location: cms.location,
+    area: cms.area,
+    topology: cms.topology,
+    role: cms.role,
+    status: cms.status,
+    beforeImage: cms.beforeImage,
+    afterImage: cms.afterImage,
+    inspiration: cms.inspiration,
+    description: cms.description,
+    features: cms.features.length ? cms.features : [""],
+    materials: cms.materials.length ? cms.materials : [""],
+    colorPalette: cms.colorPalette.length ? cms.colorPalette : ["#ffffff"],
+    galleryImages: cms.galleryImages,
+    customFields: [],
+  }
+}
+
 export default function EditProjectPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
@@ -76,28 +103,10 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
   const [yearError, setYearError] = useState("")
 
   useEffect(() => {
-    const savedProjects = localStorage.getItem("portfolioProjects")
-    if (savedProjects) {
-      const projects = JSON.parse(savedProjects)
-      const foundProject = projects.find((p: Project) => p.id === Number.parseInt(params.id))
-      if (foundProject) {
-        setProject({
-          ...foundProject,
-          customFields: foundProject.customFields || [],
-          features: foundProject.features || [""],
-          materials: foundProject.materials || [""],
-          colorPalette: foundProject.colorPalette || ["#ffffff"],
-          galleryImages: foundProject.galleryImages || [],
-          location: foundProject.location || "",
-          area: foundProject.area || "",
-          topology: foundProject.topology || "",
-          role: foundProject.role || "",
-          inspiration: foundProject.inspiration || "",
-        })
-      } else {
-        router.push("/dashboard/manage-portfolio")
-      }
-    }
+    cmsApi
+      .getPortfolioProject(params.id)
+      .then((found) => setProject(mapCmsToEditProject(found)))
+      .catch(() => router.push("/dashboard/manage-portfolio"))
   }, [params.id, router])
 
   const handleSave = () => {
@@ -114,15 +123,28 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
     setShowConfirmModal(true)
   }
 
-  const handleConfirmedSave = () => {
+  const handleConfirmedSave = async () => {
     if (!project) return
 
-    const savedProjects = localStorage.getItem("portfolioProjects")
-    if (savedProjects) {
-      const projects = JSON.parse(savedProjects)
-      const updatedProjects = projects.map((p: Project) => (p.id === project.id ? project : p))
-      localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
-    }
+    await cmsApi.updatePortfolioProject(project.id, {
+      title: project.name,
+      categoryId: project.categoryId,
+      year: project.year,
+      client: project.client,
+      location: project.location,
+      area: project.area,
+      topology: project.topology,
+      role: project.role,
+      status: project.status,
+      beforeImage: project.beforeImage,
+      afterImage: project.afterImage,
+      inspiration: project.inspiration,
+      description: getRichTextPlain(project.description) || project.description,
+      features: project.features.filter(Boolean),
+      materials: project.materials.filter(Boolean),
+      colorPalette: project.colorPalette,
+      galleryImages: project.galleryImages,
+    })
 
     setShowConfirmModal(false)
     router.push("/dashboard/manage-portfolio")

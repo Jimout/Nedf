@@ -1,25 +1,24 @@
 import { notFound } from "next/navigation"
 import PortfolioDetailClient from "./PortfolioDetailClient"
-import {
-  getAllPortfolioProjectIds,
-  getPortfolioProjectById,
-} from "@/lib/landing-portfolio-projects"
+import { cmsProjectToDetail } from "@/lib/cms/mappers"
+import { getPortfolioById, getPublishedPortfolio } from "@/lib/cms/store"
 
 type Props = {
   params: Promise<{ id: string }>
 }
 
-export function generateStaticParams() {
-  return getAllPortfolioProjectIds().map((id) => ({ id }))
+export async function generateStaticParams() {
+  const projects = await getPublishedPortfolio()
+  return projects.map((project) => ({ id: project.id }))
 }
 
 export default async function PortfolioDetailPage({ params }: Props) {
   const { id } = await params
-  const project = getPortfolioProjectById(id)
+  const project = await getPortfolioById(id)
 
-  if (!project) {
+  if (!project || !project.published) {
     notFound()
   }
 
-  return <PortfolioDetailClient projectId={id} initialProject={project} />
+  return <PortfolioDetailClient projectId={id} initialProject={cmsProjectToDetail(project)} />
 }

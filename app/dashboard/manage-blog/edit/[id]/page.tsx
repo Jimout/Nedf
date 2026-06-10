@@ -7,6 +7,15 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useRouter, useParams } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import { RichTextEditor } from "@/components/rich-text-editor"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { cmsApi } from "@/lib/cms/client"
+import type { CmsBlogFilter, CmsBlogPost } from "@/lib/cms/types"
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -14,24 +23,9 @@ const ArrowLeftIcon = () => (
   </svg>
 )
 
-interface BlogSection {
-  id: string
-  title: string
-  content: string
-  level: number
-  number: string
-  images?: string[]
-  imageFiles?: File[]
-}
+interface Blog extends CmsBlogPost {}
 
-interface Blog {
-  id: string
-  title: string
-  heroImage: string
-  tags: string[]
-  sections: BlogSection[]
-  createdAt: string
-}
+type BlogSection = Blog["sections"][number] & { imageFiles?: File[] }
 
 export default function EditBlogPage() {
   const router = useRouter()
@@ -43,22 +37,25 @@ export default function EditBlogPage() {
 
   // Editing state
   const [editingTitle, setEditingTitle] = useState("")
+  const [editingDescription, setEditingDescription] = useState("")
+  const [editingFilterId, setEditingFilterId] = useState("")
+  const [blogFilters, setBlogFilters] = useState<CmsBlogFilter[]>([])
   const [editingTags, setEditingTags] = useState<string[]>([])
-  const [editingSections, setEditingSections] = useState<BlogSection[]>([])
+  const [editingSections, setEditingSections] = useState<Blog["sections"]>([])
   const [newTag, setNewTag] = useState("")
 
   useEffect(() => {
-    const savedBlogs = localStorage.getItem("blogs")
-    if (savedBlogs) {
-      const blogs: Blog[] = JSON.parse(savedBlogs)
-      const foundBlog = blogs.find((b) => b.id === blogId)
-      if (foundBlog) {
+    Promise.all([cmsApi.getBlog(blogId), cmsApi.getBlogFilters(true)])
+      .then(([foundBlog, filters]) => {
         setOriginalBlog(foundBlog)
         setEditingTitle(foundBlog.title)
+        setEditingDescription(foundBlog.description)
+        setEditingFilterId(foundBlog.filterId)
         setEditingTags([...foundBlog.tags])
         setEditingSections([...foundBlog.sections])
-      }
-    }
+        setBlogFilters(filters.filter((f) => f.isActive))
+      })
+      .catch(() => setOriginalBlog(null))
   }, [blogId])
 
   const addTag = () => {
@@ -168,19 +165,15 @@ export default function EditBlogPage() {
     setShowSaveModal(true)
   }
 
-  const confirmSave = () => {
+  const confirmSave = async () => {
     if (originalBlog) {
-      const updatedBlog = {
-        ...originalBlog,
+      await cmsApi.updateBlog(blogId, {
         title: editingTitle,
+        description: editingDescription,
+        filterId: editingFilterId,
         tags: editingTags,
         sections: editingSections,
-      }
-
-      const savedBlogs = localStorage.getItem("blogs")
-      const blogs: Blog[] = savedBlogs ? JSON.parse(savedBlogs) : []
-      const updatedBlogs = blogs.map((b) => (b.id === blogId ? updatedBlog : b))
-      localStorage.setItem("blogs", JSON.stringify(updatedBlogs))
+      })
 
       setShowSaveModal(false)
       router.push("/dashboard/manage-blog")

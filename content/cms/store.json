@@ -1,0 +1,920 @@
+{
+  "blogFilters": [
+    {
+      "id": "architecture",
+      "label": "Architecture",
+      "sortOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "design",
+      "label": "Design",
+      "sortOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "interior",
+      "label": "Interior",
+      "sortOrder": 3,
+      "isActive": true
+    },
+    {
+      "id": "studio-life",
+      "label": "Studio Life",
+      "sortOrder": 4,
+      "isActive": true
+    },
+    {
+      "id": "materials",
+      "label": "Materials",
+      "sortOrder": 5,
+      "isActive": true
+    },
+    {
+      "id": "tech",
+      "label": "Tech",
+      "sortOrder": 6,
+      "isActive": true
+    }
+  ],
+  "portfolioCategories": [
+    {
+      "id": "architecture",
+      "label": "Architecture",
+      "sortOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "interior",
+      "label": "Interior",
+      "sortOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "visualization",
+      "label": "Visualization",
+      "sortOrder": 3,
+      "isActive": true
+    }
+  ],
+  "blogs": [
+    {
+      "id": "1",
+      "title": "From Concept To Concrete",
+      "description": "We Take You Through The Design Journey Of A Modern Home We Recently Completed In Addis Ababa From Rough Initial Sketches To Polished Renders To Final Construction. This comprehensive case study explores every detail of our creative process and the challenges we overcame.",
+      "heroImage": "/room1.jpg",
+      "filterId": "architecture",
+      "tags": [
+        "Case File",
+        "Architecture"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "We Take You Through The Design Journey Of A Modern Home We Recently Completed In Addis Ababa From Rough Initial Sketches To Polished Renders To Final Construction. This comprehensive case study explores every detail of our creative process and the challenges we overcame.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2024-09-15",
+      "updatedAt": "2025-01-10"
+    },
+    {
+      "id": "2",
+      "title": "Why Clay Still Wins",
+      "description": "Clay Isn't Just A Material It's A Philosophy. In This Note, We Reflect On Why Traditional Materials Continue To Outperform Modern Alternatives In Both Sustainability And Aesthetic Appeal.",
+      "heroImage": "/room2.jpg",
+      "filterId": "materials",
+      "tags": [
+        "Materials",
+        "Design Thinking",
+        "Interior Design"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "Clay Isn't Just A Material It's A Philosophy. In This Note, We Reflect On Why Traditional Materials Continue To Outperform Modern Alternatives In Both Sustainability And Aesthetic Appeal.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2024-10-02",
+      "updatedAt": "2025-01-10"
+    },
+    {
+      "id": "3",
+      "title": "Studio Mornings: What Fuels Our Process",
+      "description": "Every Monday At NEDF Starts With Music, Coffee, And Creative Chaos. We Give You A Glimpse Into Our Daily Rituals And The Small Moments That Spark Big Ideas.",
+      "heroImage": "/interior1.jpg",
+      "filterId": "studio-life",
+      "tags": [
+        "Studio Life",
+        "Behind the Scenes"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "Every Monday At NEDF Starts With Music, Coffee, And Creative Chaos. We Give You A Glimpse Into Our Daily Rituals And The Small Moments That Spark Big Ideas.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2024-10-20",
+      "updatedAt": "2025-01-10"
+    },
+    {
+      "id": "4",
+      "title": "The Power Of Simplicity",
+      "description": "Design Isn't Always About More. Sometimes It's About Less Done Right. We explore the principles of minimalist design and how restraint can create more impactful spaces.",
+      "heroImage": "/interior2.jpg",
+      "filterId": "design",
+      "tags": [
+        "Design"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "Design Isn't Always About More. Sometimes It's About Less Done Right. We explore the principles of minimalist design and how restraint can create more impactful spaces.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2024-11-05",
+      "updatedAt": "2025-01-10"
+    },
+    {
+      "id": "5",
+      "title": "Using AI in Architecture",
+      "description": "How Artificial Intelligence is shaping how we plan, visualize, and build in the 21st century. From generative design to predictive modeling, we examine the tools that are revolutionizing our industry.",
+      "heroImage": "/interior3.jpg",
+      "filterId": "tech",
+      "tags": [
+        "Tech",
+        "AI"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "How Artificial Intelligence is shaping how we plan, visualize, and build in the 21st century. From generative design to predictive modeling, we examine the tools that are revolutionizing our industry.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2024-11-18",
+      "updatedAt": "2025-01-10"
+    },
+    {
+      "id": "6",
+      "title": "Modern Minimalism",
+      "description": "Minimalist spaces are more than aesthetics; they are philosophy. We explore how to create spaces that breathe and inspire through thoughtful reduction and careful curation.",
+      "heroImage": "/visual1.jpg",
+      "filterId": "interior",
+      "tags": [
+        "Interior",
+        "Design"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "Minimalist spaces are more than aesthetics; they are philosophy. We explore how to create spaces that breathe and inspire through thoughtful reduction and careful curation.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2024-12-01",
+      "updatedAt": "2025-01-10"
+    },
+    {
+      "id": "7",
+      "title": "Workflow Optimization",
+      "description": "Tips on how to streamline your creative process and maintain productivity while preserving the spark of innovation.",
+      "heroImage": "/visual1.jpg",
+      "filterId": "studio-life",
+      "tags": [
+        "Studio Life",
+        "Workflow"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "Tips on how to streamline your creative process and maintain productivity while preserving the spark of innovation.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2024-12-12",
+      "updatedAt": "2025-01-10"
+    },
+    {
+      "id": "8",
+      "title": "Material Innovation",
+      "description": "Exploring new materials for sustainable interiors that don't compromise on beauty or functionality.",
+      "heroImage": "/visual3.jpg",
+      "filterId": "design",
+      "tags": [
+        "Design",
+        "Materials"
+      ],
+      "sections": [
+        {
+          "id": "intro",
+          "title": "Introduction",
+          "content": "Exploring new materials for sustainable interiors that don't compromise on beauty or functionality.",
+          "level": 1,
+          "number": "1"
+        }
+      ],
+      "published": true,
+      "publishedAt": "2025-01-05",
+      "updatedAt": "2025-01-10"
+    }
+  ],
+  "portfolio": [
+    {
+      "id": "p1",
+      "title": "HIDASSE TELECOM",
+      "categoryId": "architecture",
+      "year": "2024",
+      "client": "Snap Trading and Industry PLC",
+      "location": "Golagol 22, Addis Ababa",
+      "area": "958 m²",
+      "topology": "(4B+G+15+T) Mixed Use Building",
+      "role": "Design & Supervision",
+      "status": "Underconstruction",
+      "inspiration": "Inspired By Natural Light, Open-Plan Living, And Seamless Indoor-Outdoor Integration.",
+      "description": "This Residential Project Emphasizes Open-Plan Living And Seamless Integration With The Surrounding Environment. The Design Prioritizes Natural Light And Sustainable Materials, Creating A Home That Is Both Functional And Aesthetically Harmonious. Terraces And Green Spaces Are Carefully Incorporated To Blend Indoor And Outdoor Areas, Offering Panoramic Views And A Strong Connection To Nature.",
+      "features": [
+        "Sustainable Building Materials",
+        "Open-Plan Layout With Panoramic Views",
+        "Terraces And Green Spaces Integrated"
+      ],
+      "materials": [
+        "Upholstery",
+        "Marble",
+        "Wood"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#7A4D12",
+        "#54514A"
+      ],
+      "beforeImage": "/room1.jpg",
+      "afterImage": "/room2.jpg",
+      "galleryImages": [
+        "/room2.jpg",
+        "/room3.jpg",
+        "/interior1.jpg",
+        "/interior2.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p2",
+      "title": "ARROW PROJECT",
+      "categoryId": "interior",
+      "year": "2024",
+      "client": "Arrow Development",
+      "location": "Bole, Addis Ababa",
+      "area": "1200 m²",
+      "topology": "Commercial Building",
+      "role": "Design & Supervision",
+      "status": "Completed",
+      "inspiration": "Modern commercial design with sustainable features.",
+      "description": "A contemporary commercial building designed for optimal functionality and aesthetic appeal.",
+      "features": [
+        "Sustainable Design Features",
+        "Modern Commercial Layout",
+        "Energy Efficient Systems"
+      ],
+      "materials": [
+        "Glass",
+        "Steel",
+        "Concrete"
+      ],
+      "colorPalette": [
+        "#FFFFFF",
+        "#000000",
+        "#808080",
+        "#FF0000"
+      ],
+      "beforeImage": "/room1.jpg",
+      "afterImage": "/room2.jpg",
+      "galleryImages": [
+        "/room2.jpg",
+        "/room3.jpg",
+        "/interior1.jpg",
+        "/interior2.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p3",
+      "title": "Urban Apartment Render",
+      "categoryId": "visualization",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Visualization",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Urban Apartment Render reflects NEDF Studio's approach to visualization in Ethiopia.",
+      "description": "Urban Apartment Render — a visualization project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/room3.jpg",
+      "afterImage": "/room3.jpg",
+      "galleryImages": [
+        "/room3.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p4",
+      "title": "Contemporary Office",
+      "categoryId": "architecture",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Architecture",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Contemporary Office reflects NEDF Studio's approach to architecture in Ethiopia.",
+      "description": "Contemporary Office — a architecture project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/interior1.jpg",
+      "afterImage": "/interior1.jpg",
+      "galleryImages": [
+        "/interior1.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p5",
+      "title": "Scandinavian Kitchen",
+      "categoryId": "interior",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Interior",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Scandinavian Kitchen reflects NEDF Studio's approach to interior in Ethiopia.",
+      "description": "Scandinavian Kitchen — a interior project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/interior2.jpg",
+      "afterImage": "/interior2.jpg",
+      "galleryImages": [
+        "/interior2.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p6",
+      "title": "Luxury Bathroom",
+      "categoryId": "visualization",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Visualization",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Luxury Bathroom reflects NEDF Studio's approach to visualization in Ethiopia.",
+      "description": "Luxury Bathroom — a visualization project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/interior3.jpg",
+      "afterImage": "/interior3.jpg",
+      "galleryImages": [
+        "/interior3.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p7",
+      "title": "Glass House Concept",
+      "categoryId": "architecture",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Architecture",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Glass House Concept reflects NEDF Studio's approach to architecture in Ethiopia.",
+      "description": "Glass House Concept — a architecture project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/visual1.jpg",
+      "afterImage": "/visual1.jpg",
+      "galleryImages": [
+        "/visual1.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p8",
+      "title": "Cozy Bedroom Suite",
+      "categoryId": "interior",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Interior",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Cozy Bedroom Suite reflects NEDF Studio's approach to interior in Ethiopia.",
+      "description": "Cozy Bedroom Suite — a interior project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/visual2.jpg",
+      "afterImage": "/visual2.jpg",
+      "galleryImages": [
+        "/visual2.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p9",
+      "title": "Restaurant Visualization",
+      "categoryId": "visualization",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Visualization",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Restaurant Visualization reflects NEDF Studio's approach to visualization in Ethiopia.",
+      "description": "Restaurant Visualization — a visualization project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/visual3.jpg",
+      "afterImage": "/visual3.jpg",
+      "galleryImages": [
+        "/visual3.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p10",
+      "title": "Modern Loft Design",
+      "categoryId": "architecture",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Architecture",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Modern Loft Design reflects NEDF Studio's approach to architecture in Ethiopia.",
+      "description": "Modern Loft Design — a architecture project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/room1.jpg",
+      "afterImage": "/room1.jpg",
+      "galleryImages": [
+        "/room1.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p11",
+      "title": "Minimalist Living Space",
+      "categoryId": "interior",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Interior",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Minimalist Living Space reflects NEDF Studio's approach to interior in Ethiopia.",
+      "description": "Minimalist Living Space — a interior project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/room2.jpg",
+      "afterImage": "/room2.jpg",
+      "galleryImages": [
+        "/room2.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p12",
+      "title": "Urban Apartment Render",
+      "categoryId": "visualization",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Visualization",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Urban Apartment Render reflects NEDF Studio's approach to visualization in Ethiopia.",
+      "description": "Urban Apartment Render — a visualization project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/room3.jpg",
+      "afterImage": "/room3.jpg",
+      "galleryImages": [
+        "/room3.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p13",
+      "title": "Contemporary Office",
+      "categoryId": "architecture",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Architecture",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Contemporary Office reflects NEDF Studio's approach to architecture in Ethiopia.",
+      "description": "Contemporary Office — a architecture project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/interior1.jpg",
+      "afterImage": "/interior1.jpg",
+      "galleryImages": [
+        "/interior1.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p14",
+      "title": "Scandinavian Kitchen",
+      "categoryId": "interior",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Interior",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Scandinavian Kitchen reflects NEDF Studio's approach to interior in Ethiopia.",
+      "description": "Scandinavian Kitchen — a interior project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/interior2.jpg",
+      "afterImage": "/interior2.jpg",
+      "galleryImages": [
+        "/interior2.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p15",
+      "title": "Luxury Bathroom",
+      "categoryId": "visualization",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Visualization",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Luxury Bathroom reflects NEDF Studio's approach to visualization in Ethiopia.",
+      "description": "Luxury Bathroom — a visualization project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/interior3.jpg",
+      "afterImage": "/interior3.jpg",
+      "galleryImages": [
+        "/interior3.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p16",
+      "title": "Glass House Concept",
+      "categoryId": "architecture",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Architecture",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Glass House Concept reflects NEDF Studio's approach to architecture in Ethiopia.",
+      "description": "Glass House Concept — a architecture project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/visual1.jpg",
+      "afterImage": "/visual1.jpg",
+      "galleryImages": [
+        "/visual1.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p17",
+      "title": "Cozy Bedroom Suite",
+      "categoryId": "interior",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Interior",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Cozy Bedroom Suite reflects NEDF Studio's approach to interior in Ethiopia.",
+      "description": "Cozy Bedroom Suite — a interior project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/visual2.jpg",
+      "afterImage": "/visual2.jpg",
+      "galleryImages": [
+        "/visual2.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    },
+    {
+      "id": "p18",
+      "title": "Restaurant Visualization",
+      "categoryId": "visualization",
+      "year": "2024",
+      "client": "Private Client",
+      "location": "Addis Ababa, Ethiopia",
+      "area": "—",
+      "topology": "Visualization",
+      "role": "Architecture & Design",
+      "status": "Completed",
+      "inspiration": "Restaurant Visualization reflects NEDF Studio's approach to visualization in Ethiopia.",
+      "description": "Restaurant Visualization — a visualization project by NEDF Studio in Addis Ababa, Ethiopia.",
+      "features": [
+        "Context-driven design",
+        "Material and light studies",
+        "Integrated project delivery"
+      ],
+      "materials": [
+        "Wood",
+        "Stone",
+        "Glass"
+      ],
+      "colorPalette": [
+        "#E3E3D8",
+        "#FDFDFD",
+        "#54514A",
+        "#7A4D12"
+      ],
+      "beforeImage": "/visual3.jpg",
+      "afterImage": "/visual3.jpg",
+      "galleryImages": [
+        "/visual3.jpg"
+      ],
+      "published": true,
+      "updatedAt": "2025-06-01"
+    }
+  ]
+}

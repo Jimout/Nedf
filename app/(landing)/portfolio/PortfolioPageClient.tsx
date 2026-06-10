@@ -9,22 +9,37 @@ import Link from "next/link"
 import Subscription from "@/components/Subscription"
 import LandingListHeader from "@/components/LandingListHeader"
 import LandingFilterTags from "@/components/LandingFilterTags"
-import { PORTFOLIO_LIST } from "@/lib/landing-portfolio-seo"
+import type { CmsPortfolioCategory, CmsPortfolioProject } from "@/lib/cms/types"
 
-type ProjectCategory = "Architecture" | "Interior" | "Visualization"
-
-interface Project {
+type Project = {
   id: string
   title: string
-  category: ProjectCategory
+  categoryId: string
   img: string
 }
 
-type FilterTag = "All" | ProjectCategory
+function cmsToListProject(p: CmsPortfolioProject): Project {
+  return {
+    id: p.id,
+    title: p.title,
+    categoryId: p.categoryId,
+    img: p.beforeImage || p.galleryImages[0] || "/placeholder.svg",
+  }
+}
 
-const PROJECTS_DATA: Project[] = PORTFOLIO_LIST as Project[]
-
-const FILTER_TAGS: FilterTag[] = ["All", "Architecture", "Interior", "Visualization"]
+function filterProjects(
+  projects: Project[],
+  categories: CmsPortfolioCategory[],
+  activeLabel: string,
+  searchQuery: string
+): Project[] {
+  return projects.filter((project) => {
+    const category = categories.find((c) => c.id === project.categoryId)
+    const matchesTag = activeLabel === "All" || category?.label === activeLabel
+    const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesTag && matchesSearch
+  })
+}
 
 const PAGINATION_CONFIG = {
   rowsPerPage: 3,
@@ -43,14 +58,6 @@ const ANIMATION_CONFIG = {
     transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
 } as const
-
-function filterProjects(projects: Project[], activeTag: FilterTag, searchQuery: string): Project[] {
-  return projects.filter((project) => {
-    const matchesTag = activeTag === "All" || project.category === activeTag
-    const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesTag && matchesSearch
-  })
-}
 
 function paginateProjects(projects: Project[], currentPage: number): Project[] {
   const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE
@@ -132,23 +139,38 @@ function EmptyState() {
   )
 }
 
-const VALID_FILTER_TAGS: FilterTag[] = ["All", "Architecture", "Interior", "Visualization"]
+const VALID_FILTER_TAGS: string[] = ["All"]
 
-export default function PortfolioPageClient() {
+export default function PortfolioPageClient({
+  projects: cmsProjects,
+  categories,
+}: {
+  projects: CmsPortfolioProject[]
+  categories: CmsPortfolioCategory[]
+}) {
+  const projects = useMemo(() => cmsProjects.map(cmsToListProject), [cmsProjects])
+  const filterTags = useMemo(() => {
+    const labels = categories
+      .filter((c) => c.isActive && projects.some((p) => p.categoryId === c.id))
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((c) => c.label)
+    return ["All", ...labels]
+  }, [categories, projects])
+
   const searchParams = useSearchParams()
-  const [activeTag, setActiveTag] = useState<FilterTag>("All")
+  const [activeTag, setActiveTag] = useState("All")
   const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
     const filter = searchParams.get("filter")
-    if (filter && VALID_FILTER_TAGS.includes(filter as FilterTag)) {
-      setActiveTag(filter as FilterTag)
+    if (filter && filterTags.includes(filter)) {
+      setActiveTag(filter)
       setPage(1)
       document.getElementById("portfolio-filter")?.scrollIntoView({ behavior: "smooth", block: "start" })
     }
-  }, [searchParams])
+  }, [searchParams, filterTags])
 
   useEffect(() => {
     const checkIfDesktop = () => setIsDesktop(window.innerWidth >= RESPONSIVE_BREAKPOINT_MD)
@@ -159,8 +181,8 @@ export default function PortfolioPageClient() {
   }, [])
 
   const filteredProjects = useMemo(
-    () => filterProjects(PROJECTS_DATA, activeTag, search),
-    [activeTag, search]
+    () => filterProjects(projects, categories, activeTag, search),
+    [projects, categories, activeTag, search]
   )
 
   const paginatedProjects = useMemo(
@@ -170,7 +192,7 @@ export default function PortfolioPageClient() {
 
   const totalPages = Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE)
 
-  const handleTagChange = (tag: FilterTag) => {
+  const handleTagChange = (tag: string) => {
     setActiveTag(tag)
     setPage(1)
   }
@@ -194,7 +216,7 @@ export default function PortfolioPageClient() {
 
           <LandingFilterTags
             id="portfolio-filter"
-            tags={FILTER_TAGS}
+            tags={filterTags}
             activeTag={activeTag}
             onTagChange={handleTagChange}
           />

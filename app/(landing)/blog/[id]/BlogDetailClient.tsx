@@ -14,7 +14,7 @@ import {
   LANDING_LIST_BOTTOM_PADDING,
   LANDING_LIST_TOP_PADDING,
 } from "@/lib/constants"
-import { BLOG_POSTS, type BlogPost } from "@/lib/landing-blog-posts"
+import type { CmsBlogPost } from "@/lib/cms/types"
 import { cn } from "@/lib/utils"
 import { BlogSubscribeSidebar } from "@/components/BlogSubscribeSidebar"
 
@@ -229,9 +229,9 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
   )
 }
 
-const allPosts = BLOG_POSTS
+const allPosts: CmsBlogPost[] = []
 
-function StaticBlogDetailPage({ post }: { post: BlogPost }) {
+function StaticBlogDetailPage({ post }: { post: CmsBlogPost }) {
   const [activeId, setActiveId] = useState("intro")
   const [showMobileTOC, setShowMobileTOC] = useState(false)
   const [tocExpanded, setTocExpanded] = useState(false)
@@ -503,57 +503,41 @@ function StaticBlogDetailPage({ post }: { post: BlogPost }) {
 }
 
 export default function BlogDetailClient({
-  blogId,
   staticPost,
 }: {
   blogId: string
-  staticPost: BlogPost | null
+  staticPost: CmsBlogPost | null
 }) {
-  const [cmsBlog, setCmsBlog] = useState<CmsBlog | null>(null)
-  const [cmsChecked, setCmsChecked] = useState(false)
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("blogs")
-      if (saved && blogId) {
-        const blogs: CmsBlog[] = JSON.parse(saved)
-        const found = blogs.find((b) => String(b.id) === String(blogId))
-        if (found) {
-          setCmsBlog(found)
-        }
-      }
-    } catch {
-      // ignore parse errors
-    } finally {
-      setCmsChecked(true)
-    }
-  }, [blogId])
-
-  if (cmsBlog) {
-    return <CmsBlogDetail blog={cmsBlog} />
-  }
-
-  if (staticPost) {
-    return <StaticBlogDetailPage post={staticPost} />
-  }
-
-  if (!cmsChecked) {
+  if (!staticPost) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat" }}>
-          Loading...
+          Studio note not found.
         </p>
       </div>
     )
   }
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat" }}>
-        Studio note not found.
-      </p>
-    </div>
-  )
+  const blog = {
+    id: staticPost.id,
+    title: staticPost.title,
+    heroImage: staticPost.heroImage,
+    tags: staticPost.tags.length > 0 ? staticPost.tags : ["Studio"],
+    sections:
+      staticPost.sections.length > 0
+        ? staticPost.sections
+        : [
+            {
+              id: "intro",
+              title: "Introduction",
+              content: staticPost.description,
+              level: 1,
+              number: "1",
+            },
+          ],
+  }
+
+  return <CmsBlogDetail blog={blog} />
 }
 
 function getSectionContent(id: string, introText: string) {

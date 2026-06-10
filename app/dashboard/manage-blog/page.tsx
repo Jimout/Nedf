@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -16,22 +16,10 @@ const PlusIcon = () => (
   </svg>
 )
 
-interface BlogSection {
-  id: string
-  title: string
-  content: string
-  level: number
-  number: string
-}
+import { cmsApi } from "@/lib/cms/client"
+import type { CmsBlogPost } from "@/lib/cms/types"
 
-interface Blog {
-  id: string
-  title: string
-  heroImage: string
-  tags: string[]
-  sections: BlogSection[]
-  createdAt: string
-}
+interface Blog extends CmsBlogPost {}
 
 export default function ManageBlogPage() {
   const router = useRouter()
@@ -45,290 +33,11 @@ export default function ManageBlogPage() {
   })
 
   useEffect(() => {
-    const savedBlogs = localStorage.getItem("blogs")
-    if (savedBlogs) {
-      setBlogs(JSON.parse(savedBlogs))
-    } else {
-      // Sample blog data
-      const sampleBlogs: Blog[] = [
-        {
-        id: "blog-1",
-          title: "From Concept To Concrete: A Complete Design Journey",
-        heroImage: "/modern-construction-site-with-buildings.jpg",
-          tags: ["Architecture", "Design Process", "Construction", "Modern Home", "NEDF Studio", "Case Study"],
-        createdAt: "2024-01-15",
-        sections: [
-          {
-            id: "introduction",
-            title: "Introduction",
-            content:
-                "Turning An Idea Into Reality Is Never A Straight Path. At NEDF Studio, Every Project Begins With A Spark—An Initial Concept Inspired By Our Client's Vision, The Site Conditions, And The Surrounding Environment. This comprehensive guide takes you through our complete design process from initial concept to final construction.",
-            level: 1,
-            number: "1",
-          },
-          {
-            id: "step1",
-            title: "Step 1: Understanding The Client's Vision",
-            content:
-                "Every Successful Design Starts With Understanding The People Who Will Inhabit It. Our Client Desired A Contemporary Home That Balances Functionality With Aesthetic Elegance. We conducted extensive interviews, site visits, and lifestyle analysis to ensure every detail reflects their unique needs and aspirations.",
-              level: 1,
-              number: "2",
-            },
-            {
-              id: "step2",
-              title: "Step 2: Site Analysis and Constraints",
-              content:
-                "Understanding the site's opportunities and limitations is crucial for successful design. We analyzed topography, climate, views, access, and local regulations to inform our design decisions and maximize the site's potential.",
-              level: 1,
-              number: "3",
-            },
-            {
-              id: "step3",
-              title: "Step 3: Conceptual Design Development",
-              content:
-                "With a clear understanding of client needs and site conditions, we developed multiple conceptual approaches. Each concept explored different spatial relationships, material palettes, and design philosophies to find the perfect solution.",
-              level: 1,
-              number: "4",
-            },
-          ],
-        },
-        {
-          id: "blog-2",
-          title: "Sustainable Architecture Trends 2024: The Future is Green",
-          heroImage: "/placeholder.svg",
-          tags: ["Sustainability", "Green Design", "Eco-Friendly", "Innovation", "Future", "Technology"],
-          createdAt: "2024-01-20",
-          sections: [
-            {
-              id: "intro",
-              title: "The Future of Green Building",
-              content:
-                "As we move into 2024, sustainable architecture continues to evolve with new technologies and innovative approaches to environmental design. The industry is witnessing a paradigm shift towards net-zero buildings, circular design principles, and regenerative architecture that not only minimizes environmental impact but actively contributes to ecosystem restoration.",
-              level: 1,
-              number: "1",
-            },
-            {
-              id: "trends",
-              title: "Key Trends to Watch",
-              content:
-                "From biophilic design to net-zero buildings, discover the trends shaping the future of sustainable architecture. We're seeing increased adoption of mass timber construction, smart building technologies, and innovative materials like mycelium-based composites and recycled ocean plastic.",
-              level: 1,
-              number: "2",
-            },
-            {
-              id: "technology",
-              title: "Emerging Technologies",
-              content:
-                "Advanced building simulation software, AI-powered energy optimization, and IoT sensors are revolutionizing how we design and operate buildings. These technologies enable real-time monitoring and adjustment of building performance, ensuring optimal energy efficiency and occupant comfort.",
-              level: 1,
-              number: "3",
-            },
-          ],
-        },
-        {
-          id: "blog-3",
-          title: "The Psychology of Interior Design: How Space Shapes Our Lives",
-          heroImage: "/placeholder.svg",
-          tags: ["Interior Design", "Psychology", "Wellness", "Mental Health", "Space", "Wellbeing"],
-          createdAt: "2024-01-25",
-          sections: [
-            {
-              id: "psychology",
-              title: "How Space Affects Mood and Behavior",
-              content:
-                "The spaces we inhabit have a profound impact on our mental and emotional well-being. Research shows that well-designed spaces can reduce stress, improve productivity, and enhance overall quality of life. Understanding this connection is crucial for creating meaningful designs that support human flourishing.",
-              level: 1,
-              number: "1",
-            },
-            {
-              id: "color",
-              title: "Color Psychology in Design",
-              content:
-                "Colors evoke specific emotions and can significantly influence how we feel in a space. Blue promotes calmness and focus, while warm colors like orange and yellow create energy and optimism. Learn how to use color effectively in your designs to create the desired emotional response.",
-              level: 1,
-              number: "2",
-            },
-            {
-              id: "lighting",
-              title: "The Power of Natural Light",
-              content:
-                "Natural light is one of the most important elements in interior design. It regulates our circadian rhythms, improves mood, and reduces energy consumption. Strategic placement of windows, skylights, and reflective surfaces can maximize natural light throughout the day.",
-              level: 1,
-              number: "3",
-            },
-          ],
-        },
-        {
-          id: "blog-4",
-          title: "Modern Kitchen Design: Where Function Meets Aesthetics",
-          heroImage: "/placeholder.svg",
-          tags: ["Kitchen", "Modern Design", "Functionality", "Aesthetics", "Home", "Renovation"],
-          createdAt: "2024-01-30",
-          sections: [
-            {
-              id: "modern",
-              title: "Contemporary Kitchen Features",
-              content:
-                "Modern kitchens blend functionality with sleek aesthetics, creating spaces that are both beautiful and practical for everyday use. Key features include clean lines, minimal hardware, integrated appliances, and smart storage solutions that maximize efficiency without compromising style.",
-              level: 1,
-              number: "1",
-            },
-            {
-              id: "materials",
-              title: "Popular Materials and Finishes",
-              content:
-                "From quartz countertops to matte black hardware, discover the materials that define contemporary kitchen design. We're seeing increased use of sustainable materials, mixed metal finishes, and textured surfaces that add visual interest while maintaining the clean, modern aesthetic.",
-              level: 1,
-              number: "2",
-            },
-            {
-              id: "layout",
-              title: "Efficient Kitchen Layouts",
-              content:
-                "The work triangle concept remains fundamental to kitchen design, but modern layouts also consider multiple users, entertaining needs, and technology integration. Open-concept designs, kitchen islands, and flexible storage solutions create versatile spaces that adapt to changing lifestyles.",
-              level: 1,
-              number: "3",
-            },
-          ],
-        },
-        {
-          id: "blog-5",
-          title: "Small Space Living: Maximizing Every Square Foot",
-          heroImage: "/placeholder.svg",
-          tags: ["Small Spaces", "Maximizing Space", "Storage", "Urban Living", "Efficiency", "Apartment"],
-          createdAt: "2024-02-05",
-          sections: [
-            {
-              id: "challenges",
-              title: "Challenges of Small Space Living",
-              content:
-                "Living in small spaces presents unique challenges, but with thoughtful design, these limitations can become opportunities for creativity. The key is to prioritize functionality, embrace minimalism, and use every inch of space strategically. Small spaces can actually promote better organization and a more intentional lifestyle.",
-              level: 1,
-              number: "1",
-            },
-            {
-              id: "solutions",
-              title: "Smart Design Solutions",
-              content:
-                "Multi-functional furniture, clever storage solutions, and strategic use of light can transform even the smallest spaces into comfortable homes. Consider built-in storage, fold-down furniture, and vertical storage options to maximize your space. Mirrors and light colors can make spaces feel larger and more open.",
-              level: 1,
-              number: "2",
-            },
-            {
-              id: "furniture",
-              title: "Multi-Functional Furniture Ideas",
-              content:
-                "Invest in furniture that serves multiple purposes: a sofa bed for guests, a dining table that converts to a desk, or storage ottomans that provide seating and organization. These pieces maximize functionality while minimizing the furniture footprint in your space.",
-              level: 1,
-              number: "3",
-            },
-          ],
-        },
-        {
-          id: "blog-6",
-          title: "Biophilic Design: Bringing Nature Indoors",
-          heroImage: "/placeholder.svg",
-          tags: ["Biophilic Design", "Nature", "Wellness", "Indoor Plants", "Natural Materials", "Health"],
-          createdAt: "2024-02-10",
-          sections: [
-            {
-              id: "biophilia",
-              title: "What is Biophilic Design?",
-              content:
-                "Biophilic design is an approach to architecture and interior design that seeks to connect building occupants more closely to nature. It incorporates natural elements, materials, and patterns to create spaces that promote health, well-being, and productivity. This design philosophy recognizes our innate need to connect with nature.",
-              level: 1,
-              number: "1",
-            },
-            {
-              id: "elements",
-              title: "Key Elements of Biophilic Design",
-              content:
-                "Essential elements include natural light, plants, water features, natural materials like wood and stone, and views of nature. These elements can be incorporated through large windows, living walls, indoor gardens, and the use of organic shapes and patterns that mimic natural forms.",
-              level: 1,
-              number: "2",
-            },
-            {
-              id: "benefits",
-              title: "Health and Wellness Benefits",
-              content:
-                "Studies show that biophilic design can reduce stress, improve cognitive function, and enhance overall well-being. Exposure to natural elements has been linked to lower blood pressure, improved mood, and increased productivity. It's not just about aesthetics—it's about creating healthier living and working environments.",
-              level: 1,
-              number: "3",
-            },
-          ],
-        },
-        {
-          id: "blog-7",
-          title: "Luxury Bathroom Design: Creating Your Personal Spa",
-          heroImage: "/placeholder.svg",
-          tags: ["Bathroom", "Luxury", "Spa", "Wellness", "Renovation", "Design"],
-          createdAt: "2024-02-15",
-          sections: [
-            {
-              id: "luxury",
-              title: "Defining Luxury in Bathroom Design",
-              content:
-                "Luxury bathrooms go beyond basic functionality to create spa-like experiences that promote relaxation and well-being. Key elements include premium materials, thoughtful lighting, ample storage, and high-end fixtures that combine beauty with superior performance. The goal is to create a personal retreat within your home.",
-              level: 1,
-              number: "1",
-            },
-            {
-              id: "materials",
-              title: "Premium Materials and Finishes",
-              content:
-                "Luxury bathrooms often feature natural stone, high-end tile, and custom millwork. Consider marble or granite countertops, heated floors, and custom cabinetry. Attention to detail in hardware, lighting, and accessories elevates the overall design and creates a cohesive, high-end aesthetic.",
-              level: 1,
-              number: "2",
-            },
-            {
-              id: "features",
-              title: "Spa-Like Features and Amenities",
-              content:
-                "Incorporate features like steam showers, soaking tubs, heated towel racks, and smart mirrors. Consider adding a seating area, built-in storage for towels and toiletries, and ambient lighting that can be adjusted for different moods and times of day.",
-              level: 1,
-              number: "3",
-            },
-          ],
-        },
-        {
-          id: "blog-8",
-          title: "Smart Home Integration: Technology Meets Design",
-          heroImage: "/placeholder.svg",
-          tags: ["Smart Home", "Technology", "Automation", "Design", "Innovation", "Future"],
-          createdAt: "2024-02-20",
-          sections: [
-            {
-              id: "integration",
-              title: "Seamlessly Integrating Technology",
-              content:
-                "Modern homes increasingly incorporate smart technology, but the key is integrating these systems seamlessly into the design. Smart home features should enhance rather than dominate the space, with controls that are intuitive and interfaces that complement the overall aesthetic of the home.",
-              level: 1,
-              number: "1",
-            },
-            {
-              id: "systems",
-              title: "Essential Smart Home Systems",
-              content:
-                "Key systems include lighting control, climate management, security, and entertainment. Smart lighting can create different moods and save energy, while automated climate control ensures comfort and efficiency. Security systems provide peace of mind, and integrated audio-visual systems create immersive entertainment experiences.",
-            level: 1,
-            number: "2",
-          },
-            {
-              id: "design",
-              title: "Design Considerations for Smart Homes",
-              content:
-                "Planning for smart home integration requires careful consideration of wiring, placement of devices, and user interfaces. Work with designers and technology specialists to ensure that smart features are both functional and aesthetically pleasing, with minimal visible technology and maximum user convenience.",
-              level: 1,
-              number: "3",
-            },
-          ],
-        },
-      ]
-      setBlogs(sampleBlogs)
-      localStorage.setItem("blogs", JSON.stringify(sampleBlogs))
-    }
+    cmsApi
+      .getBlogs(true)
+      .then(setBlogs)
+      .catch(() => setBlogs([]))
   }, [])
-
   const handleAddBlog = () => {
     router.push("/dashboard/manage-blog/add")
   }
@@ -341,11 +50,14 @@ export default function ManageBlogPage() {
     setDeleteModal({ isOpen: true, blogId })
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deleteModal.blogId) {
-      const updatedBlogs = blogs.filter((blog) => blog.id !== deleteModal.blogId)
-      setBlogs(updatedBlogs)
-      localStorage.setItem("blogs", JSON.stringify(updatedBlogs))
+      try {
+        await cmsApi.deleteBlog(deleteModal.blogId)
+        setBlogs((prev) => prev.filter((blog) => blog.id !== deleteModal.blogId))
+      } catch {
+        // ignore
+      }
     }
     setDeleteModal({ isOpen: false, blogId: null })
   }
@@ -430,7 +142,7 @@ export default function ManageBlogPage() {
                             {blog.tags.length > 2 && <span className="text-muted-foreground text-xs">+{blog.tags.length - 2}</span>}
                           </div>
                         </TableCell>
-                        <TableCell className="hidden md:table-cell text-muted-foreground text-sm">{blog.createdAt}</TableCell>
+                        <TableCell className="hidden md:table-cell text-muted-foreground text-sm">{blog.publishedAt}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex gap-1 sm:gap-2 justify-end">
                             <Button

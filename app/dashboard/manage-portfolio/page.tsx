@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,8 @@ import Pagination from "@/components/Pagination"
 import SearchBar from "@/components/Search-bar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Pencil, Trash2 } from "lucide-react"
+import { cmsApi } from "@/lib/cms/client"
+import type { CmsPortfolioProject } from "@/lib/cms/types"
 
 const PlusIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -16,33 +18,7 @@ const PlusIcon = () => (
   </svg>
 )
 
-interface CustomField {
-  id: string
-  type: "text" | "list"
-  label: string
-  value: string | string[]
-}
-
-interface Project {
-  id: number
-  name: string
-  year: string
-  client: string
-  location: string
-  area: string
-  topology: string
-  role: string
-  status: string
-  beforeImage: string
-  afterImage: string
-  inspiration: string
-  description: string
-  features: string[]
-  materials: string[]
-  colorPalette: string[]
-  galleryImages: string[]
-  customFields?: CustomField[]
-}
+interface Project extends CmsPortfolioProject {}
 
 export default function ManagePortfolioPage() {
   const router = useRouter()
@@ -50,91 +26,35 @@ export default function ManagePortfolioPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 8
   const [searchTerm, setSearchTerm] = useState("")
-  const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; projectId: number | null }>({
+  const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; projectId: string | null }>({
     isOpen: false,
     projectId: null,
   })
 
   useEffect(() => {
-    const savedProjects = localStorage.getItem("portfolioProjects")
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects))
-    } else {
-      const sampleProject: Project = {
-        id: 1,
-        name: "Modern Luxury Villa Renovation",
-        year: "2024",
-        client: "The Johnson Family",
-        location: "Beverly Hills, California",
-        area: "4,500 sq ft",
-        topology: "Hillside",
-        role: "Lead Interior Designer",
-        status: "Completed",
-        beforeImage: "/old-traditional-house-before-renovation.jpg",
-        afterImage: "/modern-luxury-villa-after-renovation.jpg",
-        inspiration:
-          "Contemporary minimalism meets warm Mediterranean influences. The design draws inspiration from mid-century modern architecture while incorporating sustainable materials and smart home technology.",
-        description:
-          "A complete transformation of a 1960s ranch-style home into a contemporary luxury villa. The project involved opening up the floor plan, adding floor-to-ceiling windows, and creating seamless indoor-outdoor living spaces. The design emphasizes natural light, clean lines, and a neutral color palette with warm wood accents.",
-        features: [
-          "Open-concept living spaces",
-          "Floor-to-ceiling windows",
-          "Smart home automation",
-          "Sustainable materials",
-          "Indoor-outdoor integration",
-          "Custom built-in storage",
-          "Energy-efficient lighting",
-          "Heated floors",
-          "Wine cellar",
-          "Home theater",
-        ],
-        materials: [
-          "White oak flooring",
-          "Carrara marble countertops",
-          "Blackened steel fixtures",
-          "Natural stone accent walls",
-          "Reclaimed wood beams",
-          "Glass and aluminum windows",
-          "Porcelain tile",
-          "Brass hardware",
-          "Concrete floors",
-          "Natural fiber rugs",
-        ],
-        colorPalette: ["#F8F9FA", "#6C757D", "#8B4513", "#2C3E50", "#E9ECEF"],
-        galleryImages: [
-          "/modern-living-room-with-floor-to-ceiling-windows.jpg",
-          "/luxury-marble-kitchen.png",
-          "/master-bedroom-walk-in.png",
-          "/spa-like-bathroom-with-freestanding-tub.jpg",
-          "/outdoor-patio-with-infinity-pool.jpg",
-          "/home-office-built-in-shelving.png",
-          "/wine-cellar-with-custom-storage.jpg",
-          "/home-theater-with-comfortable-seating.jpg",
-        ],
-      }
-
-      setProjects([sampleProject])
-      localStorage.setItem("portfolioProjects", JSON.stringify([sampleProject]))
-    }
+    cmsApi.getPortfolio(true).then(setProjects).catch(() => setProjects([]))
   }, [])
 
   const handleAddProject = () => {
     router.push("/dashboard/manage-portfolio/add")
   }
 
-  const handleEditProject = (id: number) => {
+  const handleEditProject = (id: string) => {
     router.push(`/dashboard/manage-portfolio/edit/${id}`)
   }
 
-  const handleDeleteProject = (id: number) => {
+  const handleDeleteProject = (id: string) => {
     setDeleteModal({ isOpen: true, projectId: id })
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deleteModal.projectId) {
-      const updatedProjects = projects.filter((project) => project.id !== deleteModal.projectId)
-      setProjects(updatedProjects)
-      localStorage.setItem("portfolioProjects", JSON.stringify(updatedProjects))
+      try {
+        await cmsApi.deletePortfolioProject(deleteModal.projectId)
+        setProjects((prev) => prev.filter((project) => project.id !== deleteModal.projectId))
+      } catch {
+        // ignore
+      }
     }
     setDeleteModal({ isOpen: false, projectId: null })
   }
@@ -158,7 +78,7 @@ export default function ManagePortfolioPage() {
 
   const filteredProjects = projects.filter(
     (project) =>
-      project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.status.toLowerCase().includes(searchTerm.toLowerCase()),
   )
@@ -216,7 +136,7 @@ export default function ManagePortfolioPage() {
                             rel="noopener noreferrer"
                             className="text-left hover:underline cursor-pointer focus:outline-none focus:underline"
                           >
-                            <div className="text-sm sm:text-base">{project.name}</div>
+                            <div className="text-sm sm:text-base">{project.title}</div>
                           </Link>
                           <div className="sm:hidden text-xs text-muted-foreground mt-1">{project.client}</div>
                         </TableCell>

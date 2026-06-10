@@ -2,13 +2,23 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Plus, X, ChevronUp, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { useRouter } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
 import { RichTextEditor } from "@/components/rich-text-editor"
+import { cmsApi } from "@/lib/cms/client"
+import type { CmsBlogFilter } from "@/lib/cms/types"
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,6 +42,9 @@ export default function AddBlogPage() {
 
   // Form state
   const [blogTitle, setBlogTitle] = useState("")
+  const [blogDescription, setBlogDescription] = useState("")
+  const [filterId, setFilterId] = useState("")
+  const [blogFilters, setBlogFilters] = useState<CmsBlogFilter[]>([])
   const [blogImage, setBlogImage] = useState<File | null>(null)
   const [blogImagePreview, setBlogImagePreview] = useState<string>("")
   const [blogTags, setBlogTags] = useState<string[]>([])
@@ -45,6 +58,13 @@ export default function AddBlogPage() {
     },
   ])
   const [newTag, setNewTag] = useState("")
+
+  useEffect(() => {
+    cmsApi.getBlogFilters(true).then((filters) => {
+      setBlogFilters(filters.filter((f) => f.isActive))
+      if (filters[0]) setFilterId(filters[0].id)
+    })
+  }, [])
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -167,20 +187,20 @@ export default function AddBlogPage() {
     }
   }
 
-  const confirmCreate = () => {
-    const newBlog = {
+  const confirmCreate = async () => {
+    const intro = blogSections[0]?.content?.replace(/<[^>]+>/g, " ").trim() || blogTitle
+    await cmsApi.createBlog({
       id: `blog-${Date.now()}`,
       title: blogTitle,
+      description: blogDescription.trim() || intro.slice(0, 280),
       heroImage: blogImagePreview || "/placeholder.svg?height=256&width=800",
+      filterId: filterId || blogFilters[0]?.id || "design",
       tags: blogTags,
-      sections: blogSections,
-      createdAt: new Date().toISOString().split("T")[0],
-    }
-
-    const savedBlogs = localStorage.getItem("blogs")
-    const blogs = savedBlogs ? JSON.parse(savedBlogs) : []
-    blogs.push(newBlog)
-    localStorage.setItem("blogs", JSON.stringify(blogs))
+      sections: blogSections.map(({ imageFiles, ...section }) => section),
+      published: true,
+      publishedAt: new Date().toISOString().split("T")[0],
+      updatedAt: new Date().toISOString().split("T")[0],
+    })
 
     setShowCreateModal(false)
     router.push("/dashboard/manage-blog")
@@ -230,6 +250,36 @@ export default function AddBlogPage() {
                   placeholder="Enter blog title..."
                   className="w-full px-3 py-2 border border-gray-300 dark:border-white/50 rounded-md focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none dark:bg-[#1a1d23] dark:text-white"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
+                  List description
+                </label>
+                <Input
+                  value={blogDescription}
+                  onChange={(e) => setBlogDescription(e.target.value)}
+                  placeholder="Short summary for the blog listing card..."
+                  className="dark:bg-[#1a1d23] dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
+                  Primary filter
+                </label>
+                <Select value={filterId} onValueChange={setFilterId}>
+                  <SelectTrigger className="dark:bg-[#1a1d23] dark:text-white">
+                    <SelectValue placeholder="Select filter" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {blogFilters.map((filter) => (
+                      <SelectItem key={filter.id} value={filter.id}>
+                        {filter.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Tags */}

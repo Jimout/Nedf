@@ -16,24 +16,121 @@ import {
   ChevronRight,
   ChevronLeft,
   ChevronDown,
-  Crown,
   ListOrdered,
   LayoutGrid,
   Quote,
   Lock,
+  ListFilter,
+  Tag,
+  PanelBottom,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { DataProvider } from "@/lib/data-context"
 import { ThemeToggle } from "@/components/theme-toggle"
 
+type NavItem = {
+  id: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  href: string
+}
+
+type NavSection = {
+  label?: string
+  items: NavItem[]
+}
+
+type NavGroup = {
+  label: string
+  sections: NavSection[]
+}
+
+const overviewItem: NavItem = {
+  id: "overview",
+  label: "Overview",
+  icon: LayoutDashboard,
+  href: "/dashboard",
+}
+
+const menuGroups: NavGroup[] = [
+  {
+    label: "Content",
+    sections: [
+      {
+        label: "Blog",
+        items: [
+          { id: "blog", label: "Posts", icon: PenTool, href: "/dashboard/manage-blog" },
+          { id: "blog-filters", label: "Filters", icon: Tag, href: "/dashboard/manage-blog-filters" },
+        ],
+      },
+      {
+        label: "Portfolio",
+        items: [
+          { id: "portfolio", label: "Projects", icon: Layers, href: "/dashboard/manage-portfolio" },
+          {
+            id: "portfolio-categories",
+            label: "Categories",
+            icon: ListFilter,
+            href: "/dashboard/manage-portfolio-categories",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Homepage",
+    sections: [
+      {
+        items: [
+          { id: "services", label: "Services", icon: LayoutGrid, href: "/dashboard/manage-services" },
+          { id: "steps", label: "Steps", icon: ListOrdered, href: "/dashboard/manage-steps" },
+          { id: "slogan", label: "Slogan", icon: Quote, href: "/dashboard/manage-slogan" },
+          { id: "contact", label: "Contact", icon: Mail, href: "/dashboard/manage-contact" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Company",
+    sections: [
+      {
+        items: [
+          { id: "thecrew", label: "Founders", icon: Building2, href: "/dashboard/manage-founders" },
+          { id: "team", label: "Team", icon: UsersRound, href: "/dashboard/manage-team" },
+          { id: "testimonial", label: "Reviews", icon: Star, href: "/dashboard/manage-review" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Settings",
+    sections: [
+      {
+        items: [
+          { id: "subscribers", label: "Footer", icon: PanelBottom, href: "/dashboard/manage-subscribers" },
+          { id: "login", label: "Login Page", icon: Lock, href: "/dashboard/manage-login" },
+        ],
+      },
+    ],
+  },
+]
+
+function isNavItemActive(pathname: string | null, href: string): boolean {
+  if (!pathname) return false
+  if (pathname === href) return true
+  if (href === "/dashboard") return false
+  return pathname.startsWith(`${href}/`)
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     Content: true,
-    People: true,
-    Engagement: true,
+    Homepage: true,
+    Company: false,
+    Settings: false,
   })
   const router = useRouter()
   const pathname = usePathname()
@@ -62,35 +159,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  const menuGroups = [
-    {
-      label: "Content",
-      items: [
-        { id: "overview", label: "Overview", icon: LayoutDashboard, href: "/dashboard" },
-        { id: "portfolio", label: "Portfolio", icon: Layers, href: "/dashboard/manage-portfolio" },
-        { id: "blog", label: "Blog Posts", icon: PenTool, href: "/dashboard/manage-blog" },
-        { id: "services", label: "Services", icon: LayoutGrid, href: "/dashboard/manage-services" },
-        { id: "steps", label: "Steps", icon: ListOrdered, href: "/dashboard/manage-steps" },
-        { id: "slogan", label: "Slogan", icon: Quote, href: "/dashboard/manage-slogan" },
-        { id: "contact", label: "Contact page", icon: Mail, href: "/dashboard/manage-contact" },
-      ],
-    },
-    {
-      label: "People",
-      items: [
-        { id: "login", label: "Login page", icon: Lock, href: "/dashboard/manage-login" },
-        { id: "thecrew", label: "About", icon: Building2, href: "/dashboard/manage-founders" },
-        { id: "team", label: "Team", icon: UsersRound, href: "/dashboard/manage-team" },
-      ],
-    },
-    {
-      label: "Engagement",
-      items: [
-        { id: "testimonial", label: "Reviews", icon: Star, href: "/dashboard/manage-review" },
-        { id: "subscribers", label: "Footer", icon: LayoutDashboard, href: "/dashboard/manage-subscribers" },
-      ],
-    },
-  ]
+  useEffect(() => {
+    if (!pathname) return
+    for (const group of menuGroups) {
+      const hasActive = group.sections.some((section) =>
+        section.items.some((item) => isNavItemActive(pathname, item.href))
+      )
+      if (hasActive) {
+        setOpenGroups((prev) => ({ ...prev, [group.label]: true }))
+      }
+    }
+  }, [pathname])
 
   const handleLogout = () => {
     localStorage.removeItem("dashboardAuth")
@@ -166,11 +245,51 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
             </div>
 
-            <nav className="flex-1 flex flex-col py-6 overflow-y-auto">
+            <nav className="flex-1 flex flex-col py-4 overflow-y-auto">
+              {!sidebarCollapsed ? (
+                <div className="px-3 mb-2">
+                  <Link
+                    href={overviewItem.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`relative flex items-center w-full px-3 py-3 rounded-lg transition-colors ${
+                      isNavItemActive(pathname, overviewItem.href)
+                        ? "bg-primary-foreground/20"
+                        : "hover:bg-primary-foreground/10"
+                    }`}
+                  >
+                    <LayoutDashboard className="w-5 h-5 shrink-0" />
+                    <span
+                      className={`ml-3 font-medium text-sm ${
+                        isNavItemActive(pathname, overviewItem.href) ? "font-semibold" : ""
+                      }`}
+                    >
+                      {overviewItem.label}
+                    </span>
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex justify-center mb-2">
+                  <Link
+                    href={overviewItem.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-center w-12 h-12 rounded-lg transition-colors ${
+                      isNavItemActive(pathname, overviewItem.href)
+                        ? "bg-primary-foreground/20"
+                        : "hover:bg-primary-foreground/10"
+                    }`}
+                    title={overviewItem.label}
+                  >
+                    <LayoutDashboard className="w-5 h-5 shrink-0" />
+                  </Link>
+                </div>
+              )}
+
               {menuGroups.map((group) => {
                 const isOpen = openGroups[group.label] ?? true
+                const groupItems = group.sections.flatMap((section) => section.items)
+
                 return (
-                  <div key={group.label} className={sidebarCollapsed ? "" : "mb-4"}>
+                  <div key={group.label} className={sidebarCollapsed ? "" : "mb-3"}>
                     {!sidebarCollapsed ? (
                       <>
                         <button
@@ -189,56 +308,51 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           />
                         </button>
                         {isOpen && (
-                          <div className="mt-1">
-                            {group.items.map((item) => {
-                              const Icon = item.icon
-                              const isActive =
-                                pathname != null &&
-                                (pathname === item.href ||
-                                  (item.href !== "/dashboard" && pathname.startsWith(item.href)))
-                              return (
-                                <div key={item.id} className="relative flex px-3 my-1">
-                                  <Link
-                                    href={item.href}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className={`relative flex items-center w-full px-3 py-3.5 rounded-lg justify-start overflow-hidden transition-colors ${
-                                      isActive ? "bg-primary-foreground/20" : "hover:bg-primary-foreground/10"
-                                    }`}
-                                  >
-                                    <Icon className="w-5 h-5 shrink-0" />
-                                    <div
-                                      className="flex items-center justify-between flex-1 ml-3 overflow-hidden"
-                                      style={{
-                                        opacity: 1,
-                                        width: "auto",
-                                      }}
-                                    >
-                                      <span
-                                        className={`font-medium text-sm whitespace-nowrap ${
-                                          isActive ? "font-semibold" : ""
+                          <div className="mt-1 space-y-3">
+                            {group.sections.map((section) => (
+                              <div key={section.label ?? group.label}>
+                                {section.label ? (
+                                  <p className="px-3 pb-1 text-[11px] font-medium uppercase tracking-wider text-primary-foreground/45">
+                                    {section.label}
+                                  </p>
+                                ) : null}
+                                {section.items.map((item) => {
+                                  const Icon = item.icon
+                                  const isActive = isNavItemActive(pathname, item.href)
+                                  return (
+                                    <div key={item.id} className="relative flex px-3 my-0.5">
+                                      <Link
+                                        href={item.href}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className={`relative flex items-center w-full px-3 py-2.5 rounded-lg justify-start overflow-hidden transition-colors ${
+                                          isActive
+                                            ? "bg-primary-foreground/20"
+                                            : "hover:bg-primary-foreground/10"
                                         }`}
                                       >
-                                        {item.label}
-                                      </span>
+                                        <Icon className="w-5 h-5 shrink-0" />
+                                        <span
+                                          className={`ml-3 font-medium text-sm whitespace-nowrap ${
+                                            isActive ? "font-semibold" : ""
+                                          }`}
+                                        >
+                                          {item.label}
+                                        </span>
+                                      </Link>
                                     </div>
-                                  </Link>
-                                </div>
-                              )
-                            })}
+                                  )
+                                })}
+                              </div>
+                            ))}
                           </div>
                         )}
                       </>
                     ) : (
                       <>
-                        {group.label !== menuGroups[0].label && (
-                          <div className="mx-2 my-1 border-t border-primary-foreground/20" aria-hidden />
-                        )}
-                        {group.items.map((item) => {
+                        <div className="mx-2 my-2 border-t border-primary-foreground/20" aria-hidden />
+                        {groupItems.map((item) => {
                           const Icon = item.icon
-                          const isActive =
-                            pathname != null &&
-                            (pathname === item.href ||
-                              (item.href !== "/dashboard" && pathname.startsWith(item.href)))
+                          const isActive = isNavItemActive(pathname, item.href)
                           return (
                             <div key={item.id} className="relative flex justify-center my-1">
                               <Link
@@ -247,7 +361,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 className={`relative flex items-center justify-center group overflow-hidden transition-colors w-12 h-12 rounded-lg ${
                                   isActive ? "bg-primary-foreground/20" : "hover:bg-primary-foreground/10"
                                 }`}
-                                title={item.label}
+                                title={`${group.label} · ${item.label}`}
                               >
                                 <Icon className="w-5 h-5 shrink-0" />
                                 <div className="absolute left-full ml-6 px-3 py-2 bg-foreground text-background text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity">
