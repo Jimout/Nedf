@@ -76,9 +76,9 @@ export default function Portfolio() {
       {/* Full-width Section - flows after Services on all screens */}
       <section
         id="portfolio"
-        className="relative z-40 pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 2xl:pt-16 3xl:pt-20 4xl:pt-24 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 font-montserrat overflow-hidden w-full bg-background"
+        className="relative z-40 flex flex-col pt-6 sm:pt-8 md:pt-10 lg:pt-12 xl:pt-14 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 font-montserrat overflow-hidden w-full bg-background 2xl:min-h-[calc(100dvh-4rem)] 2xl:pt-12 2xl:pb-12 3xl:min-h-[calc(100dvh-5rem)] 3xl:pt-14 3xl:pb-14 4xl:min-h-[calc(100dvh-6rem)] 4xl:pt-16 4xl:pb-16"
       >
-        <div className="w-full">
+        <div className="flex w-full min-h-0 flex-col 2xl:flex-1 2xl:justify-center">
         <div
           className={`flex justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 3xl:gap-16 4xl:gap-20 mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 flex-nowrap transition-all duration-300 ease-out ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
@@ -111,13 +111,12 @@ export default function Portfolio() {
         </div>
 
         {/* Full-width container aligned with navbar */}
-        <div className="relative w-full">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 w-full">
-            <div className="hidden md:flex justify-between items-start gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 w-full">
-              {/* Left column */}
-              <div className="flex flex-col w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] items-start">
+        <div className="relative w-full 2xl:flex-1 2xl:flex 2xl:flex-col 2xl:justify-center">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 w-full 2xl:flex-1 2xl:justify-center">
+            <div className="hidden md:flex w-full flex-col gap-6 md:gap-8 lg:gap-9 2xl:gap-10">
+              <div className="flex w-full items-start gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14">
                 <div
-                  className={`relative w-full h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[440px] 3xl:h-[500px] 4xl:h-[600px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
+                  className={`relative min-w-0 flex-1 h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[52vh] 3xl:h-[56vh] 4xl:h-[60vh] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
                     transitioning
                       ? "transform -translate-x-[120%] opacity-0 scale-95"
                       : "transform translate-x-0 opacity-100 scale-100"
@@ -137,77 +136,75 @@ export default function Portfolio() {
                 </div>
 
                 <div
-                  className={`mt-4 md:mt-5 lg:mt-6 xl:mt-7 2xl:mt-8 transition-all duration-700 ${
-                    transitioning ? "transform translate-y-8 opacity-0" : "transform translate-y-0 opacity-100"
+                  className={`relative min-w-0 flex-1 h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[52vh] 3xl:h-[56vh] 4xl:h-[60vh] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
+                    transitioning ? "transform scale-95 opacity-0" : "transform scale-100 opacity-100"
                   }`}
                   style={{
-                    transitionDelay: transitioning ? "0ms" : "400ms",
+                    transitionDelay: transitioning ? "100ms" : "250ms",
                     transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                   }}
                 >
-                  <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-light text-foreground leading-[1.1] mb-3 md:mb-3 lg:mb-4 xl:mb-4 2xl:mb-5 tracking-tight">
-                    {slide.title1 === "Architectural" ? (
-                      <>
-                        Architectural{" "}
-                        <span className="font-medium text-primary">Design</span>
-                      </>
-                    ) : slide.title1 === "Interior" ? (
-                      <>
-                        Interior{" "}
-                        <span className="font-medium text-primary">Design</span>
-                      </>
-                    ) : (
-                      slide.title1
-                    )}
-                  </h2>
-                  <Button
-                    variant="outline"
-                    onClick={handleExploreClick}
-                    className="rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground px-5 md:px-6 lg:px-7 xl:px-8 2xl:px-9 3xl:px-10 4xl:px-11 py-2 md:py-2.5 lg:py-2.5 xl:py-3 2xl:py-3 3xl:py-3.5 4xl:py-4 text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0"
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
-                  >
-                    <span className="group-hover:tracking-wide transition-all duration-500">Explore More</span>
-                  </Button>
+                  <Image
+                    src={slide.images[1].src || "/placeholder.svg"}
+                    alt={slide.images[1].alt}
+                    fill
+                    className="object-cover transition-all duration-700 ease-out hover:scale-105"
+                  />
+                  <div className="absolute inset-0 opacity-0 dark:opacity-10 bg-background" />
+                </div>
+
+                <div
+                  className={`relative min-w-0 flex-1 h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[52vh] 3xl:h-[56vh] 4xl:h-[60vh] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
+                    transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
+                  }`}
+                  style={{
+                    transitionDelay: transitioning ? "0ms" : "500ms",
+                    transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  }}
+                >
+                  <Image
+                    src={slide.images[2].src || "/placeholder.svg"}
+                    alt={slide.images[2].alt}
+                    fill
+                    className="object-cover transition-all duration-700 ease-out hover:scale-105"
+                  />
+                  <div className="absolute inset-0 opacity-0 dark:opacity-10 bg-background" />
                 </div>
               </div>
 
-              {/* Middle Image */}
               <div
-                className={`relative min-w-0 w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[42%] h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[440px] 3xl:h-[500px] 4xl:h-[600px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[1000ms] ${
-                  transitioning ? "transform scale-90 opacity-0" : "transform scale-100 opacity-100"
+                className={`transition-all duration-700 ${
+                  transitioning ? "transform translate-y-8 opacity-0" : "transform translate-y-0 opacity-100"
                 }`}
                 style={{
-                  transitionDelay: transitioning ? "100ms" : "250ms",
+                  transitionDelay: transitioning ? "0ms" : "400ms",
                   transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
               >
-                <Image
-                  src={slide.images[1].src || "/placeholder.svg"}
-                  alt={slide.images[1].alt}
-                  fill
-                  className="object-cover transition-all duration-700 ease-out hover:scale-105"
-                />
-                <div className="absolute inset-0 opacity-0 dark:opacity-10 bg-background" />
-              </div>
-
-              {/* Right column */}
-              <div
-                className={`relative w-[28%] lg:w-[27%] xl:w-[26%] 2xl:w-[25%] h-[250px] md:h-[270px] lg:h-[300px] xl:h-[340px] 2xl:h-[440px] 3xl:h-[500px] 4xl:h-[600px] overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
-                  transitioning ? "transform translate-x-[120%] opacity-0 scale-95" : "transform translate-x-0 opacity-100 scale-100"
-                }`}
-                style={{
-                  transitionDelay: transitioning ? "0ms" : "500ms",
-                  transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-                }}
-              >
-                <Image
-                  src={slide.images[2].src || "/placeholder.svg"}
-                  alt={slide.images[2].alt}
-                  fill
-                  className="object-cover transition-all duration-700 ease-out hover:scale-105"
-                />
-                <div className="absolute inset-0 opacity-0 dark:opacity-10 bg-background" />
+                <h2 className="text-2xl md:text-3xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-6xl font-light text-foreground leading-[1.1] mb-3 md:mb-3 lg:mb-4 xl:mb-4 2xl:mb-5 tracking-tight">
+                  {slide.title1 === "Architectural" ? (
+                    <>
+                      Architectural{" "}
+                      <span className="font-medium text-primary">Design</span>
+                    </>
+                  ) : slide.title1 === "Interior" ? (
+                    <>
+                      Interior{" "}
+                      <span className="font-medium text-primary">Design</span>
+                    </>
+                  ) : (
+                    slide.title1
+                  )}
+                </h2>
+                <Button
+                  variant="outline"
+                  onClick={handleExploreClick}
+                  className="rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground px-5 md:px-6 lg:px-7 xl:px-8 2xl:px-9 3xl:px-10 4xl:px-11 py-2 md:py-2.5 lg:py-2.5 xl:py-3 2xl:py-3 3xl:py-3.5 4xl:py-4 text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0"
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
+                >
+                  <span className="group-hover:tracking-wide transition-all duration-500">Explore More</span>
+                </Button>
               </div>
             </div>
 

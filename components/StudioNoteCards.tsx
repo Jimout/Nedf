@@ -20,7 +20,8 @@ export function StudioNotesCard() {
         className={cn(
           "group relative block w-full overflow-hidden rounded-none",
           "min-h-[320px] sm:min-h-[360px] md:min-h-[400px] lg:min-h-[440px]",
-          "xl:min-h-[480px] 2xl:min-h-[520px] 3xl:min-h-[580px] 4xl:min-h-[640px]",
+          "xl:min-h-[480px]",
+          "2xl:min-h-[calc(80dvh-4rem)] 3xl:min-h-[calc(80dvh-5rem)] 4xl:min-h-[calc(80dvh-6rem)]",
           "shadow-lg transition-shadow duration-300 hover:shadow-xl",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         )}
@@ -49,7 +50,7 @@ export function StudioNotesCard() {
           <p
             className={cn(
               TYPE.eyebrow,
-              "text-[10px] text-white/80 sm:text-xs lg:text-sm 2xl:text-base 3xl:text-lg 4xl:text-xl"
+              "text-[10px] text-white/80 sm:text-xs lg:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-2xl"
             )}
           >
             From the studio
@@ -61,7 +62,7 @@ export function StudioNotesCard() {
               TYPE.headline,
               "mt-3 max-w-4xl leading-[1.1] text-white",
               "text-xl sm:mt-4 sm:text-2xl md:text-3xl lg:mt-5 lg:text-4xl",
-              "xl:text-5xl 2xl:mt-6 2xl:text-5xl 3xl:mt-8 3xl:text-6xl 4xl:mt-10 4xl:text-7xl"
+              "xl:text-5xl 2xl:mt-8 2xl:max-w-5xl 2xl:text-6xl 3xl:mt-10 3xl:max-w-6xl 3xl:text-7xl 4xl:mt-12 4xl:max-w-6xl 4xl:text-8xl"
             )}
           >
             {STUDIO_NOTES_HEADING}
@@ -72,7 +73,7 @@ export function StudioNotesCard() {
               TYPE.body,
               "mt-4 max-w-2xl text-white/85",
               "text-sm sm:mt-5 sm:text-base md:text-base lg:mt-6 lg:text-lg",
-              "2xl:mt-8 2xl:max-w-3xl 2xl:text-xl 3xl:mt-10 3xl:text-2xl 4xl:mt-12 4xl:text-2xl"
+              "2xl:mt-10 2xl:max-w-4xl 2xl:text-2xl 3xl:mt-12 3xl:max-w-4xl 3xl:text-3xl 4xl:mt-14 4xl:max-w-5xl 4xl:text-3xl"
             )}
           >
             {SITE.studioNotesTagline}
@@ -82,13 +83,13 @@ export function StudioNotesCard() {
             className={cn(
               "mt-8 flex items-center justify-center rounded-full bg-primary text-primary-foreground",
               "h-12 w-12 sm:mt-10 sm:h-14 sm:w-14 md:mt-10 lg:mt-12",
-              "2xl:mt-14 2xl:h-16 2xl:w-16 3xl:mt-16 3xl:h-[4.5rem] 3xl:w-[4.5rem] 4xl:mt-16 4xl:h-20 4xl:w-20",
+              "2xl:mt-16 2xl:h-[4.5rem] 2xl:w-[4.5rem] 3xl:mt-20 3xl:h-20 3xl:w-20 4xl:mt-24 4xl:h-24 4xl:w-24",
               "transition-[opacity,transform] duration-300 group-hover:opacity-90 group-hover:scale-105"
             )}
             aria-hidden
           >
             <ArrowRight
-              className="h-5 w-5 sm:h-6 sm:w-6 2xl:h-7 2xl:w-7 3xl:h-8 3xl:w-8 4xl:h-9 4xl:w-9 transition-transform duration-300 group-hover:translate-x-1"
+              className="h-5 w-5 sm:h-6 sm:w-6 2xl:h-8 2xl:w-8 3xl:h-9 3xl:w-9 4xl:h-10 4xl:w-10 transition-transform duration-300 group-hover:translate-x-1"
               strokeWidth={2.5}
             />
           </span>
