@@ -240,15 +240,15 @@ function NavLink({
       href={item.href}
       onClick={(e) => onClick(e, item)}
       className={cn(
-        "transition-all duration-300 ease-out font-medium font-montserrat whitespace-nowrap",
+        "transition-all duration-300 ease-out font-normal font-montserrat whitespace-nowrap",
         // Tap targets (desktop): keep visual style, ensure >=44px click height.
         "px-2 py-2",
         // Match Subscription footer quick links: text-sm → 2xl:base → 3xl/4xl:lg
         "text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg",
         "hover:scale-110",
-        isActive 
-          ? "text-primary" 
-          : "text-foreground"
+        isActive
+          ? "text-primary opacity-100"
+          : "text-foreground opacity-60 hover:opacity-100"
       )}
     >
       {item.name}
@@ -418,11 +418,11 @@ function MobileNavLink({
       href={item.href}
       onClick={onClick}
       className="
-        py-3 px-3 rounded-none font-medium
+        py-3 px-3 rounded-none font-normal font-montserrat
         text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg
-        text-foreground
+        text-foreground opacity-60
         hover:bg-muted
-        hover:pl-4 hover:text-primary
+        hover:pl-4 hover:text-primary hover:opacity-100
         transition-all duration-200
       "
     >

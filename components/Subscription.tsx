@@ -97,7 +97,7 @@ export default function Footer() {
                     <li key={link.href}>
                       <a
                         href={link.href}
-                        className="text-footer-muted hover:text-footer-foreground transition-colors text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg"
+                        className="block opacity-60 text-footer-muted hover:opacity-100 hover:text-footer-foreground transition-all duration-300 text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg"
                       >
                         {link.label}
                       </a>
@@ -109,11 +109,11 @@ export default function Footer() {
                 <h3 className="font-display text-base sm:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-2xl font-semibold text-footer-accent mb-3 sm:mb-4 2xl:mb-5 3xl:mb-6 4xl:mb-6">
                   Contact
                 </h3>
-                <ul className="space-y-2 2xl:space-y-3 3xl:space-y-3 4xl:space-y-4 text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-footer-muted">
+                <ul className="space-y-2 2xl:space-y-3 3xl:space-y-3 4xl:space-y-4 text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg">
                   <li>
                     <a
                       href={`mailto:${data.contact.email}`}
-                      className="hover:text-footer-foreground transition-colors"
+                      className="block opacity-60 text-footer-muted hover:opacity-100 hover:text-footer-foreground transition-all duration-300"
                     >
                       {data.contact.email}
                     </a>
@@ -121,7 +121,7 @@ export default function Footer() {
                   <li>
                     <a
                       href={`tel:${data.contact.phonePrimary}`}
-                      className="hover:text-footer-foreground transition-colors"
+                      className="block opacity-60 text-footer-muted hover:opacity-100 hover:text-footer-foreground transition-all duration-300"
                     >
                       {data.contact.phonePrimary}
                     </a>
@@ -129,7 +129,7 @@ export default function Footer() {
                   <li>
                     <a
                       href={`tel:${data.contact.phoneSecondary}`}
-                      className="hover:text-footer-foreground transition-colors"
+                      className="block opacity-60 text-footer-muted hover:opacity-100 hover:text-footer-foreground transition-all duration-300"
                     >
                       {data.contact.phoneSecondary}
                     </a>
