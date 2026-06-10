@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
+import { PAGE_GUTTERS } from "@/lib/constants"
 import Image from "next/image"
 import Link from "next/link"
 import { gsap } from "gsap"
@@ -145,11 +146,13 @@ function NavbarContent({
         backdrop-blur-md 
         bg-background/80 
       ">
-        <div className="
-          flex items-center justify-between w-full 
-          px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24
-          py-2.5 md:py-3 2xl:py-6 3xl:py-[1.75rem] 4xl:py-8
-        ">
+        <div
+          className={cn(
+            "flex w-full items-center justify-between",
+            PAGE_GUTTERS,
+            "py-2.5 md:py-3 2xl:py-6 3xl:py-[1.75rem] 4xl:py-8"
+          )}
+        >
           <NavLogo />
           <DesktopNavLinks pathname={pathname} onNavClick={onNavClick} />
           <NavActions 

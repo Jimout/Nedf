@@ -66,6 +66,14 @@ export const LANDING_STEPS_KEY = "landingSteps"
 /** localStorage key for hero slogan (dashboard-managed) */
 export const LANDING_SLOGAN_KEY = "landingSlogan"
 
+/** Navbar horizontal padding — all breakpoints */
+export const PAGE_GUTTERS =
+  "px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24"
+
+/** Landing main content padding — large screens only (lg through 4xl) */
+export const LANDING_MAIN_GUTTERS =
+  "lg:px-12 xl:px-14 2xl:px-28 3xl:px-32 4xl:px-36"
+
 /** localStorage key for The Crew / founders (dashboard-managed) */
 export const LANDING_CREW_KEY = "landingCrew"
 

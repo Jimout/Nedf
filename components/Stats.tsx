@@ -155,13 +155,13 @@ export default function Stats() {
     <section
       ref={ref}
       className="
-        w-full relative z-10 flex-shrink-0
-        mt-auto pt-4 pb-8 sm:pb-10 md:pb-12
-        lg:mt-6 lg:py-6 xl:py-7 2xl:py-8
-        px-5 sm:px-7 md:px-9 lg:px-0
+        w-full relative z-10
+        mt-6 sm:mt-8 md:mt-10
+        py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7
+        2xl:mt-auto 2xl:flex-shrink-0 2xl:pt-3 2xl:pb-6 3xl:pb-7 4xl:pb-8
       "
     >
-      <div className="grid w-full grid-cols-2 gap-3 sm:gap-4 lg:flex lg:flex-row lg:justify-between lg:items-end lg:gap-0">
+      <div className="grid w-full min-w-0 grid-cols-2 items-end gap-4 sm:gap-5 md:gap-6 lg:flex lg:flex-row lg:items-end lg:justify-between lg:gap-6 xl:gap-8">
         {STATS_DATA.map((stat, index) => (
           <StatCard
             key={stat.label}
@@ -181,17 +181,18 @@ function StatCard({ value, label, isCounting }: { value: string; label: string; 
   return (
     <div
       className="
-        flex items-start gap-2.5 sm:gap-3
-        rounded-md bg-muted/45 px-3 py-3.5 sm:px-4 sm:py-4
+        flex min-w-0 items-start gap-2.5 sm:gap-3
+        rounded-md bg-muted/45 py-3.5 sm:py-4
         dark:bg-muted/25
-        lg:flex-1 lg:flex-col lg:items-center lg:rounded-none lg:bg-transparent lg:dark:bg-transparent lg:px-0 lg:py-0 lg:text-center
+        w-full lg:w-auto lg:shrink-0
+        lg:flex-col lg:items-center lg:rounded-none lg:bg-transparent lg:dark:bg-transparent lg:px-0 lg:py-0 lg:text-center
       "
     >
       <span
         className="mt-1 h-8 w-px shrink-0 bg-primary/70 lg:hidden"
         aria-hidden
       />
-      <div className="min-w-0 flex-1 lg:flex lg:flex-col lg:items-center w-full">
+      <div className="min-w-0 flex-1 px-2.5 sm:px-3 lg:flex lg:flex-col lg:items-center lg:px-0">
         <span
           className={`
             block font-mono font-semibold text-foreground leading-none tabular-nums
