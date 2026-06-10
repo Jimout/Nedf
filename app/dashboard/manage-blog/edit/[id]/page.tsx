@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useRouter, useParams } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
+import { RichTextEditor } from "@/components/rich-text-editor"
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -381,11 +382,11 @@ export default function EditBlogPage() {
                           <X className="w-4 h-4" />
                         </Button>
                       </div>
-                      <textarea
+                      <RichTextEditor
                         value={section.content}
-                        onChange={(e) => updateSection(section.id, "content", e.target.value)}
-                        rows={6}
-                        className="w-full p-3 border border-gray-300 dark:border-white/50 rounded-md focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none resize-none dark:bg-[#1a1d23] dark:text-white"
+                        onChange={(value) => updateSection(section.id, "content", value)}
+                        placeholder="Write section content..."
+                        minHeight="180px"
                       />
                       
                       {/* Optional Images Upload */}

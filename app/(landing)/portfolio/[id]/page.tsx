@@ -8,6 +8,7 @@ import BeforeAfterSlider from "@/components/BeforeAfterSlider"
 import ImageSlider from "@/components/ImageSlider"
 import PanoramaViewer from "@/components/PanoramaViewer"
 import Subscription from "@/components/Subscription"
+import { RichTextContent } from "@/components/rich-text-content"
 
 // ============================================================================
 // TYPES
@@ -246,9 +247,11 @@ function SectionHeader({ title }: { title: string }) {
  */
 function TextParagraph({ content }: { content: string }) {
   return (
-    <p className={BLOG_DETAIL_BODY_CLASS} style={BLOG_DETAIL_BODY_STYLE}>
-      {content}
-    </p>
+    <RichTextContent
+      content={content}
+      className={BLOG_DETAIL_BODY_CLASS}
+      style={BLOG_DETAIL_BODY_STYLE}
+    />
   )
 }
 

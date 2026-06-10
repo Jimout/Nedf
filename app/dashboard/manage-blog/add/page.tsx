@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
+import { RichTextEditor } from "@/components/rich-text-editor"
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +39,7 @@ export default function AddBlogPage() {
     {
       id: "section-1",
       title: "Introduction",
-      content: "Enter your introduction content here...",
+      content: "",
       level: 1,
       number: "1",
     },
@@ -95,7 +96,7 @@ export default function AddBlogPage() {
     const newSection: BlogSection = {
       id: `section-${Date.now()}`,
       title: "New Section",
-      content: "Enter your content here...",
+      content: "",
       level: 1,
       number: "1",
     }
@@ -318,11 +319,11 @@ export default function AddBlogPage() {
                           <X className="w-4 h-4" />
                         </Button>
                       </div>
-                      <textarea
+                      <RichTextEditor
                         value={section.content}
-                        onChange={(e) => updateSection(section.id, "content", e.target.value)}
-                        rows={4}
-                        className="w-full p-3 border border-gray-300 dark:border-white/50 rounded-md focus:border-[#001F4B] dark:focus:border-[#ec1e24] outline-none resize-none dark:bg-[#1a1d23] dark:text-white"
+                        onChange={(value) => updateSection(section.id, "content", value)}
+                        placeholder="Write section content..."
+                        minHeight="140px"
                       />
                       
                       {/* Optional Images Upload */}

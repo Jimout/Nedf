@@ -10,6 +10,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
+import { RichTextContent } from "@/components/rich-text-content"
 
 /** Same scroll-in animation as `app/(landing)/portfolio/[id]/page.tsx` */
 const ANIMATION_CONFIG = {
@@ -182,12 +183,11 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
                       <span className="font-semibold mr-2">{section.number}</span>
                       {section.title}
                     </h2>
-                    <p
+                    <RichTextContent
+                      content={section.content}
                       className="text-foreground/80 text-sm mb-4 leading-7 text-justify"
                       style={{ fontFamily: "Montserrat", fontWeight: 400 }}
-                    >
-                      {section.content}
-                    </p>
+                    />
                     {section.images && section.images.length > 0 && (
                       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {section.images.map((image, index) => (

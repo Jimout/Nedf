@@ -5,10 +5,11 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import ConfirmationModal from "@/components/Confirmation-modal"
+import { RichTextEditor } from "@/components/rich-text-editor"
+import { getRichTextPlain } from "@/lib/rich-text"
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -339,7 +340,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
       project.client.trim() !== "" &&
       project.beforeImage !== "" &&
       project.afterImage !== "" &&
-      project.description.trim() !== "" &&
+      getRichTextPlain(project.description) !== "" &&
       project.colorPalette.length > 0 &&
       project.galleryImages.length >= 2 // At least 2 gallery photos
     )
@@ -596,23 +597,22 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
           <CardContent className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Inspiration</label>
-              <Textarea
+              <RichTextEditor
                 value={project.inspiration}
-                onChange={(e) => setProject({ ...project, inspiration: e.target.value })}
+                onChange={(value) => setProject({ ...project, inspiration: value })}
                 placeholder="Describe the inspiration for this project"
-                rows={3}
+                minHeight="120px"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Description <span className="text-red-500">*</span>
               </label>
-              <Textarea
+              <RichTextEditor
                 value={project.description}
-                onChange={(e) => setProject({ ...project, description: e.target.value })}
+                onChange={(value) => setProject({ ...project, description: value })}
                 placeholder="Detailed project description"
-                rows={4}
-                required
+                minHeight="140px"
               />
             </div>
           </CardContent>
@@ -721,12 +721,11 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
                   </div>
 
                   {field.type === "text" ? (
-                    <Textarea
+                    <RichTextEditor
                       value={field.value as string}
-                      onChange={(e) => updateCustomField(field.id, { value: e.target.value })}
+                      onChange={(value) => updateCustomField(field.id, { value })}
                       placeholder="Enter text content"
-                      rows={3}
-                      className="border-gray-300"
+                      minHeight="120px"
                     />
                   ) : (
                     <div className="space-y-2">
@@ -883,7 +882,7 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
               {!project.client.trim() && <li>Client</li>}
               {!project.beforeImage && <li>Before Image</li>}
               {!project.afterImage && <li>After Image</li>}
-              {!project.description.trim() && <li>Description</li>}
+              {!getRichTextPlain(project.description) && <li>Description</li>}
               {project.colorPalette.length === 0 && <li>Color Palette (at least 1 color)</li>}
               {project.galleryImages.length < 2 && <li>Gallery (at least 2 photos, currently {project.galleryImages.length})</li>}
             </ul>

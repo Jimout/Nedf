@@ -5,11 +5,11 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import ConfirmationModal from "@/components/Confirmation-modal"
+import { RichTextEditor } from "@/components/rich-text-editor"
 
 const ArrowLeftIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -635,11 +635,11 @@ export default function AddProjectPage() {
                   </div>
 
                   {section.type === "description" && (
-              <Textarea
+                    <RichTextEditor
                       value={section.content as string}
-                      onChange={(e) => updateContentSection(section.id, { content: e.target.value })}
+                      onChange={(value) => updateContentSection(section.id, { content: value })}
                       placeholder="Enter detailed description"
-                rows={4}
+                      minHeight="140px"
                     />
                   )}
 
