@@ -156,6 +156,7 @@ export default function Stats() {
       ref={ref}
       className="
         w-full relative z-10
+        max-md:mt-auto max-md:flex-shrink-0 max-md:pb-2
         mt-6 sm:mt-8 md:mt-10
         py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7
         2xl:mt-auto 2xl:flex-shrink-0 2xl:pt-3 2xl:pb-6 3xl:pb-7 4xl:pb-8

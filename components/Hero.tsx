@@ -109,6 +109,7 @@ export default function HeroWithStats() {
     <div
       className="
         flex w-full flex-col
+        max-md:min-h-[calc(100dvh-7.5rem)]
         2xl:min-h-[calc(86dvh-4rem)]
         3xl:min-h-[calc(86dvh-5rem)]
         4xl:min-h-[calc(86dvh-6rem)]
@@ -144,8 +145,8 @@ function HeroSection({
       relative w-full z-10
       flex flex-col items-center justify-center
       font-montserrat overflow-hidden
-      min-h-[28vh] sm:min-h-[30vh] md:min-h-[32vh]
-      lg:min-h-[34vh] xl:min-h-[36vh]
+      max-md:flex-1 max-md:min-h-0 max-md:mt-0
+      md:min-h-[32vh] lg:min-h-[34vh] xl:min-h-[36vh]
       2xl:flex-1 2xl:min-h-0
       3xl:flex-1 3xl:min-h-0
       4xl:flex-1 4xl:min-h-0
@@ -164,7 +165,7 @@ function HeroSection({
 
 function Spacer() {
   return (
-    <div className="h-2 sm:h-3 md:h-4 lg:h-5 xl:h-6 2xl:hidden" />
+    <div className="h-2 sm:h-3 md:h-4 lg:h-5 xl:h-6 max-md:hidden 2xl:hidden" />
   )
 }
 

@@ -68,11 +68,11 @@ export const LANDING_SLOGAN_KEY = "landingSlogan"
 
 /** Navbar horizontal padding — all breakpoints */
 export const PAGE_GUTTERS =
-  "px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24"
+  "px-6 md:px-10 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24"
 
-/** Landing main content padding — large screens only (lg through 4xl) */
+/** Landing main content horizontal padding — all breakpoints */
 export const LANDING_MAIN_GUTTERS =
-  "lg:px-12 xl:px-14 2xl:px-28 3xl:px-32 4xl:px-36"
+  "px-6 md:px-10 lg:px-12 xl:px-14 2xl:px-28 3xl:px-32 4xl:px-36"
 
 /** Top/bottom spacing below navbar — blog & portfolio list + detail pages */
 export const LANDING_LIST_TOP_PADDING =
