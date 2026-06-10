@@ -1,11 +1,24 @@
 "use client"
 
+import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { loadCrewSection, type CrewMember } from "@/lib/landing-crew"
+import { loadCrewSection, type CrewMember, type CrewSocial } from "@/lib/landing-crew"
 import { Pencil } from "lucide-react"
 import Link from "next/link"
+import { FaBehance, FaInstagram, FaLinkedin, FaPinterest, FaYoutube } from "react-icons/fa"
+import { FaTiktok, FaXTwitter } from "react-icons/fa6"
+
+const SOCIAL_ICONS: Record<keyof CrewSocial, React.ReactNode> = {
+  instagram: <FaInstagram className="h-4 w-4" />,
+  tiktok: <FaTiktok className="h-4 w-4" />,
+  linkedin: <FaLinkedin className="h-4 w-4" />,
+  pinterest: <FaPinterest className="h-4 w-4" />,
+  behance: <FaBehance className="h-4 w-4" />,
+  x: <FaXTwitter className="h-4 w-4" />,
+  youtube: <FaYoutube className="h-4 w-4" />,
+}
 
 export default function CrewViewPage() {
   const [aboutDescription, setAboutDescription] = useState("")
@@ -85,7 +98,7 @@ export default function CrewViewPage() {
                 {Object.keys(member.social || {}).length > 0 && (
                   <div className="pt-2 border-t border-border">
                     <p className="text-xs font-medium uppercase text-muted-foreground mb-1">Social media</p>
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-2">
                       {Object.entries(member.social).map(
                         ([platform, url]) =>
                           url && (
@@ -94,9 +107,11 @@ export default function CrewViewPage() {
                               href={url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs text-primary hover:underline capitalize"
+                              aria-label={platform}
+                              title={platform}
+                              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                             >
-                              {platform}
+                              {SOCIAL_ICONS[platform as keyof CrewSocial]}
                             </a>
                           )
                       )}

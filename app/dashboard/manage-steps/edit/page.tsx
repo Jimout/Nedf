@@ -55,17 +55,21 @@ export default function ManageStepsEditPage() {
   }
 
   const addStep = () => {
-    const nextId = steps.length > 0 ? Math.max(...steps.map((s) => s.id)) + 1 : 1
-    setSteps((prev) => [
-      ...prev,
-      {
-        id: nextId,
-        name: "",
-        role: `Step ${prev.length + 1}`,
-        quote: "",
-        avatar: "",
-      },
-    ])
+    setSteps((prev) => {
+      const nextId = prev.length > 0 ? Math.max(...prev.map((s) => s.id)) + 1 : 1
+      const nextIndex = prev.length
+      setExpanded((current) => new Set([...current, nextIndex]))
+      return [
+        ...prev,
+        {
+          id: nextId,
+          name: "",
+          role: `Step ${prev.length + 1}`,
+          quote: "",
+          avatar: "",
+        },
+      ]
+    })
     setSaved(false)
   }
 
@@ -190,23 +194,7 @@ export default function ManageStepsEditPage() {
           </DialogContent>
         </Dialog>
 
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">Steps</p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={addStep}
-            className="rounded-none border-border text-foreground hover:bg-muted"
-          >
-            <Plus className="h-4 w-4 mr-1" />
-            Add step
-          </Button>
-        </div>
-
-        <p className="text-xs text-muted-foreground">
-          Use &quot;Add step&quot; to create a new step. Use the remove (trash) icon on a step to delete it. Confirm when prompted.
-        </p>
+        <p className="text-sm text-muted-foreground">Steps</p>
 
         <div className="space-y-6">
           {steps.map((step, index) => {
@@ -233,8 +221,7 @@ export default function ManageStepsEditPage() {
                         className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 [&_svg]:shrink-0 rounded-none"
                         aria-label="Remove step"
                       >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        <span className="hidden sm:inline">Remove</span>
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                       <span className="text-muted-foreground" aria-hidden>
                         {isExpanded ? (
@@ -284,6 +271,22 @@ export default function ManageStepsEditPage() {
               </Card>
             )
           })}
+        </div>
+
+        <div className="flex flex-col items-stretch gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-muted-foreground">
+            Use the remove (trash) icon on a step to delete it. Confirm when prompted.
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addStep}
+            className="rounded-none border-border text-foreground hover:bg-muted shrink-0"
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add new step
+          </Button>
         </div>
       </div>
     </div>

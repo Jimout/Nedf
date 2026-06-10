@@ -1,5 +1,6 @@
 "use client"
 
+import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -24,6 +25,8 @@ import {
 } from "@/lib/landing-crew"
 import { Plus, Trash2, ArrowLeft, Save, ChevronDown, ChevronUp, XCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { FaBehance, FaInstagram, FaLinkedin, FaPinterest, FaYoutube } from "react-icons/fa"
+import { FaTiktok, FaXTwitter } from "react-icons/fa6"
 
 const SOCIAL_KEYS: (keyof CrewSocial)[] = [
   "instagram",
@@ -34,6 +37,24 @@ const SOCIAL_KEYS: (keyof CrewSocial)[] = [
   "x",
   "youtube",
 ]
+
+const SOCIAL_ICONS: Record<keyof CrewSocial, React.ReactNode> = {
+  instagram: <FaInstagram className="h-4 w-4" />,
+  tiktok: <FaTiktok className="h-4 w-4" />,
+  linkedin: <FaLinkedin className="h-4 w-4" />,
+  pinterest: <FaPinterest className="h-4 w-4" />,
+  behance: <FaBehance className="h-4 w-4" />,
+  x: <FaXTwitter className="h-4 w-4" />,
+  youtube: <FaYoutube className="h-4 w-4" />,
+}
+
+function getActiveSocialKeys(social: CrewSocial): (keyof CrewSocial)[] {
+  return SOCIAL_KEYS.filter((key) => key in social)
+}
+
+function getAvailableSocialKeys(social: CrewSocial): (keyof CrewSocial)[] {
+  return SOCIAL_KEYS.filter((key) => !(key in social))
+}
 
 export default function ManageCrewEditPage() {
   const router = useRouter()
@@ -47,6 +68,9 @@ export default function ManageCrewEditPage() {
     | { type: "cancel" }
     | { type: "deleteMember"; index: number }
   >(null)
+  const [pendingSocialPlatform, setPendingSocialPlatform] = useState<
+    Record<string, keyof CrewSocial | "">
+  >({})
 
   const toggleExpanded = (index: number) => {
     setExpanded((prev) => {
@@ -72,11 +96,36 @@ export default function ManageCrewEditPage() {
 
   const updateSocial = (memberIndex: number, key: keyof CrewSocial, value: string) => {
     setCrew((prev) =>
+      prev.map((m, i) => {
+        if (i !== memberIndex) return m
+        const next = { ...m.social }
+        if (!value.trim()) {
+          delete next[key]
+        } else {
+          next[key] = value
+        }
+        return { ...m, social: next }
+      })
+    )
+    setSaved(false)
+  }
+
+  const addSocial = (memberIndex: number, key: keyof CrewSocial) => {
+    setCrew((prev) =>
       prev.map((m, i) =>
-        i === memberIndex
-          ? { ...m, social: { ...m.social, [key]: value || undefined } }
-          : m
+        i === memberIndex ? { ...m, social: { ...m.social, [key]: "" } } : m
       )
+    )
+    setSaved(false)
+  }
+
+  const removeSocial = (memberIndex: number, key: keyof CrewSocial) => {
+    setCrew((prev) =>
+      prev.map((m, i) => {
+        if (i !== memberIndex) return m
+        const { [key]: _, ...rest } = m.social
+        return { ...m, social: rest }
+      })
     )
     setSaved(false)
   }
@@ -399,24 +448,108 @@ export default function ManageCrewEditPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">Social links</label>
-                      <p className="text-xs text-muted-foreground">
-                        Instagram, TikTok, LinkedIn, Pinterest, Behance, X, YouTube – shown under this member on the landing page.
-                      </p>
-                      <div className="grid gap-2 sm:grid-cols-2">
-                        {SOCIAL_KEYS.map((key) => (
-                          <div key={key} className="space-y-1">
-                            <span className="text-xs text-muted-foreground capitalize">{key}</span>
-                            <Input
-                              value={member.social[key] ?? ""}
-                              onChange={(e) => updateSocial(index, key, e.target.value)}
-                              placeholder={`${key} URL`}
-                              className="rounded-none bg-background border-border"
-                            />
-                          </div>
-                        ))}
+                    <div className="space-y-3">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                        <label className="text-sm font-medium text-foreground">Social links</label>
+                        {getAvailableSocialKeys(member.social).length > 0 && (
+                          <p className="text-xs text-muted-foreground">
+                            {getAvailableSocialKeys(member.social).length} platform
+                            {getAvailableSocialKeys(member.social).length === 1 ? "" : "s"} available to add
+                          </p>
+                        )}
                       </div>
+                      {getActiveSocialKeys(member.social).length === 0 ? (
+                        <p className="text-xs text-muted-foreground italic">No social links yet. Add one below.</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {getActiveSocialKeys(member.social).map((key) => (
+                            <div key={key} className="flex items-center gap-2">
+                              <span
+                                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground"
+                                title={key}
+                                aria-hidden
+                              >
+                                {SOCIAL_ICONS[key]}
+                              </span>
+                              <Input
+                                value={member.social[key] ?? ""}
+                                onChange={(e) => updateSocial(index, key, e.target.value)}
+                                placeholder={`${key} URL`}
+                                className="flex-1 rounded-none bg-background border-border"
+                              />
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => removeSocial(index, key)}
+                                className="shrink-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                aria-label={`Remove ${key}`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {getAvailableSocialKeys(member.social).length > 0 && (
+                        <div className="space-y-2 rounded-none border border-dashed border-border p-3">
+                          <p className="text-xs font-medium text-foreground">Add social link</p>
+                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                            <select
+                              value={pendingSocialPlatform[member.id] ?? ""}
+                              onChange={(e) =>
+                                setPendingSocialPlatform((prev) => ({
+                                  ...prev,
+                                  [member.id]: e.target.value as keyof CrewSocial | "",
+                                }))
+                              }
+                              className="flex h-10 w-full rounded-none border border-border bg-background px-3 text-sm text-foreground sm:max-w-xs"
+                            >
+                              <option value="">Select platform</option>
+                              {getAvailableSocialKeys(member.social).map((key) => (
+                                <option key={key} value={key}>
+                                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                                </option>
+                              ))}
+                            </select>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              disabled={!pendingSocialPlatform[member.id]}
+                              onClick={() => {
+                                const pending = pendingSocialPlatform[member.id]
+                                if (!pending) return
+                                addSocial(index, pending)
+                                setPendingSocialPlatform((prev) => ({
+                                  ...prev,
+                                  [member.id]: "",
+                                }))
+                              }}
+                              className="rounded-none border-border shrink-0"
+                            >
+                              <Plus className="h-4 w-4 mr-2" />
+                              Add
+                            </Button>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {getAvailableSocialKeys(member.social).map((key) => (
+                              <Button
+                                key={key}
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => addSocial(index, key)}
+                                className="h-9 w-9 rounded-full border border-border p-0"
+                                title={`Add ${key}`}
+                                aria-label={`Add ${key}`}
+                              >
+                                {SOCIAL_ICONS[key]}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 )}

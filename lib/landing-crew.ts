@@ -21,6 +21,17 @@ export interface CrewMember {
   social: CrewSocial
 }
 
+function normalizeCrewMember(member: CrewMember): CrewMember {
+  return {
+    ...member,
+    social: member.social ?? {},
+  }
+}
+
+function normalizeCrew(crew: CrewMember[]): CrewMember[] {
+  return crew.map(normalizeCrewMember)
+}
+
 export interface CrewSectionData {
   aboutDescription: string
   crew: CrewMember[]
@@ -81,13 +92,14 @@ export function loadCrewSection(): CrewSectionData {
     if (parsed && typeof parsed.aboutDescription === "string" && Array.isArray(parsed.crew)) {
       return {
         aboutDescription: parsed.aboutDescription,
-        crew: parsed.crew.length > 0 ? parsed.crew : DEFAULT_CREW,
+        crew:
+          parsed.crew.length > 0 ? normalizeCrew(parsed.crew as CrewMember[]) : DEFAULT_CREW,
       }
     }
     const asArray = Array.isArray(parsed) ? parsed : []
     return {
       aboutDescription: DEFAULT_ABOUT_DESCRIPTION,
-      crew: asArray.length > 0 ? asArray : DEFAULT_CREW,
+      crew: asArray.length > 0 ? normalizeCrew(asArray as CrewMember[]) : DEFAULT_CREW,
     }
   } catch {
     return { aboutDescription: DEFAULT_ABOUT_DESCRIPTION, crew: DEFAULT_CREW }
