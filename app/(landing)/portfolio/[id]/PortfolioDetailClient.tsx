@@ -1,0 +1,559 @@
+"use client"
+
+import type React from "react"
+import { Suspense, useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import BeforeAfterSlider from "@/components/BeforeAfterSlider"
+import ImageSlider from "@/components/ImageSlider"
+import PanoramaViewer from "@/components/PanoramaViewer"
+import Subscription from "@/components/Subscription"
+import { RichTextContent } from "@/components/rich-text-content"
+import {
+  LANDING_LIST_BOTTOM_PADDING,
+  LANDING_LIST_TOP_PADDING,
+} from "@/lib/constants"
+import {
+  getPortfolioProjectById,
+  type PortfolioProject,
+} from "@/lib/landing-portfolio-projects"
+import { cn } from "@/lib/utils"
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+interface ProjectData extends PortfolioProject {}
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+const ANIMATION_CONFIG = {
+  fadeUp: {
+    hidden: { y: 30 },
+    visible: { y: 0, transition: { duration: 0.6 } },
+  },
+} as const
+
+const VIEWPORT_CONFIG = {
+  once: true,
+  margin: "-100px",
+} as const
+
+/** Matches `app/(landing)/blog/[id]/page.tsx` title, headings, and body */
+const BLOG_DETAIL_TITLE_STYLE: React.CSSProperties = {
+  fontFamily: "Montserrat",
+  fontWeight: 500,
+  fontSize: "36px",
+}
+
+const BLOG_DETAIL_SECTION_H2_CLASS = "text-2xl font-medium mb-4 text-foreground"
+const BLOG_DETAIL_SECTION_H2_STYLE: React.CSSProperties = { fontFamily: "Montserrat" }
+
+const BLOG_DETAIL_BODY_CLASS = "text-foreground/80 text-sm mb-4 leading-7 text-justify"
+const BLOG_DETAIL_BODY_STYLE: React.CSSProperties = {
+  fontFamily: "Montserrat",
+  fontWeight: 400,
+}
+
+const CONTENT_SECTIONS = [
+  {
+    type: "text" as const,
+    content:
+      "The architectural design seamlessly blends modern aesthetics with functional spaces, creating an environment that promotes both productivity and comfort. Every detail has been carefully considered to enhance the user experience, from the strategic placement of windows to maximize natural light, to the selection of materials that provide both durability and visual appeal. The building's facade reflects a contemporary approach while respecting the surrounding urban context, creating a harmonious relationship between the structure and its environment. Interior spaces are designed with flexibility in mind, allowing for various configurations that can adapt to changing needs over time.",
+  },
+  {
+    type: "image" as const,
+    src: "/interior3.jpg",
+    alt: "Project showcase 2",
+    fit: "contain" as const,
+  },
+  {
+    type: "text" as const,
+    content:
+      "Innovative spatial planning ensures optimal flow throughout the building, while sustainable materials and energy-efficient systems demonstrate our commitment to environmental responsibility. The design incorporates advanced building technologies that reduce energy consumption and minimize environmental impact, including high-performance glazing systems, efficient HVAC solutions, and renewable energy integration. Circulation paths are carefully planned to create intuitive navigation throughout the space, while strategic zoning separates public and private areas to enhance functionality. The material palette combines natural elements with contemporary finishes, creating a sophisticated aesthetic that will remain timeless for years to come.",
+  },
+  {
+    type: "video" as const,
+    src: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    title: "Project video",
+  },
+  {
+    type: "text" as const,
+    content:
+      "The integration of natural light throughout the space creates a warm and inviting atmosphere, while carefully selected materials add texture and depth to the overall design aesthetic. Large windows and strategically placed skylights ensure that daylight penetrates deep into the interior spaces, reducing the need for artificial lighting and creating a connection with the outdoor environment. The interplay of light and shadow throughout the day adds a dynamic quality to the spaces, highlighting architectural features and creating visual interest. Material selections emphasize tactile qualities and natural textures, from smooth polished surfaces to rough-hewn stone, creating a rich sensory experience that engages occupants on multiple levels.",
+  },
+  {
+    type: "image" as const,
+    src: "/Bermel_Animation_For-GIF.gif.mp4",
+    alt: "Project animation",
+  },
+  {
+    type: "text" as const,
+    content:
+      "Advanced construction techniques and attention to detail ensure that every aspect of the building meets the highest standards of quality and durability, creating a lasting legacy for generations to come. The construction process employed cutting-edge methodologies and rigorous quality control measures at every stage, from foundation to finishing touches. Skilled craftspeople worked alongside advanced technology to achieve precision in execution, ensuring that the architect's vision was realized with exacting accuracy. The building systems are designed for longevity and ease of maintenance, with careful consideration given to future adaptability and potential expansion. This commitment to excellence in construction ensures that the building will continue to serve its purpose effectively for decades to come.",
+  },
+  {
+    type: "image" as const,
+    src: "/visual1.jpg",
+    alt: "Project showcase 3",
+    fit: "contain" as const,
+  },
+]
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+function isSpecialProject(title: string): boolean {
+  return title.includes("HIDASSE") || title.includes("ARROW")
+}
+
+// ============================================================================
+// COMPONENTS
+// ============================================================================
+
+/**
+ * Project title with responsive sizing
+ */
+function ProjectTitle({ title }: { title: string }) {
+  const titleClass = isSpecialProject(title) ? "text-primary" : "text-foreground"
+
+  return (
+    <h1 className={`mb-6 ${titleClass}`} style={BLOG_DETAIL_TITLE_STYLE}>
+      {title}
+    </h1>
+  )
+}
+
+/**
+ * Project year and divider
+ */
+function ProjectYear({ year }: { year: string }) {
+  return (
+    <>
+      <p
+        className="text-sm text-muted-foreground mb-3"
+        style={{ fontFamily: "Montserrat", fontWeight: 400 }}
+      >
+        {year}
+      </p>
+      <hr className="mb-8 border-b border-border" />
+    </>
+  )
+}
+
+/**
+ * Project metadata info section
+ */
+function ProjectInfo({ project }: { project: ProjectData }) {
+  const infoItems = [
+    { label: "CLIENT", value: project.client },
+    { label: "LOCATION", value: project.location },
+    { label: "AREA", value: project.area },
+    { label: "TOPOLOGY", value: project.topology },
+    { label: "ROLE", value: project.role },
+    { label: "STATUS", value: project.status },
+  ]
+
+  return (
+    <div
+      className="space-y-1.5 mb-6 text-sm leading-7"
+      style={{ fontFamily: "Montserrat", fontWeight: 400 }}
+    >
+      {infoItems.map(({ label, value }) => (
+        <p key={label} className="text-foreground">
+          <span className="font-medium">{label}: </span>
+          <span className="text-muted-foreground font-normal">{value}</span>
+        </p>
+      ))}
+    </div>
+  )
+}
+
+/**
+ * Section header with responsive sizing
+ */
+function SectionHeader({ title }: { title: string }) {
+  return (
+    <h2 className={BLOG_DETAIL_SECTION_H2_CLASS} style={BLOG_DETAIL_SECTION_H2_STYLE}>
+      {title}
+    </h2>
+  )
+}
+
+/**
+ * Text paragraph with responsive sizing
+ */
+function TextParagraph({ content }: { content: string }) {
+  return (
+    <RichTextContent
+      content={content}
+      className={BLOG_DETAIL_BODY_CLASS}
+      style={BLOG_DETAIL_BODY_STYLE}
+    />
+  )
+}
+
+/**
+ * Image showcase — `cover` fills the frame; `contain` shows the full image with muted bands when aspect ratios differ.
+ */
+function ImageShowcase({
+  src,
+  alt,
+  fit = "cover",
+}: {
+  src: string
+  alt: string
+  fit?: "cover" | "contain"
+}) {
+  const frameClass =
+    "h-[340px] w-full max-h-[90svh] sm:h-[400px] md:h-[480px] lg:h-[580px] xl:h-[680px] 2xl:h-[900px] 3xl:h-[1050px] 4xl:h-[1200px]"
+
+  if (fit === "contain") {
+    return (
+      <div
+        className={`flex w-full items-center justify-center overflow-hidden bg-muted ${frameClass}`}
+      >
+        <img src={src} alt={alt} className="max-h-full max-w-full object-contain" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative w-full overflow-hidden">
+      <img src={src} alt={alt} className={`${frameClass} object-cover`} />
+    </div>
+  )
+}
+
+/**
+ * Video embed section
+ */
+function VideoEmbed({ src, title }: { src: string; title: string }) {
+  return (
+    <div
+      className={
+        "relative w-full overflow-hidden shadow-lg " +
+        "aspect-video min-h-[220px] max-h-[min(92svh,90rem)] " +
+        "sm:min-h-[240px] md:min-h-[260px] lg:min-h-[300px] xl:min-h-[360px] 2xl:min-h-[420px] 3xl:min-h-[480px] 4xl:min-h-[540px]"
+      }
+    >
+      <iframe
+        width="100%"
+        height="100%"
+        src={src}
+        title={title}
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="w-full h-full"
+      />
+    </div>
+  )
+}
+
+/**
+ * Animated section wrapper
+ */
+function AnimatedSection({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.section
+      className="mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14"
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT_CONFIG}
+      variants={ANIMATION_CONFIG.fadeUp}
+    >
+      {children}
+    </motion.section>
+  )
+}
+
+/**
+ * Static section without animation
+ */
+function StaticSection({ children }: { children: React.ReactNode }) {
+  return (
+    <section className="mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14">{children}</section>
+  )
+}
+
+/**
+ * Color palette display
+ */
+function ColorPalette({ colors }: { colors: string[] }) {
+  return (
+    <div className="flex gap-4 sm:gap-5 md:gap-6 lg:gap-6 xl:gap-7 2xl:gap-8 mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 flex-wrap">
+      {colors.map((hex, index) => (
+        <div key={index} className="text-center">
+          <div
+            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-16 lg:h-16 xl:w-18 xl:h-18 2xl:w-20 2xl:h-20 border border-border"
+            style={{ backgroundColor: hex }}
+          />
+          <p
+            className="text-sm mt-2 text-muted-foreground"
+            style={{ fontFamily: "Montserrat", fontWeight: 400 }}
+          >
+            {hex}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/**
+ * Main project detail content
+ */
+interface StoredPortfolioProject {
+  id: number | string
+  name: string
+  year?: string
+  client?: string
+  location?: string
+  area?: string
+  topology?: string
+  role?: string
+  status?: string
+  inspiration?: string
+  description?: string
+  features?: string[]
+  materials?: string[]
+  colorPalette?: string[]
+  beforeImage?: string
+  afterImage?: string
+  galleryImages?: string[]
+}
+
+function mapStoredProject(raw: StoredPortfolioProject): ProjectData {
+  const galleryImages = raw.galleryImages ?? []
+  return {
+    id: String(raw.id),
+    title: raw.name,
+    year: raw.year ?? "",
+    client: raw.client ?? "",
+    location: raw.location ?? "",
+    area: raw.area ?? "",
+    topology: raw.topology ?? "",
+    role: raw.role ?? "",
+    status: raw.status ?? "",
+    inspiration: raw.inspiration ?? "",
+    description: raw.description ?? "",
+    features: raw.features ?? [],
+    materials: raw.materials ?? [],
+    colorPalette: raw.colorPalette ?? [],
+    beforeAfterImages: [raw.beforeImage || "/placeholder.svg", raw.afterImage || "/placeholder.svg"],
+    galleryImages,
+    galleryAlts: galleryImages.map((_, index) => `Gallery ${index + 1}`),
+  }
+}
+
+function ProjectDetailContent({
+  projectId,
+  initialProject,
+}: {
+  projectId: string
+  initialProject: ProjectData | null
+}) {
+  const [storedProject, setStoredProject] = useState<ProjectData | null>(null)
+  const [cmsChecked, setCmsChecked] = useState(false)
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("portfolioProjects")
+      if (saved && projectId) {
+        const projects: StoredPortfolioProject[] = JSON.parse(saved)
+        const raw = projects.find((p) => String(p.id) === String(projectId))
+        if (raw) {
+          setStoredProject(mapStoredProject(raw))
+        }
+      }
+    } catch {
+      // ignore parse errors
+    } finally {
+      setCmsChecked(true)
+    }
+  }, [projectId])
+
+  const project =
+    storedProject ?? initialProject ?? getPortfolioProjectById(projectId) ?? null
+
+  if (!project && !cmsChecked && !initialProject) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
+          Loading...
+        </p>
+      </div>
+    )
+  }
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
+          Project not found
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative min-h-screen overflow-hidden scroll-smooth">
+      <div
+        className={cn(
+          "relative mx-auto w-full bg-background",
+          LANDING_LIST_TOP_PADDING,
+          LANDING_LIST_BOTTOM_PADDING,
+        )}
+      >
+        <main className="text-foreground relative font-montserrat">
+          <ProjectTitle title={project.title} />
+          <ProjectYear year={project.year} />
+          <ProjectInfo project={project} />
+
+          {/* Before/After Slider */}
+          <div className="mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 flex justify-center">
+            <BeforeAfterSlider
+              beforeImage={project.beforeAfterImages[0]}
+              afterImage={project.beforeAfterImages[1]}
+              beforeAlt="Project before renovation"
+              afterAlt="Project after renovation"
+            />
+          </div>
+
+          {/* Inspiration Section */}
+          <StaticSection>
+            <SectionHeader title="INSPIRATION" />
+            <TextParagraph content={project.inspiration} />
+          </StaticSection>
+
+          {/* Description Section */}
+          <StaticSection>
+            <SectionHeader title="DESCRIPTION" />
+            <TextParagraph content={project.description} />
+          </StaticSection>
+
+          {/* First Image */}
+          <AnimatedSection>
+            <ImageShowcase src="/room3.jpg" alt="Project showcase 1" />
+          </AnimatedSection>
+
+          {/* Dynamic Content Sections */}
+          {CONTENT_SECTIONS.map((section, index) => (
+            <AnimatedSection key={index}>
+              {section.type === "text" && <TextParagraph content={section.content} />}
+              {section.type === "image" && (
+                <ImageShowcase src={section.src} alt={section.alt} fit={section.fit} />
+              )}
+              {section.type === "video" && <VideoEmbed src={section.src} title={section.title} />}
+            </AnimatedSection>
+          ))}
+
+          {/* 360° Virtual Tour */}
+          <AnimatedSection>
+            <SectionHeader title="360° VIRTUAL TOUR" />
+            <div className="mb-6 h-[300px] w-full max-h-[min(92svh,90rem)] sm:mb-7 sm:h-[360px] md:mb-8 md:h-[420px] lg:mb-9 lg:h-[520px] xl:mb-10 xl:h-[600px] 2xl:mb-12 2xl:h-[700px] 3xl:h-[800px] 4xl:h-[900px]">
+              <PanoramaViewer
+                iframeUrl="https://nedf-studios.github.io/Lula_Beauty_Salon_360/"
+                title="360° Virtual Tour"
+              />
+            </div>
+            <p className="text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-base text-muted-foreground mt-2 sm:mt-2 md:mt-3 lg:mt-3 xl:mt-4 2xl:mt-4 text-center">
+              Drag with mouse or finger to explore in all directions • Scroll to zoom • Click fullscreen for
+              immersive view
+            </p>
+          </AnimatedSection>
+
+          {/* Features Section */}
+          <StaticSection>
+            <SectionHeader title="FEATURES" />
+            <ul
+              className="list-disc list-inside text-foreground/80 text-sm leading-7 text-justify"
+              style={BLOG_DETAIL_BODY_STYLE}
+            >
+              {project.features.map((feature, index) => (
+                <li key={index} className="mb-4 last:mb-0">
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </StaticSection>
+
+          {/* Materials Section */}
+          <StaticSection>
+            <SectionHeader title="MATERIALS" />
+            <ul
+              className="list-disc list-inside text-foreground/80 text-sm leading-7 text-justify"
+              style={BLOG_DETAIL_BODY_STYLE}
+            >
+              {project.materials.map((material, index) => (
+                <li key={index} className="mb-4 last:mb-0">
+                  {material}
+                </li>
+              ))}
+            </ul>
+          </StaticSection>
+
+          {/* Color Palette Section */}
+          <StaticSection>
+            <SectionHeader title="COLOR PALETTE" />
+            <ColorPalette colors={project.colorPalette} />
+            <ImageSlider images={project.galleryImages} alts={project.galleryAlts} gap={10} />
+          </StaticSection>
+
+          {/* Location Map */}
+          <AnimatedSection>
+            <SectionHeader title="LOCATION" />
+            <div className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px] 2xl:h-[600px]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7577!3d9.0320!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sAddis%20Ababa!5e0!3m2!1sen!2set!4v1647000000000!5m2!1sen!2set"
+                title="Project Location"
+                className="w-full h-full border-0 dark:invert dark:brightness-90 dark:contrast-125 dark:sepia-[0.1] dark:hue-rotate-[320deg] dark:saturate-150"
+                allowFullScreen
+                loading="eager"
+                referrerPolicy="no-referrer-when-downgrade"
+                style={{ pointerEvents: "auto" }}
+              />
+            </div>
+          </AnimatedSection>
+        </main>
+      </div>
+      <Subscription />
+    </div>
+  )
+}
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+/**
+ * Portfolio project detail page with optional CMS override after hydration.
+ */
+export default function PortfolioDetailClient({
+  projectId,
+  initialProject,
+}: {
+  projectId: string
+  initialProject: ProjectData | null
+}) {
+  return (
+    <Suspense
+      fallback={
+        initialProject ? (
+          <ProjectDetailContent projectId={projectId} initialProject={initialProject} />
+        ) : (
+          <div className="min-h-screen flex items-center justify-center">
+            <p className="text-muted-foreground text-sm" style={{ fontFamily: "Montserrat", fontWeight: 400 }}>
+              Loading...
+            </p>
+          </div>
+        )
+      }
+    >
+      <ProjectDetailContent projectId={projectId} initialProject={initialProject} />
+    </Suspense>
+  )
+}

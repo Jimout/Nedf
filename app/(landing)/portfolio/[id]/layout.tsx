@@ -4,6 +4,7 @@ import { getPortfolioSeoById } from "@/lib/landing-portfolio-seo"
 import {
   createArticleMetadata,
   createPageMetadata,
+  getBreadcrumbJsonLd,
   getCreativeWorkJsonLd,
 } from "@/lib/seo"
 
@@ -40,14 +41,23 @@ export default async function PortfolioDetailLayout({ children, params }: Props)
   return (
     <>
       {project ? (
-        <JsonLd
-          data={getCreativeWorkJsonLd({
-            title: project.title,
-            description: project.description,
-            path: `/portfolio/${project.id}`,
-            image: project.image,
-          })}
-        />
+        <>
+          <JsonLd
+            data={getCreativeWorkJsonLd({
+              title: project.title,
+              description: project.description,
+              path: `/portfolio/${project.id}`,
+              image: project.image,
+            })}
+          />
+          <JsonLd
+            data={getBreadcrumbJsonLd([
+              { name: "Home", path: "/" },
+              { name: "Portfolio", path: "/portfolio" },
+              { name: project.title, path: `/portfolio/${project.id}` },
+            ])}
+          />
+        </>
       ) : null}
       {children}
     </>

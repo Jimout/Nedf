@@ -9,6 +9,7 @@ import { DynamicBackground } from "@/components/dynamic-background"
 import SplashScreenWrapper from "@/components/SplashScreenWrapper"
 import AnimatedFavicon from "@/components/AnimatedFavicon"
 import {
+  DEFAULT_OG_IMAGE,
   SITE_DESCRIPTION,
   SITE_NAME,
   getSiteUrl,
@@ -39,13 +40,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [{ url: "/room1.jpg", alt: SITE_NAME }],
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: ["/room1.jpg"],
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,

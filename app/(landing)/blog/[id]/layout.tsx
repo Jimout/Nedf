@@ -5,6 +5,7 @@ import {
   createArticleMetadata,
   createPageMetadata,
   getArticleJsonLd,
+  getBreadcrumbJsonLd,
 } from "@/lib/seo"
 
 type Props = {
@@ -30,6 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.description,
     path: `/blog/${post.id}`,
     image: post.image,
+    publishedAt: post.publishedAt,
+    updatedAt: post.updatedAt,
   })
 }
 
@@ -40,14 +43,25 @@ export default async function BlogDetailLayout({ children, params }: Props) {
   return (
     <>
       {post ? (
-        <JsonLd
-          data={getArticleJsonLd({
-            title: post.title,
-            description: post.description,
-            path: `/blog/${post.id}`,
-            image: post.image,
-          })}
-        />
+        <>
+          <JsonLd
+            data={getArticleJsonLd({
+              title: post.title,
+              description: post.description,
+              path: `/blog/${post.id}`,
+              image: post.image,
+              publishedAt: post.publishedAt,
+              updatedAt: post.updatedAt,
+            })}
+          />
+          <JsonLd
+            data={getBreadcrumbJsonLd([
+              { name: "Home", path: "/" },
+              { name: "Studio Notes", path: "/blog" },
+              { name: post.title, path: `/blog/${post.id}` },
+            ])}
+          />
+        </>
       ) : null}
       {children}
     </>

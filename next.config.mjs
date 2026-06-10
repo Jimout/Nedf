@@ -57,6 +57,20 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog_detail",
+        destination: "/blog",
+        permanent: true,
+      },
+      {
+        source: "/dashbord-login",
+        destination: "/dashboard-login",
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig
