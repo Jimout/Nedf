@@ -77,9 +77,14 @@ function getArcConfig(viewportWidth: number) {
   return ARC_CONFIG.DESKTOP
 }
 
+function getViewportHeight(): number {
+  if (typeof window === "undefined") return 0
+  return window.visualViewport?.height ?? window.innerHeight
+}
+
 function calculateScrollProgress(element: HTMLDivElement): number {
   const rect = element.getBoundingClientRect()
-  const windowHeight = window.innerHeight
+  const windowHeight = getViewportHeight()
   const elementTop = rect.top
   const elementHeight = rect.height
 
@@ -88,22 +93,20 @@ function calculateScrollProgress(element: HTMLDivElement): number {
 
 // ==================== MAIN COMPONENT ====================
 
-/** Lerp factor: higher = snappier (trackpad / wheel), still smooth for touch momentum */
-const DISPLAY_PROGRESS_LERP = 0.22
-/** Stop RAF chain when smoothed value has nearly caught raw scroll progress */
-const PROGRESS_EPSILON = 0.0012
-/** Skip React re-render when progress barely changed (wheel / trackpad micro-deltas) */
-const RENDER_EPSILON = 0.00035
+/** Min change before React re-render (keeps touch 1:1 without blocking the main thread) */
+const PROGRESS_RENDER_EPSILON = 0.002
 
 export default function Steps() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const rafIdRef = useRef<number | null>(null)
   const displayProgressRef = useRef(0)
   const viewportWidthRef = useRef(0)
+  const viewportHeightRef = useRef(0)
 
   const [stepsData, setStepsData] = useState<StepItem[]>(() => loadSteps())
   const [displayProgress, setDisplayProgress] = useState(0)
   const [viewportWidth, setViewportWidth] = useState(0)
+  const [viewportHeight, setViewportHeight] = useState(0)
   const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
@@ -127,77 +130,60 @@ export default function Steps() {
     return () => observer.disconnect()
   }, [])
 
-  // Track viewport width
+  // Track viewport size (visualViewport keeps touch / mobile browser chrome stable)
   useEffect(() => {
-    const w = window.innerWidth
-    viewportWidthRef.current = w
-    setViewportWidth(w)
-    const handleResize = () => {
-      const ww = window.innerWidth
-      viewportWidthRef.current = ww
-      setViewportWidth(ww)
+    const syncViewport = () => {
+      const w = window.innerWidth
+      const h = getViewportHeight()
+      viewportWidthRef.current = w
+      viewportHeightRef.current = h
+      setViewportWidth(w)
+      setViewportHeight(h)
     }
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
+
+    syncViewport()
+    window.addEventListener("resize", syncViewport)
+    window.visualViewport?.addEventListener("resize", syncViewport)
+
+    return () => {
+      window.removeEventListener("resize", syncViewport)
+      window.visualViewport?.removeEventListener("resize", syncViewport)
+    }
   }, [])
 
-  // Scroll-linked progress: one RAF chain, lerp toward raw progress, stops when idle
-  // (fixes infinite mobile RAF + evens out wheel / trackpad / touch momentum)
+  // Scroll-linked progress: track finger 1:1; batch via rAF; skip micro re-renders
   useEffect(() => {
     if (stepsData.length === 0) return
 
-    const scheduleTick = () => {
-      if (rafIdRef.current != null) return
-      rafIdRef.current = requestAnimationFrame(tick)
-    }
-
-    const tick = () => {
+    const applyProgress = () => {
       const el = sectionRef.current
-      if (!el || stepsData.length === 0) {
-        rafIdRef.current = null
-        return
-      }
+      if (!el) return
 
       const raw = calculateScrollProgress(el)
-      const prev = displayProgressRef.current
-      const next = prev + (raw - prev) * DISPLAY_PROGRESS_LERP
-      displayProgressRef.current = next
+      displayProgressRef.current = raw
 
-      setDisplayProgress((p) =>
-        Math.abs(p - next) < RENDER_EPSILON ? p : next
-      )
+      setDisplayProgress((prev) => {
+        if (Math.abs(prev - raw) < PROGRESS_RENDER_EPSILON) return prev
+        return raw
+      })
+    }
 
-      const converged = Math.abs(raw - next) < PROGRESS_EPSILON
-      if (converged) {
-        if (displayProgressRef.current !== raw) {
-          displayProgressRef.current = raw
-          setDisplayProgress(raw)
-        }
+    const scheduleUpdate = () => {
+      if (rafIdRef.current != null) return
+      rafIdRef.current = requestAnimationFrame(() => {
+        applyProgress()
         rafIdRef.current = null
-        return
-      }
-
-      rafIdRef.current = requestAnimationFrame(tick)
+      })
     }
 
-    const handleScrollOrResize = () => {
-      scheduleTick()
-    }
+    applyProgress()
 
-    if (sectionRef.current) {
-      const initial = calculateScrollProgress(sectionRef.current)
-      displayProgressRef.current = initial
-      setDisplayProgress(initial)
-    }
-
-    window.addEventListener("scroll", handleScrollOrResize, { passive: true })
-    window.addEventListener("resize", handleScrollOrResize)
-
-    scheduleTick()
+    window.addEventListener("scroll", scheduleUpdate, { passive: true })
+    window.addEventListener("resize", scheduleUpdate)
 
     return () => {
-      window.removeEventListener("scroll", handleScrollOrResize)
-      window.removeEventListener("resize", handleScrollOrResize)
+      window.removeEventListener("scroll", scheduleUpdate)
+      window.removeEventListener("resize", scheduleUpdate)
       if (rafIdRef.current != null) {
         cancelAnimationFrame(rafIdRef.current)
         rafIdRef.current = null
@@ -214,8 +200,8 @@ export default function Steps() {
     // have a real viewport, so we fall back to 0 and let the client-side
     // effect populate the correct values after hydration.
     const isBrowser = typeof window !== "undefined"
-    const vw = viewportWidth || (isBrowser ? window.innerWidth : 0)
-    const vh = isBrowser ? window.innerHeight : 0
+    const vw = viewportWidth || viewportWidthRef.current || (isBrowser ? window.innerWidth : 0)
+    const vh = viewportHeight || viewportHeightRef.current || (isBrowser ? getViewportHeight() : 0)
     
     const arcConfig = getArcConfig(vw)
     
@@ -262,7 +248,7 @@ export default function Steps() {
     return { opacity, scale }
   }
 
-  const progressForRender = displayProgress
+  const progressForRender = displayProgressRef.current
   const activeIndexForRender = Math.min(
     Math.floor(displayProgress * stepsData.length),
     stepsData.length - 1
@@ -330,10 +316,10 @@ export default function Steps() {
             <div className="absolute top-[58%] sm:top-[55%] lg:top-[58%] xl:top-[60%] 2xl:top-[62%] left-1/2 transform -translate-x-1/2 w-full mt-10 sm:mt-14 md:mt-20 lg:mt-24 xl:mt-0">
               <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-7xl 3xl:max-w-[80rem] 4xl:max-w-[96rem] mx-auto text-center px-4 sm:px-6 md:px-8">
                 <div
+                  className="pointer-events-none touch-pan-y"
                   style={{
                     opacity: textOpacity,
                     transform: `scale(${textScale})`,
-                    pointerEvents: textOpacity > 0.1 ? "auto" : "none",
                   }}
                 >
                   <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5 xl:space-y-6 2xl:space-y-8 3xl:space-y-10 4xl:space-y-12">
