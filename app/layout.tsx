@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { DynamicBackground } from "@/components/dynamic-background"
 import SplashScreenWrapper from "@/components/SplashScreenWrapper"
+import AnimatedFavicon from "@/components/AnimatedFavicon"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
   description: "We are a fully integrated Design firm based in Addis Ababa, Ethiopia. We craft perfection through every line and form.",
   generator: "v0.app",
   icons: {
-    icon: "/FAV ICON 180x180.png",
-    shortcut: "/FAV ICON 180x180.png",
-    apple: "/FAV ICON 180x180.png",
+    icon: "/Fav-2.png",
+    shortcut: "/Fav-2.png",
+    apple: "/Fav-2.png",
   },
 }
 
@@ -34,6 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={montserrat.variable}>
       <body className={`${montserrat.className} font-sans antialiased bg-background`}>
+        <AnimatedFavicon />
         <SplashScreenWrapper />
         <DynamicBackground />
         <ThemeProvider 
