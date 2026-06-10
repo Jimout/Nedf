@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
 import Pagination from "@/components/Pagination"
-import { Button } from "@/components/ui/button"
 import Subscription from "@/components/Subscription"
+import LandingListHeader from "@/components/LandingListHeader"
+import LandingFilterTags from "@/components/LandingFilterTags"
 
 // ============================================================================
 // TYPES
@@ -93,6 +94,33 @@ const BLOG_POSTS: Post[] = [
 
 const POSTS_PER_PAGE = 6
 
+const BLOG_FILTER_TAGS = [
+  "All",
+  "Architecture",
+  "Design",
+  "Interior",
+  "Studio Life",
+  "Materials",
+  "Tech",
+] as const
+
+type FilterTag = (typeof BLOG_FILTER_TAGS)[number]
+
+const TAG_MATCHERS: Record<Exclude<FilterTag, "All">, string[]> = {
+  Architecture: ["Architecture", "Case File"],
+  Design: ["Design", "Design Thinking"],
+  Interior: ["Interior", "Interior Design"],
+  "Studio Life": ["Studio Life", "Behind the Scenes", "Workflow"],
+  Materials: ["Materials"],
+  Tech: ["Tech", "AI"],
+}
+
+function postMatchesTag(post: Post, activeTag: FilterTag): boolean {
+  if (activeTag === "All") return true
+  const matchers = TAG_MATCHERS[activeTag]
+  return post.categories.some((cat) => matchers.includes(cat))
+}
+
 /** Same grid enter/exit as `PortfolioPageClient` (subtle vertical motion, no horizontal slide) */
 const ANIMATION_CONFIG = {
   grid: {
@@ -131,17 +159,19 @@ function calculateTextLines(title: string, categories: string[]): number {
   return Math.max(TEXT_CLAMP_CONFIG.minLines, lines)
 }
 
-function filterPosts(posts: Post[], searchQuery: string): Post[] {
-  if (!searchQuery) return posts
-
+function filterPosts(posts: Post[], activeTag: FilterTag, searchQuery: string): Post[] {
   const query = searchQuery.toLowerCase()
 
-  return posts.filter(
-    (post) =>
+  return posts.filter((post) => {
+    const matchesTag = postMatchesTag(post, activeTag)
+    const matchesSearch =
+      !query ||
       post.title.toLowerCase().includes(query) ||
       post.description.toLowerCase().includes(query) ||
       post.categories.some((cat) => cat.toLowerCase().includes(query))
-  )
+
+    return matchesTag && matchesSearch
+  })
 }
 
 function paginatePosts(posts: Post[], currentPage: number): Post[] {
@@ -153,28 +183,6 @@ function paginatePosts(posts: Post[], currentPage: number): Post[] {
 // ============================================================================
 // COMPONENTS
 // ============================================================================
-
-/**
- * Search bar with responsive sizing
- */
-function SearchBar({ value, onChange }: { value: string; onChange: (value: string) => void }) {
-  return (
-    <div className="flex justify-center w-full">
-      <div className="flex w-full max-w-md">
-        <input
-          type="text"
-          placeholder="Search articles..."
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="flex-1 px-4 py-2 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-        />
-        <button className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors whitespace-nowrap">
-          Search
-        </button>
-      </div>
-    </div>
-  )
-}
 
 /**
  * Blog post card with responsive sizing
@@ -227,12 +235,13 @@ function BlogPostCard({ post, onReadMore }: { post: Post; onReadMore: (id: numbe
         </div>
 
         <div className="flex justify-end">
-          <Button
+          <button
+            type="button"
             onClick={() => onReadMore(post.id)}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs px-3 py-2"
+            className="inline-flex items-center justify-center rounded-none bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-md active:translate-y-0 active:scale-[0.98]"
           >
             Read More
-          </Button>
+          </button>
         </div>
       </div>
     </article>
@@ -242,7 +251,15 @@ function BlogPostCard({ post, onReadMore }: { post: Post; onReadMore: (id: numbe
 /**
  * Blog grid with animation
  */
-function BlogGrid({ posts, animationKey, onReadMore }: { posts: Post[]; animationKey: number; onReadMore: (id: number) => void }) {
+function BlogGrid({
+  posts,
+  animationKey,
+  onReadMore,
+}: {
+  posts: Post[]
+  animationKey: string
+  onReadMore: (id: number) => void
+}) {
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -251,7 +268,7 @@ function BlogGrid({ posts, animationKey, onReadMore }: { posts: Post[]; animatio
         animate={ANIMATION_CONFIG.grid.animate}
         exit={ANIMATION_CONFIG.grid.exit}
         transition={ANIMATION_CONFIG.grid.transition}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5 gap-6"
       >
         {posts.map((post) => (
           <BlogPostCard key={post.id} post={post} onReadMore={onReadMore} />
@@ -269,11 +286,15 @@ function BlogGrid({ posts, animationKey, onReadMore }: { posts: Post[]; animatio
  * Blog page with search, filtering, and pagination
  */
 export default function BlogPage() {
+  const [activeTag, setActiveTag] = useState<FilterTag>("All")
   const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
   const router = useRouter()
 
-  const filteredPosts = useMemo(() => filterPosts(BLOG_POSTS, search), [search])
+  const filteredPosts = useMemo(
+    () => filterPosts(BLOG_POSTS, activeTag, search),
+    [activeTag, search],
+  )
 
   const paginatedPosts = useMemo(() => paginatePosts(filteredPosts, page), [filteredPosts, page])
 
@@ -284,46 +305,52 @@ export default function BlogPage() {
     setPage(1)
   }
 
+  const handleTagChange = (tag: FilterTag) => {
+    setActiveTag(tag)
+    setPage(1)
+  }
+
   const handleReadMore = (id: number) => {
     router.push(`/blog/${id}`)
   }
 
+  const animationKey = `${page}-${activeTag}-${search}`
+
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {/* Header + Search */}
-      <section className="w-full pt-12 pb-8 text-center">
-        <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
-          Our Blog: Stories & Insights
-        </h1>
-        <p className="text-lg text-muted-foreground mb-8">
-          Discover design thinking, project stories, and ideas shaping architecture & interior design.
-        </p>
+    <>
+      <div className="overflow-x-hidden">
+        <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-background">
+          <LandingListHeader
+            searchValue={search}
+            onSearchChange={handleSearchChange}
+            searchPlaceholder="Search articles..."
+          />
 
-        <SearchBar value={search} onChange={handleSearchChange} />
-      </section>
+          <LandingFilterTags
+            id="blog-filter"
+            tags={BLOG_FILTER_TAGS}
+            activeTag={activeTag}
+            onTagChange={handleTagChange}
+          />
 
-      {/* Blog Grid */}
-      <section className="w-full pb-8">
-        <BlogGrid posts={paginatedPosts} animationKey={page} onReadMore={handleReadMore} />
+          <BlogGrid posts={paginatedPosts} animationKey={animationKey} onReadMore={handleReadMore} />
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-6 flex justify-end">
-            <Pagination page={page} setPage={setPage} total={totalPages} />
-          </div>
-        )}
+          {totalPages > 1 && (
+            <div className="mt-6 sm:mt-7 md:mt-8 lg:mt-9 xl:mt-10 2xl:mt-12">
+              <Pagination page={page} setPage={setPage} total={totalPages} />
+            </div>
+          )}
 
-        {/* Empty State */}
-        {filteredPosts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground text-sm sm:text-base">
-              No articles found matching your search.
-            </p>
-          </div>
-        )}
-      </section>
-
+          {filteredPosts.length === 0 && (
+            <div className="text-center py-12 sm:py-14 md:py-16 lg:py-18 xl:py-20 2xl:py-24">
+              <p className="text-muted-foreground text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg">
+                No articles found matching your filters.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
       <Subscription />
-    </div>
+    </>
   )
 }

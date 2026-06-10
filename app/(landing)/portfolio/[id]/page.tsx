@@ -9,6 +9,11 @@ import ImageSlider from "@/components/ImageSlider"
 import PanoramaViewer from "@/components/PanoramaViewer"
 import Subscription from "@/components/Subscription"
 import { RichTextContent } from "@/components/rich-text-content"
+import {
+  LANDING_LIST_BOTTOM_PADDING,
+  LANDING_LIST_TOP_PADDING,
+} from "@/lib/constants"
+import { cn } from "@/lib/utils"
 
 // ============================================================================
 // TYPES
@@ -456,7 +461,13 @@ function ProjectDetailContent() {
 
   return (
     <div className="relative min-h-screen overflow-hidden scroll-smooth">
-      <div className="relative mx-auto w-full py-8 sm:py-9 md:py-10 lg:py-11 xl:py-12 2xl:py-14 bg-background">
+      <div
+        className={cn(
+          "relative mx-auto w-full bg-background",
+          LANDING_LIST_TOP_PADDING,
+          LANDING_LIST_BOTTOM_PADDING,
+        )}
+      >
         <main className="text-foreground relative font-montserrat">
           <ProjectTitle title={project.title} />
           <ProjectYear year={project.year} />

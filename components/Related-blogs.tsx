@@ -26,8 +26,12 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
         setItemsPerSlide(1)
       } else if (width < 1024) {
         setItemsPerSlide(2)
-      } else {
+      } else if (width < 1536) {
         setItemsPerSlide(3)
+      } else if (width < 2560) {
+        setItemsPerSlide(4)
+      } else {
+        setItemsPerSlide(5)
       }
     }
 
@@ -53,7 +57,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
       ) : (
         <div className="relative">
           {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 4xl:grid-cols-5 gap-6">
             {visiblePosts.map((post) => (
               <article
                 key={post.id}
@@ -65,7 +69,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                     alt={post.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, (max-width: 2560px) 25vw, 20vw"
                   />
                 </div>
 
@@ -94,7 +98,7 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                   <div className="flex justify-end">
                     <button
                       onClick={() => (window.location.href = `/blog-detail?id=${post.id}`)}
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs px-3 py-2 transition"
+                      className="bg-primary text-primary-foreground text-xs px-3 py-2 transition-all duration-300 hover:bg-primary/90 hover:brightness-110 active:scale-[0.98]"
                     >
                       Read More
                     </button>

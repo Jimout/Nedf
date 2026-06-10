@@ -24,7 +24,7 @@ export default function Pagination({ page, setPage, total }: PaginationProps) {
         <button
           onClick={handlePrev}
           disabled={page === 1}
-          className={`px-3 sm:px-4 py-2 2xl:px-6 2xl:py-3 3xl:px-8 3xl:py-4 4xl:px-10 4xl:py-5 bg-white dark:bg-white/10 text-black dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors`}
+          className={`px-3 sm:px-4 py-2 2xl:px-6 2xl:py-3 3xl:px-8 3xl:py-4 4xl:px-10 4xl:py-5 bg-white dark:bg-white/10 text-black dark:text-white/40 hover:bg-gray-100 dark:hover:bg-white/20 hover:brightness-95 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:active:scale-100 transition-all duration-300`}
           aria-label="Previous page"
         >
           <ArrowLeft size={18} className="w-4 h-4 sm:w-5 sm:h-5 2xl:w-6 2xl:h-6 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8" />
@@ -39,7 +39,7 @@ export default function Pagination({ page, setPage, total }: PaginationProps) {
         <button
           onClick={handleNext}
           disabled={page === total}
-          className={`px-3 sm:px-4 py-2 2xl:px-6 2xl:py-3 3xl:px-8 3xl:py-4 4xl:px-10 4xl:py-5 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#001F4B]/80 dark:hover:bg-[#ec1e24]/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors`}
+          className={`px-3 sm:px-4 py-2 2xl:px-6 2xl:py-3 3xl:px-8 3xl:py-4 4xl:px-10 4xl:py-5 bg-[#001F4B] dark:bg-[#ec1e24] text-white hover:bg-[#001F4B]/80 dark:hover:bg-[#ec1e24]/80 hover:brightness-110 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:active:scale-100 transition-all duration-300`}
           aria-label="Next page"
         >
           <ArrowRight size={18} className="w-4 h-4 sm:w-5 sm:h-5 2xl:w-6 2xl:h-6 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8" />

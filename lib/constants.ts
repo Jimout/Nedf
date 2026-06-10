@@ -74,6 +74,13 @@ export const PAGE_GUTTERS =
 export const LANDING_MAIN_GUTTERS =
   "lg:px-12 xl:px-14 2xl:px-28 3xl:px-32 4xl:px-36"
 
+/** Top/bottom spacing below navbar — blog & portfolio list + detail pages */
+export const LANDING_LIST_TOP_PADDING =
+  "pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14"
+
+export const LANDING_LIST_BOTTOM_PADDING =
+  "pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24"
+
 /** localStorage key for The Crew / founders (dashboard-managed) */
 export const LANDING_CREW_KEY = "landingCrew"
 

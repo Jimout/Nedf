@@ -11,6 +11,11 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { RichTextContent } from "@/components/rich-text-content"
+import {
+  LANDING_LIST_BOTTOM_PADDING,
+  LANDING_LIST_TOP_PADDING,
+} from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import { BlogSubscribeSidebar } from "@/components/BlogSubscribeSidebar"
 
 /** Same scroll-in animation as `app/(landing)/portfolio/[id]/page.tsx` */
@@ -52,7 +57,7 @@ function AnimatedSection({
 const BLOG_DETAIL_GRID =
   "flex flex-col lg:grid lg:grid-cols-[380px_minmax(0,1fr)] lg:gap-10 2xl:grid-cols-[380px_minmax(0,1fr)_380px] 3xl:grid-cols-[400px_minmax(0,1fr)_400px] 4xl:grid-cols-[420px_minmax(0,1fr)_420px]"
 const STICKY_TOC_ASIDE = "hidden lg:block"
-const STICKY_TOC_INNER = "sticky top-2 pt-14 z-10"
+const STICKY_TOC_INNER = "sticky top-14 z-10"
 const STICKY_TOC_PANEL =
   "bg-card border border-border overflow-hidden flex flex-col max-h-[calc(100vh-0.75rem)]"
 
@@ -110,8 +115,8 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
 
   return (
     <div className="relative min-h-screen flex flex-col scroll-smooth">
-      <div className="flex-1 py-8 bg-background">
-        <main className="flex-1 flex flex-col gap-8 relative w-full">
+      <div className={cn("flex-1 bg-background", LANDING_LIST_TOP_PADDING, LANDING_LIST_BOTTOM_PADDING)}>
+        <main className="flex-1 flex flex-col relative w-full">
           <div className={BLOG_DETAIL_GRID}>
             <aside className={STICKY_TOC_ASIDE}>
               <div className={STICKY_TOC_INNER}>
@@ -148,7 +153,7 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
               </div>
             </aside>
 
-            <article className="flex-1 relative lg:pt-14 min-w-0">
+            <article className="flex-1 relative min-w-0">
               <AnimatedSection className="mb-6">
                 <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
                   <Image
@@ -344,8 +349,8 @@ function StaticBlogDetailPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col scroll-smooth">
-      <div className="flex-1 py-8 bg-background">
-        <main className="flex-1 flex flex-col gap-8 relative w-full">
+      <div className={cn("flex-1 bg-background", LANDING_LIST_TOP_PADDING, LANDING_LIST_BOTTOM_PADDING)}>
+        <main className="flex-1 flex flex-col relative w-full">
           <div className={BLOG_DETAIL_GRID}>
             <aside className={STICKY_TOC_ASIDE}>
               <div className={STICKY_TOC_INNER}>
@@ -390,7 +395,7 @@ function StaticBlogDetailPage() {
             </aside>
 
             {/* Blog Content - top padding on lg so content aligns with TOC */}
-            <article className="flex-1 relative lg:pt-14 min-w-0">
+            <article className="flex-1 relative min-w-0">
               {showMobileTOC && (
               <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
                 <button

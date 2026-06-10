@@ -3,11 +3,12 @@
 import { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
-import { Search } from "lucide-react"
 import Pagination from "@/components/Pagination"
 import { AnimatePresence, motion } from "framer-motion"
 import Link from "next/link"
 import Subscription from "@/components/Subscription"
+import LandingListHeader from "@/components/LandingListHeader"
+import LandingFilterTags from "@/components/LandingFilterTags"
 
 type ProjectCategory = "Architecture" | "Interior" | "Visualization"
 
@@ -75,50 +76,6 @@ function paginateProjects(projects: Project[], currentPage: number): Project[] {
   return projects.slice(startIndex, endIndex)
 }
 
-function SearchBar({ value, onChange }: { value: string; onChange: (value: string) => void }) {
-  return (
-    <div className="relative mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12" id="search">
-      <Search className="absolute left-3 sm:left-3 md:left-4 lg:left-4 xl:left-4 2xl:left-5 top-1/2 -translate-y-1/2 text-primary opacity-40 w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6" />
-      <input
-        type="text"
-        placeholder="Search projects..."
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full pl-10 sm:pl-10 md:pl-12 lg:pl-12 xl:pl-12 2xl:pl-14 pr-4 sm:pr-4 md:pr-5 lg:pr-5 xl:pr-6 2xl:pr-6 py-2.5 sm:py-2.5 md:py-3 lg:py-3 xl:py-3.5 2xl:py-4 text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg rounded-2xl sm:rounded-2xl md:rounded-3xl lg:rounded-3xl xl:rounded-3xl 2xl:rounded-3xl text-foreground placeholder-muted-foreground/70 bg-muted/30 transition-all duration-300 ease-in-out
-        focus:bg-background focus:border focus:border-border focus:text-foreground focus:placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
-      />
-    </div>
-  )
-}
-
-function FilterTags({
-  tags,
-  activeTag,
-  onTagChange,
-}: {
-  tags: FilterTag[]
-  activeTag: FilterTag
-  onTagChange: (tag: FilterTag) => void
-}) {
-  return (
-    <div id="portfolio-filter" className="flex gap-8 sm:gap-9 md:gap-10 lg:gap-11 xl:gap-12 2xl:gap-14 border-b border-border mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10 2xl:mb-12 overflow-x-auto no-scrollbar">
-      {tags.map((tag) => (
-        <button
-          key={tag}
-          onClick={() => onTagChange(tag)}
-          className={`pb-1 sm:pb-1 md:pb-1.5 lg:pb-1.5 xl:pb-2 2xl:pb-2 text-xs sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base font-medium whitespace-nowrap transition-all duration-300 ${
-            activeTag === tag
-              ? "text-primary border-b-2 border-primary"
-              : "text-muted-foreground hover:text-primary/80"
-          }`}
-        >
-          {tag}
-        </button>
-      ))}
-    </div>
-  )
-}
-
 function ProjectCard({ project, index, isDesktop }: { project: Project; index: number; isDesktop: boolean }) {
   return (
     <Link
@@ -169,7 +126,7 @@ function ProjectGrid({
     <AnimatePresence mode="wait">
       <motion.div
         key={animationKey}
-        className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-3 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 2xl:gap-6"
+        className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-3 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 2xl:gap-6"
         initial={ANIMATION_CONFIG.grid.initial}
         animate={ANIMATION_CONFIG.grid.animate}
         exit={ANIMATION_CONFIG.grid.exit}
@@ -247,9 +204,18 @@ export default function PortfolioPageClient() {
     <>
       <div className="overflow-x-hidden">
         <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-background">
-          <SearchBar value={search} onChange={handleSearchChange} />
+          <LandingListHeader
+            searchValue={search}
+            onSearchChange={handleSearchChange}
+            searchPlaceholder="Search projects..."
+          />
 
-          <FilterTags tags={FILTER_TAGS} activeTag={activeTag} onTagChange={handleTagChange} />
+          <LandingFilterTags
+            id="portfolio-filter"
+            tags={FILTER_TAGS}
+            activeTag={activeTag}
+            onTagChange={handleTagChange}
+          />
 
           <ProjectGrid projects={paginatedProjects} animationKey={animationKey} isDesktop={isDesktop} />
 
