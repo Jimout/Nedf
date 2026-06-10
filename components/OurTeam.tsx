@@ -285,7 +285,6 @@ export function OurTeam() {
             currentIndex={currentIndex}
             totalPages={totalPages}
             onPageChange={handlePageChange}
-            onDotClick={setCurrentIndex}
           />
         )}
       </div>
@@ -342,48 +341,22 @@ function NavigationControls({
   currentIndex,
   totalPages,
   onPageChange,
-  onDotClick,
 }: {
   currentIndex: number
   totalPages: number
   onPageChange: (page: number) => void
-  onDotClick: (index: number) => void
 }) {
   return (
-    <>
-      {/* Mobile & Tablet - Dot indicators; tap targets ≥44px */}
-      <div className="flex justify-center gap-1.5 sm:gap-2 md:gap-2 lg:hidden mt-4 sm:mt-5 md:mt-6 3xl:mt-12 4xl:mt-14">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index}
-            onClick={() => onDotClick(index)}
-            className="group min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full transition-all duration-300"
-            aria-label={`Go to page ${index + 1}`}
-          >
-            <span
-              className={cn(
-                "w-2 h-2 rounded-full block transition-all duration-300",
-                currentIndex === index
-                  ? "bg-[#001F4B] dark:bg-[#ec1e24] scale-125"
-                  : "bg-gray-300 dark:bg-gray-600 group-hover:bg-gray-400 dark:group-hover:bg-gray-500"
-              )}
-            />
-          </button>
-        ))}
-      </div>
-
-      {/* Desktop - Pagination */}
-      <div className="hidden lg:flex justify-center mt-10 lg:mt-11 xl:mt-12 2xl:mt-14 3xl:mt-16 4xl:mt-20">
-        <Pagination
-          page={currentIndex + 1}
-          setPage={(value) => {
-            const next =
-              typeof value === "function" ? value(currentIndex + 1) : value
-            onPageChange(next)
-          }}
-          total={totalPages}
-        />
-      </div>
-    </>
+    <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-10 xl:mt-11 2xl:mt-14 3xl:mt-16 4xl:mt-20">
+      <Pagination
+        page={currentIndex + 1}
+        setPage={(value) => {
+          const next =
+            typeof value === "function" ? value(currentIndex + 1) : value
+          onPageChange(next)
+        }}
+        total={totalPages}
+      />
+    </div>
   )
 }

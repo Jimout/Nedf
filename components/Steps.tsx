@@ -77,6 +77,13 @@ function getArcConfig(viewportWidth: number) {
   return ARC_CONFIG.DESKTOP
 }
 
+function getCircleScale(viewportWidth: number): number {
+  if (viewportWidth >= 2560) return 3.35
+  if (viewportWidth >= 1920) return 3.55
+  if (viewportWidth >= BREAKPOINTS.ULTRA_WIDE) return 3.75
+  return ANIMATION_CONFIG.CIRCLE_SCALE
+}
+
 function getViewportHeight(): number {
   if (typeof window === "undefined") return 0
   return window.visualViewport?.height ?? window.innerHeight
@@ -217,7 +224,7 @@ export default function Steps() {
       x: arcX, 
       y: arcY, 
       opacity, 
-      scale: ANIMATION_CONFIG.CIRCLE_SCALE, 
+      scale: getCircleScale(vw), 
       rotation, 
       vw, 
       vh 
@@ -298,12 +305,12 @@ export default function Steps() {
                 willChange: "transform, opacity",
               }}
             >
-              <div className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] xl:w-[60px] xl:h-[60px] 2xl:w-[110px] 2xl:h-[110px] 3xl:w-[130px] 3xl:h-[130px] 4xl:w-[150px] 4xl:h-[150px] relative">
+              <div className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] xl:w-[60px] xl:h-[60px] 2xl:w-[100px] 2xl:h-[100px] 3xl:w-[118px] 3xl:h-[118px] 4xl:w-[136px] 4xl:h-[136px] relative">
                 <div 
                   className="w-full h-full rounded-full flex items-center justify-center bg-foreground dark:bg-primary-foreground"
                 >
                   <span 
-                    className="text-[5px] sm:text-[6px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[20px] font-bold text-center px-1 leading-tight text-primary-foreground dark:text-background"
+                    className="text-[5px] sm:text-[6px] md:text-[8px] lg:text-[8px] xl:text-[10px] 2xl:text-[16px] 3xl:text-[18px] 4xl:text-[19px] font-bold text-center px-1 leading-tight text-primary-foreground dark:text-background"
                     style={{ opacity: opacity > 0.9 ? 1 : 0 }}
                   >
                     {activeStep.name}
@@ -314,7 +321,7 @@ export default function Steps() {
 
             {/* Description Text - gap from circle only on sm/md/lg */}
             <div className="absolute top-[58%] sm:top-[55%] lg:top-[58%] xl:top-[60%] 2xl:top-[62%] left-1/2 transform -translate-x-1/2 w-full mt-10 sm:mt-14 md:mt-20 lg:mt-24 xl:mt-0">
-              <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-7xl 3xl:max-w-[80rem] 4xl:max-w-[96rem] mx-auto text-center px-4 sm:px-6 md:px-8">
+              <div className="max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-2xl 3xl:max-w-3xl 4xl:max-w-4xl mx-auto text-center px-4 sm:px-6 md:px-8">
                 <div
                   className="pointer-events-none touch-pan-y"
                   style={{
