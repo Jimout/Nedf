@@ -11,6 +11,7 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { RichTextContent } from "@/components/rich-text-content"
+import { BlogSubscribeSidebar } from "@/components/BlogSubscribeSidebar"
 
 /** Same scroll-in animation as `app/(landing)/portfolio/[id]/page.tsx` */
 const ANIMATION_CONFIG = {
@@ -47,6 +48,13 @@ function AnimatedSection({
     </motion.section>
   )
 }
+
+const BLOG_DETAIL_GRID =
+  "flex flex-col lg:grid lg:grid-cols-[380px_minmax(0,1fr)] lg:gap-10 2xl:grid-cols-[380px_minmax(0,1fr)_380px] 3xl:grid-cols-[400px_minmax(0,1fr)_400px] 4xl:grid-cols-[420px_minmax(0,1fr)_420px]"
+const STICKY_TOC_ASIDE = "hidden lg:block"
+const STICKY_TOC_INNER = "sticky top-2 pt-14 z-10"
+const STICKY_TOC_PANEL =
+  "bg-card border border-border overflow-hidden flex flex-col max-h-[calc(100vh-0.75rem)]"
 
 interface TocItem {
   id: string
@@ -104,13 +112,14 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
     <div className="relative min-h-screen flex flex-col scroll-smooth">
       <div className="flex-1 py-8 bg-background">
         <main className="flex-1 flex flex-col gap-8 relative w-full">
-          <div className="flex flex-col lg:flex-row gap-10">
-            <aside className="hidden lg:block lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
-              <div className="bg-card border border-border overflow-hidden">
-                <div className="border-b border-border px-6 py-5 bg-muted">
+          <div className={BLOG_DETAIL_GRID}>
+            <aside className={STICKY_TOC_ASIDE}>
+              <div className={STICKY_TOC_INNER}>
+                <div className={STICKY_TOC_PANEL}>
+                <div className="border-b border-border px-6 py-5 bg-muted shrink-0">
                   <h2 className="text-sm font-bold text-foreground uppercase tracking-wide">Table of Contents</h2>
                 </div>
-                <nav className="p-3">
+                <nav className="p-3 overflow-y-auto flex-1 min-h-0">
                   <ul className="space-y-1">
                     {blog.sections.map((section) => {
                       const isActive = activeId === section.id
@@ -135,10 +144,11 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
                     })}
                   </ul>
                 </nav>
+                </div>
               </div>
             </aside>
 
-            <article className="flex-1 relative lg:pt-14">
+            <article className="flex-1 relative lg:pt-14 min-w-0">
               <AnimatedSection className="mb-6">
                 <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
                   <Image
@@ -206,6 +216,8 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
                 )
               })}
             </article>
+
+            <BlogSubscribeSidebar />
           </div>
         </main>
       </div>
@@ -334,14 +346,14 @@ function StaticBlogDetailPage() {
     <div className="relative min-h-screen flex flex-col scroll-smooth">
       <div className="flex-1 py-8 bg-background">
         <main className="flex-1 flex flex-col gap-8 relative w-full">
-          <div className="flex flex-col lg:flex-row gap-10">
-            <div className="flex flex-col gap-4 lg:w-1/4 h-fit lg:sticky lg:top-10 self-start">
-              <aside className="hidden lg:block">
-              <div className="bg-card border border-border overflow-hidden">
-                <div className="border-b border-border px-6 py-5 bg-muted">
+          <div className={BLOG_DETAIL_GRID}>
+            <aside className={STICKY_TOC_ASIDE}>
+              <div className={STICKY_TOC_INNER}>
+                <div className={STICKY_TOC_PANEL}>
+                <div className="border-b border-border px-6 py-5 bg-muted shrink-0">
                   <h2 className="text-sm font-bold text-foreground uppercase tracking-wide">Table of Contents</h2>
                 </div>
-                <nav className="p-3">
+                <nav className="p-3 overflow-y-auto flex-1 min-h-0">
                   <ul className="space-y-1">
                     {toc.map((item) => {
                       const isActive = activeId === item.id
@@ -373,12 +385,12 @@ function StaticBlogDetailPage() {
                     })}
                   </ul>
                 </nav>
+                </div>
               </div>
             </aside>
-            </div>
 
             {/* Blog Content - top padding on lg so content aligns with TOC */}
-            <article className="flex-1 relative lg:pt-14">
+            <article className="flex-1 relative lg:pt-14 min-w-0">
               {showMobileTOC && (
               <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
                 <button
@@ -507,6 +519,8 @@ function StaticBlogDetailPage() {
             })}
 
             </article>
+
+            <BlogSubscribeSidebar />
           </div>
         </main>
       </div>
