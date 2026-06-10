@@ -9,6 +9,7 @@ import Link from "next/link"
 import Subscription from "@/components/Subscription"
 import LandingListHeader from "@/components/LandingListHeader"
 import LandingFilterTags from "@/components/LandingFilterTags"
+import { PORTFOLIO_LIST } from "@/lib/landing-portfolio-seo"
 
 type ProjectCategory = "Architecture" | "Interior" | "Visualization"
 
@@ -21,26 +22,7 @@ interface Project {
 
 type FilterTag = "All" | ProjectCategory
 
-const PROJECTS_DATA: Project[] = [
-  { id: "p1", title: "Modern Loft Design", category: "Architecture", img: "/room1.jpg" },
-  { id: "p2", title: "Minimalist Living Space", category: "Interior", img: "/room2.jpg" },
-  { id: "p3", title: "Urban Apartment Render", category: "Visualization", img: "/room3.jpg" },
-  { id: "p4", title: "Contemporary Office", category: "Architecture", img: "/interior1.jpg" },
-  { id: "p5", title: "Scandinavian Kitchen", category: "Interior", img: "/interior2.jpg" },
-  { id: "p6", title: "Luxury Bathroom", category: "Visualization", img: "/interior3.jpg" },
-  { id: "p7", title: "Glass House Concept", category: "Architecture", img: "/visual1.jpg" },
-  { id: "p8", title: "Cozy Bedroom Suite", category: "Interior", img: "/visual2.jpg" },
-  { id: "p9", title: "Restaurant Visualization", category: "Visualization", img: "/visual3.jpg" },
-  { id: "p10", title: "Modern Loft Design", category: "Architecture", img: "/room1.jpg" },
-  { id: "p11", title: "Minimalist Living Space", category: "Interior", img: "/room2.jpg" },
-  { id: "p12", title: "Urban Apartment Render", category: "Visualization", img: "/room3.jpg" },
-  { id: "p13", title: "Contemporary Office", category: "Architecture", img: "/interior1.jpg" },
-  { id: "p14", title: "Scandinavian Kitchen", category: "Interior", img: "/interior2.jpg" },
-  { id: "p15", title: "Luxury Bathroom", category: "Visualization", img: "/interior3.jpg" },
-  { id: "p16", title: "Glass House Concept", category: "Architecture", img: "/visual1.jpg" },
-  { id: "p17", title: "Cozy Bedroom Suite", category: "Interior", img: "/visual2.jpg" },
-  { id: "p18", title: "Restaurant Visualization", category: "Visualization", img: "/visual3.jpg" },
-]
+const PROJECTS_DATA: Project[] = PORTFOLIO_LIST as Project[]
 
 const FILTER_TAGS: FilterTag[] = ["All", "Architecture", "Interior", "Visualization"]
 

@@ -1,4 +1,13 @@
+import type { Metadata } from "next"
 import type React from "react"
+import { createPageMetadata } from "@/lib/seo"
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Dashboard Login",
+  description: "Sign in to the NEDF Studio dashboard.",
+  path: "/dashboard-login",
+  noIndex: true,
+})
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (

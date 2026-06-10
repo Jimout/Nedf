@@ -1,9 +1,10 @@
 export const APP_CONFIG = {
-  name: "NextApp",
-  description: "Professional Next.js application with modern tooling",
+  name: "NEDF Studio",
+  description:
+    "We are a fully integrated design firm based in Addis Ababa, Ethiopia. We craft perfection through every line and form.",
   version: "1.0.0",
-  author: "Your Name",
-  url: "https://your-domain.com",
+  author: "NEDF Studio",
+  url: "https://nedfstudio.com",
 } as const
 
 export const ROUTES = {

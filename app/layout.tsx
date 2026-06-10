@@ -8,6 +8,11 @@ import { Toaster } from "@/components/ui/toaster"
 import { DynamicBackground } from "@/components/dynamic-background"
 import SplashScreenWrapper from "@/components/SplashScreenWrapper"
 import AnimatedFavicon from "@/components/AnimatedFavicon"
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  getSiteUrl,
+} from "@/lib/seo"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -17,13 +22,34 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: "NEDF STUDIO",
-  description: "We are a fully integrated Design firm based in Addis Ababa, Ethiopia. We craft perfection through every line and form.",
-  generator: "v0.app",
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
   icons: {
     icon: "/Fav-2.png",
     shortcut: "/Fav-2.png",
     apple: "/Fav-2.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [{ url: "/room1.jpg", alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: ["/room1.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 }
 
