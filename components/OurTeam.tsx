@@ -264,7 +264,7 @@ export function OurTeam() {
   return (
     <section
       id="OurTeam"
-      className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 w-full relative z-10"
+      className="pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-0 sm:pb-0 md:pb-0 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28 w-full relative z-10"
     >
       <div className="w-full">
         <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl font-bold font-montserrat tracking-tight mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-20 text-foreground/80 dark:text-primary">
@@ -352,7 +352,7 @@ function NavigationControls({
   return (
     <>
       {/* Mobile & Tablet - Dot indicators; tap targets ≥44px */}
-      <div className="flex justify-center gap-1.5 sm:gap-2 md:gap-2 lg:hidden mt-8 sm:mt-9 md:mt-10 3xl:mt-12 4xl:mt-14">
+      <div className="flex justify-center gap-1.5 sm:gap-2 md:gap-2 lg:hidden mt-4 sm:mt-5 md:mt-6 3xl:mt-12 4xl:mt-14">
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index}
