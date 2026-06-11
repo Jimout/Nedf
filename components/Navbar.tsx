@@ -248,8 +248,8 @@ function NavLink({
         "text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg",
         "hover:scale-110",
         isActive
-          ? "text-primary opacity-100"
-          : "text-foreground opacity-60 hover:opacity-100"
+          ? "text-primary"
+          : "text-muted-foreground hover:text-foreground"
       )}
     >
       {item.name}
@@ -417,9 +417,9 @@ function MobileNavLink({
       className="
         py-3 px-3 rounded-none font-normal font-montserrat
         text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg
-        text-foreground opacity-60
+        text-muted-foreground
         hover:bg-muted
-        hover:pl-4 hover:text-primary hover:opacity-100
+        hover:pl-4 hover:text-foreground
         transition-all duration-200
       "
     >
