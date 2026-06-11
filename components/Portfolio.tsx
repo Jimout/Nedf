@@ -269,18 +269,14 @@ export default function Portfolio() {
         </div>
 
         {/* Pagination Dots - blue (light) / red (dark) via system primary */}
-        <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 3xl:mt-10 4xl:mt-12 gap-2 sm:gap-2.5 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4 3xl:gap-4 4xl:gap-5">
+        <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 3xl:mt-10 4xl:mt-12 gap-1 sm:gap-2 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4 3xl:gap-4 4xl:gap-5">
           {slides.map((_, index) => (
-            <div
+            <button
               key={index}
-              className={`transition-all duration-500 cursor-pointer hover:scale-125 ${
-                index === currentIndex
-                  ? "bg-gradient-to-r from-primary to-primary/80 w-6 sm:w-7 md:w-8 lg:w-9 xl:w-10 2xl:w-11 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5 shadow-md"
-                  : "bg-primary/20 hover:bg-primary/40 dark:bg-primary/30 dark:hover:bg-primary/50 w-1.5 sm:w-1.5 md:w-2 lg:w-2 xl:w-2.5 2xl:w-2.5 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5"
-              }`}
-              style={{
-                transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}
+              type="button"
+              aria-label={`Go to slide ${index + 1}`}
+              aria-current={index === currentIndex ? "true" : undefined}
+              className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] touch-manipulation select-none [-webkit-tap-highlight-color:transparent] p-3"
               onClick={() => {
                 if (index !== currentIndex) {
                   setTransitioning(true)
@@ -288,7 +284,18 @@ export default function Portfolio() {
                   setTimeout(() => setTransitioning(false), 450)
                 }
               }}
-            />
+            >
+              <span
+                className={`block transition-all duration-500 ${
+                  index === currentIndex
+                    ? "bg-gradient-to-r from-primary to-primary/80 w-6 sm:w-7 md:w-8 lg:w-9 xl:w-10 2xl:w-11 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5 shadow-md"
+                    : "bg-primary/20 hover:bg-primary/40 dark:bg-primary/30 dark:hover:bg-primary/50 w-1.5 sm:w-1.5 md:w-2 lg:w-2 xl:w-2.5 2xl:w-2.5 h-1.5 sm:h-1.5 md:h-2 lg:h-2 xl:h-2.5 2xl:h-2.5"
+                }`}
+                style={{
+                  transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+                }}
+              />
+            </button>
           ))}
         </div>
         </div>

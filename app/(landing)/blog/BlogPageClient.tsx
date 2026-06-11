@@ -154,7 +154,7 @@ export default function BlogPageClient({
 
   return (
     <>
-      <div className="overflow-x-hidden">
+      <div>
         <div className="pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14 pb-12 sm:pb-14 md:pb-16 lg:pb-18 xl:pb-20 2xl:pb-24 bg-background">
           <LandingListHeader
             searchValue={search}

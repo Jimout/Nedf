@@ -19,7 +19,7 @@ export default function Layout({
       {/* Main content: template.tsx wraps children with PageTransition (blur/scale on route change) */}
       <div
         className={cn(
-          "mx-auto w-full min-w-0 max-w-full overflow-x-clip",
+          "mx-auto w-full min-w-0 max-w-full",
           LANDING_MAIN_GUTTERS
         )}
       >

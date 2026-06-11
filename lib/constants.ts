@@ -75,6 +75,10 @@ export const PAGE_GUTTERS =
 export const LANDING_MAIN_GUTTERS =
   "px-6 md:px-10 lg:px-12 xl:px-14 2xl:px-28 3xl:px-32 4xl:px-36"
 
+/** Negative horizontal margins to bleed landing content to the viewport edge */
+export const LANDING_MAIN_GUTTERS_BLEED =
+  "-mx-6 md:-mx-10 lg:-mx-12 xl:-mx-14 2xl:-mx-28 3xl:-mx-32 4xl:-mx-36"
+
 /** Top/bottom spacing below navbar — blog & portfolio list + detail pages */
 export const LANDING_LIST_TOP_PADDING =
   "pt-6 sm:pt-7 md:pt-8 lg:pt-10 xl:pt-12 2xl:pt-14"

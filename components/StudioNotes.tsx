@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import { Button } from "./ui/button"
 import Pagination from "./Pagination"
 import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
 
 // ==================== TYPES ====================
 
@@ -343,42 +342,15 @@ function NavigationControls({
   totalPages,
   onPageChange,
 }: any) {
-
   return (
-
-    <>
-
-      <div className="flex justify-center gap-2 md:hidden mt-5">
-
-        {Array.from({ length: totalPages }, (_, index) => (
-
-          <button
-            key={index}
-            onClick={() => onPageChange(index + 1)}
-            className={cn(
-              "w-2 h-2 rounded-full transition-all duration-300",
-              currentPage === index + 1
-                ? "bg-[#001F4B] dark:bg-[#ec1e24] scale-125"
-                : "bg-gray-300 dark:bg-gray-600"
-            )}
-          />
-
-        ))}
-
-      </div>
-
-      <div className="hidden md:flex justify-center mt-8">
-
-        <Pagination
-          page={currentPage}
-          setPage={(page: any) =>
-            onPageChange(typeof page === "function" ? page(currentPage) : page)
-          }
-          total={totalPages}
-        />
-
-      </div>
-
-    </>
+    <div className="flex justify-center mt-5 md:mt-8">
+      <Pagination
+        page={currentPage}
+        setPage={(page: React.SetStateAction<number>) =>
+          onPageChange(typeof page === "function" ? page(currentPage) : page)
+        }
+        total={totalPages}
+      />
+    </div>
   )
 }
