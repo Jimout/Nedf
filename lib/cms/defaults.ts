@@ -1,4 +1,5 @@
 import { BLOG_POSTS } from "@/lib/landing-blog-posts"
+import { createCaseStudyBlogSections } from "@/lib/cms/sample-blog-sections"
 import { PORTFOLIO_LIST } from "@/lib/landing-portfolio-seo"
 import { getPortfolioProjectById } from "@/lib/landing-portfolio-projects"
 import type {
@@ -76,7 +77,10 @@ export function createDefaultBlogs(): CmsBlogPost[] {
     heroImage: post.image,
     filterId: resolveBlogFilterId(post.categories),
     tags: post.categories,
-    sections: defaultBlogSections(post.description),
+    sections:
+      post.id === 1
+        ? createCaseStudyBlogSections(post.description)
+        : defaultBlogSections(post.description),
     published: true,
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,

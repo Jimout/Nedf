@@ -104,9 +104,40 @@ interface CmsBlog {
 
 function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
   const [activeId, setActiveId] = useState(blog.sections[0]?.id ?? "")
+  const [showMobileTOC, setShowMobileTOC] = useState(false)
+  const [tocExpanded, setTocExpanded] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = 150
+      let current = blog.sections[0]?.id ?? ""
+
+      blog.sections.forEach((section) => {
+        const element = document.getElementById(section.id)
+        if (element) {
+          const top = element.getBoundingClientRect().top
+          if (top - offset <= 0) {
+            current = section.id
+          }
+        }
+      })
+
+      setActiveId(current)
+
+      const article = document.querySelector("article")
+      if (article) {
+        setShowMobileTOC(article.getBoundingClientRect().top < 0)
+      }
+    }
+
+    handleScroll()
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [blog.sections])
 
   const scrollToSection = (sectionId: string) => {
     setActiveId(sectionId)
+    setTocExpanded(false)
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -156,6 +187,64 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
             </aside>
 
             <article className="flex-1 relative min-w-0">
+              {blog.sections.length > 0 && showMobileTOC && (
+                <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
+                  <Button
+                    type="button"
+                    size="icon"
+                    onClick={() => setTocExpanded(!tocExpanded)}
+                    aria-label="Toggle table of contents"
+                    aria-expanded={tocExpanded}
+                    className="h-12 w-12 shadow-lg"
+                  >
+                    <Menu size={20} />
+                  </Button>
+
+                  <div
+                    className={cn(
+                      "mt-3 bg-card border border-border shadow-xl w-72 max-h-[70vh] flex flex-col transform origin-top transition-all duration-200 ease-out overflow-hidden",
+                      tocExpanded ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 pointer-events-none",
+                    )}
+                  >
+                    <div className="border-b border-border px-6 py-5 bg-muted shrink-0">
+                      <h2 className="text-sm font-bold text-foreground uppercase tracking-wide">
+                        Table of Contents
+                      </h2>
+                    </div>
+                    <nav className="overflow-y-auto flex-1 p-3">
+                      <ul className="space-y-1">
+                        {blog.sections.map((section) => {
+                          const isActive = activeId === section.id
+                          const paddingLeft = section.level === 1 ? "12px" : section.level === 2 ? "28px" : "44px"
+
+                          return (
+                            <li key={section.id}>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={() => scrollToSection(section.id)}
+                                className={cn(
+                                  "flex h-auto min-h-[44px] w-full items-start justify-start gap-3 rounded-none py-2 px-3 text-sm text-left shadow-none hover:translate-y-0 hover:shadow-none",
+                                  isActive
+                                    ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                                )}
+                                style={{ paddingLeft }}
+                              >
+                                <span className="text-xs font-medium mt-0.5 min-w-[32px]">{section.number}</span>
+                                <span className={`flex-1 leading-relaxed ${isActive ? "font-medium" : "font-normal"}`}>
+                                  {section.title}
+                                </span>
+                              </Button>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              )}
+
               <AnimatedSection className="mb-6">
                 <div className="w-full h-48 md:h-56 lg:h-64 relative mb-6">
                   <Image
