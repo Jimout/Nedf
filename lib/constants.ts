@@ -67,6 +67,12 @@ export const LANDING_STEPS_KEY = "landingSteps"
 /** localStorage key for hero slogan (dashboard-managed) */
 export const LANDING_SLOGAN_KEY = "landingSlogan"
 
+/** sessionStorage key — splash shown once per browser session on home */
+export const SPLASH_STORAGE_KEY = "nedf-splash-shown"
+
+/** html class applied before React hydrates to hide landing until splash */
+export const SPLASH_PENDING_CLASS = "nedf-splash-pending"
+
 /** Navbar horizontal padding — all breakpoints */
 export const PAGE_GUTTERS =
   "px-6 md:px-10 lg:px-8 xl:px-10 2xl:px-16 3xl:px-20 4xl:px-24"

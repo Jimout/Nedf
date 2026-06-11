@@ -173,7 +173,7 @@ function NavbarContent({
 }
 
 function NavLogo() {
-  const logoClasses = "transition-opacity duration-300 w-[60px] h-auto sm:w-[70px] md:w-[80px] lg:w-[88px] xl:w-[96px] 2xl:w-[140px] 3xl:w-[152px] 4xl:w-[170px]"
+  const logoClasses = "w-[60px] h-auto sm:w-[70px] md:w-[80px] lg:w-[88px] xl:w-[96px] 2xl:w-[140px] 3xl:w-[152px] 4xl:w-[170px]"
 
   return (
     <Link 

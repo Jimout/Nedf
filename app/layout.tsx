@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { DynamicBackground } from "@/components/dynamic-background"
 import SplashScreenWrapper from "@/components/SplashScreenWrapper"
+import { SPLASH_STORAGE_KEY } from "@/lib/constants"
 import AnimatedFavicon from "@/components/AnimatedFavicon"
 import {
   DEFAULT_OG_IMAGE,
@@ -62,19 +63,26 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={montserrat.variable}>
       <body className={`${montserrat.className} font-sans antialiased bg-background`}>
-        <AnimatedFavicon />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var p=location.pathname;if(p==="/"||p===""){if(!sessionStorage.getItem("${SPLASH_STORAGE_KEY}")){document.documentElement.classList.add("nedf-splash-pending")}}}catch(e){}})();`,
+          }}
+        />
         <SplashScreenWrapper />
+        <div className="nedf-app-shell">
+        <AnimatedFavicon />
         <DynamicBackground />
         <ThemeProvider 
           attribute="class" 
           defaultTheme="light" 
           enableSystem={false}
-          disableTransitionOnChange={false}
+          disableTransitionOnChange
         >
           {children}
           <Toaster />
         </ThemeProvider>
         <Analytics />
+        </div>
       </body>
     </html>
   )

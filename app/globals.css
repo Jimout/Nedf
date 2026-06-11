@@ -9,6 +9,14 @@
 }
 
 @layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
   /* Light mode: background #F2F0F0, accent #002e47, text #2D2A2A */
   :root {
     --background: 30 9% 95%; /* #F2F0F0 */
@@ -64,6 +72,16 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
+
+  html.nedf-splash-pending .nedf-app-shell {
+    visibility: hidden;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.12s;
+  animation-timing-function: ease-in-out;
 }
 
 

@@ -55,14 +55,14 @@ export default function Footer() {
                 alt="NEDF Studio"
                 width={280}
                 height={90}
-                className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] transition-opacity duration-300 dark:opacity-0"
+                className="w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] dark:opacity-0"
               />
               <Image
                 src={data.logoDark}
                 alt="NEDF Studio"
                 width={280}
                 height={90}
-                className="absolute inset-0 w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] transition-opacity duration-300 opacity-0 dark:opacity-100"
+                className="absolute inset-0 w-[130px] h-auto sm:w-[150px] md:w-[170px] lg:w-[190px] xl:w-[210px] 2xl:w-[280px] 3xl:w-[320px] 4xl:w-[360px] opacity-0 dark:opacity-100"
               />
             </Link>
 

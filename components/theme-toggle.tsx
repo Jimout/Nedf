@@ -5,6 +5,16 @@ import { useEffect, useState, useCallback } from "react"
 
 import { Button } from "@/components/ui/button"
 
+function applyTheme(setTheme: (theme: string) => void, next: "light" | "dark") {
+  if (typeof document !== "undefined" && "startViewTransition" in document) {
+    document.startViewTransition(() => {
+      setTheme(next)
+    })
+    return
+  }
+  setTheme(next)
+}
+
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -14,19 +24,21 @@ export function ThemeToggle() {
   }, [])
 
   const handleToggle = useCallback(() => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark")
+    const next = resolvedTheme === "dark" ? "light" : "dark"
+    applyTheme(setTheme, next)
   }, [resolvedTheme, setTheme])
+
+  const iconClass =
+    "h-[1.2rem] w-[1.2rem] 2xl:h-[2rem] 2xl:w-[2rem] 3xl:h-[2.25rem] 3xl:w-[2.25rem] 4xl:h-[2.5rem] 4xl:w-[2.5rem] text-accent"
 
   if (!mounted) {
     return (
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         size="icon"
         className="2xl:w-14 2xl:h-14 3xl:w-16 3xl:h-16 4xl:w-[4.5rem] 4xl:h-[4.5rem]"
       >
-        <Sun 
-          className="h-[1.2rem] w-[1.2rem] 2xl:h-[2rem] 2xl:w-[2rem] 3xl:h-[2.25rem] 3xl:w-[2.25rem] 4xl:h-[2.5rem] 4xl:w-[2.5rem] text-accent transition-all duration-300 hover:scale-110 hover:rotate-12" 
-        />
+        <Sun className={iconClass} />
         <span className="sr-only">Toggle theme</span>
       </Button>
     )
@@ -35,17 +47,17 @@ export function ThemeToggle() {
   const isDark = resolvedTheme === "dark"
 
   return (
-    <Button 
-      variant="ghost" 
-      size="icon" 
+    <Button
+      variant="ghost"
+      size="icon"
       onClick={handleToggle}
-      className="transition-all duration-300 hover:bg-muted rounded-lg 2xl:w-14 2xl:h-14 3xl:w-16 3xl:h-16 4xl:w-[4.5rem] 4xl:h-[4.5rem]"
+      className="rounded-lg hover:bg-muted 2xl:w-14 2xl:h-14 3xl:w-16 3xl:h-16 4xl:w-[4.5rem] 4xl:h-[4.5rem]"
     >
-      <Sun 
-        className={`h-[1.2rem] w-[1.2rem] 2xl:h-[2rem] 2xl:w-[2rem] 3xl:h-[2.25rem] 3xl:w-[2.25rem] 4xl:h-[2.5rem] 4xl:w-[2.5rem] text-accent transition-all duration-300 hover:scale-110 hover:rotate-12 ${isDark ? "-rotate-90 scale-0" : "rotate-0 scale-100"}`} 
+      <Sun
+        className={`${iconClass} transition-transform duration-200 hover:scale-110 ${isDark ? "-rotate-90 scale-0" : "rotate-0 scale-100"}`}
       />
-      <Moon 
-        className={`absolute h-[1.2rem] w-[1.2rem] 2xl:h-[2rem] 2xl:w-[2rem] 3xl:h-[2.25rem] 3xl:w-[2.25rem] 4xl:h-[2.5rem] 4xl:w-[2.5rem] text-accent transition-all duration-300 hover:scale-110 hover:-rotate-12 ${isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} 
+      <Moon
+        className={`absolute ${iconClass} transition-transform duration-200 hover:scale-110 ${isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
       />
       <span className="sr-only">Toggle theme</span>
     </Button>
