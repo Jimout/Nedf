@@ -5,7 +5,6 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
-import { DynamicBackground } from "@/components/dynamic-background"
 import SplashScreenWrapper from "@/components/SplashScreenWrapper"
 import { SPLASH_STORAGE_KEY } from "@/lib/constants"
 import AnimatedFavicon from "@/components/AnimatedFavicon"
@@ -71,7 +70,6 @@ export default function RootLayout({
         <SplashScreenWrapper />
         <div className="nedf-app-shell">
         <AnimatedFavicon />
-        <DynamicBackground />
         <ThemeProvider 
           attribute="class" 
           defaultTheme="light" 

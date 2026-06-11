@@ -16,7 +16,7 @@ export default function Layout({
       <JsonLd data={getOrganizationJsonLd()} />
       {/* Navbar: full width; mobile/tablet hamburger, desktop full menu */}
       <Navbar />
-      {/* Main content: template.tsx wraps children with PageTransition (blur/scale on route change) */}
+      {/* Main content */}
       <div
         className={cn(
           "mx-auto w-full min-w-0 max-w-full",
