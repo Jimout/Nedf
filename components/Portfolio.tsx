@@ -208,12 +208,15 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Mobile */}
+            {/* Mobile — single featured card */}
             <div className="md:hidden w-full flex flex-col items-center">
               <div
-                className={`relative w-11/12 h-72 sm:h-80 overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms] ${
-                  transitioning ? "transform translate-y-[100%] opacity-0 scale-98" : "transform translate-y-0 opacity-100 scale-100"
-                }`}
+                className={cn(
+                  "relative w-11/12 h-72 sm:h-80 overflow-hidden shadow-xl shadow-border/20 dark:shadow-background/40 transition-all duration-[900ms]",
+                  transitioning
+                    ? "translate-y-[100%] opacity-0 scale-[0.98]"
+                    : "translate-y-0 opacity-100 scale-100",
+                )}
                 style={{
                   transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
@@ -222,14 +225,17 @@ export default function Portfolio() {
                   src={slide.images[0].src || "/placeholder.svg"}
                   alt={slide.images[0].alt}
                   fill
+                  sizes="92vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 opacity-0 dark:opacity-10 bg-background" />
               </div>
+
               <h2
-                className={`text-xl sm:text-2xl font-light text-foreground leading-tight mt-4 sm:mt-5 whitespace-nowrap text-center transition-all duration-700 ${
-                  transitioning ? "transform translate-y-6 opacity-0" : "transform translate-y-0 opacity-100"
-                }`}
+                className={cn(
+                  "text-xl sm:text-2xl font-light text-foreground leading-tight mt-4 sm:mt-5 whitespace-nowrap text-center transition-all duration-700",
+                  transitioning ? "translate-y-6 opacity-0" : "translate-y-0 opacity-100",
+                )}
                 style={{
                   transitionDelay: transitioning ? "0ms" : "350ms",
                   transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -249,12 +255,14 @@ export default function Portfolio() {
                   slide.title1
                 )}
               </h2>
+
               <Button
                 variant="outline"
                 onClick={handleExploreClick}
-                className={`rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground px-5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm mt-3 sm:mt-4 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0 ${
-                  transitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
-                }`}
+                className={cn(
+                  "rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground px-5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm mt-3 sm:mt-4 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 group active:scale-100 active:translate-y-0",
+                  transitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0",
+                )}
                 style={{
                   transitionDelay: transitioning ? "0ms" : "550ms",
                   transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -268,17 +276,49 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* Pagination Dots - blue (light) / red (dark) via system primary */}
+        {/* Pagination — compact dots on mobile, full controls on md+ */}
         <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 3xl:mt-10 4xl:mt-12 gap-1 sm:gap-2 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4 3xl:gap-4 4xl:gap-5">
+          {slides.map((_, index) => {
+            const goToSlide = () => {
+              if (index !== currentIndex) {
+                setTransitioning(true)
+                setTimeout(() => setCurrentIndex(index), 150)
+                setTimeout(() => setTransitioning(false), 450)
+              }
+            }
+
+            const dotClass = cn(
+              "block transition-all duration-500",
+              index === currentIndex
+                ? "bg-gradient-to-r from-primary to-primary/80 w-6 sm:w-7 h-1.5 shadow-md"
+                : "bg-primary/20 hover:bg-primary/40 dark:bg-primary/30 dark:hover:bg-primary/50 w-1.5 h-1.5",
+            )
+
+            return (
+              <button
+                key={index}
+                type="button"
+                aria-label={`Go to slide ${index + 1}`}
+                aria-current={index === currentIndex ? "true" : undefined}
+                onClick={goToSlide}
+                className="inline-flex md:hidden min-h-[44px] min-w-[44px] items-center justify-center touch-manipulation select-none [-webkit-tap-highlight-color:transparent]"
+              >
+                <span
+                  className={dotClass}
+                  style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+                />
+              </button>
+            )
+          })}
           {slides.map((_, index) => (
             <Button
-              key={index}
+              key={`desktop-${index}`}
               type="button"
               variant="ghost"
               size="icon"
               aria-label={`Go to slide ${index + 1}`}
               aria-current={index === currentIndex ? "true" : undefined}
-              className="min-h-[44px] min-w-[44px] p-3 shadow-none hover:shadow-none hover:translate-y-0"
+              className="hidden md:inline-flex min-h-[44px] min-w-[44px] p-3 shadow-none hover:shadow-none hover:translate-y-0"
               onClick={() => {
                 if (index !== currentIndex) {
                   setTransitioning(true)
