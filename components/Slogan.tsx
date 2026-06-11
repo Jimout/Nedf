@@ -93,20 +93,10 @@ export default function HeroTextFadeScroll() {
         { visibility: "visible" }
       );
 
-      const durChar = 0.08;
-      const stagChar = 0.05;
+      const durChar = 0.06;
+      const stagChar = 0.04;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current!,
-          start: "top top",
-          end: () => `+=${window.innerHeight * 2}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
+      const tl = gsap.timeline({ paused: true });
 
       let t = 0;
 
@@ -143,17 +133,28 @@ export default function HeroTextFadeScroll() {
       };
 
       t = addRevealParallel(revealOrder1a, t);
-      t += 0.15;
+      t += 0.1;
       t = addRevealParallel(revealOrder1b, t);
-      t += 0.3;
+      t += 0.12;
       const tHideStart = t;
       const end1a = addHideParallel(hideOrder1a, tHideStart);
       const end1b = addHideParallel(hideOrder1b, tHideStart);
       t = Math.max(end1a, end1b);
-      t += 0.15;
+      t += 0.1;
       t = addRevealParallel(revealOrder2, t);
-      t += 0.3;
+      t += 0.12;
       addHideParallel(hideOrder2, t);
+
+      ScrollTrigger.create({
+        trigger: sectionRef.current!,
+        start: "top top",
+        end: () => `+=${Math.max(tl.duration() * 90, window.innerHeight * 0.75)}`,
+        scrub: 0.85,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        animation: tl,
+      });
 
       return () => {
         split1a.revert();
@@ -174,7 +175,7 @@ export default function HeroTextFadeScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28"
+      className="relative z-20 flex items-center justify-center min-h-screen bg-background overflow-x-hidden overflow-y-visible 2xl:overflow-x-visible 3xl:overflow-x-visible 4xl:overflow-x-visible"
     >
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-0">
         <div
