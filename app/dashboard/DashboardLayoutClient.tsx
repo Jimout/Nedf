@@ -36,14 +36,9 @@ type NavItem = {
   href: string
 }
 
-type NavSection = {
-  label?: string
-  items: NavItem[]
-}
-
 type NavGroup = {
   label: string
-  sections: NavSection[]
+  items: NavItem[]
 }
 
 const overviewItem: NavItem = {
@@ -55,63 +50,46 @@ const overviewItem: NavItem = {
 
 const menuGroups: NavGroup[] = [
   {
-    label: "Content",
-    sections: [
+    label: "Blog",
+    items: [
+      { id: "blog", label: "Posts", icon: PenTool, href: "/dashboard/manage-blog" },
+      { id: "blog-filters", label: "Filters", icon: Tag, href: "/dashboard/manage-blog-filters" },
+    ],
+  },
+  {
+    label: "Portfolio",
+    items: [
+      { id: "portfolio", label: "Projects", icon: Layers, href: "/dashboard/manage-portfolio" },
       {
-        label: "Blog",
-        items: [
-          { id: "blog", label: "Posts", icon: PenTool, href: "/dashboard/manage-blog" },
-          { id: "blog-filters", label: "Filters", icon: Tag, href: "/dashboard/manage-blog-filters" },
-        ],
-      },
-      {
-        label: "Portfolio",
-        items: [
-          { id: "portfolio", label: "Projects", icon: Layers, href: "/dashboard/manage-portfolio" },
-          {
-            id: "portfolio-categories",
-            label: "Categories",
-            icon: ListFilter,
-            href: "/dashboard/manage-portfolio-categories",
-          },
-        ],
+        id: "portfolio-categories",
+        label: "Categories",
+        icon: ListFilter,
+        href: "/dashboard/manage-portfolio-categories",
       },
     ],
   },
   {
     label: "Homepage",
-    sections: [
-      {
-        items: [
-          { id: "services", label: "Services", icon: LayoutGrid, href: "/dashboard/manage-services" },
-          { id: "steps", label: "Steps", icon: ListOrdered, href: "/dashboard/manage-steps" },
-          { id: "slogan", label: "Slogan", icon: Quote, href: "/dashboard/manage-slogan" },
-          { id: "contact", label: "Contact", icon: Mail, href: "/dashboard/manage-contact" },
-        ],
-      },
+    items: [
+      { id: "services", label: "Services", icon: LayoutGrid, href: "/dashboard/manage-services" },
+      { id: "steps", label: "Steps", icon: ListOrdered, href: "/dashboard/manage-steps" },
+      { id: "slogan", label: "Slogan", icon: Quote, href: "/dashboard/manage-slogan" },
+      { id: "contact", label: "Contact", icon: Mail, href: "/dashboard/manage-contact" },
     ],
   },
   {
     label: "Company",
-    sections: [
-      {
-        items: [
-          { id: "thecrew", label: "Founders", icon: Building2, href: "/dashboard/manage-founders" },
-          { id: "team", label: "Team", icon: UsersRound, href: "/dashboard/manage-team" },
-          { id: "testimonial", label: "Reviews", icon: Star, href: "/dashboard/manage-review" },
-        ],
-      },
+    items: [
+      { id: "thecrew", label: "Founders", icon: Building2, href: "/dashboard/manage-founders" },
+      { id: "team", label: "Team", icon: UsersRound, href: "/dashboard/manage-team" },
+      { id: "testimonial", label: "Reviews", icon: Star, href: "/dashboard/manage-review" },
     ],
   },
   {
     label: "Settings",
-    sections: [
-      {
-        items: [
-          { id: "subscribers", label: "Footer", icon: PanelBottom, href: "/dashboard/manage-subscribers" },
-          { id: "login", label: "Login Page", icon: Lock, href: "/dashboard/manage-login" },
-        ],
-      },
+    items: [
+      { id: "subscribers", label: "Footer", icon: PanelBottom, href: "/dashboard/manage-subscribers" },
+      { id: "login", label: "Login Page", icon: Lock, href: "/dashboard/manage-login" },
     ],
   },
 ]
@@ -127,8 +105,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    Content: true,
-    Homepage: true,
+    Blog: false,
+    Portfolio: false,
+    Homepage: false,
     Company: false,
     Settings: false,
   })
@@ -162,9 +141,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     if (!pathname) return
     for (const group of menuGroups) {
-      const hasActive = group.sections.some((section) =>
-        section.items.some((item) => isNavItemActive(pathname, item.href))
-      )
+      const hasActive = group.items.some((item) => isNavItemActive(pathname, item.href))
       if (hasActive) {
         setOpenGroups((prev) => ({ ...prev, [group.label]: true }))
       }
@@ -285,8 +262,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               )}
 
               {menuGroups.map((group) => {
-                const isOpen = openGroups[group.label] ?? true
-                const groupItems = group.sections.flatMap((section) => section.items)
+                const isOpen = openGroups[group.label] ?? false
 
                 return (
                   <div key={group.label} className={sidebarCollapsed ? "" : "mb-3"}>
@@ -308,49 +284,40 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           />
                         </button>
                         {isOpen && (
-                          <div className="mt-1 space-y-3">
-                            {group.sections.map((section) => (
-                              <div key={section.label ?? group.label}>
-                                {section.label ? (
-                                  <p className="px-3 pb-1 text-[11px] font-medium uppercase tracking-wider text-primary-foreground/45">
-                                    {section.label}
-                                  </p>
-                                ) : null}
-                                {section.items.map((item) => {
-                                  const Icon = item.icon
-                                  const isActive = isNavItemActive(pathname, item.href)
-                                  return (
-                                    <div key={item.id} className="relative flex px-3 my-0.5">
-                                      <Link
-                                        href={item.href}
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className={`relative flex items-center w-full px-3 py-2.5 rounded-lg justify-start overflow-hidden transition-colors ${
-                                          isActive
-                                            ? "bg-primary-foreground/20"
-                                            : "hover:bg-primary-foreground/10"
-                                        }`}
-                                      >
-                                        <Icon className="w-5 h-5 shrink-0" />
-                                        <span
-                                          className={`ml-3 font-medium text-sm whitespace-nowrap ${
-                                            isActive ? "font-semibold" : ""
-                                          }`}
-                                        >
-                                          {item.label}
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  )
-                                })}
-                              </div>
-                            ))}
+                          <div className="mt-1">
+                            {group.items.map((item) => {
+                              const Icon = item.icon
+                              const isActive = isNavItemActive(pathname, item.href)
+                              return (
+                                <div key={item.id} className="relative flex px-3 my-0.5">
+                                  <Link
+                                    href={item.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={`relative flex items-center w-full px-3 py-2.5 rounded-lg justify-start overflow-hidden transition-colors ${
+                                      isActive
+                                        ? "bg-primary-foreground/20"
+                                        : "hover:bg-primary-foreground/10"
+                                    }`}
+                                  >
+                                    <Icon className="w-5 h-5 shrink-0" />
+                                    <span
+                                      className={`ml-3 font-medium text-sm whitespace-nowrap ${
+                                        isActive ? "font-semibold" : ""
+                                      }`}
+                                    >
+                                      {item.label}
+                                    </span>
+                                  </Link>
+                                </div>
+                              )
+                            })}
                           </div>
                         )}
                       </>
                     ) : (
                       <>
                         <div className="mx-2 my-2 border-t border-primary-foreground/20" aria-hidden />
-                        {groupItems.map((item) => {
+                        {group.items.map((item) => {
                           const Icon = item.icon
                           const isActive = isNavItemActive(pathname, item.href)
                           return (
