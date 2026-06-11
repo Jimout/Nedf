@@ -3,6 +3,7 @@
 import type React from "react"
 
 import RelatedBlogs from "@/components/Related-blogs"
+import { cmsPostToCard } from "@/components/BlogPostCard"
 import Subscription from "@/components/Subscription"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
@@ -295,9 +296,10 @@ function StaticBlogDetailPage({ post }: { post: CmsBlogPost }) {
   const relatedPosts = allPosts
     .filter((item) => {
       if (item.id === post.id) return false
-      return item.categories.some((category) => post.categories.includes(category))
+      return item.tags.some((tag) => post.tags.includes(tag))
     })
-    .slice(0, 3)
+    .slice(0, 12)
+    .map((item) => cmsPostToCard(item))
 
   return (
     <div className="relative min-h-screen flex flex-col scroll-smooth">

@@ -3,12 +3,11 @@
 import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
-import Image from "next/image"
 import Pagination from "@/components/Pagination"
 import Subscription from "@/components/Subscription"
 import LandingListHeader from "@/components/LandingListHeader"
 import LandingFilterTags from "@/components/LandingFilterTags"
-import { Button } from "@/components/ui/button"
+import BlogPostCard, { cmsPostToCard } from "@/components/BlogPostCard"
 import type { CmsBlogFilter, CmsBlogPost } from "@/lib/cms/types"
 
 const POSTS_PER_PAGE = 6
@@ -56,48 +55,6 @@ function filterPosts(
 function paginatePosts(posts: CmsBlogPost[], currentPage: number): CmsBlogPost[] {
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE
   return posts.slice(startIndex, startIndex + POSTS_PER_PAGE)
-}
-
-function BlogPostCard({
-  post,
-  filterLabel,
-  onReadMore,
-}: {
-  post: CmsBlogPost
-  filterLabel: string
-  onReadMore: (id: string) => void
-}) {
-  return (
-    <article className="group bg-card text-card-foreground shadow-lg flex flex-col overflow-hidden transition-shadow hover:shadow-xl border border-border h-[400px]">
-      <div className="relative w-full h-[170px] shrink-0">
-        <Image
-          src={post.heroImage || "/placeholder.svg"}
-          alt={post.title}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 33vw"
-        />
-      </div>
-      <div className="relative p-4 flex flex-col flex-1 min-h-0">
-        <div className="mb-2 min-h-6 shrink-0">
-          <span className="inline-block text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">
-            {filterLabel}
-          </span>
-        </div>
-        <h2 className="text-base font-medium text-foreground mb-2 line-clamp-2 h-[2.5rem] leading-5 shrink-0 overflow-hidden">
-          {post.title}
-        </h2>
-        <p className="text-sm text-muted-foreground line-clamp-3 h-[3.75rem] leading-5 shrink-0 overflow-hidden">
-          {post.description}
-        </p>
-        <div className="mt-auto flex justify-end shrink-0 pt-2">
-          <Button type="button" size="sm" onClick={() => onReadMore(post.id)} className="relative z-10">
-            Read more
-          </Button>
-        </div>
-      </div>
-    </article>
-  )
 }
 
 export default function BlogPageClient({
@@ -163,8 +120,10 @@ export default function BlogPageClient({
               {paginatedPosts.map((post) => (
                 <BlogPostCard
                   key={post.id}
-                  post={post}
-                  filterLabel={filters.find((f) => f.id === post.filterId)?.label ?? "Studio"}
+                  post={cmsPostToCard(
+                    post,
+                    filters.find((f) => f.id === post.filterId)?.label ?? "Studio",
+                  )}
                   onReadMore={(id) => router.push(`/blog/${id}`)}
                 />
               ))}

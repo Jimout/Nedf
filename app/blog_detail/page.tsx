@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import { Menu } from "lucide-react"
 import RelatedBlogs from "@/components/Related-blogs"
 import { Button } from "@/components/ui/button"
+import type { BlogPostCardData } from "@/components/BlogPostCard"
 
 interface TocItem {
   id: string
@@ -322,7 +323,17 @@ export default function BlogDetailPage() {
               WebkitMaskComposite: "intersect",
             }}
           >
-            <RelatedBlogs posts={relatedPosts} />
+            <RelatedBlogs
+              posts={relatedPosts.map(
+                (post): BlogPostCardData => ({
+                  id: String(post.id),
+                  title: post.title,
+                  description: post.description,
+                  image: post.image,
+                  categories: post.categories,
+                }),
+              )}
+            />
           </section>
         </>
       )}

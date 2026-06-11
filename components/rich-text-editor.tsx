@@ -26,7 +26,6 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 
 interface RichTextEditorProps {
   value: string
@@ -226,21 +225,20 @@ export function RichTextEditor({
         </ToolbarButton>
         <Popover open={linkOpen} onOpenChange={handleLinkOpenChange}>
           <PopoverTrigger asChild>
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               title="Link"
               className={cn(
-                "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md transition-colors",
-                "text-gray-600 dark:text-gray-300",
+                "h-8 w-8 min-h-0 min-w-0 shrink-0 rounded-md text-gray-600 shadow-none hover:translate-y-0 dark:text-gray-300",
                 "hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-white/15 dark:hover:text-white",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#001F4B]/40 dark:focus-visible:ring-[#ec1e24]/40",
-                "[&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:stroke-current",
                 editor.isActive("link") &&
                   "bg-[#001F4B]/10 text-[#001F4B] hover:bg-[#001F4B]/15 hover:text-[#001F4B] dark:bg-[#ec1e24]/20 dark:text-[#ec1e24] dark:hover:bg-[#ec1e24]/30 dark:hover:text-[#ec1e24]",
               )}
             >
               <LinkIcon className="h-4 w-4" />
-            </button>
+            </Button>
           </PopoverTrigger>
           <PopoverContent
             align="start"
