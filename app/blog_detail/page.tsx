@@ -181,12 +181,15 @@ export default function BlogDetailPage() {
             {/* Mobile TOC Icon */}
             {showMobileTOC && (
               <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
-                <button
-                  className="bg-[#001F4B] text-white p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+                <Button
+                  type="button"
+                  size="icon"
+                  className="h-14 w-14 rounded-full shadow-lg"
                   onClick={() => setTocExpanded(!tocExpanded)}
+                  aria-label="Toggle table of contents"
                 >
                   <Menu size={24} />
-                </button>
+                </Button>
 
                 <div
                   className={`mt-2 bg-white border rounded shadow-lg w-56 max-h-[70vh] flex flex-col transform origin-top transition-all duration-300 ease-in-out overflow-hidden ${
