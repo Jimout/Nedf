@@ -316,7 +316,7 @@ function HamburgerButton({
       aria-label="Toggle navigation"
       aria-expanded={isOpen}
       onClick={onClick}
-      className="lg:hidden -mr-2 min-h-[44px] min-w-[44px] rounded-none text-foreground hover:translate-y-0 active:bg-muted"
+      className="lg:hidden -mr-2 min-h-[44px] min-w-[44px] rounded-none text-foreground shadow-none hover:bg-transparent hover:text-foreground active:bg-transparent hover:shadow-none hover:translate-y-0"
     >
       <div className="relative h-5 w-5">
         <HamburgerLine isOpen={isOpen} position="top" />
