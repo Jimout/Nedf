@@ -9,20 +9,23 @@ import Link from "next/link"
 import Subscription from "@/components/Subscription"
 import LandingListHeader from "@/components/LandingListHeader"
 import LandingFilterTags from "@/components/LandingFilterTags"
+import { cn } from "@/lib/utils"
 import type { CmsPortfolioCategory, CmsPortfolioProject } from "@/lib/cms/types"
 
 type Project = {
   id: string
   title: string
   categoryId: string
+  category: string
   img: string
 }
 
-function cmsToListProject(p: CmsPortfolioProject): Project {
+function cmsToListProject(p: CmsPortfolioProject, categories: CmsPortfolioCategory[]): Project {
   return {
     id: p.id,
     title: p.title,
     categoryId: p.categoryId,
+    category: categories.find((c) => c.id === p.categoryId)?.label ?? "Project",
     img: p.beforeImage || p.galleryImages[0] || "/placeholder.svg",
   }
 }
@@ -48,8 +51,6 @@ const PAGINATION_CONFIG = {
 
 const PROJECTS_PER_PAGE = PAGINATION_CONFIG.rowsPerPage * PAGINATION_CONFIG.projectsPerRow
 
-const RESPONSIVE_BREAKPOINT_MD = 768
-
 const ANIMATION_CONFIG = {
   grid: {
     initial: { y: 20 },
@@ -65,28 +66,54 @@ function paginateProjects(projects: Project[], currentPage: number): Project[] {
   return projects.slice(startIndex, endIndex)
 }
 
-function ProjectCard({ project, index, isDesktop }: { project: Project; index: number; isDesktop: boolean }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const [hovered, setHovered] = useState(false)
+  const [hoverCapable, setHoverCapable] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    setHoverCapable(window.matchMedia("(hover: hover) and (pointer: fine)").matches)
+  }, [])
+
+  const showOverlay = hoverCapable === null ? false : hoverCapable ? hovered : true
+
   return (
     <Link
       href={`/portfolio/${project.id}`}
-      className="relative group cursor-pointer overflow-hidden transition-all duration-700 ease-out transform hover:-translate-y-2 will-change-transform active:scale-98 h-[240px] sm:h-[260px] md:h-[280px] lg:h-[300px] xl:h-[320px] 2xl:h-[360px]"
+      className={cn(
+        "relative block cursor-pointer overflow-hidden transition-all duration-700 ease-out will-change-transform active:scale-[0.98]",
+        "h-[240px] sm:h-[260px] md:h-[280px] lg:h-[300px] xl:h-[320px] 2xl:h-[360px]",
+        hovered && hoverCapable === true && "-translate-y-2",
+      )}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
     >
       <Image
         src={project.img || "/placeholder.svg"}
         alt={project.title}
         fill
         sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 25vw"
-        className={`object-cover transition-transform duration-700 ease-out ${
-          isDesktop ? "group-hover:scale-105 md:group-hover:scale-110" : ""
-        }`}
+        className={cn(
+          "object-cover transition-transform duration-700 ease-out",
+          hovered && hoverCapable === true && "scale-105 lg:scale-110",
+        )}
         priority={index < 6}
       />
 
-      {isDesktop && (
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
-      )}
+      <div
+        className={cn(
+          "absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/15 to-transparent transition-opacity duration-500 ease-out pointer-events-none",
+          showOverlay ? "opacity-100" : "opacity-0",
+        )}
+      />
 
-      <div className="absolute inset-0 flex flex-col justify-end p-2 sm:p-2.5 md:p-3 lg:p-4 xl:p-5 2xl:p-6 text-primary-foreground opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-2 sm:translate-y-2 md:translate-y-3 lg:translate-y-3 xl:translate-y-4 2xl:translate-y-4 group-hover:translate-y-0">
+      <div
+        className={cn(
+          "absolute inset-0 z-20 flex flex-col justify-end p-2 sm:p-2.5 md:p-3 lg:p-4 xl:p-5 2xl:p-6 text-primary-foreground pointer-events-none transition-all duration-500 ease-out",
+          showOverlay ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+        )}
+      >
         <div className="backdrop-blur-sm bg-primary-foreground/10 p-2 sm:p-2 md:p-2.5 lg:p-3 xl:p-4 2xl:p-4 border border-primary-foreground/20">
           <h3 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-bold mb-1 sm:mb-1 md:mb-1.5 lg:mb-2 xl:mb-2 2xl:mb-2 text-balance leading-tight">
             {project.title}
@@ -97,7 +124,12 @@ function ProjectCard({ project, index, isDesktop }: { project: Project; index: n
         </div>
       </div>
 
-      <div className="absolute inset-0 border border-transparent group-hover:border-primary-foreground/20 transition-all duration-500 ease-out rounded-sm" />
+      <div
+        className={cn(
+          "absolute inset-0 z-30 border border-transparent transition-all duration-500 ease-out rounded-sm pointer-events-none",
+          showOverlay && hoverCapable === true && "border-primary-foreground/20",
+        )}
+      />
     </Link>
   )
 }
@@ -105,11 +137,9 @@ function ProjectCard({ project, index, isDesktop }: { project: Project; index: n
 function ProjectGrid({
   projects,
   animationKey,
-  isDesktop,
 }: {
   projects: Project[]
   animationKey: string
-  isDesktop: boolean
 }) {
   return (
     <AnimatePresence mode="wait">
@@ -122,7 +152,7 @@ function ProjectGrid({
         transition={ANIMATION_CONFIG.grid.transition}
       >
         {projects.map((project, index) => (
-          <ProjectCard key={`${project.id}-${index}`} project={project} index={index} isDesktop={isDesktop} />
+          <ProjectCard key={`${project.id}-${index}`} project={project} index={index} />
         ))}
       </motion.div>
     </AnimatePresence>
@@ -148,7 +178,10 @@ export default function PortfolioPageClient({
   projects: CmsPortfolioProject[]
   categories: CmsPortfolioCategory[]
 }) {
-  const projects = useMemo(() => cmsProjects.map(cmsToListProject), [cmsProjects])
+  const projects = useMemo(
+    () => cmsProjects.map((p) => cmsToListProject(p, categories)),
+    [cmsProjects, categories],
+  )
   const filterTags = useMemo(() => {
     const labels = categories
       .filter((c) => c.isActive && projects.some((p) => p.categoryId === c.id))
@@ -161,7 +194,6 @@ export default function PortfolioPageClient({
   const [activeTag, setActiveTag] = useState("All")
   const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
-  const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
     const filter = searchParams.get("filter")
@@ -171,14 +203,6 @@ export default function PortfolioPageClient({
       document.getElementById("portfolio-filter")?.scrollIntoView({ behavior: "smooth", block: "start" })
     }
   }, [searchParams, filterTags])
-
-  useEffect(() => {
-    const checkIfDesktop = () => setIsDesktop(window.innerWidth >= RESPONSIVE_BREAKPOINT_MD)
-    checkIfDesktop()
-
-    window.addEventListener("resize", checkIfDesktop)
-    return () => window.removeEventListener("resize", checkIfDesktop)
-  }, [])
 
   const filteredProjects = useMemo(
     () => filterProjects(projects, categories, activeTag, search),
@@ -221,7 +245,7 @@ export default function PortfolioPageClient({
             onTagChange={handleTagChange}
           />
 
-          <ProjectGrid projects={paginatedProjects} animationKey={animationKey} isDesktop={isDesktop} />
+          <ProjectGrid projects={paginatedProjects} animationKey={animationKey} />
 
           {paginatedProjects.length > 0 && (
             <div className="mt-6 sm:mt-7 md:mt-8 lg:mt-9 xl:mt-10 2xl:mt-12">

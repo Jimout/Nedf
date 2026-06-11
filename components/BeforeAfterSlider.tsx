@@ -156,7 +156,7 @@ export default function BeforeAfterSlider({
       ref={containerRef}
       className={`relative overflow-hidden select-none bg-background ${
         height == null
-          ? "w-full min-h-[240px] max-h-[min(92svh,96rem)] h-[min(52vw,420px)] sm:h-[min(50vw,480px)] md:h-[min(48vw,560px)] lg:h-[min(46vw,640px)] xl:h-[min(44vw,720px)] 2xl:h-[min(42vw,800px)] 3xl:h-[min(40vw,900px)] 4xl:h-[min(38vw,1000px)] "
+          ? "w-full max-h-[min(92svh,96rem)] h-[380px] min-h-[380px] sm:min-h-[240px] sm:h-[min(50vw,480px)] md:h-[min(48vw,560px)] lg:h-[min(46vw,640px)] xl:h-[min(44vw,720px)] 2xl:h-[min(42vw,800px)] 3xl:h-[min(40vw,900px)] 4xl:h-[min(38vw,1000px)] "
           : ""
       } ${className}`}
       style={{
