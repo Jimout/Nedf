@@ -84,20 +84,16 @@ export default function DashboardLogin() {
           </div>
           <Button
             type="submit"
-            className="w-full rounded-none bg-primary text-primary-foreground hover:bg-primary/90"
+            className="w-full"
           >
             Login
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-between items-center text-xs text-muted-foreground">
-        <button
-          type="button"
-          onClick={handleForgotPassword}
-          className="text-primary hover:underline"
-        >
+        <Button type="button" variant="link" size="sm" onClick={handleForgotPassword} className="h-auto p-0 text-xs">
           Forgot password?
-        </button>
+        </Button>
         <span>Default: nedfteam / nedf123</span>
       </CardFooter>
     </Card>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react"
 import { Mail, Send, CheckCircle2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { loadSubscription, DEFAULT_SUBSCRIPTION } from "@/lib/landing-subscription"
 import { cn } from "@/lib/utils"
 
@@ -79,13 +80,9 @@ export function BlogSubscribeSidebar({ className }: { className?: string }) {
                 <p className="text-xs text-muted-foreground" style={{ fontFamily: "Montserrat" }}>
                   Thanks for joining our mailing list.
                 </p>
-                <button
-                  type="button"
-                  onClick={() => setStatus("idle")}
-                  className="mt-1 text-xs text-primary underline-offset-2 hover:underline"
-                >
+                <Button type="button" variant="link" size="sm" onClick={() => setStatus("idle")} className="mt-1 h-auto p-0 text-xs">
                   Subscribe another email
-                </button>
+                </Button>
               </div>
             ) : (
               <>
@@ -122,14 +119,10 @@ export function BlogSubscribeSidebar({ className }: { className?: string }) {
                   </p>
                 )}
 
-                <button
-                  type="submit"
-                  className="flex w-full items-center justify-center gap-2 bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 3xl:py-3 3xl:text-base 4xl:py-3.5 4xl:text-base"
-                  style={{ fontFamily: "Montserrat" }}
-                >
+                <Button type="submit" className="w-full gap-2 font-semibold 3xl:py-3 3xl:text-base 4xl:py-3.5 4xl:text-base" style={{ fontFamily: "Montserrat" }}>
                   <Send className="h-4 w-4 3xl:h-5 3xl:w-5" />
                   {newsletter.buttonLabel}
-                </button>
+                </Button>
 
                 <p
                   className="text-[11px] leading-relaxed text-muted-foreground 3xl:text-xs 4xl:text-sm"

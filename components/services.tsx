@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Minimize2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { LANDING_SERVICES_KEY } from "@/lib/constants";
 import { TYPE } from "@/lib/typography";
 
@@ -135,22 +136,21 @@ export default function ServicesSection({
         <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-8 2xl:mb-12 3xl:mb-14 4xl:mb-16 flex flex-col gap-3 sm:gap-4 md:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8">
             {services.map((s, i) => (
-              <button
+              <Button
                 key={s.id}
                 type="button"
+                variant={i === activeIndex ? "default" : "secondary"}
                 onClick={() => {
                   setActiveIndex(i);
                   setShowSubServices(false);
                 }}
                 className={cn(
-                  "rounded-full px-4 py-2 sm:px-5 sm:py-2.5 md:px-5 md:py-2.5 lg:px-6 lg:py-3 2xl:px-10 2xl:py-5 3xl:px-11 3xl:py-5 4xl:px-12 4xl:py-6 text-xs sm:text-sm md:text-base lg:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl font-medium transition-colors",
-                  i === activeIndex
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-muted-foreground hover:bg-muted"
+                  "rounded-full px-4 py-2 sm:px-5 sm:py-2.5 md:px-5 md:py-2.5 lg:px-6 lg:py-3 2xl:px-10 2xl:py-5 3xl:px-11 3xl:py-5 4xl:px-12 4xl:py-6 text-xs sm:text-sm md:text-base lg:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl font-medium h-auto min-h-[44px]",
+                  i !== activeIndex && "text-muted-foreground hover:bg-muted",
                 )}
               >
                 {s.name}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -180,10 +180,11 @@ export default function ServicesSection({
             )}
           >
             {/* Pill: Sub Services in bottom-right corner */}
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={() => setShowSubServices((v) => !v)}
-              className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 xl:bottom-10 xl:right-10 2xl:bottom-20 2xl:right-20 3xl:bottom-24 3xl:right-24 4xl:bottom-28 4xl:right-28 z-20 inline-flex items-center overflow-hidden rounded-full bg-muted text-foreground shadow-md transition-opacity hover:opacity-90"
+              className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 xl:bottom-10 xl:right-10 2xl:bottom-20 2xl:right-20 3xl:bottom-24 3xl:right-24 4xl:bottom-28 4xl:right-28 z-20 h-auto min-h-[44px] overflow-hidden rounded-full p-0 shadow-md hover:shadow-md hover:translate-y-0"
             >
               <span className="px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-9 2xl:py-5 3xl:px-10 3xl:py-5 4xl:px-11 4xl:py-6 text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg font-semibold uppercase tracking-wider">
                 SUB SERVICES
@@ -191,7 +192,7 @@ export default function ServicesSection({
               <span className="flex h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 2xl:h-14 2xl:w-14 3xl:h-16 3xl:w-16 4xl:h-[4.5rem] 4xl:w-[4.5rem] items-center justify-center rounded-full bg-card text-card-foreground">
                 <Minimize2 className={cn("h-4 w-4 sm:h-5 sm:w-5 2xl:h-7 2xl:w-7 3xl:h-7 3xl:w-7 4xl:h-8 4xl:w-8 transition-transform duration-300", showSubServices && "rotate-180")} />
               </span>
-            </button>
+            </Button>
 
             {/* Expanded sub-services panel (bottom-right, like reference) */}
             <div
@@ -204,21 +205,24 @@ export default function ServicesSection({
                 <span className="text-sm 2xl:text-xl 3xl:text-2xl 4xl:text-3xl font-semibold uppercase tracking-wider text-primary-foreground">
                   SELECT TO EXPLORE
                 </span>
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setShowSubServices(false)}
-                  className="rounded-md p-1.5 2xl:p-3 3xl:p-3.5 4xl:p-4 text-primary-foreground transition-colors hover:bg-primary-foreground/20"
+                  className="text-primary-foreground hover:bg-primary-foreground/20 hover:translate-y-0 shadow-none"
                   aria-label="Close sub services"
                 >
                   <Minimize2 className="h-4 w-4 sm:h-5 sm:w-5 2xl:h-8 2xl:w-8 3xl:h-9 3xl:w-9 4xl:h-10 4xl:w-10" />
-                </button>
+                </Button>
               </div>
               <div className="grid grid-cols-2 gap-2 p-3 sm:p-4 2xl:gap-6 2xl:p-8 3xl:gap-8 3xl:p-10 4xl:gap-10 4xl:p-12">
                 {active.subServices.map((sub, i) => (
-                  <button
+                  <Button
                     key={sub}
                     type="button"
-                    className="group relative flex min-h-[72px] sm:min-h-[80px] 2xl:min-h-[160px] 3xl:min-h-[200px] 4xl:min-h-[240px] flex-col items-start justify-end rounded-xl 2xl:rounded-2xl 3xl:rounded-2xl 4xl:rounded-[1rem] bg-muted p-3 2xl:p-6 3xl:p-8 4xl:p-10 text-left transition-colors hover:bg-muted/80 dark:bg-muted dark:hover:bg-muted/80"
+                    variant="secondary"
+                    className="group relative flex h-auto min-h-[72px] sm:min-h-[80px] 2xl:min-h-[160px] 3xl:min-h-[200px] 4xl:min-h-[240px] flex-col items-start justify-end rounded-xl 2xl:rounded-2xl 3xl:rounded-2xl 4xl:rounded-[1rem] p-3 2xl:p-6 3xl:p-8 4xl:p-10 text-left hover:translate-y-0 shadow-none hover:shadow-none dark:bg-muted"
                   >
 <span className="text-xs font-medium leading-tight text-card-foreground sm:text-sm 2xl:text-lg 3xl:text-xl 4xl:text-2xl">
                                       {sub}
@@ -231,7 +235,7 @@ export default function ServicesSection({
                     >
                       <ChevronRight className="h-3.5 w-3.5 2xl:h-7 2xl:w-7 3xl:h-8 3xl:w-8 4xl:h-9 4xl:w-9" />
                     </Link>
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>

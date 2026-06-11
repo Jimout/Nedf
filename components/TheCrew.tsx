@@ -7,6 +7,7 @@ import { FaLinkedin, FaInstagram, FaPinterest, FaBehance, FaYoutube } from "reac
 import { FaTiktok } from "react-icons/fa6"
 import { FaXTwitter } from "react-icons/fa6"
 import { CometCard } from "@/components/ui/comet-card"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { loadCrewSection, type CrewMember } from "@/lib/landing-crew"
 
@@ -320,9 +321,11 @@ function SocialLinks({ social }: { social: SocialLinks }) {
 
   return (
     <div className="pt-3 sm:pt-3 md:pt-4 lg:pt-4 xl:pt-4 2xl:pt-5">
-      <button
+      <Button
+        type="button"
+        variant="link"
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-xl 3xl:text-2xl 4xl:text-3xl font-medium text-muted-foreground mb-2 sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4 hover:text-primary transition-colors duration-300 cursor-pointer flex items-center gap-2"
+        className="mb-2 h-auto justify-start p-0 text-xs sm:text-sm md:text-sm lg:text-base xl:text-base 2xl:text-xl 3xl:text-2xl 4xl:text-3xl font-medium text-muted-foreground hover:translate-y-0 hover:text-primary sm:mb-2 md:mb-3 lg:mb-3 xl:mb-3 2xl:mb-4"
       >
         Follow Us
         <span className={cn(
@@ -331,7 +334,7 @@ function SocialLinks({ social }: { social: SocialLinks }) {
         )}>
           ▼
         </span>
-      </button>
+      </Button>
       <div 
         className={cn(
           "flex gap-3 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-4 2xl:gap-6 3xl:gap-7 4xl:gap-8 justify-start flex-wrap py-1 transition-all duration-500 ease-in-out",

@@ -8,6 +8,7 @@ import Link from "next/link"
 import { gsap } from "gsap"
 import { useClientPathname } from "@/lib/use-client-pathname"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Button } from "@/components/ui/button"
 
 // ==================== CONSTANTS ====================
 
@@ -308,25 +309,21 @@ function HamburgerButton({
   onClick: () => void
 }) {
   return (
-    <button
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
       aria-label="Toggle navigation"
       aria-expanded={isOpen}
       onClick={onClick}
-      className="
-        lg:hidden inline-flex items-center justify-center 
-        min-w-[44px] min-h-[44px] p-2.5 -mr-2 rounded-none
-        text-foreground
-        active:bg-muted
-        transition-colors duration-150
-        touch-manipulation
-      "
+      className="lg:hidden -mr-2 min-h-[44px] min-w-[44px] rounded-none text-foreground hover:translate-y-0 active:bg-muted"
     >
-      <div className="relative w-5 h-5">
+      <div className="relative h-5 w-5">
         <HamburgerLine isOpen={isOpen} position="top" />
         <HamburgerLine isOpen={isOpen} position="middle" />
         <HamburgerLine isOpen={isOpen} position="bottom" />
       </div>
-    </button>
+    </Button>
   )
 }
 

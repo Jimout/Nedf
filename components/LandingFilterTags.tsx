@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { LANDING_MAIN_GUTTERS, LANDING_MAIN_GUTTERS_BLEED } from "@/lib/constants"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 interface LandingFilterTagsProps<T extends string> {
@@ -46,22 +47,23 @@ export default function LandingFilterTags<T extends string>({
           {tags.map((tag) => {
             const isActive = activeTag === tag
             return (
-              <button
+              <Button
                 key={tag}
                 ref={isActive ? activeButtonRef : undefined}
                 type="button"
+                variant="ghost"
                 onClick={() => onTagChange(tag)}
                 className={cn(
-                  "inline-flex min-h-[44px] items-end pb-1 sm:pb-1 md:pb-1.5 lg:pb-1.5 xl:pb-2 2xl:pb-2",
+                  "inline-flex h-auto min-h-[44px] items-end rounded-none px-0 pb-1 sm:pb-1 md:pb-1.5 lg:pb-1.5 xl:pb-2 2xl:pb-2",
                   "text-xs sm:text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-base font-medium whitespace-nowrap shrink-0",
-                  "border-b-2 transition-colors duration-300 ease-out touch-manipulation [-webkit-tap-highlight-color:transparent]",
+                  "border-b-2 shadow-none hover:shadow-none hover:translate-y-0 active:translate-y-0",
                   isActive
-                    ? "text-primary border-primary"
-                    : "text-muted-foreground border-transparent hover:text-primary hover:border-primary/40",
+                    ? "text-primary border-primary hover:bg-transparent hover:text-primary/75"
+                    : "text-muted-foreground border-transparent hover:bg-transparent hover:text-primary hover:border-primary/40",
                 )}
               >
                 {tag}
-              </button>
+              </Button>
             )
           })}
         </div>

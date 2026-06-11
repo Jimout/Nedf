@@ -271,12 +271,14 @@ export default function Portfolio() {
         {/* Pagination Dots - blue (light) / red (dark) via system primary */}
         <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-7 xl:mt-8 2xl:mt-9 3xl:mt-10 4xl:mt-12 gap-1 sm:gap-2 md:gap-3 lg:gap-3 xl:gap-3.5 2xl:gap-4 3xl:gap-4 4xl:gap-5">
           {slides.map((_, index) => (
-            <button
+            <Button
               key={index}
               type="button"
+              variant="ghost"
+              size="icon"
               aria-label={`Go to slide ${index + 1}`}
               aria-current={index === currentIndex ? "true" : undefined}
-              className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] touch-manipulation select-none [-webkit-tap-highlight-color:transparent] p-3"
+              className="min-h-[44px] min-w-[44px] p-3 shadow-none hover:shadow-none hover:translate-y-0"
               onClick={() => {
                 if (index !== currentIndex) {
                   setTransitioning(true)
@@ -295,7 +297,7 @@ export default function Portfolio() {
                   transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
                 }}
               />
-            </button>
+            </Button>
           ))}
         </div>
         </div>

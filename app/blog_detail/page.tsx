@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { Menu } from "lucide-react"
 import RelatedBlogs from "@/components/Related-blogs"
+import { Button } from "@/components/ui/button"
 
 interface TocItem {
   id: string

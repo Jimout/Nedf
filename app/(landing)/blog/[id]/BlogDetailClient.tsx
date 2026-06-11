@@ -4,6 +4,7 @@ import type React from "react"
 
 import RelatedBlogs from "@/components/Related-blogs"
 import Subscription from "@/components/Subscription"
+import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Menu } from "lucide-react"
 import Image from "next/image"
@@ -129,19 +130,21 @@ function CmsBlogDetail({ blog }: { blog: CmsBlog }) {
                       const paddingLeft = section.level === 1 ? "12px" : section.level === 2 ? "28px" : "44px"
                       return (
                         <li key={section.id}>
-                          <button
+                          <Button
                             type="button"
+                            variant="ghost"
                             onClick={() => scrollToSection(section.id)}
-                            className={`flex w-full items-start gap-3 py-2 px-3 text-sm text-left transition-all duration-300 ${
+                            className={cn(
+                              "flex h-auto min-h-[44px] w-full items-start justify-start gap-3 rounded-none py-2 px-3 text-sm text-left shadow-none hover:translate-y-0 hover:shadow-none",
                               isActive
-                                ? "bg-primary text-primary-foreground"
-                                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                            }`}
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                            )}
                             style={{ paddingLeft }}
                           >
                             <span className="text-xs font-medium mt-0.5 min-w-[32px]">{section.number}</span>
                             <span className="flex-1 leading-relaxed">{section.title}</span>
-                          </button>
+                          </Button>
                         </li>
                       )
                     })}
@@ -347,13 +350,15 @@ function StaticBlogDetailPage({ post }: { post: CmsBlogPost }) {
             <article className="flex-1 relative min-w-0">
               {showMobileTOC && (
               <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
-                <button
-                  className="bg-primary text-primary-foreground p-3 shadow-lg w-12 h-12 flex items-center justify-center hover:bg-primary/90 transition-colors duration-200"
+                <Button
+                  type="button"
+                  size="icon"
                   onClick={() => setTocExpanded(!tocExpanded)}
                   aria-label="Toggle table of contents"
+                  className="h-12 w-12 shadow-lg"
                 >
                   <Menu size={20} />
-                </button>
+                </Button>
 
                 <div
                   className={`mt-3 bg-card border border-border shadow-xl w-72 max-h-[70vh] flex flex-col transform origin-top transition-all duration-200 ease-out overflow-hidden ${

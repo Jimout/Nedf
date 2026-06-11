@@ -4,6 +4,7 @@ import { ChevronLeft, Menu } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import Subscription from "@/components/Subscription"
+import { Button } from "@/components/ui/button"
 import type { LegalSection } from "@/lib/legal-content"
 
 const LEGAL_PAGE_BACK_LABEL = "Back"
@@ -115,12 +116,15 @@ export function LegalPage({ title, lastUpdated, sections, backHref }: LegalPageP
               {/* Mobile TOC Icon */}
               {showMobileTOC && (
                 <div className="lg:hidden fixed left-4 top-4 z-50 flex flex-col items-start">
-                  <button
-                    className="bg-primary text-primary-foreground p-3 rounded-full shadow-lg w-14 h-14 flex items-center justify-center"
+                  <Button
+                    type="button"
+                    size="icon"
+                    className="h-14 w-14 rounded-full shadow-lg"
                     onClick={() => setTocExpanded(!tocExpanded)}
+                    aria-label="Toggle table of contents"
                   >
                     <Menu size={24} />
-                  </button>
+                  </Button>
 
                   <div
                     className={`mt-2 bg-background border rounded shadow-lg w-56 max-h-[70vh] flex flex-col transform origin-top transition-all duration-300 ease-in-out overflow-hidden ${

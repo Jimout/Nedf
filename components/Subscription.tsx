@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Send, Linkedin, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   loadSubscription,
   type SubscriptionData,
@@ -73,10 +74,10 @@ export default function Footer() {
                   placeholder={data.newsletter.placeholder}
                   className="flex-1 min-w-0 px-3 py-2.5 sm:px-4 sm:py-3 2xl:px-5 2xl:py-4 3xl:px-6 3xl:py-4 4xl:px-6 4xl:py-5 text-sm sm:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl bg-footer-input text-footer-foreground placeholder:text-footer-muted border border-footer-border focus:outline-none focus:ring-1 focus:ring-footer-accent"
                 />
-                <button className="px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-8 2xl:py-4 3xl:px-9 3xl:py-4 4xl:px-10 4xl:py-5 bg-primary text-primary-foreground text-sm sm:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shrink-0">
+                <Button type="button" className="shrink-0 gap-2 text-sm sm:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-8 2xl:py-4 3xl:px-9 3xl:py-4 4xl:px-10 4xl:py-5">
                   <Send className="w-4 h-4 sm:w-4 sm:h-4 2xl:w-5 2xl:h-5 3xl:w-6 3xl:h-6 4xl:w-6 4xl:h-6" />
                   {data.newsletter.buttonLabel}
-                </button>
+                </Button>
               </div>
               <p className="text-xs sm:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg text-footer-muted">
                 {data.newsletter.description}

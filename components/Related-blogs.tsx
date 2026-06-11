@@ -99,7 +99,6 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                       type="button"
                       size="sm"
                       onClick={() => (window.location.href = `/blog-detail?id=${post.id}`)}
-                      className="relative z-10 min-h-[44px] min-w-[44px] rounded-none touch-manipulation select-none [-webkit-tap-highlight-color:transparent] shadow-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:bg-primary/80 active:shadow-sm focus-visible:ring-2 focus-visible:ring-primary/40"
                     >
                       Read More
                     </Button>

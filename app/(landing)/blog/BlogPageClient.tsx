@@ -91,12 +91,7 @@ function BlogPostCard({
           {post.description}
         </p>
         <div className="mt-auto flex justify-end shrink-0 pt-2">
-          <Button
-            type="button"
-            size="sm"
-            onClick={() => onReadMore(post.id)}
-            className="relative z-10 min-h-[44px] min-w-[44px] rounded-none touch-manipulation select-none [-webkit-tap-highlight-color:transparent] shadow-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:bg-primary/80 active:shadow-sm focus-visible:ring-2 focus-visible:ring-primary/40"
-          >
+          <Button type="button" size="sm" onClick={() => onReadMore(post.id)} className="relative z-10">
             Read more
           </Button>
         </div>

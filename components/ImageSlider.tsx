@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface ImageSliderProps {
   images: string[]
@@ -28,14 +29,17 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Left Arrow */}
-      <button
+      <Button
+        type="button"
+        variant="secondary"
+        size="icon"
         onClick={prevSlide}
         disabled={isAtStart}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-[#15171a]/80 hover:bg-white dark:hover:bg-[#15171a] rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80 dark:disabled:hover:bg-[#15171a]/80"
+        aria-label="Previous slide"
+        className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg hover:translate-y-[-50%] hover:shadow-lg dark:bg-[#15171a]/80 dark:hover:bg-[#15171a] disabled:opacity-30"
       >
-        <ChevronLeft className="w-6 h-6 text-[#001F4B] dark:text-[#ec1e24]" />
-      </button>
+        <ChevronLeft className="h-6 w-6 text-[#001F4B] dark:text-[#ec1e24]" />
+      </Button>
 
       <div
         className="flex transition-transform duration-700 ease-in-out"
@@ -77,22 +81,33 @@ export default function ImageSlider({ images, alts, gap = 10 }: ImageSliderProps
         })}
       </div>
 
-      {/* Right Arrow */}
-      <button
+      <Button
+        type="button"
+        variant="secondary"
+        size="icon"
         onClick={nextSlide}
         disabled={isAtEnd}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-[#15171a]/80 hover:bg-white dark:hover:bg-[#15171a] rounded-full p-2 shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/80 dark:disabled:hover:bg-[#15171a]/80"
+        aria-label="Next slide"
+        className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg hover:translate-y-[-50%] hover:shadow-lg dark:bg-[#15171a]/80 dark:hover:bg-[#15171a] disabled:opacity-30"
       >
-        <ChevronRight className="w-6 h-6 text-[#001F4B] dark:text-[#ec1e24]" />
-      </button>
+        <ChevronRight className="h-6 w-6 text-[#001F4B] dark:text-[#ec1e24]" />
+      </Button>
 
-      <div className="flex justify-center mt-4 space-x-2">
+      <div className="mt-4 flex justify-center space-x-2">
         {Array.from({ length: totalSlides + 1 }).map((_, idx) => (
-          <button
+          <Button
             key={idx}
+            type="button"
+            variant="ghost"
+            size="icon"
             onClick={() => setCurrentSlide(idx)}
-            className={`w-2 h-2 rounded-full transition-all ${idx === currentSlide ? "bg-[#001F4B] dark:bg-[#ec1e24]" : "bg-gray-300 dark:bg-gray-600"}`}
-          />
+            aria-label={`Go to slide ${idx + 1}`}
+            className="h-8 w-8 min-h-0 min-w-0 p-0 shadow-none hover:translate-y-0 hover:shadow-none"
+          >
+            <span
+              className={`block rounded-full transition-all ${idx === currentSlide ? "h-2 w-2 bg-[#001F4B] dark:bg-[#ec1e24]" : "h-2 w-2 bg-gray-300 dark:bg-gray-600"}`}
+            />
+          </Button>
         ))}
       </div>
     </div>

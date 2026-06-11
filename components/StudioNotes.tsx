@@ -303,10 +303,7 @@ function PostContent({
 
       <div className="flex justify-end">
 
-        <Button
-          onClick={() => onReadMore(postId)}
-          className="bg-[#002e47] dark:bg-[#ec1e24] text-white hover:bg-[#001f35] dark:hover:bg-[#ec1e24]/90"
-        >
+        <Button type="button" size="sm" onClick={() => onReadMore(postId)}>
           Read More
         </Button>
 

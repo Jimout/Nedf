@@ -6,6 +6,7 @@ import { FaLinkedin, FaInstagram, FaYoutube } from "react-icons/fa"
 import { FaTiktok, FaXTwitter } from "react-icons/fa6"
 import { loadContact, type ContactData } from "@/lib/landing-contact"
 import Subscription from "@/components/Subscription"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const SOCIAL_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -148,12 +149,9 @@ export default function ContactPage() {
                   className="w-full px-3 py-2.5 bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-y min-h-[100px]"
                 />
               </label>
-              <button
-                type="submit"
-                className="px-5 py-2.5 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
-              >
+              <Button type="submit">
                 {contactData.page.sendButtonLabel}
-              </button>
+              </Button>
             </form>
           </section>
 

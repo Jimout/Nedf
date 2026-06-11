@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function DashboardLogin() {
   const router = useRouter();
@@ -16,8 +18,8 @@ export default function DashboardLogin() {
     e.preventDefault();
 
     if (username === DEFAULT_USER && password === DEFAULT_PASS) {
-      localStorage.setItem("dashboardAuth", "true"); // mark as logged in
-      router.push("/dashboard/overview");           // redirect to dashboard
+      localStorage.setItem("dashboardAuth", "true");
+      router.push("/dashboard/overview");
     } else {
       setError("Invalid username or password");
     }
@@ -28,40 +30,39 @@ export default function DashboardLogin() {
   };
 
   return (
-    <div className="bg-white p-8 rounded-xl shadow-lg">
-      <h1 className="text-2xl font-bold text-center mb-6">NEDF Dashboard Login</h1>
+    <div className="rounded-xl bg-white p-8 shadow-lg">
+      <h1 className="mb-6 text-center text-2xl font-bold">NEDF Dashboard Login</h1>
 
-      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+      {error && <p className="mb-2 text-sm text-red-500">{error}</p>}
 
       <form onSubmit={handleLogin} className="space-y-4">
-        <input
+        <Input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="rounded-lg"
         />
-        <input
+        <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="rounded-lg"
         />
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-        >
+        <Button type="submit" className="w-full">
           Login
-        </button>
+        </Button>
       </form>
 
-      <button
+      <Button
+        type="button"
+        variant="link"
         onClick={handleForgotPassword}
-        className="text-blue-600 mt-4 text-sm underline block mx-auto"
+        className="mx-auto mt-4 block h-auto p-0 text-sm"
       >
         Forgot Password?
-      </button>
+      </Button>
     </div>
   );
 }
