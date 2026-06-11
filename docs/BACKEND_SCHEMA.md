@@ -1,28 +1,81 @@
 # NEDF Backend Schema & API Handoff
 
-This document describes the data model, relationships, and API surface the backend team should implement when replacing the current frontend-only persistence (JSON file + `localStorage`).
+**Audience:** Backend team implementing persistence, auth, and public/admin APIs for the NEDF marketing site and dashboard.
 
-**Frontend repo paths:** types in `lib/cms/types.ts`, CMS logic in `lib/cms/store.ts`, CMS client in `lib/cms/client.ts`.
+**Frontend repo:** `Nedf/` (Next.js App Router)
 
----
+**Canonical TypeScript types:** `lib/cms/types.ts`  
+**CMS business logic:** `lib/cms/store.ts`  
+**CMS HTTP client (dashboard + landing):** `lib/cms/client.ts`
 
-## 1. Current architecture
-
-| Layer | Status |
-|--------|--------|
-| **Blog + Portfolio CMS** | Partial backend: Next.js routes under `/api/cms/*`, JSON file in dev only (`content/cms/store.json`) |
-| **Homepage / company content** | Browser `localStorage` only — not persisted server-side |
-| **Auth** | Client-only: `localStorage.dashboardAuth = "true"` + plaintext credentials in `dashboardLoginConfig` |
-| **Contact form** | UI only — submit handler is a stub (`app/(landing)/contact/page.tsx`) |
-| **Newsletter signups** | Saved to `localStorage.subscribers` |
-| **Legal pages** | Static TypeScript in `lib/legal-content.ts` |
-| **Landing testimonials** | Hardcoded in components — **not** connected to dashboard `reviews` |
-
-**Production note:** CMS writes to `store.json` only work when `NODE_ENV=development`. Production currently falls back to defaults in `lib/cms/defaults.ts` unless a real database is added.
+**Last updated:** June 2026 — aligned with current frontend after dead-code cleanup.
 
 ---
 
-## 2. Entity relationship diagram
+## 1. Executive summary
+
+| Area | Current state | Backend action |
+|------|---------------|----------------|
+| Blog + Portfolio CMS | Partial: `/api/cms/*` routes, JSON file in dev (`content/cms/store.json`) | **P0** — PostgreSQL + same JSON contract |
+| Homepage content (slogan, services, steps, contact, footer, founders) | Browser `localStorage` only | **P1** — Site settings APIs |
+| Admin auth | Plaintext creds in `localStorage` + `dashboardAuth=true` flag | **P0** — Real auth + protected writes |
+| Contact form | UI only — submit is a stub | **P1** — `POST /api/contact` |
+| Newsletter | Blog sidebar saves to `localStorage.subscribers`; footer form is display-only | **P1** — `POST /api/newsletter/subscribe` |
+| Team / Reviews (dashboard) | `localStorage` via `lib/data-context.tsx` | **P2** — CRUD + wire landing |
+| Landing testimonials | Hardcoded in `components/ClientReflections.tsx` | **P2** — Replace with `GET /api/reviews` |
+| Landing team carousel | Hardcoded `TEAM_DATA` in `components/OurTeam.tsx` | **P2** — Wire to `team_members` |
+| Hero stats | Hardcoded in `components/Stats.tsx` | **P3** — Optional CMS |
+| Hero rotating words | Hardcoded in `components/Hero.tsx` | **P3** — Optional CMS |
+| Portfolio 360° tour | Hardcoded iframe URL in portfolio detail page | **P2** — Add field to portfolio project |
+| Legal pages | Static copy in `lib/legal-content.ts` | **P3** — Optional CMS |
+| Portfolio profile (dashboard) | `localStorage.portfolioProfile` — not on public site | **P3** — Drop or merge into site settings |
+
+**Production CMS note:** Writes to `content/cms/store.json` only succeed when `NODE_ENV=development`. In production, reads fall back to `lib/cms/defaults.ts` unless a database backs the routes.
+
+---
+
+## 2. Public site map (what consumes data)
+
+| Public route | Data source today | Backend target |
+|--------------|-------------------|----------------|
+| `/` | CMS portfolio (carousel), `localStorage` slogan/services, hardcoded stats/testimonials/studio-notes CTA | Mixed APIs |
+| `/about` | `landingCrew` (founders), hardcoded `OurTeam`, `landingSteps` | Site + team APIs |
+| `/portfolio`, `/portfolio/[id]` | CMS (`/api/cms/portfolio*`) | Keep CMS APIs |
+| `/blog`, `/blog/[id]` | CMS (`/api/cms/blogs*`) | Keep CMS APIs |
+| `/contact` | `landingContact` + stub form | Contact settings + submissions API |
+| `/privacy-policy`, `/terms-and-conditions` | `lib/legal-content.ts` | Static or legal CMS |
+
+**Redirects (keep in gateway/nginx or Next config):**
+
+- `/blog_detail` → `/blog` (permanent)
+- `/dashbord-login` → `/dashboard-login` (permanent)
+
+---
+
+## 3. Dashboard map (admin UI → storage)
+
+| Dashboard route | Sidebar label | Storage key / API | Wired to landing? |
+|-----------------|---------------|-------------------|-------------------|
+| `/dashboard/manage-blog` | Posts | CMS `blogs` | Yes |
+| `/dashboard/manage-blog-filters` | Filters | CMS `blogFilters` | Yes |
+| `/dashboard/manage-portfolio` | Projects | CMS `portfolio` | Yes |
+| `/dashboard/manage-portfolio-categories` | Categories | CMS `portfolioCategories` | Yes |
+| `/dashboard/manage-services` | Services | `landingServices` | Yes |
+| `/dashboard/manage-steps` | Steps | `landingSteps` | Yes (`/about`) |
+| `/dashboard/manage-slogan` | Slogan | `landingSlogan` | Yes (homepage) |
+| `/dashboard/manage-contact` | Contact | `landingContact` | Yes (`/contact`) |
+| `/dashboard/manage-subscribers` | Footer | `landingSubscription` | Yes (`Subscription.tsx` footer) |
+| `/dashboard/manage-founders` | Founders | `landingCrew` | Yes (`TheCrew` on `/about`) |
+| `/dashboard/manage-team` | Team | `teamMembers` | **No** — landing uses hardcoded team |
+| `/dashboard/manage-review` | Reviews | `reviews` | **No** — landing uses hardcoded testimonials |
+| `/dashboard/manage-login` | Login Page | `dashboardLoginConfig` | Auth only |
+| `/dashboard/manage-profile` | (overview link only) | `portfolioProfile` | **No** — dashboard-only stub |
+
+Sidebar definition: `app/dashboard/DashboardLayoutClient.tsx`
+
+---
+
+## 4. Entity relationship diagram
 
 ```mermaid
 erDiagram
@@ -31,22 +84,22 @@ erDiagram
     blog_posts ||--|{ blog_sections : "embedded JSON"
     portfolio_projects ||--o{ media_assets : "image URLs"
 
-    site_settings ||--|| hero_slogan : "singleton"
-    site_settings ||--|| footer_settings : "singleton"
-    site_settings ||--|| contact_page_settings : "singleton"
-    site_settings ||--|| about_section : "singleton"
+    hero_slogan ||--|| site_settings : "singleton"
+    footer_settings ||--|| site_settings : "singleton"
+    contact_settings ||--|| site_settings : "singleton"
+    about_section ||--|| site_settings : "singleton"
 
-    about_section ||--o{ founders : "crew on about page"
-    services ||--o{ service_sub_items : "ordered list"
+    about_section ||--o{ founders : "crew members"
+    services ||--o{ service_sub_items : "sub_services JSON"
     process_steps ||--o{ step_items : "ordered list"
 
-    team_members }o--|| media_assets : "avatar"
-    reviews }o--|| media_assets : "profile_picture"
+    team_members }o--|| media_assets : "avatar_url"
+    reviews }o--|| media_assets : "profile_picture_url"
     founders }o--|| media_assets : "image URLs"
 
     admin_users ||--o{ admin_sessions : "auth"
-    newsletter_subscribers }o--|| site_settings : "signup"
-    contact_submissions }o--|| contact_page_settings : "form"
+    newsletter_subscribers }o--|| site_settings : "signup source"
+    contact_submissions }o--|| contact_settings : "form"
 
     blog_filters {
         varchar id PK
@@ -60,31 +113,22 @@ erDiagram
         varchar filter_id FK
         bool published
         date published_at
-        date updated_at
-    }
-
-    portfolio_categories {
-        varchar id PK
-        varchar label
-        int sort_order
-        bool is_active
     }
 
     portfolio_projects {
         varchar id PK
         varchar category_id FK
         bool published
-        date updated_at
     }
 ```
 
 ---
 
-## 3. Database schema (PostgreSQL recommended)
+## 5. Database schema (PostgreSQL recommended)
 
-### 3.1 CMS — implement first (partially exists in frontend)
+Use **camelCase in JSON API responses** to match the frontend. Map to snake_case in SQL if preferred.
 
-Types are defined in `lib/cms/types.ts`.
+### 5.1 CMS — implement first (partially exists)
 
 #### `blog_filters`
 
@@ -109,8 +153,8 @@ Types are defined in `lib/cms/types.ts`.
 | `tags` | `JSONB` | NOT NULL DEFAULT `'[]'` | `string[]` legacy display tags |
 | `sections` | `JSONB` | NOT NULL DEFAULT `'[]'` | See section shape below |
 | `published` | `BOOLEAN` | NOT NULL DEFAULT false | Public API filters on this |
-| `published_at` | `DATE` | | |
-| `updated_at` | `DATE` | | |
+| `published_at` | `DATE` | | `YYYY-MM-DD` |
+| `updated_at` | `DATE` | | `YYYY-MM-DD` |
 | `created_at` | `TIMESTAMPTZ` | NOT NULL DEFAULT now() | |
 
 **Embedded `blog_sections` JSON shape:**
@@ -145,33 +189,37 @@ Same columns as `blog_filters`.
 | `area` | `VARCHAR(100)` | | |
 | `topology` | `VARCHAR(255)` | | Building type |
 | `role` | `VARCHAR(255)` | | NEDF role on project |
-| `status` | `VARCHAR(100)` | | e.g. Underconstruction |
+| `status` | `VARCHAR(100)` | | e.g. Under construction |
 | `inspiration` | `TEXT` | | |
-| `description` | `TEXT` | | |
+| `description` | `TEXT` | | HTML allowed (rich text editor) |
 | `features` | `JSONB` | NOT NULL DEFAULT `'[]'` | `string[]` |
 | `materials` | `JSONB` | NOT NULL DEFAULT `'[]'` | `string[]` |
 | `color_palette` | `JSONB` | NOT NULL DEFAULT `'[]'` | `string[]` hex colors |
 | `before_image_url` | `TEXT` | | |
 | `after_image_url` | `TEXT` | | |
 | `gallery_images` | `JSONB` | NOT NULL DEFAULT `'[]'` | `string[]` URLs |
+| `panorama_iframe_url` | `TEXT` | nullable | **Not in CMS yet** — hardcoded on detail page today |
+| `panorama_image_url` | `TEXT` | nullable | Optional Pannellum image panorama |
 | `published` | `BOOLEAN` | NOT NULL DEFAULT false | |
 | `updated_at` | `DATE` | | |
 | `created_at` | `TIMESTAMPTZ` | NOT NULL DEFAULT now() | |
 
 **Indexes:** `(category_id)`, `(published)`.
 
-#### FK delete rules
+**Gallery alt text:** Frontend auto-generates alts as `"${title} ${index+1}"` in `lib/cms/mappers.ts`. Optional future column: `gallery_alts JSONB`.
 
-Both taxonomies use the same logic as `lib/cms/store.ts`:
+#### FK delete rules (taxonomy)
 
-- Deleting a `blog_filter` or `portfolio_category` that is referenced **requires** a `reassign_to_id` body field, or return **409 Conflict**.
-- On reassignment, update all child rows and bump `updated_at`.
+Mirrors `lib/cms/store.ts`:
+
+- Deleting a `blog_filter` or `portfolio_category` that is referenced **requires** `reassignToId` in DELETE body, or return **409 Conflict**.
+- On reassignment, update all child rows and bump `updated_at` to today (`YYYY-MM-DD`).
 
 ---
 
-### 3.2 Site content — currently `localStorage`
+### 5.2 Site content — currently `localStorage`
 
-#### `hero_slogan` (singleton, one row)
+#### `hero_slogan` (singleton)
 
 | Column | Type |
 |--------|------|
@@ -179,9 +227,12 @@ Both taxonomies use the same logic as `lib/cms/store.ts`:
 | `line2` | `VARCHAR(255)` |
 | `line3` | `VARCHAR(255)` |
 
-**Frontend type:** `SloganData` — `lib/landing-slogan.ts`  
-**localStorage key:** `landingSlogan`  
-**Dashboard:** `/dashboard/manage-slogan`
+| | |
+|--|--|
+| **TypeScript** | `SloganData` — `lib/landing-slogan.ts` |
+| **localStorage key** | `landingSlogan` (`LANDING_SLOGAN_KEY` in `lib/constants.ts`) |
+| **Dashboard** | `/dashboard/manage-slogan` |
+| **Landing component** | `components/Slogan.tsx` (GSAP scroll animation) |
 
 #### `services`
 
@@ -189,69 +240,137 @@ Both taxonomies use the same logic as `lib/cms/store.ts`:
 |--------|------|-------|
 | `id` | `VARCHAR(64)` PK | e.g. `design` |
 | `name` | `VARCHAR(255)` | |
-| `category` | `VARCHAR(255)` | Section label, e.g. DESIGN SERVICES |
+| `category` | `VARCHAR(255)` | Section label, e.g. `DESIGN SERVICES` |
 | `headline` | `VARCHAR(500)` | |
 | `cta` | `VARCHAR(100)` | Button label |
 | `image_url` | `TEXT` | |
-| `sub_services` | `JSONB` | `string[]` — or normalize to `service_sub_items` |
-| `sort_order` | `INT` | |
+| `sub_services` | `JSONB` | `string[]` |
+| `sort_order` | `INT` | Preserve array order |
 
-**Frontend type:** `LandingService` — `app/dashboard/manage-services/services-data.ts`  
-**localStorage key:** `landingServices`  
-**Dashboard:** `/dashboard/manage-services`
+| | |
+|--|--|
+| **TypeScript** | `LandingService` — `app/dashboard/manage-services/services-data.ts` |
+| **localStorage key** | `landingServices` |
+| **Dashboard** | `/dashboard/manage-services` |
+| **Landing component** | `components/services.tsx` |
 
 #### `process_steps`
 
 | Column | Type | Notes |
 |--------|------|-------|
-| `id` | `INT` PK | |
+| `id` | `INT` PK | Stable step id (1–5 in defaults) |
 | `quote` | `TEXT` | |
 | `name` | `VARCHAR(100)` | Step name: Design, Think, … |
 | `role` | `VARCHAR(50)` | Display: Step 1, Step 2, … |
-| `avatar` | `VARCHAR(100)` | Label/icon text today |
+| `avatar` | `VARCHAR(100)` | Label text used in arc animation |
 | `sort_order` | `INT` | |
 
-**Frontend type:** `StepItem` — `lib/landing-steps.ts`  
-**localStorage key:** `landingSteps`  
-**Dashboard:** `/dashboard/manage-steps`
+| | |
+|--|--|
+| **TypeScript** | `StepItem` — `lib/landing-steps.ts` |
+| **localStorage key** | `landingSteps` |
+| **Dashboard** | `/dashboard/manage-steps` |
+| **Landing component** | `components/Steps.tsx` on `/about` |
 
-#### `contact_settings` (singleton or normalized)
+#### `contact_settings` (singleton)
 
-**Frontend type:** `ContactData` — `lib/landing-contact.ts`  
-**localStorage key:** `landingContact`  
-**Dashboard:** `/dashboard/manage-contact`
+| | |
+|--|--|
+| **TypeScript** | `ContactData` — `lib/landing-contact.ts` |
+| **localStorage key** | `landingContact` |
+| **Dashboard** | `/dashboard/manage-contact` |
+| **Landing page** | `app/(landing)/contact/page.tsx` |
 
-| Group | Fields |
-|-------|--------|
-| `info` | `address`, `email`, `phone`, `phone_secondary`, `availability` |
-| `page` | `title`, `subtitle`, `form_title`, `send_button_label`, `company_info_title`, `social_label` |
-| `form_labels` | `full_name`, `email`, `subject`, `message` |
-| `social_links` | JSONB array of `{ name, href }` |
+**JSON shape:**
 
-Store as one JSONB column `payload` or split into columns — frontend merges with defaults on read.
+```typescript
+interface ContactData {
+  info: {
+    address: string
+    email: string
+    phone: string
+    phoneSecondary: string
+    availability: string
+  }
+  page: {
+    title: string
+    subtitle: string
+    formTitle: string
+    sendButtonLabel: string
+    companyInfoTitle: string
+    socialLabel: string
+  }
+  formLabels: {
+    fullName: string
+    email: string
+    subject: string
+    message: string
+  }
+  socialLinks: { name: string; href: string }[]
+}
+```
+
+Defaults seeded from `lib/constants.ts` (`CONTACT_INFO`, `CONTACT_PAGE`, etc.).
+
+**Contact form submission (not persisted today):**
+
+| Field | Type | Required |
+|-------|------|----------|
+| `fullName` | string | yes |
+| `email` | string | yes |
+| `subject` | string | no |
+| `message` | string | yes |
+
+> **Important:** `lib/validations.ts` defines `firstName`/`lastName` — the live form uses a single `fullName` field. Backend must match the UI.
 
 #### `footer_settings` (singleton)
 
-**Frontend type:** `SubscriptionData` — `lib/landing-subscription.ts`  
-**localStorage key:** `landingSubscription`  
-**Dashboard:** `/dashboard/manage-subscribers` (labeled “Footer” in sidebar)
+| | |
+|--|--|
+| **TypeScript** | `SubscriptionData` — `lib/landing-subscription.ts` |
+| **localStorage key** | `landingSubscription` |
+| **Dashboard** | `/dashboard/manage-subscribers` (sidebar: “Footer”) |
+| **Landing component** | `components/Subscription.tsx` (default export name `Footer`) |
 
-| Field | Type |
-|-------|------|
-| `logo_light_url` | TEXT |
-| `logo_dark_url` | TEXT |
-| `quick_links` | JSONB `{ label, href }[]` |
-| `contact` | JSONB `{ email, phone_primary, phone_secondary }` |
-| `social` | JSONB optional platform URLs (linkedin, instagram, tiktok, x, youtube) |
-| `newsletter` | JSONB `{ placeholder, button_label, description }` |
-| `policy_links` | JSONB `{ label, href }[]` |
-| `copyright` | VARCHAR |
+**JSON shape:**
+
+```typescript
+interface SubscriptionData {
+  logoLight: string
+  logoDark: string
+  quickLinks: { label: string; href: string }[]
+  contact: {
+    email: string
+    phonePrimary: string
+    phoneSecondary: string
+  }
+  social: {
+    linkedin?: string
+    instagram?: string
+    tiktok?: string
+    x?: string
+    youtube?: string
+  }
+  newsletter: {
+    placeholder: string
+    buttonLabel: string
+    description: string
+  }
+  policyLinks: { label: string; href: string }[]
+  copyright: string
+}
+```
+
+Footer newsletter input is **display-only** today (no submit handler). Only `BlogSubscribeSidebar` persists signups.
 
 #### `about_section` + `founders`
 
-**Frontend type:** `CrewSectionData` / `CrewMember` — `lib/landing-crew.ts`  
-**localStorage key:** `landingCrew`  
-**Dashboard:** `/dashboard/manage-founders` (sidebar label: Founders)
+| | |
+|--|--|
+| **TypeScript** | `CrewSectionData` / `CrewMember` — `lib/landing-crew.ts` |
+| **localStorage key** | `landingCrew` |
+| **Dashboard** | `/dashboard/manage-founders` |
+| **Landing component** | `components/TheCrew.tsx` on `/about` |
 
 **`about_section` (singleton):**
 
@@ -273,18 +392,20 @@ Store as one JSONB column `payload` or split into columns — frontend merges wi
 | `social` | JSONB — `{ instagram?, tiktok?, linkedin?, pinterest?, behance?, x?, youtube? }` |
 | `sort_order` | INT |
 
-> **Important:** Landing About page reads `landingCrew` only. There is a separate unused `founders` array in `lib/data-context.tsx` (`localStorage.founders`) — do **not** migrate unless product confirms.
+> **Do not migrate** `localStorage.founders` from `lib/data-context.tsx` — orphaned duplicate. Landing reads `landingCrew` only.
 
 ---
 
-### 3.3 People & social proof
+### 5.3 People & social proof
 
 #### `team_members`
 
-**Frontend type:** `TeamMember` — `lib/data-context.tsx`  
-**localStorage key:** `teamMembers`  
-**Dashboard:** `/dashboard/manage-team`  
-**Landing:** Not wired yet — dashboard-only.
+| | |
+|--|--|
+| **TypeScript** | `TeamMember` — `lib/data-context.tsx` |
+| **localStorage key** | `teamMembers` |
+| **Dashboard** | `/dashboard/manage-team` |
+| **Landing** | **Not wired** — `components/OurTeam.tsx` uses hardcoded `TEAM_DATA` |
 
 | Column | Type |
 |--------|------|
@@ -297,12 +418,28 @@ Store as one JSONB column `payload` or split into columns — frontend merges wi
 | `social_media` | JSONB — instagram, tiktok, behance, pinterest, linkedin, twitter, github, website |
 | `sort_order` | INT |
 
+**Landing `OurTeam` expects (when wired):**
+
+```typescript
+interface LandingTeamMember {
+  name: string
+  role: string
+  bio: string
+  image: string
+  socials?: { linkedin?, instagram?, twitter?, dribbble? }
+}
+```
+
+Map `position` → `role`, `description` → `bio`, `avatar_url` → `image`.
+
 #### `reviews` (testimonials)
 
-**Frontend type:** `Review` — `lib/data-context.tsx`  
-**localStorage key:** `reviews`  
-**Dashboard:** `/dashboard/manage-review`  
-**Landing:** Hardcoded in `ClientReflections.tsx`, `AnimatedTestimonials.tsx`, etc.
+| | |
+|--|--|
+| **TypeScript** | `Review` — `lib/data-context.tsx` |
+| **localStorage key** | `reviews` |
+| **Dashboard** | `/dashboard/manage-review` |
+| **Landing** | **Not wired** — `components/ClientReflections.tsx` uses hardcoded array |
 
 | Column | Type |
 |--------|------|
@@ -311,12 +448,62 @@ Store as one JSONB column `payload` or split into columns — frontend merges wi
 | `position` | VARCHAR |
 | `testimonial` | TEXT |
 | `profile_picture_url` | TEXT nullable |
-| `published` | BOOLEAN DEFAULT true — add when wiring landing |
+| `company` | VARCHAR nullable | Landing shows `work` field — add when wiring |
+| `published` | BOOLEAN DEFAULT true |
 | `sort_order` | INT |
+
+**Landing testimonial shape (target for API mapping):**
+
+```typescript
+interface LandingTestimonial {
+  id: number | string
+  quote: string
+  name: string
+  role: string
+  avatar: string      // initials fallback
+  photo: string       // profile image URL
+  work: string        // company name
+}
+```
+
+#### `hero_stats` (optional — hardcoded today)
+
+`components/Stats.tsx` — not in dashboard:
+
+```typescript
+{ value: "100+", label: "Projects Completed" }
+{ value: "95%", label: "Client Engagement Rate" }
+{ value: "98%", label: "Client Satisfaction Rate" }
+{ value: "99%", label: "On-Time Project Completion" }
+```
+
+#### `portfolio_profile` (dashboard-only stub)
+
+**localStorage key:** `portfolioProfile`  
+**Dashboard:** `/dashboard/manage-profile` (linked from overview, not in sidebar)
+
+```typescript
+interface PortfolioProfile {
+  description: string
+  phoneNumber1: string
+  phoneNumber2: string
+  email: string
+  socialMedia: {
+    instagram: string
+    tiktok: string
+    linkedin: string
+    pinterest: string
+    behance: string
+    twitter: string
+  }
+}
+```
+
+Not displayed on public site — low priority or merge into contact/footer settings.
 
 ---
 
-### 3.4 Auth & admin
+### 5.4 Auth & admin
 
 Replace `dashboardLoginConfig` and client-side `dashboardAuth`.
 
@@ -333,34 +520,54 @@ Replace `dashboardLoginConfig` and client-side `dashboardAuth`.
 | `created_at` | TIMESTAMPTZ |
 | `updated_at` | TIMESTAMPTZ |
 
-**Dev defaults today** (`lib/dashboard-login-config.ts`): username `nedfteam`, password `nedf123` — **never ship plaintext to production**.
+**Dev defaults today** (`lib/dashboard-login-config.ts`):
+
+| Key | Default |
+|-----|---------|
+| `dashboardLoginConfig.username` | `nedfteam` |
+| `dashboardLoginConfig.password` | `nedf123` |
+
+**Session flag today:** `localStorage.dashboardAuth = "true"` after login on `/dashboard-login`.
+
+**Never ship plaintext passwords to production.**
 
 #### Sessions
 
-Use HTTP-only cookies or JWT refresh tokens. All CMS and admin mutation routes must require authentication.
+Use HTTP-only cookies or JWT refresh tokens. Protect:
+
+- All CMS mutation routes (`POST`, `PUT`, `PATCH`, `DELETE` under `/api/cms/*`)
+- All proposed site settings write routes
+- Admin list endpoints (optional: public read for published content only)
 
 ---
 
-### 3.5 Public submissions
+### 5.5 Public submissions
 
 #### `newsletter_subscribers`
 
-**localStorage key:** `subscribers`  
-**Signup UI:** `components/BlogSubscribeSidebar.tsx`
+| | |
+|--|--|
+| **localStorage key** | `subscribers` |
+| **Signup UI** | `components/BlogSubscribeSidebar.tsx` (blog detail/list, 2xl+ sidebar) |
+| **Footer form** | `components/Subscription.tsx` — **not connected** |
 
 | Column | Type |
 |--------|------|
-| `id` | UUID PK |
+| `id` | VARCHAR or UUID PK |
 | `email` | VARCHAR UNIQUE NOT NULL |
 | `subscribed_at` | TIMESTAMPTZ NOT NULL |
 | `source` | VARCHAR — e.g. `blog_sidebar`, `footer` |
 | `unsubscribed_at` | TIMESTAMPTZ nullable |
 
-**Rule:** Dedupe by email (case-insensitive).
+**Current localStorage row shape:**
+
+```json
+{ "id": "sub-1710000000000", "email": "user@example.com", "subscribedAt": "2026-06-11" }
+```
+
+**Rules:** Dedupe by email (case-insensitive). Basic regex validation on frontend.
 
 #### `contact_submissions`
-
-**Contact form fields** (actual UI in `app/(landing)/contact/page.tsx`):
 
 | Column | Type |
 |--------|------|
@@ -373,13 +580,11 @@ Use HTTP-only cookies or JWT refresh tokens. All CMS and admin mutation routes m
 | `created_at` | TIMESTAMPTZ |
 | `ip_address` | INET nullable |
 
-> Note: `lib/validations.ts` defines `firstName`/`lastName` — the live form uses a single `fullName` field. Backend should match the UI.
-
 ---
 
-### 3.6 Media
+### 5.6 Media
 
-Frontend uploads often become **base64 data URLs** in `localStorage`. Backend should store files in object storage and persist URLs only.
+Dashboard uploads often become **base64 data URLs** in `localStorage`. Backend must use object storage and persist URLs only.
 
 #### `media_assets`
 
@@ -393,59 +598,63 @@ Frontend uploads often become **base64 data URLs** in `localStorage`. Backend sh
 | `uploaded_by` | UUID FK → `admin_users.id` |
 | `created_at` | TIMESTAMPTZ |
 
-**Endpoint:** `POST /api/media/upload` (admin only) → `{ id, url }`.
+**Endpoint:** `POST /api/media/upload` (admin, multipart) → `{ id, url }`.
 
 ---
 
-### 3.7 Legal content (optional CMS)
+### 5.7 Legal content (optional CMS)
 
 **Source:** `lib/legal-content.ts`
 
 | Table | Columns |
 |-------|---------|
-| `legal_pages` | `slug` PK, `title` |
+| `legal_pages` | `slug` PK (`privacy-policy`, `terms-and-conditions`), `title`, `last_updated` |
 | `legal_sections` | `id`, `page_slug` FK, `sort_order`, `title`, `paragraphs` JSONB `string[]` |
 
-Pages: `privacy-policy`, `terms-and-conditions`. Low priority — static copy is acceptable initially.
+**Landing pages:** `app/(landing)/privacy-policy/page.tsx`, `terms-and-conditions/page.tsx` via `components/LegalPage.tsx`.
 
 ---
 
-## 4. Existing API contract (mirror in real backend)
+## 6. Existing API contract (implement in real backend)
 
-Implemented in `app/api/cms/**`. Frontend client: `lib/cms/client.ts`.
+**Routes:** `app/api/cms/**`  
+**Client:** `lib/cms/client.ts` (`cmsApi` object)  
+**Dev persistence:** `content/cms/store.json`
 
-### Blog filters
+### 6.1 Blog filters — `/api/cms/blog-filters`
 
-| Method | Path | Query | Body | Response |
-|--------|------|-------|------|----------|
-| GET | `/api/cms/blog-filters` | `admin=1` optional | — | `CmsBlogFilter[]` |
-| POST | `/api/cms/blog-filters` | — | `{ label: string }` | Created filter |
-| PATCH | `/api/cms/blog-filters/:id` | — | `{ label?, sortOrder?, isActive? }` | Updated filter |
-| DELETE | `/api/cms/blog-filters/:id` | — | `{ reassignToId?: string }` | `{ success: true }` or 409 |
+| Method | Path | Query | Body | Response | Errors |
+|--------|------|-------|------|----------|--------|
+| GET | `/api/cms/blog-filters` | `admin=1` optional | — | `CmsBlogFilter[]` | |
+| POST | `/api/cms/blog-filters` | — | `{ label: string }` | Created filter | 500 |
+| PATCH | `/api/cms/blog-filters/:id` | — | `{ label?, sortOrder?, isActive? }` | Updated filter | 404, 500 |
+| DELETE | `/api/cms/blog-filters/:id` | — | `{ reassignToId?: string }` | `{ success: true }` | 409 if in use, 500 |
 
 Public GET: active filters only, sorted by `sortOrder`.
 
-### Blog posts
+### 6.2 Blog posts — `/api/cms/blogs`
 
-| Method | Path | Query | Body |
-|--------|------|-------|------|
-| GET | `/api/cms/blogs` | `admin=1` optional | — |
-| POST | `/api/cms/blogs` | — | Full `CmsBlogPost` |
-| GET | `/api/cms/blogs/:id` | — | — |
-| PUT | `/api/cms/blogs/:id` | — | Partial/full `CmsBlogPost` |
-| DELETE | `/api/cms/blogs/:id` | — | — |
+| Method | Path | Query | Body | Response | Errors |
+|--------|------|-------|------|----------|--------|
+| GET | `/api/cms/blogs` | `admin=1` optional | — | `CmsBlogPost[]` | |
+| POST | `/api/cms/blogs` | — | Full `CmsBlogPost` | Created post | 400 missing title/filterId, 500 |
+| GET | `/api/cms/blogs/:id` | — | — | `CmsBlogPost` | 404 |
+| PUT | `/api/cms/blogs/:id` | — | Partial/full post | Updated post | 404, 500 |
+| DELETE | `/api/cms/blogs/:id` | — | — | `{ success: true }` | 404, 500 |
 
-POST validation: `title` and `filterId` required. Auto-sets `id`, `publishedAt`, `updatedAt` if missing.
+POST auto-fills: `id` (`blog-${Date.now()}` if missing), `published` (default true), `publishedAt` / `updatedAt` (today `YYYY-MM-DD`).
 
-### Portfolio categories
+Public GET: `published === true` only.
 
-Same CRUD pattern as blog filters (`/api/cms/portfolio-categories`).
+### 6.3 Portfolio categories — `/api/cms/portfolio-categories`
 
-### Portfolio projects
+Same CRUD pattern as blog filters.
 
-Same CRUD pattern as blogs (`/api/cms/portfolio`). POST requires `title` and `categoryId`.
+### 6.4 Portfolio projects — `/api/cms/portfolio`
 
-### TypeScript types (request/response bodies)
+Same CRUD pattern as blogs. POST requires `title` and `categoryId`.
+
+### 6.5 TypeScript types (JSON bodies)
 
 ```typescript
 interface CmsBlogFilter {
@@ -506,131 +715,190 @@ interface CmsPortfolioProject {
   published: boolean
   updatedAt: string
 }
-```
 
-Use **camelCase** in JSON to match the frontend (map to snake_case in SQL if preferred).
+interface CmsStore {
+  blogFilters: CmsBlogFilter[]
+  portfolioCategories: CmsPortfolioCategory[]
+  blogs: CmsBlogPost[]
+  portfolio: CmsPortfolioProject[]
+}
+```
 
 ---
 
-## 5. Proposed API surface (not built yet)
+## 7. Proposed API surface (not built yet)
 
 ```
-POST   /api/auth/login              { username, password } → token/cookie
+POST   /api/auth/login              { username, password } → Set-Cookie or { token }
 POST   /api/auth/logout
 GET    /api/auth/me
 
 GET    /api/site/settings           Optional bundle of all singletons
-PUT    /api/site/slogan
-GET    /api/site/services
+PUT    /api/site/slogan             SloganData
+GET    /api/site/services           LandingService[]
 PUT    /api/site/services
-GET    /api/site/steps
+GET    /api/site/steps              StepItem[]
 PUT    /api/site/steps
-GET    /api/site/contact
+GET    /api/site/contact            ContactData
 PUT    /api/site/contact
-GET    /api/site/footer
+GET    /api/site/footer             SubscriptionData
 PUT    /api/site/footer
-GET    /api/site/about              { aboutDescription, founders[] }
+GET    /api/site/about              { aboutDescription, crew: CrewMember[] }
 PUT    /api/site/about
 
-GET    /api/team
-POST   /api/team
+GET    /api/team                    Public published team (when landing wired)
+POST   /api/team                    Admin
 GET    /api/team/:id
 PUT    /api/team/:id
 DELETE /api/team/:id
 
 GET    /api/reviews                 ?published=1 for public
-POST   /api/reviews
+POST   /api/reviews                 Admin
 PUT    /api/reviews/:id
 DELETE /api/reviews/:id
 
-POST   /api/contact                 Public — persist + notify
-POST   /api/newsletter/subscribe    Public
+POST   /api/contact                 Public — { fullName, email, subject?, message }
+POST   /api/newsletter/subscribe    Public — { email, source? }
 GET    /api/newsletter/subscribers  Admin only
 
-POST   /api/media/upload            Admin only — multipart
+POST   /api/media/upload            Admin — multipart/form-data
 ```
 
 Optional version prefix: `/api/v1/...`.
 
----
+**Suggested public site bundle (SSR-friendly):**
 
-## 6. localStorage → database migration map
-
-| localStorage key | Target tables | Priority |
-|------------------|---------------|----------|
-| `content/cms/store.json` | blog_filters, blog_posts, portfolio_categories, portfolio_projects | **P0** |
-| `dashboardLoginConfig` | admin_users | **P0** |
-| `dashboardAuth` | sessions / JWT | **P0** |
-| `landingSlogan` | hero_slogan | P1 |
-| `landingServices` | services | P1 |
-| `landingSteps` | process_steps | P1 |
-| `landingContact` | contact_settings | P1 |
-| `landingSubscription` | footer_settings | P1 |
-| `landingCrew` | about_section + founders | P1 |
-| `subscribers` | newsletter_subscribers | P1 |
-| `teamMembers` | team_members | P2 |
-| `reviews` | reviews (+ wire landing) | P2 |
-| `portfolioProfile` | Dashboard-only stub — not on landing | P3 / drop |
-| `founders` (data-context) | Orphaned — ignore | — |
+```
+GET /api/public/home
+→ { slogan, services, portfolioPreview[], footer, ... }
+```
 
 ---
 
-## 7. Business rules
+## 8. localStorage → database migration map
 
-1. **Taxonomy delete:** Cannot delete blog filter / portfolio category if referenced unless `reassignToId` is provided (409 otherwise).
+| localStorage key | Target table(s) | Priority | Notes |
+|------------------|-----------------|----------|-------|
+| `content/cms/store.json` | blog_filters, blog_posts, portfolio_categories, portfolio_projects | **P0** | File path: `content/cms/store.json` |
+| `dashboardLoginConfig` | admin_users | **P0** | Hash passwords |
+| `dashboardAuth` | sessions / JWT | **P0** | Remove client flag |
+| `landingSlogan` | hero_slogan | P1 | |
+| `landingServices` | services | P1 | |
+| `landingSteps` | process_steps | P1 | |
+| `landingContact` | contact_settings | P1 | |
+| `landingSubscription` | footer_settings | P1 | |
+| `landingCrew` | about_section + founders | P1 | |
+| `subscribers` | newsletter_subscribers | P1 | |
+| `teamMembers` | team_members | P2 | Wire `OurTeam.tsx` |
+| `reviews` | reviews | P2 | Wire `ClientReflections.tsx` |
+| `portfolioProfile` | Optional / drop | P3 | Dashboard-only |
+| `founders` (data-context) | **Ignore** | — | Orphaned duplicate |
+
+---
+
+## 9. Business rules
+
+1. **Taxonomy delete:** Cannot delete blog filter / portfolio category if referenced unless `reassignToId` is provided → **409 Conflict**.
 2. **Slug IDs:** New filters/categories get slug IDs from label; append `-1`, `-2`, … on collision (`slugify` in `lib/cms/store.ts`).
 3. **Publishing:** Public endpoints and sitemap only expose `published = true` records.
 4. **Stable IDs:** Blog and portfolio detail URLs use string IDs — do not regenerate on update.
 5. **Dates:** CMS uses ISO date strings `YYYY-MM-DD` for `publishedAt` / `updatedAt`.
-6. **Rich text:** Blog sections and portfolio descriptions store HTML strings.
-7. **Newsletter:** Reject duplicate emails (case-insensitive).
-8. **SEO:** Set `NEXT_PUBLIC_SITE_URL` in production for sitemap and metadata (`lib/seo.ts`).
+6. **Rich text:** Blog sections and portfolio descriptions store HTML strings (TipTap editor: `components/rich-text-editor.tsx`).
+7. **Newsletter:** Reject duplicate emails (case-insensitive); validate email format.
+8. **SEO:** Set `NEXT_PUBLIC_SITE_URL` in production (`lib/seo.ts`, sitemap, Open Graph).
+9. **Images:** Reject or migrate base64 blobs — store CDN URLs only in DB.
+10. **CORS / cookies:** Dashboard and public site may share origin; use SameSite cookies if monolith.
 
 ---
 
-## 8. Suggested implementation order
+## 10. Environment variables
 
-1. PostgreSQL (or Supabase) + migrations for CMS tables  
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL for metadata, sitemap, JSON-LD |
+| `NODE_ENV` | CMS file writes gated to `development` today |
+| `DATABASE_URL` | PostgreSQL connection (backend) |
+| `JWT_SECRET` or session secret | Auth (backend) |
+| `S3_*` / `CLOUDINARY_*` | Media storage (backend) |
+
+---
+
+## 11. Suggested implementation order
+
+1. PostgreSQL + migrations for CMS tables  
 2. Admin auth (hash passwords, protect all write routes)  
-3. Port existing `/api/cms/*` from JSON file to DB — keep response shapes identical  
+3. Port existing `/api/cms/*` from JSON file to DB — **keep response shapes identical**  
 4. Media upload service (S3, Cloudinary, etc.)  
 5. Site settings APIs (slogan, services, steps, contact, footer, founders)  
 6. Newsletter + contact submission endpoints  
-7. Team + reviews CRUD; wire landing testimonials to API  
-8. Legal CMS (optional)
+7. Team + reviews CRUD; wire landing `OurTeam` + `ClientReflections`  
+8. Add `panoramaIframeUrl` to portfolio CMS + detail page  
+9. Legal CMS (optional)  
+10. Hero stats / hero words CMS (optional)
 
 ---
 
-## 9. Frontend integration checklist (after backend is ready)
+## 12. Frontend integration checklist (after backend is ready)
 
 - [ ] Replace `localStorage` loaders in `lib/landing-*.ts` with fetch + SSR where needed  
 - [ ] Add auth headers or cookies to `cmsApi` and new site API clients  
-- [ ] Wire contact form `handleSubmit` to `POST /api/contact`  
-- [ ] Wire `BlogSubscribeSidebar` to `POST /api/newsletter/subscribe`  
+- [ ] Wire contact form in `app/(landing)/contact/page.tsx` → `POST /api/contact`  
+- [ ] Wire `BlogSubscribeSidebar` → `POST /api/newsletter/subscribe`  
+- [ ] Wire footer newsletter in `Subscription.tsx` (currently display-only)  
 - [ ] Replace `dashboard-login` localStorage auth with real session  
 - [ ] Upload images via `/api/media/upload` instead of base64 in JSON  
-- [ ] Connect landing testimonial components to `GET /api/reviews?published=1`  
-- [ ] Update dashboard overview stats to use API counts instead of localStorage  
+- [ ] Connect `ClientReflections.tsx` → `GET /api/reviews?published=1`  
+- [ ] Connect `OurTeam.tsx` → `GET /api/team`  
+- [ ] Update dashboard overview stats (`app/dashboard/page.tsx`) to use API counts  
+- [ ] Extend `CmsPortfolioProject` + DB with panorama fields; remove hardcoded iframe URL  
+- [ ] Align or remove unused `lib/validations.ts` (firstName/lastName vs fullName)
 
 ---
 
-## 10. Source file index
+## 13. Source file index
 
 | Domain | File |
 |--------|------|
 | CMS types | `lib/cms/types.ts` |
 | CMS store / business logic | `lib/cms/store.ts` |
 | CMS defaults / seed data | `lib/cms/defaults.ts` |
+| CMS → landing mappers | `lib/cms/mappers.ts` |
 | CMS fetch client | `lib/cms/client.ts` |
+| CMS JSON file (dev) | `content/cms/store.json` |
 | Services | `app/dashboard/manage-services/services-data.ts` |
 | Slogan | `lib/landing-slogan.ts` |
 | Steps | `lib/landing-steps.ts` |
 | Contact | `lib/landing-contact.ts` |
-| Footer | `lib/landing-subscription.ts` |
-| Founders / About | `lib/landing-crew.ts` |
+| Footer / subscription block | `lib/landing-subscription.ts` |
+| Founders / About crew | `lib/landing-crew.ts` |
 | Team / Reviews context | `lib/data-context.tsx` |
 | Login config | `lib/dashboard-login-config.ts` |
-| Contact validation (legacy) | `lib/validations.ts` |
+| Shared constants & storage keys | `lib/constants.ts` |
+| Contact validation (legacy, unused by live form) | `lib/validations.ts` |
 | Legal copy | `lib/legal-content.ts` |
 | SEO helpers | `lib/seo.ts` |
 | Dashboard sidebar routes | `app/dashboard/DashboardLayoutClient.tsx` |
+| Landing homepage stack | `app/(landing)/HomePageClient.tsx`, `components/LandingStack.tsx` |
+| Testimonials (hardcoded) | `components/ClientReflections.tsx` |
+| Team carousel (hardcoded) | `components/OurTeam.tsx` |
+| Blog newsletter signup | `components/BlogSubscribeSidebar.tsx` |
+| Public footer | `components/Subscription.tsx` |
+
+---
+
+## 14. CMS API route files (reference)
+
+```
+app/api/cms/blog-filters/route.ts
+app/api/cms/blog-filters/[id]/route.ts
+app/api/cms/blogs/route.ts
+app/api/cms/blogs/[id]/route.ts
+app/api/cms/portfolio-categories/route.ts
+app/api/cms/portfolio-categories/[id]/route.ts
+app/api/cms/portfolio/route.ts
+app/api/cms/portfolio/[id]/route.ts
+```
+
+---
+
+*Questions about frontend contracts: inspect the TypeScript types above or the referenced `lib/` files — they are the source of truth until OpenAPI specs are generated.*
