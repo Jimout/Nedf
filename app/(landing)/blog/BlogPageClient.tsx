@@ -8,6 +8,7 @@ import Pagination from "@/components/Pagination"
 import Subscription from "@/components/Subscription"
 import LandingListHeader from "@/components/LandingListHeader"
 import LandingFilterTags from "@/components/LandingFilterTags"
+import { Button } from "@/components/ui/button"
 import type { CmsBlogFilter, CmsBlogPost } from "@/lib/cms/types"
 
 const POSTS_PER_PAGE = 6
@@ -20,22 +21,6 @@ const ANIMATION_CONFIG = {
     transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
 } as const
-
-const TEXT_CLAMP_CONFIG = {
-  titleLengthThreshold: { medium: 40, long: 60 },
-  categoryCountThreshold: { many: 2, tooMany: 3 },
-  baseLines: 3,
-  minLines: 1,
-} as const
-
-function calculateTextLines(title: string, categories: string[]): number {
-  let lines = TEXT_CLAMP_CONFIG.baseLines
-  if (title.length > TEXT_CLAMP_CONFIG.titleLengthThreshold.medium) lines -= 1
-  if (title.length > TEXT_CLAMP_CONFIG.titleLengthThreshold.long) lines -= 1
-  if (categories.length > TEXT_CLAMP_CONFIG.categoryCountThreshold.many) lines -= 1
-  if (categories.length > TEXT_CLAMP_CONFIG.categoryCountThreshold.tooMany) lines -= 1
-  return Math.max(TEXT_CLAMP_CONFIG.minLines, lines)
-}
 
 function postMatchesFilter(
   post: CmsBlogPost,
@@ -82,12 +67,9 @@ function BlogPostCard({
   filterLabel: string
   onReadMore: (id: string) => void
 }) {
-  const categories = [filterLabel, ...post.tags.slice(0, 2)]
-  const textLines = calculateTextLines(post.title, categories)
-
   return (
     <article className="group bg-card text-card-foreground shadow-lg flex flex-col overflow-hidden transition-shadow hover:shadow-xl border border-border h-[400px]">
-      <div className="relative w-full h-[170px]">
+      <div className="relative w-full h-[170px] shrink-0">
         <Image
           src={post.heroImage || "/placeholder.svg"}
           alt={post.title}
@@ -96,29 +78,28 @@ function BlogPostCard({
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 33vw"
         />
       </div>
-      <div className="relative p-4 flex flex-col flex-1">
-        <div className="flex flex-wrap gap-2 mb-2" style={{ minHeight: "24px" }}>
-          <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">{filterLabel}</span>
+      <div className="relative p-4 flex flex-col flex-1 min-h-0">
+        <div className="mb-2 min-h-6 shrink-0">
+          <span className="inline-block text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">
+            {filterLabel}
+          </span>
         </div>
-        <h2 className="text-base font-medium text-foreground mb-2 line-clamp-2">{post.title}</h2>
-        <p
-          className="text-sm text-muted-foreground flex-1"
-          style={{
-            display: "-webkit-box",
-            WebkitLineClamp: textLines,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
+        <h2 className="text-base font-medium text-foreground mb-2 line-clamp-2 h-[2.5rem] leading-5 shrink-0 overflow-hidden">
+          {post.title}
+        </h2>
+        <p className="text-sm text-muted-foreground line-clamp-3 h-[3.75rem] leading-5 shrink-0 overflow-hidden">
           {post.description}
         </p>
-        <button
-          type="button"
-          onClick={() => onReadMore(post.id)}
-          className="mt-3 text-sm font-medium text-primary hover:underline text-left"
-        >
-          Read more
-        </button>
+        <div className="mt-auto flex justify-end shrink-0 pt-2">
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => onReadMore(post.id)}
+            className="relative z-10 min-h-[44px] min-w-[44px] rounded-none touch-manipulation select-none [-webkit-tap-highlight-color:transparent] shadow-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:bg-primary/80 active:shadow-sm focus-visible:ring-2 focus-visible:ring-primary/40"
+          >
+            Read more
+          </Button>
+        </div>
       </div>
     </article>
   )

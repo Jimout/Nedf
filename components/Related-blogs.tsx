@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
 import Pagination from "./Pagination"
+import { Button } from "@/components/ui/button"
 
 interface RelatedBlogsProps {
   posts: Array<{
@@ -73,8 +74,8 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                   />
                 </div>
 
-                <div className="relative p-4 flex flex-col h-[230px]">
-                  <div className="flex flex-wrap gap-2 mb-2" style={{ minHeight: "24px" }}>
+                <div className="relative p-4 flex flex-col flex-1 min-h-0">
+                  <div className="flex flex-wrap gap-2 mb-2 min-h-6 shrink-0">
                     {post.categories.map((category, idx) => (
                       <span
                         key={idx}
@@ -85,23 +86,23 @@ export default function RelatedBlogs({ posts }: RelatedBlogsProps) {
                     ))}
                   </div>
 
-                  <h3 className="text-[18px] text-foreground font-normal leading-6 mb-2">
+                  <h3 className="text-[18px] text-foreground font-normal leading-6 mb-2 line-clamp-2 h-[3rem] shrink-0 overflow-hidden">
                     {post.title}
                   </h3>
 
-                  <div className="flex-1 mb-3">
-                    <p className="text-muted-foreground text-[12px] leading-[18px] line-clamp-3">
-                      {post.description}
-                    </p>
-                  </div>
+                  <p className="text-muted-foreground text-[12px] leading-[18px] line-clamp-3 h-[3.375rem] shrink-0 overflow-hidden">
+                    {post.description}
+                  </p>
 
-                  <div className="flex justify-end">
-                    <button
+                  <div className="mt-auto flex justify-end shrink-0 pt-2">
+                    <Button
+                      type="button"
+                      size="sm"
                       onClick={() => (window.location.href = `/blog-detail?id=${post.id}`)}
-                      className="bg-primary text-primary-foreground text-xs px-3 py-2 transition-all duration-300 hover:bg-primary/90 hover:brightness-110 active:scale-[0.98]"
+                      className="relative z-10 min-h-[44px] min-w-[44px] rounded-none touch-manipulation select-none [-webkit-tap-highlight-color:transparent] shadow-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:bg-primary/80 active:shadow-sm focus-visible:ring-2 focus-visible:ring-primary/40"
                     >
                       Read More
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </article>
