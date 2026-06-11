@@ -28,6 +28,16 @@ import Image from "next/image"
 import Link from "next/link"
 import { DataProvider } from "@/lib/data-context"
 import { ThemeToggle } from "@/components/theme-toggle"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 type NavItem = {
   id: string
@@ -111,6 +121,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     Company: false,
     Settings: false,
   })
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -349,7 +360,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="border-t border-primary-foreground/20 py-4 flex-shrink-0">
               <div className={`relative flex ${sidebarCollapsed ? "justify-center" : "px-3"} my-1`}>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => setShowLogoutConfirm(true)}
                   className={`relative flex items-center justify-center group overflow-hidden transition-colors ${
                     sidebarCollapsed ? "w-12 h-12 rounded-lg" : "w-full px-3 py-3.5 rounded-lg justify-start"
                   } hover:bg-primary-foreground/10`}
@@ -394,6 +405,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         >
           <div className="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-6 bg-background">{children}</div>
         </main>
+
+        <AlertDialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Log out?</AlertDialogTitle>
+              <AlertDialogDescription>
+                You will be signed out of the dashboard. You can sign back in at any time.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                onClick={handleLogout}
+              >
+                Log out
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </DataProvider>
   )
