@@ -94,7 +94,7 @@ interface ServicesSectionProps {
 }
 
 const STACKED_PADDING =
-  "pt-2 sm:pt-3 md:pt-4 lg:pt-5 xl:pt-6 2xl:pt-8 3xl:pt-10 4xl:pt-12 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28";
+  "pt-0 sm:pt-1 md:pt-2 lg:pt-3 xl:pt-4 2xl:pt-20 3xl:pt-24 4xl:pt-28 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28";
 
 const DEFAULT_PADDING =
   "pt-12 sm:pt-14 md:pt-16 lg:pt-20 xl:pt-20 2xl:pt-32 3xl:pt-36 4xl:pt-40 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16 2xl:pb-20 3xl:pb-24 4xl:pb-28";
@@ -293,7 +293,7 @@ export default function ServicesSection({
 
   if (stacked) {
     return (
-      <section ref={sectionRef} id="services" className={cn(sectionClassName, "relative z-30 -mt-2 sm:-mt-3 md:-mt-4")}>
+      <section ref={sectionRef} id="services" className={cn(sectionClassName, "relative z-30 -mt-4 sm:-mt-5 md:-mt-6 lg:-mt-8 2xl:-mt-2 3xl:-mt-2 4xl:-mt-2")}>
         {inner}
       </section>
     );

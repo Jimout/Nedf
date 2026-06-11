@@ -93,8 +93,9 @@ export default function HeroTextFadeScroll() {
         { visibility: "visible" }
       );
 
-      const durChar = 0.06;
-      const stagChar = 0.04;
+      const durCharReveal = 0.13;
+      const durCharHide = 0.09;
+      const stagChar = 0.08;
 
       const tl = gsap.timeline({ paused: true });
 
@@ -109,7 +110,7 @@ export default function HeroTextFadeScroll() {
           const pos = startTime + round * stagChar;
           order.forEach((shuffledChars) => {
             if (shuffledChars[round]) {
-              tl.to(shuffledChars[round], { opacity: 1, duration: durChar, ease: "none" }, pos);
+              tl.to(shuffledChars[round], { opacity: 1, duration: durCharReveal, ease: "power1.out" }, pos);
             }
           });
         }
@@ -125,7 +126,7 @@ export default function HeroTextFadeScroll() {
           const pos = startTime + round * stagChar;
           order.forEach((shuffledChars) => {
             if (shuffledChars[round]) {
-              tl.to(shuffledChars[round], { opacity: 0, duration: durChar, ease: "none" }, pos);
+              tl.to(shuffledChars[round], { opacity: 0, duration: durCharHide, ease: "power1.in" }, pos);
             }
           });
         }
@@ -133,23 +134,37 @@ export default function HeroTextFadeScroll() {
       };
 
       t = addRevealParallel(revealOrder1a, t);
-      t += 0.1;
+      t += 0.2;
       t = addRevealParallel(revealOrder1b, t);
-      t += 0.12;
+      t += 0.25;
       const tHideStart = t;
       const end1a = addHideParallel(hideOrder1a, tHideStart);
       const end1b = addHideParallel(hideOrder1b, tHideStart);
       t = Math.max(end1a, end1b);
-      t += 0.1;
+      t += 0.2;
       t = addRevealParallel(revealOrder2, t);
-      t += 0.12;
+      t += 0.25;
       addHideParallel(hideOrder2, t);
+
+      const scrollPxPerSecond = 135;
+
+      const getMinScrollVh = () => {
+        const w = window.innerWidth;
+        if (w >= 2560) return 1.15;
+        if (w >= 1920) return 1.05;
+        if (w >= 1536) return 0.95;
+        return 0.9;
+      };
 
       ScrollTrigger.create({
         trigger: sectionRef.current!,
         start: "top top",
-        end: () => `+=${Math.max(tl.duration() * 90, window.innerHeight * 0.75)}`,
-        scrub: 0.85,
+        end: () => {
+          const fromTimeline = tl.duration() * scrollPxPerSecond;
+          const minScroll = window.innerHeight * getMinScrollVh();
+          return `+=${Math.max(fromTimeline, minScroll)}`;
+        },
+        scrub: 1.2,
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
