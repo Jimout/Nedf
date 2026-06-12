@@ -44,7 +44,10 @@ export default function HeroTextFadeScroll() {
     )
       return;
 
-    const ctx = gsap.context(() => {
+    let ctx: gsap.Context | undefined;
+
+    try {
+    ctx = gsap.context(() => {
       const split1a = new SplitType(firstLine1Ref.current!, {
         types: "words,chars",
         tagName: "span",
@@ -93,9 +96,9 @@ export default function HeroTextFadeScroll() {
         { visibility: "visible" }
       );
 
-      const durCharReveal = 0.13;
-      const durCharHide = 0.09;
-      const stagChar = 0.08;
+      const durCharReveal = 0.18;
+      const durCharHide = 0.1;
+      const stagChar = 0.12;
 
       const tl = gsap.timeline({ paused: true });
 
@@ -134,26 +137,26 @@ export default function HeroTextFadeScroll() {
       };
 
       t = addRevealParallel(revealOrder1a, t);
-      t += 0.2;
+      t += 0.35;
       t = addRevealParallel(revealOrder1b, t);
-      t += 0.25;
+      t += 0.4;
       const tHideStart = t;
       const end1a = addHideParallel(hideOrder1a, tHideStart);
       const end1b = addHideParallel(hideOrder1b, tHideStart);
       t = Math.max(end1a, end1b);
-      t += 0.2;
+      t += 0.35;
       t = addRevealParallel(revealOrder2, t);
-      t += 0.25;
+      t += 0.4;
       addHideParallel(hideOrder2, t);
 
-      const scrollPxPerSecond = 135;
+      const scrollPxPerSecond = 200;
 
       const getMinScrollVh = () => {
         const w = window.innerWidth;
-        if (w >= 2560) return 1.15;
-        if (w >= 1920) return 1.05;
-        if (w >= 1536) return 0.95;
-        return 0.9;
+        if (w >= 2560) return 1.65;
+        if (w >= 1920) return 1.5;
+        if (w >= 1536) return 1.35;
+        return 1.2;
       };
 
       ScrollTrigger.create({
@@ -164,7 +167,7 @@ export default function HeroTextFadeScroll() {
           const minScroll = window.innerHeight * getMinScrollVh();
           return `+=${Math.max(fromTimeline, minScroll)}`;
         },
-        scrub: 1.2,
+        scrub: 1.6,
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
@@ -177,13 +180,20 @@ export default function HeroTextFadeScroll() {
         split2.revert();
       };
     }, sectionRef);
+    } catch {
+      gsap.set(
+        [firstLine1Ref.current!, firstLine2Ref.current!, secondRef.current!],
+        { visibility: "visible", opacity: 1 }
+      );
+      return;
+    }
 
     requestAnimationFrame(() => ScrollTrigger.refresh());
     const refreshLater = window.setTimeout(() => ScrollTrigger.refresh(), 100);
 
     return () => {
       window.clearTimeout(refreshLater);
-      ctx.revert();
+      ctx?.revert();
     };
   }, [slogan.line1, slogan.line2, slogan.line3]);
 

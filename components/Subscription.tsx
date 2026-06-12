@@ -68,13 +68,16 @@ export default function Footer() {
 
             {/* Newsletter form */}
             <div className="space-y-3 sm:space-y-4 2xl:space-y-5 3xl:space-y-6 4xl:space-y-6 max-w-md w-full text-left">
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+              <div className="flex flex-col sm:flex-row sm:items-stretch gap-2">
                 <input
                   type="email"
                   placeholder={data.newsletter.placeholder}
-                  className="flex-1 min-w-0 px-3 py-2.5 sm:px-4 sm:py-3 2xl:px-5 2xl:py-4 3xl:px-6 3xl:py-4 4xl:px-6 4xl:py-5 text-sm sm:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl bg-footer-input text-footer-foreground placeholder:text-footer-muted border border-footer-border focus:outline-none focus:ring-1 focus:ring-footer-accent"
+                  className="flex-1 min-w-0 h-11 sm:h-12 2xl:h-14 3xl:h-[3.75rem] 4xl:h-16 px-3 sm:px-4 2xl:px-5 3xl:px-6 4xl:px-6 text-sm sm:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl bg-footer-input text-footer-foreground placeholder:text-footer-muted border border-footer-border focus:outline-none focus:ring-1 focus:ring-footer-accent"
                 />
-                <Button type="button" className="shrink-0 gap-2 text-sm sm:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold px-4 py-2.5 sm:px-5 sm:py-3 2xl:px-8 2xl:py-4 3xl:px-9 3xl:py-4 4xl:px-10 4xl:py-5">
+                <Button
+                  type="button"
+                  className="h-11 sm:h-12 2xl:h-14 3xl:h-[3.75rem] 4xl:h-16 shrink-0 gap-2 text-sm sm:text-base 2xl:text-lg 3xl:text-xl 4xl:text-xl font-semibold px-4 sm:px-5 2xl:px-8 3xl:px-9 4xl:px-10"
+                >
                   <Send className="w-4 h-4 sm:w-4 sm:h-4 2xl:w-5 2xl:h-5 3xl:w-6 3xl:h-6 4xl:w-6 4xl:h-6" />
                   {data.newsletter.buttonLabel}
                 </Button>

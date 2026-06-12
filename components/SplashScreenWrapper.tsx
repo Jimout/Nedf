@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useLayoutEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useClientPathname } from "@/lib/use-client-pathname";
 import SplashScreen from "./SplashScreen";
 import { SPLASH_PENDING_CLASS, SPLASH_STORAGE_KEY } from "@/lib/constants";
 
@@ -28,7 +28,7 @@ function markSplashShown(): void {
 }
 
 export default function SplashScreenWrapper() {
-  const pathname = usePathname();
+  const pathname = useClientPathname();
   const isHome = pathname === "/";
   const [showSplash, setShowSplash] = useState(false);
 

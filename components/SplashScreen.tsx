@@ -10,7 +10,7 @@ const SPLASH_CONFIG = {
     dark: "/LOGO FOR THE WEBISTE-05.png",
     alt: "NEDF Studio",
   },
-  durationMs: 3000,
+  durationMs: 1800,
   tagline: "Less, but Better.",
   loadingDotsCount: 3,
   dotDelayMs: 150,
